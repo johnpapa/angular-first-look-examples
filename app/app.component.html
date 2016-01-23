@@ -1,0 +1,16 @@
+<div>
+  <header>
+    <h1>Storyline Tracker</h1>
+    <nav>
+      <ul>
+        <li><a [routerLink]="['CharactersDashboard']" href="">Characters</a></li>
+        <li><a [routerLink]="['VehiclesDashboard']" href="">Vehicles</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section>
+      <router-outlet></router-outlet>
+    </section>
+  </main>
+</div>
