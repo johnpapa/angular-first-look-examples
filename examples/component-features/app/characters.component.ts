@@ -8,11 +8,7 @@ import { CharacterDetailComponent } from './character-detail.component';
 @Component({
   selector: 'story-characters',
   templateUrl: './app/characters.component.html',
-  // styleUrls: ['./app/characters.component.css'],
-  styles: [`
-    .characters { list-style-type: none; }
-    *.characters li { padding: 4px; }
-  `],
+  styleUrls: ['./app/characters.component.css'],
   directives: [CharacterDetailComponent],
   providers: [HTTP_PROVIDERS, CharacterService]
 })
