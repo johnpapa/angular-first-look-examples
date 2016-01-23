@@ -1,0 +1,8 @@
+<article>
+  <ul class="characters">
+    <li *ngFor="#character of characters | async">
+       <div (click)="select(character)">{{character.id}}. {{character.name}}</div>
+    </li>
+  </ul>
+  <story-character-detail [character]="selectedCharacter"></story-character-detail>
+</article>

@@ -1,0 +1,8 @@
+{
+  "description": "Storyline Tracker",
+  "files":[
+    "!**/*.d.ts",
+    "!**/*.js"
+  ],
+  "tags": ["tutorial"]
+}
