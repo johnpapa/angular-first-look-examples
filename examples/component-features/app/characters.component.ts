@@ -1,30 +1,27 @@
 import { Component, EventEmitter, Input, OnInit, Output } from 'angular2/core';
 import { HTTP_PROVIDERS } from 'angular2/http';
 import { Observable } from 'rxjs/Rx';
-
 import { Character, CharacterService } from './character.service';
-import { CharacterDetailComponent } from './character-detail.component';
+import { CharacterComponent } from './character.component';
 
 @Component({
   selector: 'story-characters',
   templateUrl: './app/characters.component.html',
   styleUrls: ['./app/characters.component.css'],
-  directives: [CharacterDetailComponent],
+  directives: [CharacterComponent],
   providers: [HTTP_PROVIDERS, CharacterService]
 })
 export class CharactersComponent implements OnInit {
-  @Output() changed: EventEmitter<Character>;
+  @Output() changed = new EventEmitter<Character>();
   @Input() storyId: number;
   characters: Observable<Character[]>;
   selectedCharacter: Character;
 
-  constructor(private _characterService: CharacterService) {
-    this.changed = new EventEmitter();
-  }
+  constructor(private _characterService: CharacterService) { }
 
   ngOnInit() {
-    console.log(`Characters Component was provided the story ID = ${this.storyId}`);
-    this.characters = this._characterService.getCharacters(this.storyId);
+    this.characters = this._characterService
+      .getCharacters(this.storyId);
   }
 
   select(selectedCharacter: Character) {
@@ -32,3 +29,4 @@ export class CharactersComponent implements OnInit {
     this.changed.emit(selectedCharacter);
   }
 }
+
