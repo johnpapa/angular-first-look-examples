@@ -1,9 +1,9 @@
 <article>
   <h4>My Vehicles</h4>
 
-  <ul>
+  <ul class="vehicles">
     <li *ngFor="#vehicle of vehicles">
-      <a href="" [routerLink]="['VehicleDetail', {id: vehicle.id}]">
+      <a href="" [routerLink]="['Vehicle', {id: vehicle.id}]">
        {{vehicle.id}}. {{vehicle.name}}
       </a>
     </li>

@@ -1,20 +1,19 @@
-import { Component, OnInit } from 'angular2/core';
-import { ROUTER_DIRECTIVES } from 'angular2/router';
-import { Observable } from 'rxjs/Rx';
+import { Component } from 'angular2/core';
+import { RouteConfig, ROUTER_DIRECTIVES } from 'angular2/router';
 
-import { Character, CharacterService } from './character.service';
+import { CharacterComponent } from './character.component';
+import { CharacterListComponent } from './character-list.component';
+import { CharacterService } from './character.service';
 
 @Component({
-  selector: 'story-characters',
-  templateUrl: './app/characters/characters.component.html',
+  selector: 'story-characters-root',
+  template: `
+    <router-outlet></router-outlet>
+  `,
   directives: [ROUTER_DIRECTIVES]
 })
-export class CharactersComponent implements OnInit {
-  characters: Observable<Character[]>;
-
-  constructor(private _characterService: CharacterService) { }
-
-  ngOnInit() {
-    this.characters = this._characterService.getCharacters();
-  }
-}
+@RouteConfig([
+  { path: '/', name: 'Characters', component: CharacterListComponent, useAsDefault: true },
+	{ path: '/:id', name: 'Character', component: CharacterComponent }
+])
+export class CharactersComponent { }

@@ -3,14 +3,18 @@ import { HTTP_PROVIDERS } from 'angular2/http';
 import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from 'angular2/router';
 import 'rxjs/Rx'; // load the full rxjs
 
-import { CharactersDashboardComponent } from './characters/characters-dashboard.component';
+import { CharactersComponent } from './characters/characters.component';
 import { CharacterService } from './characters/character.service';
-import { VehiclesDashboardComponent } from './vehicles/vehicles-dashboard.component';
+import { VehiclesComponent } from './vehicles/vehicles.component';
 import { CONFIG } from './config';
 
 @Component({
   selector: 'story-app',
   templateUrl: 'app/app.component.html',
+  styles: [`
+    nav ul {list-style-type: none;}
+    nav ul li {padding: 4px;cursor: pointer;display:inline-block}
+  `],
   directives: [ROUTER_DIRECTIVES],
   providers: [
     HTTP_PROVIDERS,
@@ -19,7 +23,7 @@ import { CONFIG } from './config';
   ]
 })
 @RouteConfig([
-  { path: '/characters/...', name: 'CharactersDashboard', component: CharactersDashboardComponent, useAsDefault: true },
-  { path: '/vehicles/...', name: 'VehiclesDashboard', component: VehiclesDashboardComponent }
+  { path: '/characters/...', name: 'Characters', component: CharactersComponent, useAsDefault: true },
+  { path: '/vehicles/...', name: 'Vehicles', component: VehiclesComponent }
 ])
 export class AppComponent { }

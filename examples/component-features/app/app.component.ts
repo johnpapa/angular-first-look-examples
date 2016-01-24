@@ -8,6 +8,7 @@ import { Character } from './character.service';
   template: `
   <div>
     <h1>Storyline Tracker</h1>
+    <h3>Component Demo</h3>
     <story-characters [storyId]="7" (changed)=changed($event)></story-characters>
   </div>
   `,

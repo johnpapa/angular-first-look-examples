@@ -1,21 +1,20 @@
 import { Component, OnInit } from 'angular2/core';
-import { ROUTER_DIRECTIVES } from 'angular2/router';
+import { RouteConfig, ROUTER_DIRECTIVES } from 'angular2/router';
 
-import { Vehicle, VehicleService } from './vehicle.service';
+import { VehicleListComponent } from './vehicle-list.component';
+import { VehicleComponent } from './vehicle.component';
+import { VehicleService } from './vehicle.service';
 
 @Component({
-  selector: 'story-vehicles',
-  templateUrl: './app/vehicles/vehicles.component.html',
-  directives: [ROUTER_DIRECTIVES]
+  selector: 'story-vehicles-root',
+  template: `
+    <router-outlet></router-outlet>
+  `,
+  directives: [ROUTER_DIRECTIVES],
+  providers: [VehicleService]
 })
-export class VehiclesComponent implements OnInit {
-  vehicles: Vehicle[];
-
-  constructor(private _vehicleService: VehicleService) { }
-
-  ngOnInit() {
-    this.vehicles = [];
-    this._vehicleService.getVehicles()
-      .subscribe(vehicles => this.vehicles = vehicles);
-  }
-}
+@RouteConfig([
+  { path: '/', name: 'Vehicles', component: VehicleListComponent, useAsDefault: true },
+	{ path: '/:id', name: 'Vehicle', component: VehicleComponent }
+])
+export class VehiclesComponent { }

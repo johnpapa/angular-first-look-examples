@@ -4,11 +4,11 @@ import { RouteParams, Router, ROUTER_DIRECTIVES } from 'angular2/router';
 import { Vehicle, VehicleService } from '../vehicles/vehicle.service';
 
 @Component({
-  selector: 'story-vehicle-detail',
-  templateUrl: 'app/vehicles/vehicle-detail.component.html',
+  selector: 'story-vehicle',
+  templateUrl: 'app/vehicles/vehicle.component.html',
   directives: [ROUTER_DIRECTIVES]
 })
-export class VehicleDetailComponent implements OnInit {
+export class VehicleComponent implements OnInit {
   @Input() vehicle: Vehicle;
 
   constructor(
