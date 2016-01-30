@@ -1,0 +1,7 @@
+{
+  "description": "Angular 1 - Binding Events",
+  "files":[
+    "!**/*.d.ts"
+  ],
+  "tags": ["first look", "angular 1"]
+}
