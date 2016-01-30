@@ -21,10 +21,17 @@
         Story:
         <input ng-model="vm.story">
       </div>
-      <div ng-style="vm.story ? {visibility: 'visible'} : {visibility: 'hidden'}">
+      <div ng-style=
+        "vm.story ?
+          {visibility: 'visible'}
+          : {visibility: 'hidden'}">
+
         <img ng-src="{{vm.imagePath}}">
         <br/>
-        <a ng-href="{{vm.link}}">{{vm.story}}</a>
+        <a ng-href="{{vm.link}}">
+          {{vm.story}}
+        </a>
+
       </div>
     </div>
   </div>
