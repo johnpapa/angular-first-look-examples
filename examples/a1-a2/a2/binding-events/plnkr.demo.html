@@ -29,12 +29,6 @@ export class AppComponent {
     .then(success => console.log(`Bootstrap success`))
     .catch(error => console.log(error));
 
-"><input type="hidden" name="files[main.ts]" value="import { bootstrap } from 'angular2/platform/browser';
-import { AppComponent } from './app.component';
-
-bootstrap(AppComponent, [])
-  .then(success => console.log(`Bootstrap success`))
-  .catch(error => console.log(error));
 "><input type="hidden" name="files[app/app.component.css]" value="ul.messages > li { list-style: none; }
 ul {
   height: 300px;
@@ -50,7 +44,6 @@ ul {
     (mousedown)=&quot;log('mousedown')&quot;
     (mouseleave)=&quot;log('mouseleave')&quot;
     (mouseup)=&quot;log('mouseup')&quot;
-    (mousemove)=&quot;log('mousemove')&quot;
     (click)=&quot;log('click')&quot;
   >
   <div>
