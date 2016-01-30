@@ -36,8 +36,8 @@ function buildPlunkers(basePath, destPath, options) {
 //   tags: [] - optional array of strings
 //   main: string - filename of what will become index.html in the plunker - defaults to index.html
 function buildPlunkerFrom(configFileName, basePath, destPath ) {
-  // replace ending 'plnkr.json' with 'plnkr.no-link.html' to create output file name;
-  var outputFileName = configFileName.substr(0, configFileName.length - 'plnkr.json'.length) + 'plnkr.no-link.html';
+  // replace ending 'plnkr.json' with 'plnkr.demo.html' to create output file name;
+  var outputFileName = configFileName.substr(0, configFileName.length - 'plnkr.json'.length) + 'plnkr.demo.html';
   var altFileName;
   if (destPath && destPath.length > 0) {
     var partPath = path.dirname(path.relative(basePath, outputFileName));
@@ -94,7 +94,7 @@ function initConfigAndCollectFileNames(configFileName) {
       return path.join(basePath, fileName);
     }
   });
-  // var defaultExcludes = [ '!**/node_modules/**','!**/typings/**','!**/tsconfig.json', '!**/*plnkr.json', '!**/*plnkr.html', '!**/*plnkr.no-link.html' ];
+  // var defaultExcludes = [ '!**/node_modules/**','!**/typings/**','!**/tsconfig.json', '!**/*plnkr.json', '!**/*plnkr.html', '!**/*plnkr.demo.html' ];
   var defaultExcludes = [
     '!**/typings/**',
     '!**/tsconfig.json',

@@ -8,6 +8,6 @@ jspm_packages
 bower_components
 
 plnkr.html
-#plnkr.no-link.html
+#plnkr.demo.html
 
 npm-debug.log

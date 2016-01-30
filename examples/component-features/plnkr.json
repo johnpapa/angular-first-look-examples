@@ -1,8 +1,8 @@
 {
-  "description": "Storyline Tracker",
+  "description": "Angular 2 - Component Features",
   "files":[
     "!**/*.d.ts",
     "!**/*.js"
   ],
-  "tags": ["tutorial"]
+  "tags": ["first look", "angular 2"]
 }

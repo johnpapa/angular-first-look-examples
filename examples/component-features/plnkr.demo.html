@@ -1,13 +1,13 @@
 <html lang="en"><head></head><body><form id="mainForm" method="post" action="http://plnkr.co/edit/?p=preview" target="_self"><input type="hidden" name="files[app/app.component.ts]" value="import { Component, ViewChild } from 'angular2/core';
 
 import { CharactersComponent } from './characters.component';
-import { Character } from './character.service';
 
 @Component({
   selector: 'story-app',
   template: `
   <div>
     <h1>Storyline Tracker</h1>
+    <h3>Component Demo</h3>
     <story-characters [storyId]=&quot;7&quot; (changed)=changed($event)></story-characters>
   </div>
   `,
@@ -16,32 +16,26 @@ import { Character } from './character.service';
 export class AppComponent {
   @ViewChild(CharactersComponent) cc: CharactersComponent;
 
-  changed(c: Character) {
+  changed(c: any) {
     if (c) {
       console.log(`Event Emitter said you selected ${c.name}`);
     }
   }
 }
-"><input type="hidden" name="files[app/character-detail.component.ts]" value="import { Component, Input, OnChanges } from 'angular2/core';
+"><input type="hidden" name="files[app/character.component.ts]" value="  import { Component, Input } from 'angular2/core';
 
-import { Character } from './character.service';
+  import { Character } from './character.service';
 
-@Component({
-  selector: 'story-character-detail',
-  template: `
-    <div *ngIf=&quot;character&quot;>Selected Character is {{character.name}}</div>
-  `
-})
-
-export class CharacterDetailComponent implements OnChanges {
-  @Input() character: Character;
-
-  ngOnChanges() {
-    if (this.character) {
-      console.log(`Details Component's Input was provided ${this.character.name}`);
-    }
+  @Component({
+    selector: 'story-character',
+    template: '<h3 *ngIf=&quot;character&quot;>You selected {{character.name}}</h3>',
+  })
+  export class CharacterComponent {
+    @Input() character: Character;
   }
-}"><input type="hidden" name="files[app/character.service.ts]" value="import { Inject, Injectable } from 'angular2/core';
+
+
+"><input type="hidden" name="files[app/character.service.ts]" value="import { Inject, Injectable } from 'angular2/core';
 import { Http, Response } from 'angular2/http';
 import 'rxjs/Rx'; // load the full rxjs
 
@@ -62,30 +56,27 @@ export class CharacterService {
 "><input type="hidden" name="files[app/characters.component.ts]" value="import { Component, EventEmitter, Input, OnInit, Output } from 'angular2/core';
 import { HTTP_PROVIDERS } from 'angular2/http';
 import { Observable } from 'rxjs/Rx';
-
 import { Character, CharacterService } from './character.service';
-import { CharacterDetailComponent } from './character-detail.component';
+import { CharacterComponent } from './character.component';
 
 @Component({
   selector: 'story-characters',
   templateUrl: './app/characters.component.html',
   styleUrls: ['./app/characters.component.css'],
-  directives: [CharacterDetailComponent],
+  directives: [CharacterComponent],
   providers: [HTTP_PROVIDERS, CharacterService]
 })
 export class CharactersComponent implements OnInit {
-  @Output() changed: EventEmitter<Character>;
+  @Output() changed = new EventEmitter<Character>();
   @Input() storyId: number;
   characters: Observable<Character[]>;
   selectedCharacter: Character;
 
-  constructor(private _characterService: CharacterService) {
-    this.changed = new EventEmitter();
-  }
+  constructor(private _characterService: CharacterService) { }
 
   ngOnInit() {
-    console.log(`Characters Component was provided the story ID = ${this.storyId}`);
-    this.characters = this._characterService.getCharacters(this.storyId);
+    this.characters = this._characterService
+      .getCharacters(this.storyId);
   }
 
   select(selectedCharacter: Character) {
@@ -93,6 +84,7 @@ export class CharactersComponent implements OnInit {
     this.changed.emit(selectedCharacter);
   }
 }
+
 "><input type="hidden" name="files[app/main.ts]" value="import { bootstrap } from 'angular2/platform/browser';
 import { AppComponent } from './app.component';
 
@@ -120,7 +112,7 @@ bootstrap(AppComponent, [])
         >{{character.id}}. {{character.name}}</div>
     </li>
   </ul>
-  <story-character-detail [character]=&quot;selectedCharacter&quot;></story-character-detail>
+  <story-character [character]=&quot;selectedCharacter&quot;></story-character>
 </article>"><input type="hidden" name="files[index.html]" value="<!DOCTYPE html>
 <html>
 
@@ -315,4 +307,4 @@ Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
-limitations under the License."><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="tutorial"><input type="hidden" name="private" value="true"><input type="hidden" name="description" value="Angular 2 Example - Storyline Tracker"></form><script>document.getElementById("mainForm").submit();</script></body></html>
+limitations under the License."><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="first look"><input type="hidden" name="tags[3]" value="angular 2"><input type="hidden" name="private" value="true"><input type="hidden" name="description" value="Angular 2 Example - Angular 2 - Component Features"></form><script>document.getElementById("mainForm").submit();</script></body></html>

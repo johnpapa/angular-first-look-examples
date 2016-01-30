@@ -4,11 +4,11 @@ import {Component} from 'angular2/core'
 @Component({
   selector: 'my-app',
   templateUrl: 'app/app.component.html',
-  styles: ['app/app.component.css']
+  styleUrls: ['app/app.component.css']
 })
 export class AppComponent {
   title: string;
-  imagePath = 'papa.png';
+  imagePath = 'angular.png';
   messages: string[] = [];
 
   constructor() {

@@ -1,7 +1,6 @@
 import { Component, ViewChild } from 'angular2/core';
 
 import { CharactersComponent } from './characters.component';
-import { Character } from './character.service';
 
 @Component({
   selector: 'story-app',
@@ -17,7 +16,7 @@ import { Character } from './character.service';
 export class AppComponent {
   @ViewChild(CharactersComponent) cc: CharactersComponent;
 
-  changed(c: Character) {
+  changed(c: any) {
     if (c) {
       console.log(`Event Emitter said you selected ${c.name}`);
     }

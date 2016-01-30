@@ -1,0 +1,46 @@
+<html lang="en"><head></head><body><form id="mainForm" method="post" action="http://plnkr.co/edit/?p=preview" target="_self"><input type="hidden" name="files[story.controller.js]" value="(function () {
+  angular
+    .module('app', [])
+    .controller('StoryController', StoryController);
+
+  function StoryController() {
+    var vm = this;
+    vm.story = { id: 100, name: 'The Force Awakens' };
+  }
+})();
+
+
+
+
+
+"><input type="hidden" name="files[index.html]" value="<!DOCTYPE html>
+<html ng-app=&quot;app&quot;>
+
+  <head>
+    <meta charset=&quot;utf-8&quot; />
+    <title>AngularJS Plunker</title>
+    <script>document.write('<base href=&quot;' + document.location + '&quot; />');</script>
+    <script data-require=&quot;angular.js@1.4.x&quot; src=&quot;https://code.angularjs.org/1.4.8/angular.js&quot; data-semver=&quot;1.4.8&quot;></script>
+    <script src=&quot;story.controller.js&quot;></script>
+  </head>
+
+  <body ng-controller=&quot;StoryController as vm&quot;>
+    <h3 >
+      {{vm.story.name}}
+    </h3>
+  </body>
+
+</html>
+"><input type="hidden" name="files[license.md]" value="Copyright 2010-2015 Google, Inc. http://angularjs.org
+
+Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License."><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="first look"><input type="hidden" name="tags[3]" value="angular 1"><input type="hidden" name="private" value="true"><input type="hidden" name="description" value="Angular 2 Example - Angular 1 - Controller"></form><script>document.getElementById("mainForm").submit();</script></body></html>

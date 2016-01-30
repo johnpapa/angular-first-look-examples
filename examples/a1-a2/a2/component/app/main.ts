@@ -1,7 +1,7 @@
   import { bootstrap } from 'angular2/platform/browser';
-  import { AppComponent } from './app.component';
+  import { StoryComponent } from './story.component';
 
-  bootstrap(AppComponent)
+  bootstrap(StoryComponent)
     .then(success => console.log(`Bootstrap success`))
     .catch(error => console.log(error));
 
