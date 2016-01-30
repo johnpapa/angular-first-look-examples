@@ -10,9 +10,8 @@
   </head>
 
   <body ng-controller="StoryController as vm">
-    <h3 >
-      {{vm.story.name}}
-    </h3>
+    <h3>{{vm.story.name}}</h3>
+    <h3 ng-bind="vm.story.name"></h3>
   </body>
 
 </html>

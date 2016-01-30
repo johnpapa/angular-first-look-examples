@@ -25,9 +25,8 @@
   </head>
 
   <body ng-controller=&quot;StoryController as vm&quot;>
-    <h3 >
-      {{vm.story.name}}
-    </h3>
+    <h3>{{vm.story.name}}</h3>
+    <h3 ng-bind=&quot;vm.story.name&quot;></h3>
   </body>
 
 </html>
