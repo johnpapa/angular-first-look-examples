@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+<head>
+  <meta charset="utf-8" />
+  <title>AngularJS Plunker</title>
+  <script>
+    document.write('<base href="' + document.location + '" />');
+  </script>
+  <script data-require="angular.js@1.4.x" src="https://code.angularjs.org/1.4.8/angular.js" data-semver="1.4.8"></script>
+  <script src="story.controller.js"></script>
+</head>
+
+<body ng-controller="StoryController as vm">
+  <div>
+    <h3>{{vm.title}}</h3>
+    <div>
+      <p>When there is a story,
+        the image and link are shown</p>
+      <div>
+        Story:
+        <input ng-model="vm.story">
+      </div>
+      <div ng-style="vm.story ? {visibility: 'visible'} : {visibility: 'hidden'}">
+        <img ng-src="{{vm.imagePath}}">
+        <br/>
+        <a ng-href="{{vm.link}}">{{vm.story}}</a>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

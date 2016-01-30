@@ -1,5 +1,5 @@
 {
-  "description": "Angular 1 - Two-Way Binding",
+  "description": "Angular 1 - Property Binding",
   "files":[
     "!**/*.d.ts"
   ],
