@@ -37,7 +37,7 @@
   <body ng-controller=&quot;VehiclesController as vm&quot;>
     <div>
       <h3>{{vm.title}}</h3>
-      <img ng-src=&quot;vm.imagePath&quot;
+      <img ng-src=&quot;{{vm.imagePath}}&quot;
         ng-mouseover=&quot;vm.log('mouseover')&quot;
         ng-mousedown=&quot;vm.log('mousedown')&quot;
         ng-mouseleave=&quot;vm.log('mouseleave')&quot;

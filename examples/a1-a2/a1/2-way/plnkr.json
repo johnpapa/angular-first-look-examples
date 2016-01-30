@@ -1,0 +1,7 @@
+{
+  "description": "Angular 1 - 2-Way Binding",
+  "files":[
+    "!**/*.d.ts"
+  ],
+  "tags": ["first look", "angular 1"]
+}
