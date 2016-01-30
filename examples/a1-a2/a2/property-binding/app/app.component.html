@@ -1,0 +1,15 @@
+<div>
+  <h3>{{title}}</h3>
+  <div>
+    <p>When there is a story,
+      the image and link are shown</p>
+    <div>
+      Story:<input [(ngModel)]="story">
+    </div>
+    <div [style.visibility]="story ? 'visible' : 'hidden'">
+      <img [src]="imagePath">
+      <br/>
+      <a [href]="link">{{story}}</a>
+    </div>
+  </div>
+</div>
