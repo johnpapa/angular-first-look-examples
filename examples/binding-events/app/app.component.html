@@ -1,0 +1,23 @@
+<div>
+  <h3>{{title}}</h3>
+  <img [src]="imagePath"
+    (mouseover)="log('mouseover')"
+    (mousedown)="log('mousedown')"
+    (mouseleave)="log('mouseleave')"
+    (mouseup)="log('mouseup')"
+    (mousemove)="log('mousemove')"
+    (click)="log('click')"
+  >
+  <div>
+    <input
+      (blur)="log('blur')"
+      (focus)="log('focus')"
+      (keydown)="log('keydown', $event)"
+      (keyup)="log('keyup', $event)"
+      (keypress)="log('keypress', $event)"
+      >
+  </div>
+  <ul class="messages">
+    <li *ngFor="#msg of messages">{{msg}}</li>
+  </ul>
+</div>
