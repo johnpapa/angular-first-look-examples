@@ -14,7 +14,9 @@ export class VehicleService {
     { id: 2, name: 'Tie Fighter' },
     { id: 3, name: 'Y-Wing Fighter' }
   ];
-}"><input type="hidden" name="files[app/vehicles.component.ts]" value="import { Component } from 'angular2/core';
+}
+
+"><input type="hidden" name="files[app/vehicles.component.ts]" value="import { Component } from 'angular2/core';
 
 import { VehicleService } from './vehicle.service';
 
@@ -24,7 +26,8 @@ import { VehicleService } from './vehicle.service';
   providers: [VehicleService]
 })
 export class VehiclesComponent {
-  constructor(private _vehicleService: VehicleService) {}
+  constructor(
+    private _vehicleService: VehicleService) { }
   vehicles = this._vehicleService.getVehicles();
 }
 
