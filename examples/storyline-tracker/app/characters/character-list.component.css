@@ -1,0 +1,17 @@
+.characters {
+  list-style-type: none;
+  padding: 0;
+}
+
+*.characters li {
+  padding: 4px;
+}
+
+.list-text,
+.mdl-card__title-text {
+  font-size: 16px;
+}
+
+.mdl-card {
+  min-height: 60px;
+}

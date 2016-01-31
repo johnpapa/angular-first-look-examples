@@ -1,0 +1,17 @@
+<article class="template animated slideInRight">
+  <h4>Top Characters</h4>
+  <div>
+    <div class="mdl-grid">
+      <div class="mdl-cell mdl-cell--3-col"
+        *ngFor="#character of characters | async"
+        (click)="gotoDetail(character)">
+
+        <button class="dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect
+      mdl-button--accent">
+          {{character.name}}
+        </button>
+
+      </div>
+    </div>
+  </div>
+</article>

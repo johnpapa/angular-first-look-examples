@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base href="/">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script src="assets/material.min.js"></script>
+  <link rel="stylesheet" href="assets/material.deep_orange-pink.min.css">
+  <link rel="stylesheet" href="assets/sprite-av-white.css">
+  <link rel="stylesheet" href="assets/animate.css">
+  <link rel="stylesheet" href="assets/app.css">
+
+  <!-- IE required polyfills, in this exact order -->
+  <script src="node_modules/es6-shim/es6-shim.min.js"></script>
+  <script src="node_modules/systemjs/dist/system-polyfills.js"></script>
+
+  <!-- Angular polyfill required everywhere -->
+  <script src="node_modules/angular2/bundles/angular2-polyfills.js"></script>
+
+  <script src="node_modules/systemjs/dist/system.src.js"></script>
+  <script src="node_modules/rxjs/bundles/Rx.js"></script>
+  <script src="node_modules/angular2/bundles/angular2.dev.js"></script>
+  <script src="node_modules/angular2/bundles/router.dev.js"></script>
+  <script src="node_modules/angular2/bundles/http.dev.js"></script>
+
+  <script src="node_modules/a2-in-memory-web-api/web-api.js"></script>
+
+  <script>
+    System.config({packages:{
+      api: {format: 'register',defaultExtension: 'js'},
+      app: {format: 'register',defaultExtension: 'js'}
+    }});
+    System.import('app/main')
+          .then(null, console.error.bind(console));
+  </script>
+
+</head>
+
+<body>
+  <story-app>Loading Storyline Tracker ...</story-app>
+</body>
+
+</html>

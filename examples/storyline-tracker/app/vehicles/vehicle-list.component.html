@@ -1,0 +1,26 @@
+<article class="template animated slideInRight">
+  <h4>My Vehicles</h4>
+
+  <button class="dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" [routerLink]="['Vehicle', {id: 'new'}]">Add</button>
+
+  <filter-text (changed)="filterChanged($event)"></filter-text>
+
+  <ul class="vehicles">
+    <li *ngFor="#vehicle of filteredVehicles">
+
+      <div class="mdl-card mdl-shadow--2dp">
+        <div class="mdl-card__title">
+          <h2 class="mdl-card__title-text">{{vehicle.id}}. {{vehicle.name | initCaps}}</h2>
+        </div>
+        <div class="mdl-card__menu">
+          <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" [routerLink]="['Vehicle', {id: vehicle.id}]">
+
+            <div class="icon mdl-color--primary icon-ic_play_circle_filled_white_24dp"></div>
+
+          </button>
+        </div>
+      </div>
+
+    </li>
+  </ul>
+</article>

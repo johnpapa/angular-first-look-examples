@@ -1,0 +1,27 @@
+.dashboard-button {
+  width: 200px;
+  height: 70px;
+}
+
+.mdl-cell--col-3 {
+  width: 25%;
+}
+
+@media (max-width: 1024px) {
+  .mdl-cell.mdl-cell--3-col > button {
+    width: 180px;
+    line-height: 18px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 839px) and (min-width: 480px){
+  .mdl-cell.mdl-cell--3-col {
+    width: 25%;
+  }
+  .mdl-cell.mdl-cell--3-col > button {
+    width: 120px;
+    line-height: 18px;
+    font-size: 12px;
+  }
+}

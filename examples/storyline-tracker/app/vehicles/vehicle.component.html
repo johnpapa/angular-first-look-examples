@@ -1,0 +1,25 @@
+<article class="template animated slideInRight">
+  <div *ngIf="vehicle">
+    <h4>{{editVehicle.name | uppercase}} details</h4>
+
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+      <label class="mdl-textfield__label" for="nametext">Name</label>
+      <input type="text" id="nametext" class="mdl-textfield__input" [(ngModel)]="editVehicle.name" />
+    </div>
+
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+      <label class="mdl-textfield__label" for="typetext">Type</label>
+      <input type="text" id="typetext" class="mdl-textfield__input" [(ngModel)]="editVehicle.type" />
+    </div>
+
+    <div>
+      <button class="dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect
+      mdl-button--accent" (click)="save()">Save</button>
+      &nbsp;
+      <button class="dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="cancel()" [class.not-displayed]="isAddMode()">Cancel</button>
+      &nbsp;
+      <button class="dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="delete()" [class.not-displayed]="isAddMode()">Delete</button>
+    </div>
+
+  </div>
+</article>

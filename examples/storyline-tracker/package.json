@@ -1,0 +1,35 @@
+{
+  "name": "storyline-tracker",
+  "version": "0.0.1",
+  "scripts": {
+    "tsc": "tsc",
+    "tsc:w": "tsc -w",
+    "lite": "lite-server",
+    "start": "concurrent \"npm run tsc:w\" \"npm run lite\" "
+  },
+  "dependencies": {
+    "a2-in-memory-web-api": "~0.1.0",
+    "angular2": "2.0.0-beta.2",
+    "bootstrap": "^3.3.6",
+    "es6-promise": "^3.0.2",
+    "es6-shim": "^0.33.3",
+    "reflect-metadata": "0.1.2",
+    "rxjs": "5.0.0-beta.0",
+    "systemjs": "0.19.6",
+    "zone.js": "0.5.10"
+  },
+  "devDependencies": {
+    "canonical-path": "0.0.2",
+    "concurrently": "^1.0.0",
+    "globby": "^4.0.0",
+    "gulp": "^3.9.0",
+    "gulp-task-listing": "^1.0.1",
+    "gulp-util": "^3.0.7",
+    "jsdom": "^7.2.2",
+    "lite-server": "^2.0.0",
+    "lodash": "^4.0.0",
+    "mkdirp": "^0.5.1",
+    "q": "^1.4.1",
+    "typescript": "^1.7.5"
+  }
+}
