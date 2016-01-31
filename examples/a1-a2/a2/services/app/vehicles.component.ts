@@ -8,7 +8,8 @@ import { VehicleService } from './vehicle.service';
   providers: [VehicleService]
 })
 export class VehiclesComponent {
-  constructor(private _vehicleService: VehicleService) {}
+  constructor(
+    private _vehicleService: VehicleService) { }
   vehicles = this._vehicleService.getVehicles();
 }
 
