@@ -1,5 +1,5 @@
 {
-  "description": "Angular 1 - ng-repeat",
+  "description": "Angular 1 - Services",
   "files":[
     "!**/*.d.ts"
   ],
