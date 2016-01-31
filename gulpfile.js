@@ -7,8 +7,8 @@ var TOOLS_PATH = './';
 var EXAMPLES_PATH = path.join('./', '');
 var PUBLIC_PATH = './plunker';
 var RESOURCES_PATH = path.join(PUBLIC_PATH, 'resources');
-// var LIVE_EXAMPLES_PATH = path.join(RESOURCES_PATH, 'live-examples');
-var LIVE_EXAMPLES_PATH = undefined;
+var LIVE_EXAMPLES_PATH = path.join(RESOURCES_PATH, 'live-examples');
+// var LIVE_EXAMPLES_PATH = undefined;
 
 var plunkerBuilder = require(path.resolve(TOOLS_PATH, 'plunker-builder/plunkerBuilder'));
 

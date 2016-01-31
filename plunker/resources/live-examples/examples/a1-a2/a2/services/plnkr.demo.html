@@ -1,35 +1,46 @@
-<html lang="en"><head></head><body><form id="mainForm" method="post" action="http://plnkr.co/edit/?p=preview" target="_self"><input type="hidden" name="files[app/app.component.ts]" value="//our root app component
-import {Component} from 'angular2/core'
+<html lang="en"><head></head><body><form id="mainForm" method="post" action="http://plnkr.co/edit/?p=preview" target="_self"><input type="hidden" name="files[app/main.ts]" value="  import { bootstrap } from 'angular2/platform/browser';
+  import { VehiclesComponent } from './vehicles.component';
 
-@Component({
-  selector: 'my-app',
-  templateUrl: 'app/app.component.html',
-})
-export class AppComponent {
-  title = 'Angular 2 Two-Way Binding';
-  story = {
-    name: 'The Empire Strikes Back'
-  };
-}"><input type="hidden" name="files[app/main.ts]" value="  import { bootstrap } from 'angular2/platform/browser';
-  import { AppComponent } from './app.component';
-
-  bootstrap(AppComponent)
+  bootstrap(VehiclesComponent)
     .then(success => console.log(`Bootstrap success`))
     .catch(error => console.log(error));
 
-"><input type="hidden" name="files[app/app.component.html]" value="<div>
-  <h3>{{title}}</h3>
-  <div>
-    2 Way Binding
-    <input [(ngModel)]=&quot;story.name&quot;>
-  </div>
-  <p>{{story.name}}</p>
-  <div>
-    1 Way Binding
-    <input [value]=&quot;story.name&quot;>
-  </div>
-</div>
-"><input type="hidden" name="files[index.html]" value="<!DOCTYPE html>
+"><input type="hidden" name="files[app/vehicle.service.ts]" value="import {Injectable} from 'angular2/core';
+
+@Injectable()
+export class VehicleService {
+  getVehicles = () => [
+    { id: 1, name: 'X-Wing Fighter' },
+    { id: 2, name: 'Tie Fighter' },
+    { id: 3, name: 'Y-Wing Fighter' }
+  ];
+}
+
+"><input type="hidden" name="files[app/vehicles.component.ts]" value="import { Component } from 'angular2/core';
+
+import { VehicleService } from './vehicle.service';
+
+@Component({
+  selector: 'my-vehicles',
+  templateUrl: 'app/vehicles.component.html',
+  providers: [VehicleService]
+})
+export class VehiclesComponent {
+  constructor(
+    private _vehicleService: VehicleService) { }
+  vehicles = this._vehicleService.getVehicles();
+}
+
+
+
+"><input type="hidden" name="files[app/vehicles.component.html]" value="<ul>
+  <li *ngFor=&quot;#vehicle of vehicles&quot;>
+    {{vehicle.name}}
+  </li>
+</ul>
+<div *ngIf=&quot;vehicles.length&quot;>
+  <h3>You have {{vehicles.length}} vehicles</h3>
+</div>"><input type="hidden" name="files[index.html]" value="<!DOCTYPE html>
 <html>
 
 <head>
@@ -67,7 +78,7 @@ export class AppComponent {
 </head>
 
 <body>
-  <my-app>Loading 2-Way Binding Demo ...</my-app>
+  <my-vehicles>Loading Services Demo ...</my-vehicles>
 </body>
 
 </html>"><input type="hidden" name="files[license.md]" value="Copyright 2010-2015 Google, Inc. http://angularjs.org
@@ -82,4 +93,4 @@ Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
-limitations under the License."><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="first look"><input type="hidden" name="tags[3]" value="angular 2"><input type="hidden" name="private" value="true"><input type="hidden" name="description" value="Angular 2 Example - Angular 2 - Two-Way Binding"></form><script>document.getElementById("mainForm").submit();</script></body></html>
+limitations under the License."><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="first look"><input type="hidden" name="tags[3]" value="angular 2"><input type="hidden" name="private" value="true"><input type="hidden" name="description" value="Angular 2 Example - Angular 2 - Services"></form><script>document.getElementById("mainForm").submit();</script></body></html>
