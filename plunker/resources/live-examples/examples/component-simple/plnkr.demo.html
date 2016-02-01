@@ -9,19 +9,20 @@
 
 @Component({
   selector: 'my-story',
-  template: `
-    <h3>{{story.name}}</h3>
-    <h3 [innerText]=&quot;story.name&quot;></h3>
-    <div [style.color]=&quot;color&quot;>{{story.name}}</div>
-  `
+  templateUrl: 'app/story.component.html'
 })
 export class StoryComponent {
-  story = { id: 100, name: 'The Force Awakens' };
-  color = 'blue';
+  name = 'Han Solo';
+  movies = 0;
+
+  add() {
+    this.movies++;
+  }
 }
 
-
-"><input type="hidden" name="files[index.html]" value="<!DOCTYPE html>
+"><input type="hidden" name="files[app/story.component.html]" value="<h3>My name is {{name}}</h3>
+<p>I am in {{movies}} movies</p>
+<button (click)=&quot;add()&quot;>Add a Movie</button>"><input type="hidden" name="files[index.html]" value="<!DOCTYPE html>
 <html>
 
 <head>
@@ -74,4 +75,4 @@ Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
-limitations under the License."><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="first look"><input type="hidden" name="tags[3]" value="angular 2"><input type="hidden" name="private" value="true"><input type="hidden" name="description" value="Angular 2 Example - Angular 2 - Component"></form><script>document.getElementById("mainForm").submit();</script></body></html>
+limitations under the License."><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="first look"><input type="hidden" name="tags[3]" value="angular 2"><input type="hidden" name="private" value="true"><input type="hidden" name="description" value="Angular 2 Example - Simplest Component"></form><script>document.getElementById("mainForm").submit();</script></body></html>

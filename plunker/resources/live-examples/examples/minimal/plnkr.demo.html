@@ -148,31 +148,22 @@ import { AppComponent } from './app.component';
 bootstrap(AppComponent, [])
   .then(success => console.log(`Bootstrap success`))
   .catch(error => console.log(error));
-"><input type="hidden" name="files[app/vehicles/vehicle-list.component.ts]" value="import { Component, OnInit } from 'angular2/core';
-import { ROUTER_DIRECTIVES } from 'angular2/router';
+"><input type="hidden" name="files[app/vehicles/vehicle-list.component.ts]" value="
 
-import { Vehicle, VehicleService } from './vehicle.service';
+  import { Component } from 'angular2/core';
 
-@Component({
-  selector: 'story-vehicles',
-  templateUrl: './app/vehicles/vehicle-list.component.html',
-  styles: [`
-    .vehicles {list-style-type: none;}
-    *.vehicles li {padding: 4px;cursor: pointer;}
-  `],
-  directives: [ROUTER_DIRECTIVES]
-})
-export class VehicleListComponent implements OnInit {
-  vehicles: Vehicle[];
+  import { Vehicle } from './vehicle.service';
 
-  constructor(private _vehicleService: VehicleService) { }
+  @Component({
+    selector: 'story-vehicles',
+    templateUrl: './vehicles.component.html'
+  })
 
-  ngOnInit() {
-    this.vehicles = [];
-    this._vehicleService.getVehicles()
-      .subscribe(vehicles => this.vehicles = vehicles);
+  export class VehicleListComponent {
+    vehicles: Vehicle[];
   }
-}
+
+
 "><input type="hidden" name="files[app/vehicles/vehicle.component.ts]" value="import { Component, Input, OnInit } from 'angular2/core';
 import { RouteParams, Router, ROUTER_DIRECTIVES } from 'angular2/router';
 
@@ -301,14 +292,18 @@ export class VehiclesComponent { }
 </article>"><input type="hidden" name="files[app/vehicles/vehicle-list.component.html]" value="<article>
   <h4>My Vehicles</h4>
 
-  <ul class=&quot;vehicles&quot;>
+  <ul>
     <li *ngFor=&quot;#vehicle of vehicles&quot;>
-      <a href=&quot;&quot; [routerLink]=&quot;['Vehicle', {id: vehicle.id}]&quot;>
-       {{vehicle.id}}. {{vehicle.name}}
-      </a>
+      {{vehicle.id}}. {{vehicle.name}}
     </li>
   </ul>
-</article>"><input type="hidden" name="files[app/vehicles/vehicle.component.html]" value="<article>
+
+  <vehicle *ngIf=&quot;selectedVehicle&quot;
+    [vehicle]=&quot;selectedVehicle&quot;></vehicle>
+
+</article>
+
+"><input type="hidden" name="files[app/vehicles/vehicle.component.html]" value="<article>
   <div *ngIf=&quot;vehicle&quot;>
     <h4>{{vehicle.name}} details</h4>
 
