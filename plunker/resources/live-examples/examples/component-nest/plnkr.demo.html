@@ -1,21 +1,53 @@
-<html lang="en"><head></head><body><form id="mainForm" method="post" action="http://plnkr.co/edit/?p=preview" target="_self"><input type="hidden" name="files[app/character.component.ts]" value="import { Component } from 'angular2/core';
+<html lang="en"><head></head><body><form id="mainForm" method="post" action="http://plnkr.co/edit/?p=preview" target="_self"><input type="hidden" name="files[app/character-list.component.ts]" value="import { Component } from 'angular2/core';
+import { Character } from './character';
+import { CharacterComponent } from './character.component';
+
+@Component({
+  selector: 'my-character-list',
+  templateUrl: 'app/character-list.component.html',
+  directives: [CharacterComponent]
+})
+export class CharacterListComponent {
+  selectedCharacter: Character;
+  characters = [
+    new Character(1, 'Han Solo'),
+    new Character(2, 'Luke Skywalker'),
+    new Character(3, 'BB-8'),
+    new Character(4, 'Rey')
+  ];
+
+  select(character: Character) {
+    this.selectedCharacter = character;
+  }
+}
+
+"><input type="hidden" name="files[app/character.component.ts]" value="import { Component, Input } from 'angular2/core';
+import { Character } from './character';
 
 @Component({
   selector: 'my-character',
   templateUrl: 'app/character.component.html'
 })
 export class CharacterComponent {
-  name = 'Han Solo';
+  @Input() character: Character;
 }
 
-"><input type="hidden" name="files[app/main.ts]" value="  import { bootstrap } from 'angular2/platform/browser';
-  import { CharacterComponent } from './character.component';
+"><input type="hidden" name="files[app/character.ts]" value="export class Character {
+  constructor(public id: number, public name: string) { }
+}"><input type="hidden" name="files[app/main.ts]" value="  import { bootstrap } from 'angular2/platform/browser';
+  import { CharacterListComponent } from './character-list.component';
 
-  bootstrap(CharacterComponent)
+  bootstrap(CharacterListComponent)
     .then(success => console.log(`Bootstrap success`))
     .catch(error => console.log(error));
 
-"><input type="hidden" name="files[app/character.component.html]" value="<h3>My name is {{name}}</h3>
+"><input type="hidden" name="files[app/character-list.component.html]" value="<ul>
+  <li *ngFor=&quot;#character of characters&quot; (click)=&quot;select(character)&quot;>
+    {{ character.name }}
+  </li>
+</ul>
+
+<my-character *ngIf=&quot;selectedCharacter&quot; [character]=&quot;selectedCharacter&quot;></my-character>"><input type="hidden" name="files[app/character.component.html]" value="<h3>We selected {{character.name}}</h3>
 
 
 
@@ -57,7 +89,7 @@ export class CharacterComponent {
 </head>
 
 <body>
-  <my-character>Loading Demo ...</my-character>
+  <my-character-list>Loading Demo ...</my-character-list>
 </body>
 
 </html>"><input type="hidden" name="files[license.md]" value="Copyright 2010-2015 Google, Inc. http://angularjs.org
