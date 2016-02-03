@@ -1,6 +1,6 @@
 <article>
   <ul class="characters">
-    <li *ngFor="#character of characters | async">
+    <li *ngFor="#character of characters">
        <div (click)="select(character)"
         [class.selected]="character === selectedCharacter"
         >{{character.id}}. {{character.name}}</div>

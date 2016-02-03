@@ -13,6 +13,6 @@ export class CharacterService {
 
   getCharacters(storyId: number) {
     return this._http.get('api/characters.json')
-      .map((response: Response) => <Character[]>response.json().data);
+      .map((response: Response) => response.json().data);
   }
 }

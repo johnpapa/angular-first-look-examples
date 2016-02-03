@@ -1,4 +1,5 @@
-<html lang="en"><head></head><body><form id="mainForm" method="post" action="http://plnkr.co/edit/?p=preview" target="_self"><input type="hidden" name="files[app/app.component.ts]" value="import { Component, ViewChild } from 'angular2/core';
+<html lang="en"><head></head><body><form id="mainForm" method="post" action="http://plnkr.co/edit/?p=preview" target="_self"><input type="hidden" name="files[app/app.component.ts]" value="import { Component } from 'angular2/core';
+import { HTTP_PROVIDERS } from 'angular2/http';
 
 import { CharactersComponent } from './characters.component';
 
@@ -11,14 +12,13 @@ import { CharactersComponent } from './characters.component';
     <story-characters [storyId]=&quot;7&quot; (changed)=changed($event)></story-characters>
   </div>
   `,
-  directives: [CharactersComponent]
+  directives: [CharactersComponent],
+  providers: [HTTP_PROVIDERS]
 })
 export class AppComponent {
-  @ViewChild(CharactersComponent) cc: CharactersComponent;
-
-  changed(c: any) {
-    if (c) {
-      console.log(`Event Emitter said you selected ${c.name}`);
+  changed(changedCharacter: any) {
+    if (changedCharacter) {
+      console.log(`Event Emitter said you selected ${changedCharacter.name}`);
     }
   }
 }
@@ -50,12 +50,10 @@ export class CharacterService {
 
   getCharacters(storyId: number) {
     return this._http.get('api/characters.json')
-      .map((response: Response) => <Character[]>response.json().data);
+      .map((response: Response) => response.json().data);
   }
 }
 "><input type="hidden" name="files[app/characters.component.ts]" value="import { Component, EventEmitter, Input, OnInit, Output } from 'angular2/core';
-import { HTTP_PROVIDERS } from 'angular2/http';
-import { Observable } from 'rxjs/Rx';
 import { Character, CharacterService } from './character.service';
 import { CharacterComponent } from './character.component';
 
@@ -64,19 +62,20 @@ import { CharacterComponent } from './character.component';
   templateUrl: './app/characters.component.html',
   styleUrls: ['./app/characters.component.css'],
   directives: [CharacterComponent],
-  providers: [HTTP_PROVIDERS, CharacterService]
+  providers: [CharacterService]
 })
 export class CharactersComponent implements OnInit {
   @Output() changed = new EventEmitter<Character>();
   @Input() storyId: number;
-  characters: Observable<Character[]>;
+  characters: Character[];
   selectedCharacter: Character;
 
   constructor(private _characterService: CharacterService) { }
 
   ngOnInit() {
-    this.characters = this._characterService
-      .getCharacters(this.storyId);
+    this._characterService
+      .getCharacters(this.storyId)
+      .subscribe(characters => this.characters = characters);
   }
 
   select(selectedCharacter: Character) {
@@ -106,7 +105,7 @@ bootstrap(AppComponent, [])
 }
 "><input type="hidden" name="files[app/characters.component.html]" value="<article>
   <ul class=&quot;characters&quot;>
-    <li *ngFor=&quot;#character of characters | async&quot;>
+    <li *ngFor=&quot;#character of characters&quot;>
        <div (click)=&quot;select(character)&quot;
         [class.selected]=&quot;character === selectedCharacter&quot;
         >{{character.id}}. {{character.name}}</div>

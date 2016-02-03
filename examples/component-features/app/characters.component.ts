@@ -1,6 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from 'angular2/core';
-import { HTTP_PROVIDERS } from 'angular2/http';
-import { Observable } from 'rxjs/Rx';
 import { Character, CharacterService } from './character.service';
 import { CharacterComponent } from './character.component';
 
@@ -9,19 +7,20 @@ import { CharacterComponent } from './character.component';
   templateUrl: './app/characters.component.html',
   styleUrls: ['./app/characters.component.css'],
   directives: [CharacterComponent],
-  providers: [HTTP_PROVIDERS, CharacterService]
+  providers: [CharacterService]
 })
 export class CharactersComponent implements OnInit {
   @Output() changed = new EventEmitter<Character>();
   @Input() storyId: number;
-  characters: Observable<Character[]>;
+  characters: Character[];
   selectedCharacter: Character;
 
   constructor(private _characterService: CharacterService) { }
 
   ngOnInit() {
-    this.characters = this._characterService
-      .getCharacters(this.storyId);
+    this._characterService
+      .getCharacters(this.storyId)
+      .subscribe(characters => this.characters = characters);
   }
 
   select(selectedCharacter: Character) {

@@ -1,4 +1,5 @@
-import { Component, ViewChild } from 'angular2/core';
+import { Component } from 'angular2/core';
+import { HTTP_PROVIDERS } from 'angular2/http';
 
 import { CharactersComponent } from './characters.component';
 
@@ -11,14 +12,13 @@ import { CharactersComponent } from './characters.component';
     <story-characters [storyId]="7" (changed)=changed($event)></story-characters>
   </div>
   `,
-  directives: [CharactersComponent]
+  directives: [CharactersComponent],
+  providers: [HTTP_PROVIDERS]
 })
 export class AppComponent {
-  @ViewChild(CharactersComponent) cc: CharactersComponent;
-
-  changed(c: any) {
-    if (c) {
-      console.log(`Event Emitter said you selected ${c.name}`);
+  changed(changedCharacter: any) {
+    if (changedCharacter) {
+      console.log(`Event Emitter said you selected ${changedCharacter.name}`);
     }
   }
 }
