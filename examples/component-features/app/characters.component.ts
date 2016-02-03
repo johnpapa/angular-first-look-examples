@@ -18,8 +18,7 @@ export class CharactersComponent implements OnInit {
   constructor(private _characterService: CharacterService) { }
 
   ngOnInit() {
-    this._characterService
-      .getCharacters(this.storyId)
+    this._characterService.getCharacters(this.storyId)
       .subscribe(characters => this.characters = characters);
   }
 
