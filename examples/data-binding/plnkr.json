@@ -1,5 +1,5 @@
 {
-  "description": "Component with Input and Output",
+  "description": "Data Binding",
   "files":[
     "!**/*.d.ts",
     "!**/*.js"

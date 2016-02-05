@@ -1,0 +1,13 @@
+.characters {
+  list-style-type: none;
+}
+
+*.characters li {
+  padding: 4px;
+  cursor: pointer;
+}
+
+*.characters li .selected {
+  background-color: #ccc;
+  width: 250px;
+}
