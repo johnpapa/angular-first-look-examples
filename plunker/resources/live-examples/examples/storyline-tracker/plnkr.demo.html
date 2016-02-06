@@ -158,7 +158,7 @@ import { CharactersComponent, CharacterService } from './characters/characters';
 import { DashboardComponent } from './dashboard/dashboard';
 import { VehiclesComponent } from './vehicles/vehicles';
 import { CONFIG, MessageService } from './shared/shared';
-import { EntityService, ExceptionService, FilterService, ModalComponent, ModalService, SpinnerComponent, SpinnerService, ToastComponent, ToastService } from './blocks/blocks';
+import { EntityService, ExceptionService, ModalComponent, ModalService, SpinnerComponent, SpinnerService, ToastComponent, ToastService } from './blocks/blocks';
 
 @Component({
   selector: 'story-app',
@@ -174,7 +174,6 @@ import { EntityService, ExceptionService, FilterService, ModalComponent, ModalSe
     CharacterService,
     EntityService,
     ExceptionService,
-    FilterService,
     MessageService,
     ModalService,
     SpinnerService,
@@ -534,7 +533,8 @@ import { FilterService, FilterTextComponent } from '../blocks/blocks';
   templateUrl: './app/characters/character-list.component.html',
   directives: [FilterTextComponent, ROUTER_DIRECTIVES],
   styleUrls: ['./app/characters/character-list.component.css'],
-  pipes: [SortCharactersPipe]
+  pipes: [SortCharactersPipe],
+  providers: [FilterService]
 })
 export class CharacterListComponent implements OnDestroy, OnInit {
   private _dbResetSubscription: Subscription<any>;
@@ -816,19 +816,19 @@ export class DashboardComponent implements OnDestroy, OnInit {
 
   characters: Observable<Character[]>;
 
-  customTrackBy = (index: number, item: any) => item['id'];
-
   constructor(
     private _characterService: CharacterService,
     private _router: Router,
     private _toastService: ToastService) { }
 
   getCharacters() {
+    // this._spinnerService.show();
     this.characters = this._characterService.getCharacters()
       .catch(e => {
         this._toastService.activate(`${e}`);
         return Observable.of();
       })
+      // .finally(() => { this._spinnerService.hide(); })
   }
 
   gotoDetail(character: Character) {
@@ -903,7 +903,8 @@ import { Vehicle, VehicleService } from './vehicle.service';
   templateUrl: './app/vehicles/vehicle-list.component.html',
   directives: [FilterTextComponent, ROUTER_DIRECTIVES],
   styleUrls: ['./app/vehicles/vehicle-list.component.css'],
-  pipes: [InitCapsPipe]
+  pipes: [InitCapsPipe],
+  providers: [FilterService]
 })
 export class VehicleListComponent implements OnDestroy, OnInit {
   private _dbResetSubscription: Subscription<any>;
@@ -915,8 +916,6 @@ export class VehicleListComponent implements OnDestroy, OnInit {
   constructor(
     private _filterService: FilterService,
     private _vehicleService: VehicleService) { }
-
-  customTrackBy = (index: number, item: any) => item['id'];
 
   filterChanged(searchText: string) {
     this.filteredVehicles = this._filterService.filter(searchText, ['id', 'name', 'type'], this.vehicles);
@@ -12018,7 +12017,6 @@ iframe.heightSet {
     <div class=&quot;mdl-grid&quot;>
       <div class=&quot;mdl-cell mdl-cell--3-col&quot;
         *ngFor=&quot;#character of characters | async&quot;
-        *ngForTrackBy=&quot;customTrackBy&quot;
         (click)=&quot;gotoDetail(character)&quot;>
 
         <button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect
@@ -12037,8 +12035,7 @@ iframe.heightSet {
   <filter-text (changed)=&quot;filterChanged($event)&quot;></filter-text>
 
   <ul class=&quot;vehicles&quot;>
-    <li *ngFor=&quot;#vehicle of filteredVehicles&quot;
-        *ngForTrackBy=&quot;customTrackBy&quot;>
+    <li *ngFor=&quot;#vehicle of filteredVehicles&quot;>
 
       <div class=&quot;mdl-card mdl-shadow--2dp&quot;>
         <div class=&quot;mdl-card__title&quot;>
@@ -12098,14 +12095,14 @@ iframe.heightSet {
   <script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.19.16/system-polyfills.js&quot;></script>
 
   <!-- Angular polyfill required everywhere -->
-  <script src=&quot;https://code.angularjs.org/2.0.0-beta.3/angular2-polyfills.js&quot;></script>
+  <script src=&quot;https://code.angularjs.org/2.0.0-beta.2/angular2-polyfills.js&quot;></script>
 
   <script src=&quot;https://code.angularjs.org/tools/system.js&quot;></script>
     <script src=&quot;https://code.angularjs.org/tools/typescript.js&quot;></script>
-  <script src=&quot;https://code.angularjs.org/2.0.0-beta.3/Rx.js&quot;></script>
-  <script src=&quot;https://code.angularjs.org/2.0.0-beta.3/angular2.dev.js&quot;></script>
-  <script src=&quot;https://code.angularjs.org/2.0.0-beta.3/router.dev.js&quot;></script>
-  <script src=&quot;https://code.angularjs.org/2.0.0-beta.3/http.dev.js&quot;></script>
+  <script src=&quot;https://code.angularjs.org/2.0.0-beta.2/Rx.js&quot;></script>
+  <script src=&quot;https://code.angularjs.org/2.0.0-beta.2/angular2.dev.js&quot;></script>
+  <script src=&quot;https://code.angularjs.org/2.0.0-beta.2/router.dev.js&quot;></script>
+  <script src=&quot;https://code.angularjs.org/2.0.0-beta.2/http.dev.js&quot;></script>
 
   <script src=&quot;https://npmcdn.com/a2-in-memory-web-api/web-api.js&quot;></script>
 
@@ -12142,7 +12139,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."><input type="hidden" name="files[README.md]" value="# Storyline Tracker
 
-## Getting Started
+# Getting Started
 
 1. Fork and clone this repo
 

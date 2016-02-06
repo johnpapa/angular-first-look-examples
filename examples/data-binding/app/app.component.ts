@@ -10,10 +10,10 @@ import { CharacterSolvedComponent } from './solution/character-solved.component'
   <div>
     <h3>Storyline Tracker - Data Binding Demo</h3>
 
-    <div>
+    <div style="margin:1em">
       <button class="dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect
       mdl-button--accent"
-        (click)="solve()">Show Solution</button>
+        (click)="solve()">{{buttonText}}</button>
     </div>
     <div *ngIf="!showSolution">
         <story-character></story-character>
@@ -28,8 +28,10 @@ import { CharacterSolvedComponent } from './solution/character-solved.component'
 })
 export class AppComponent {
   showSolution = false;
+  buttonText = 'Show Solution';
 
   solve() {
     this.showSolution = !this.showSolution;
+    this.buttonText = this.showSolution ? 'Show Starter' : 'Show Solution';
   }
 }
