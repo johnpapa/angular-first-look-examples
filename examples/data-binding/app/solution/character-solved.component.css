@@ -1,0 +1,18 @@
+.template {
+  margin: 1em;
+}
+
+.mdl-textfield__label {
+  top: 0;
+}
+
+.row {
+  margin: 1em;
+  padding: 1em;
+  width: 40%;
+}
+
+.selected {
+  border-right: 5px solid #EEE;
+  border-bottom: 5px solid #EEE;
+}
