@@ -15,12 +15,15 @@ import { CharacterSolvedComponent } from './solution/character-solved.component'
       mdl-button--accent"
         (click)="solve()">{{buttonText}}</button>
     </div>
-    <div *ngIf="!showSolution">
-        <story-character></story-character>
-    </div>
-    <div *ngIf="showSolution">
+
+    <span [ngSwitch]="showSolution">
+      <template [ngSwitchWhen]="true">
         <story-character-solved></story-character-solved>
-    </div>
+      </template>
+      <template ngSwitchDefault>
+        <story-character></story-character>
+      </template>
+    </span>
   </div>
   `,
   directives: [CharacterComponent, CharacterSolvedComponent],
@@ -28,10 +31,10 @@ import { CharacterSolvedComponent } from './solution/character-solved.component'
 })
 export class AppComponent {
   showSolution = false;
-  buttonText = 'Show Solution';
+  buttonText = 'Switch to Solution';
 
   solve() {
     this.showSolution = !this.showSolution;
-    this.buttonText = this.showSolution ? 'Show Starter' : 'Show Solution';
+    this.buttonText = this.showSolution ? 'Switch to  Starter' : 'Switch to Solution';
   }
 }

@@ -27,14 +27,6 @@ export class CharacterComponent {
     this.character = new Character(100, 'Boba Fett', 'dark', 'assets/man.png', 'http://angular.io');
   }
 
-  getClasses() {
-    let classes: string[] = ['bordered'];
-    if (this.isSelected) {
-      classes.push('selected');
-    }
-    return classes.join(' ');
-  }
-
   select(name: string) {
     let msg = `You selected ${name}`;
     console.log(msg);

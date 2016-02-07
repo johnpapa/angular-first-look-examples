@@ -1,47 +1,58 @@
 <article>
   <div class="template">
 
-  <h4>{{character.name | uppercase}} details</h4>
+    <h4>{{character.name | uppercase}}</h4>
 
-  <div class="row"
-    [class.selected2]="isSelected"
-    [ngClass]="getClasses()">
+    <p>{{character.name | uppercase}}</p>
+    <p>{{character.name | lowercase}}</p>
+    <p>{{price | currency}}</p>
+    <p>{{value | percent:'1.1-1'}}</p>
+    <p>{{value | number:'1.1-3'}}</p>
+    <p>{{eventDate | date:'medium'}}</p>
+    <p>{{eventDate | date:'yMMMd'}}</p>
 
-    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-      <label class="mdl-textfield__label" for="nametext">Name</label>
-      <input type="text" id="nametext" class="mdl-textfield__input"
-        [(ngModel)]="character.name" />
+
+
+    <div class="row"
+      [class.selected2]="isSelected"
+      [ngClass]="{selected: this.isSelected}">
+
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <label class="mdl-textfield__label" for="nametext">Name</label>
+        <input type="text" id="nametext" class="mdl-textfield__input"
+          [(ngModel)]="character.name" />
+      </div>
+
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <label class="mdl-textfield__label" for="nametext">Color</label>
+        <input type="text" id="nametext" class="mdl-textfield__input"
+          [(ngModel)]="color" />
+      </div>
+
+      <div class="row">
+        <a href="{{character.link}}" target="_blank">
+          <img src="{{character.imageUrl}}" style="width:50px"
+            [style.background]="color"
+            (mouseenter)="color = '#CCC'"
+            (mouseleave)="color = '#EEE'"
+            >
+        </a>
+      </div>
     </div>
 
-    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-      <label class="mdl-textfield__label" for="nametext">Color</label>
-      <input type="text" id="nametext" class="mdl-textfield__input"
-        [(ngModel)]="color" />
+    <div>
+      <button class="dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect
+      mdl-button--accent"
+        [attr.aria-label]="selectLabel"
+        (click)="select(character.name)">Select</button>
     </div>
 
-    <div class="row">
-      <a href="{{character.link}}" target="_blank">
-        <img src="{{character.imageUrl}}" style="width:50px"
-          [style.background]="color"
-          (mouseenter)="color = '#CCC'"
-          (mouseleave)="color = '#EEE'"
-          >
-      </a>
+    <div class="row" *ngIf="isSelected">
+      Your character {{character.name}} has these vehicles:
+      <ul>
+        <li *ngFor="#vehicle of vehicles">{{vehicle.name}}</li>
+      </ul>
     </div>
-  </div>
 
-  <div>
-    <button class="dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect
-    mdl-button--accent"
-      [attr.aria-label]="selectLabel"
-      (click)="select(character.name)">Select</button>
   </div>
-
-  <div class="row" *ngIf="isSelected">
-    Your character {{character.name}} has these vehicles:
-    <ul>
-      <li *ngFor="#vehicle of vehicles">{{vehicle.name}}</li>
-    </ul>
-  </div>
-
-</div>
+</article>
