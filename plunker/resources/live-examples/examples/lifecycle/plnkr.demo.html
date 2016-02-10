@@ -1,4 +1,16 @@
-<html lang="en"><head></head><body><form id="mainForm" method="post" action="http://plnkr.co/edit/?p=preview" target="_self"><input type="hidden" name="files[app/character-list.component.ts]" value="import { Component, OnInit } from 'angular2/core';
+<html lang="en"><head></head><body><form id="mainForm" method="post" action="http://plnkr.co/edit/?p=preview" target="_self"><input type="hidden" name="files[app/app.component.ts]" value="import { Component } from 'angular2/core';
+import { Character, CharacterService } from './character.service';
+import { CharacterListComponent } from './character-list.component';
+
+@Component({
+  selector: 'my-app',
+  template: '<my-character-list></my-character-list>',
+  directives: [CharacterListComponent],
+  providers: [CharacterService]
+})
+export class AppComponent {}
+
+"><input type="hidden" name="files[app/character-list.component.ts]" value="import { Component, OnInit } from 'angular2/core';
 import { Character, CharacterService } from './character.service';
 import { CharacterComponent } from './character.component';
 
@@ -6,8 +18,7 @@ import { CharacterComponent } from './character.component';
   selector: 'my-character-list',
   templateUrl: 'app/character-list.component.html',
   styles: ['li {cursor: pointer;}'],
-  directives: [CharacterComponent],
-  providers: [CharacterService]
+  directives: [CharacterComponent]
 })
 export class CharacterListComponent implements OnInit {
   selectedCharacter: Character;
@@ -81,9 +92,9 @@ export class CharacterService {
   }
 }
 "><input type="hidden" name="files[app/main.ts]" value="  import { bootstrap } from 'angular2/platform/browser';
-  import { CharacterListComponent } from './character-list.component';
+  import { AppComponent } from './app.component';
 
-  bootstrap(CharacterListComponent)
+  bootstrap(AppComponent)
     .then(success => console.log(`Bootstrap success`))
     .catch(error => console.log(error));
 
@@ -144,7 +155,7 @@ export class CharacterService {
 </head>
 
 <body>
-  <my-character-list>Loading Demo ...</my-character-list>
+  <my-app>Loading Demo ...</my-app>
 </body>
 
 </html>"><input type="hidden" name="files[api/characters.json]" value="{

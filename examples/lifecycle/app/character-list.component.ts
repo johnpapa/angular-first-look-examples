@@ -6,8 +6,7 @@ import { CharacterComponent } from './character.component';
   selector: 'my-character-list',
   templateUrl: 'app/character-list.component.html',
   styles: ['li {cursor: pointer;}'],
-  directives: [CharacterComponent],
-  providers: [CharacterService]
+  directives: [CharacterComponent]
 })
 export class CharacterListComponent implements OnInit {
   selectedCharacter: Character;

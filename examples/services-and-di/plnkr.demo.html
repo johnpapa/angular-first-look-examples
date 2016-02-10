@@ -1,4 +1,16 @@
-<html lang="en"><head></head><body><form id="mainForm" method="post" action="http://plnkr.co/edit/?p=preview" target="_self"><input type="hidden" name="files[app/character-list.component.ts]" value="import { Component } from 'angular2/core';
+<html lang="en"><head></head><body><form id="mainForm" method="post" action="http://plnkr.co/edit/?p=preview" target="_self"><input type="hidden" name="files[app/app.component.ts]" value="import { Component } from 'angular2/core';
+import { Character, CharacterService } from './character.service';
+import { CharacterListComponent } from './character-list.component';
+
+@Component({
+  selector: 'my-app',
+  template: '<my-character-list></my-character-list>',
+  directives: [CharacterListComponent],
+  providers: [CharacterService]
+})
+export class AppComponent {}
+
+"><input type="hidden" name="files[app/character-list.component.ts]" value="import { Component } from 'angular2/core';
 import { Character, CharacterService } from './character.service';
 import { CharacterComponent } from './character.component';
 
@@ -6,8 +18,7 @@ import { CharacterComponent } from './character.component';
   selector: 'my-character-list',
   templateUrl: 'app/character-list.component.html',
   styles: ['li {cursor: pointer;}'],
-  directives: [CharacterComponent],
-  providers: [CharacterService]
+  directives: [CharacterComponent]
 })
 export class CharacterListComponent {
   selectedCharacter: Character;
@@ -57,9 +68,9 @@ export class CharacterService {
   }
 }
 "><input type="hidden" name="files[app/main.ts]" value="  import { bootstrap } from 'angular2/platform/browser';
-  import { CharacterListComponent } from './character-list.component';
+  import { AppComponent } from './app.component';
 
-  bootstrap(CharacterListComponent)
+  bootstrap(AppComponent)
     .then(success => console.log(`Bootstrap success`))
     .catch(error => console.log(error));
 
@@ -115,7 +126,7 @@ export class CharacterService {
 </head>
 
 <body>
-  <my-character-list>Loading Demo ...</my-character-list>
+  <my-app>Loading Demo ...</my-app>
 </body>
 
 </html>"><input type="hidden" name="files[api/characters.json]" value="{
@@ -271,4 +282,4 @@ Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
-limitations under the License."><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="first look"><input type="hidden" name="tags[3]" value="angular 2"><input type="hidden" name="private" value="true"><input type="hidden" name="description" value="Angular 2 Example - Services"></form><script>document.getElementById("mainForm").submit();</script></body></html>
+limitations under the License."><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="first look"><input type="hidden" name="tags[3]" value="angular 2"><input type="hidden" name="private" value="true"><input type="hidden" name="description" value="Angular 2 Example - Services and DI"></form><script>document.getElementById("mainForm").submit();</script></body></html>
