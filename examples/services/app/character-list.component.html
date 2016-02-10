@@ -1,0 +1,11 @@
+<ul>
+  <li *ngFor="#character of characters" (click)="select(character)">
+    {{ character.name }}
+  </li>
+</ul>
+
+<ul class="messages">
+  <li *ngFor="#msg of messages">{{msg}}</li>
+</ul>
+
+<my-character *ngIf="selectedCharacter" [character]="selectedCharacter"></my-character>

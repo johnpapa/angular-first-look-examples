@@ -1,4 +1,4 @@
-import { Component, OnInit } from 'angular2/core';
+import { Component } from 'angular2/core';
 import { Character, CharacterService } from './character.service';
 import { CharacterComponent } from './character.component';
 
@@ -9,28 +9,22 @@ import { CharacterComponent } from './character.component';
   directives: [CharacterComponent],
   providers: [CharacterService]
 })
-export class CharacterListComponent implements OnInit {
+export class CharacterListComponent {
   selectedCharacter: Character;
-  characters: Character[] = [];
+  characters = [
+    new Character(1, 'Han Solo', 'light'),
+    new Character(2, 'Luke Skywalker', 'light'),
+    new Character(3, 'Kylo', 'dark'),
+    new Character(4, 'Rey', 'light')
+  ];
   messages: string[] = [];
 
-  constructor(private _characterService: CharacterService) { }
-
-  ngOnInit() {
+  constructor(private _characterService: CharacterService) {
     this.characters = this._characterService.getCharacters();
   }
 
   select(character: Character) {
     this.selectedCharacter = character;
-  }
-
-  clear() {
-    this.selectedCharacter = null;
-  }
-
-  log(msg: string) {
-    this.messages.splice(0, 0, msg);
-    console.log(msg);
   }
 }
 
