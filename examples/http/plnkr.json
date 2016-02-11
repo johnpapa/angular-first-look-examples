@@ -1,0 +1,8 @@
+{
+  "description": "Http",
+  "files":[
+    "!**/*.d.ts",
+    "!**/*.js"
+  ],
+  "tags": ["first look", "angular 2"]
+}

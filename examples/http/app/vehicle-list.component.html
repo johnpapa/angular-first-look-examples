@@ -1,0 +1,13 @@
+<ul>
+  <li *ngFor="#vehicle of vehicles" (click)="select(vehicle)">
+    {{ vehicle.name }}
+  </li>
+</ul>
+
+<ul class="messages">
+  <li *ngFor="#msg of messages">{{msg}}</li>
+</ul>
+
+<div class="error" *ngIf="errorMessage">{{errorMessage}}</div>
+
+<my-vehicle *ngIf="selectedvehicle" [vehicle]="selectedvehicle"></my-vehicle>
