@@ -12,15 +12,16 @@ import { VehicleComponent } from './vehicle.component';
 })
 export class VehicleListComponent {
   errorMessage: string;
-  vehicles: Observable<Vehicle[]>;
   selectedVehicle: Vehicle;
 
   constructor(private _vehicleService: VehicleService) { }
 
   ngOnInit() { this.getHeroes(); }
 
-  getHeroes() {
-    this.vehicles = this._vehicleService.getVehicles();
+  vehicles: Observable<Vehicle[]>;
+
+  getHeroes(value?: string) {
+    this.vehicles = this._vehicleService.getVehicles(value);
   }
 
   select(vehicle: Vehicle) {

@@ -10,9 +10,13 @@ export class Vehicle {
 export class VehicleService {
   constructor(private _http: Http) { }
 
-  getVehicles() {
+  getVehicles(value?: string) {
     return this._http.get('api/vehicles.json')
-      .map((response: Response) => <Vehicle[]>response.json().data)
+      .map((response: Response) => {
+        let vehicles = <Vehicle[]>response.json().data;
+        if (!value) return vehicles;
+        return vehicles.filter(v => v.name.toLowerCase().includes(value.toLowerCase()))
+      })
       .do(data => console.log(data))
       .catch(this.handleError);
   }

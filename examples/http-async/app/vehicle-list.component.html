@@ -1,6 +1,6 @@
+<input #text (keyup)="getHeroes(text.value)">
 <ul>
-  <li *ngFor="#vehicle of vehicles | async"
-    (click)="select(vehicle)">
+  <li *ngFor="#vehicle of vehicles | async">
     {{ vehicle.name }}
   </li>
 </ul>
