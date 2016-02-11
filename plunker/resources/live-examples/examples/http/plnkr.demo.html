@@ -15,12 +15,13 @@ import { VehicleListComponent } from './vehicle-list.component';
 })
 export class AppComponent {}
 
-"><input type="hidden" name="files[app/main.ts]" value="  import { bootstrap } from 'angular2/platform/browser';
-  import { AppComponent } from './app.component';
+"><input type="hidden" name="files[app/main.ts]" value="import { bootstrap } from 'angular2/platform/browser';
+import { AppComponent } from './app.component';
+import 'rxjs/Rx';
 
-  bootstrap(AppComponent)
-    .then(success => console.log(`Bootstrap success`))
-    .catch(error => console.log(error));
+bootstrap(AppComponent)
+  .then(success => console.log(`Bootstrap success`))
+  .catch(error => console.log(error));
 
 "><input type="hidden" name="files[app/vehicle-list.component.ts]" value="import { Component } from 'angular2/core';
 import { Vehicle, VehicleService } from './vehicle.service';
@@ -78,10 +79,9 @@ export class VehicleService {
   constructor(private _http: Http) { }
 
   getVehicles() {
-    return this._http.get('api/vehicles')
-      .map((response: Response) =>
-        <Vehicle[]>response.json().data
-      )
+    return this._http.get('api/vehicles.json')
+      .map((response: Response) => <Vehicle[]>response.json().data)
+      .do(data => console.log(data))
       .catch(this.handleError);
   }
 

@@ -24,6 +24,8 @@ bootstrap(AppComponent)
   .catch(error => console.log(error));
 
 "><input type="hidden" name="files[app/vehicle-list.component.ts]" value="import { Component } from 'angular2/core';
+import { Observable } from 'rxjs/Rx';
+
 import { Vehicle, VehicleService } from './vehicle.service';
 import { VehicleComponent } from './vehicle.component';
 
@@ -35,19 +37,16 @@ import { VehicleComponent } from './vehicle.component';
 })
 export class VehicleListComponent {
   errorMessage: string;
-  vehicles: Vehicle[];
   selectedVehicle: Vehicle;
 
   constructor(private _vehicleService: VehicleService) { }
 
   ngOnInit() { this.getHeroes(); }
 
-  getHeroes() {
-    this._vehicleService.getVehicles()
-      .subscribe(
-        vehicles => this.vehicles = vehicles,
-        error =>  this.errorMessage = <any>error
-    );
+  vehicles: Observable<Vehicle[]>;
+
+  getHeroes(value?: string) {
+    this.vehicles = this._vehicleService.getVehicles(value);
   }
 
   select(vehicle: Vehicle) {
@@ -78,9 +77,13 @@ export class Vehicle {
 export class VehicleService {
   constructor(private _http: Http) { }
 
-  getVehicles() {
+  getVehicles(value?: string) {
     return this._http.get('api/vehicles.json')
-      .map((response: Response) => <Vehicle[]>response.json().data)
+      .map((response: Response) => {
+        let vehicles = <Vehicle[]>response.json().data;
+        if (!value) return vehicles;
+        return vehicles.filter(v => v.name.toLowerCase().includes(value.toLowerCase()))
+      })
       .do(data => console.log(data))
       .catch(this.handleError);
   }
@@ -90,8 +93,9 @@ export class VehicleService {
     return Observable.throw(error.json().error || 'Server error');
   }
 }
-"><input type="hidden" name="files[app/vehicle-list.component.html]" value="<ul>
-  <li *ngFor=&quot;#vehicle of vehicles&quot; (click)=&quot;select(vehicle)&quot;>
+"><input type="hidden" name="files[app/vehicle-list.component.html]" value="<input #text (keyup)=&quot;getHeroes(text.value)&quot;>
+<ul>
+  <li *ngFor=&quot;#vehicle of vehicles | async&quot;>
     {{ vehicle.name }}
   </li>
 </ul>
@@ -300,4 +304,4 @@ Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
-limitations under the License."><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="first look"><input type="hidden" name="tags[3]" value="angular 2"><input type="hidden" name="private" value="true"><input type="hidden" name="description" value="Angular 2 Example - Http"></form><script>document.getElementById("mainForm").submit();</script></body></html>
+limitations under the License."><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="first look"><input type="hidden" name="tags[3]" value="angular 2"><input type="hidden" name="private" value="true"><input type="hidden" name="description" value="Angular 2 Example - Http with Async Pipe"></form><script>document.getElementById("mainForm").submit();</script></body></html>
