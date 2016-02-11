@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+  <head>
+    <meta charset="utf-8" />
+    <title>AngularJS Plunker</title>
+    <script>document.write('<base href="' + document.location + '" />');</script>
+    <script data-require="angular.js@1.4.x" src="https://code.angularjs.org/1.4.8/angular.js" data-semver="1.4.8"></script>
+    <script src="vehicles.controller.js"></script>
+    <script src="vehicle.service.js"></script>
+  </head>
+
+  <body ng-controller="VehiclesController as vm">
+    <h3>{{vm.title}}</h3>
+    <ul>
+      <li ng-repeat="vehicle in vm.vehicles">
+        {{vehicle.name}}
+      </li>
+    </ul>
+    <div ng-if="vm.vehicles.length">
+      <h3>You have {{vm.vehicles.length}} vehicles</h3>
+    </div>
+  </body>
+
+</html>

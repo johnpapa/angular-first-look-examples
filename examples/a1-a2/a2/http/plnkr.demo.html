@@ -24,18 +24,15 @@ export class AppComponent {}
 
 "><input type="hidden" name="files[app/vehicle-list.component.ts]" value="import { Component } from 'angular2/core';
 import { Vehicle, VehicleService } from './vehicle.service';
-import { VehicleComponent } from './vehicle.component';
 
 @Component({
   selector: 'my-vehicle-list',
   templateUrl: 'app/vehicle-list.component.html',
-  styles: ['li {cursor: pointer;} .error {color:red;}'],
-  directives: [VehicleComponent]
+  styles: ['li {cursor: pointer;} .error {color:red;}']
 })
 export class VehicleListComponent {
   errorMessage: string;
   vehicles: Vehicle[];
-  selectedVehicle: Vehicle;
 
   constructor(private _vehicleService: VehicleService) { }
 
@@ -48,21 +45,6 @@ export class VehicleListComponent {
         error =>  this.errorMessage = <any>error
     );
   }
-
-  select(vehicle: Vehicle) {
-    this.selectedVehicle = vehicle;
-  }
-}
-
-"><input type="hidden" name="files[app/vehicle.component.ts]" value="import { Component, EventEmitter, Input, Output } from 'angular2/core';
-import { Vehicle } from './vehicle.service';
-
-@Component({
-  selector: 'my-vehicle',
-  templateUrl: 'app/vehicle.component.html'
-})
-export class VehicleComponent {
-  @Input() vehicle: Vehicle;
 }
 
 "><input type="hidden" name="files[app/vehicle.service.ts]" value="import { Injectable } from 'angular2/core';
@@ -78,7 +60,7 @@ export class VehicleService {
   constructor(private _http: Http) { }
 
   getVehicles() {
-    return this._http.get('api/vehicles')
+    return this._http.get('api/vehicles.json')
       .map((response: Response) =>
         <Vehicle[]>response.json().data
       )
@@ -91,7 +73,7 @@ export class VehicleService {
   }
 }
 "><input type="hidden" name="files[app/vehicle-list.component.html]" value="<ul>
-  <li *ngFor=&quot;#vehicle of vehicles&quot; (click)=&quot;select(vehicle)&quot;>
+  <li *ngFor=&quot;#vehicle of vehicles&quot;>
     {{ vehicle.name }}
   </li>
 </ul>
@@ -100,13 +82,7 @@ export class VehicleService {
   <li *ngFor=&quot;#msg of messages&quot;>{{msg}}</li>
 </ul>
 
-<div class=&quot;error&quot; *ngIf=&quot;errorMessage&quot;>{{errorMessage}}</div>
-
-<my-vehicle *ngIf=&quot;selectedvehicle&quot; [vehicle]=&quot;selectedvehicle&quot;></my-vehicle>"><input type="hidden" name="files[app/vehicle.component.html]" value="<h3>We selected {{vehicle.name}}</h3>
-
-
-
-"><input type="hidden" name="files[index.html]" value="<!DOCTYPE html>
+<div class=&quot;error&quot; *ngIf=&quot;errorMessage&quot;>{{errorMessage}}</div>"><input type="hidden" name="files[index.html]" value="<!DOCTYPE html>
 <html>
 
 <head>
@@ -300,4 +276,4 @@ Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
-limitations under the License."><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="first look"><input type="hidden" name="tags[3]" value="angular 2"><input type="hidden" name="private" value="true"><input type="hidden" name="description" value="Angular 2 Example - Http"></form><script>document.getElementById("mainForm").submit();</script></body></html>
+limitations under the License."><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="first look"><input type="hidden" name="tags[3]" value="angular 2"><input type="hidden" name="private" value="true"><input type="hidden" name="description" value="Angular 2 Example - Angular 2 - Http"></form><script>document.getElementById("mainForm").submit();</script></body></html>

@@ -11,7 +11,7 @@ export class VehicleService {
   constructor(private _http: Http) { }
 
   getVehicles() {
-    return this._http.get('api/vehicles')
+    return this._http.get('api/vehicles.json')
       .map((response: Response) =>
         <Vehicle[]>response.json().data
       )

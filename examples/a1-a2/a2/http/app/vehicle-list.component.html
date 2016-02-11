@@ -1,0 +1,11 @@
+<ul>
+  <li *ngFor="#vehicle of vehicles">
+    {{ vehicle.name }}
+  </li>
+</ul>
+
+<ul class="messages">
+  <li *ngFor="#msg of messages">{{msg}}</li>
+</ul>
+
+<div class="error" *ngIf="errorMessage">{{errorMessage}}</div>

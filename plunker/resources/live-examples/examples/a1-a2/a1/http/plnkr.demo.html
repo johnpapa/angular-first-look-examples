@@ -1,0 +1,219 @@
+<html lang="en"><head></head><body><form id="mainForm" method="post" action="http://plnkr.co/edit/?p=preview" target="_self"><input type="hidden" name="files[vehicle.service.js]" value="(function() {
+  'use strict';
+
+  angular
+    .module('app')
+    .service('VehicleService', VehicleService);
+
+  VehicleService.$inject = ['$http'];
+
+  function VehicleService($http) {
+    this.getVehicles = function() {
+      return $http.get('api/vehicles.json')
+        .then(function(response) {
+          return response.data.data;
+        })
+        .catch(handleError);
+    }
+
+    function handleError() {
+
+    }
+  }
+})();
+
+"><input type="hidden" name="files[vehicles.controller.js]" value="(function () {
+  angular
+    .module('app', [])
+    .controller('VehiclesController', VehiclesController);
+
+  VehiclesController.$inject = ['VehicleService'];
+  function VehiclesController(VehicleService) {
+    var vm = this;
+    vm.title = 'Services';
+    VehicleService.getVehicles()
+      .then(function (vehicles) {
+        vm.vehicles = vehicles;
+      });
+  }
+})();
+
+"><input type="hidden" name="files[index.html]" value="<!DOCTYPE html>
+<html ng-app=&quot;app&quot;>
+
+  <head>
+    <meta charset=&quot;utf-8&quot; />
+    <title>AngularJS Plunker</title>
+    <script>document.write('<base href=&quot;' + document.location + '&quot; />');</script>
+    <script data-require=&quot;angular.js@1.4.x&quot; src=&quot;https://code.angularjs.org/1.4.8/angular.js&quot; data-semver=&quot;1.4.8&quot;></script>
+    <script src=&quot;vehicles.controller.js&quot;></script>
+    <script src=&quot;vehicle.service.js&quot;></script>
+  </head>
+
+  <body ng-controller=&quot;VehiclesController as vm&quot;>
+    <h3>{{vm.title}}</h3>
+    <ul>
+      <li ng-repeat=&quot;vehicle in vm.vehicles&quot;>
+        {{vehicle.name}}
+      </li>
+    </ul>
+    <div ng-if=&quot;vm.vehicles.length&quot;>
+      <h3>You have {{vm.vehicles.length}} vehicles</h3>
+    </div>
+  </body>
+
+</html>
+"><input type="hidden" name="files[api/characters.json]" value="{
+  &quot;data&quot;: [
+    {
+      &quot;id&quot;: 11,
+      &quot;name&quot;: &quot;Chewbacca&quot;,
+      &quot;side&quot;: &quot;light&quot;
+    },
+    {
+      &quot;id&quot;: 12,
+      &quot;name&quot;: &quot;Rey&quot;,
+      &quot;side&quot;: &quot;light&quot;
+    },
+    {
+      &quot;id&quot;: 13,
+      &quot;name&quot;: &quot;Finn (FN2187)&quot;,
+      &quot;side&quot;: &quot;light&quot;
+    },
+    {
+      &quot;id&quot;: 14,
+      &quot;name&quot;: &quot;Han Solo&quot;,
+      &quot;side&quot;: &quot;light&quot;
+    },
+    {
+      &quot;id&quot;: 15,
+      &quot;name&quot;: &quot;Leia Organa&quot;,
+      &quot;side&quot;: &quot;light&quot;
+    },
+    {
+      &quot;id&quot;: 16,
+      &quot;name&quot;: &quot;Luke Skywalker&quot;,
+      &quot;side&quot;: &quot;light&quot;
+    },
+    {
+      &quot;id&quot;: 17,
+      &quot;name&quot;: &quot;Poe Dameron&quot;,
+      &quot;side&quot;: &quot;light&quot;
+    },
+    {
+      &quot;id&quot;: 18,
+      &quot;name&quot;: &quot;Kylo Ren&quot;,
+      &quot;side&quot;: &quot;dark&quot;
+    },
+    {
+      &quot;id&quot;: 19,
+      &quot;name&quot;: &quot;Supreme Commander Snoke&quot;,
+      &quot;side&quot;: &quot;dark&quot;
+    },
+    {
+      &quot;id&quot;: 20,
+      &quot;name&quot;: &quot;R2-D2&quot;,
+      &quot;side&quot;: &quot;light&quot;
+    },
+    {
+      &quot;id&quot;: 21,
+      &quot;name&quot;: &quot;BB8&quot;,
+      &quot;side&quot;: &quot;light&quot;
+    },
+    {
+      &quot;id&quot;: 22,
+      &quot;name&quot;: &quot;C-3PO&quot;,
+      &quot;side&quot;: &quot;light&quot;
+    },
+    {
+      &quot;id&quot;: 23,
+      &quot;name&quot;: &quot;Maz Kanata&quot;,
+      &quot;side&quot;: &quot;light&quot;
+    },
+    {
+      &quot;id&quot;: 24,
+      &quot;name&quot;: &quot;Captain Phasma&quot;,
+      &quot;side&quot;: &quot;dark&quot;
+    },
+    {
+      &quot;id&quot;: 25,
+      &quot;name&quot;: &quot;General Hux&quot;,
+      &quot;side&quot;: &quot;dark&quot;
+    },
+    {
+      &quot;id&quot;: 26,
+      &quot;name&quot;: &quot;Lor San Tekka&quot;,
+      &quot;side&quot;: &quot;light&quot;
+    }
+  ]
+}"><input type="hidden" name="files[api/vehicles.json]" value="{
+  &quot;data&quot;: [
+    {
+      &quot;id&quot;: 30,
+      &quot;name&quot;: &quot;Millennium Falcon&quot;,
+      &quot;type&quot;: &quot;space&quot;
+    },
+    {
+      &quot;id&quot;: 32,
+      &quot;name&quot;: &quot;X-Wing Fighter&quot;,
+      &quot;type&quot;: &quot;space&quot;
+    },
+    {
+      &quot;id&quot;: 33,
+      &quot;name&quot;: &quot;Imperial Star Destroyer&quot;,
+      &quot;type&quot;: &quot;space&quot;
+    },
+    {
+      &quot;id&quot;: 34,
+      &quot;name&quot;: &quot;AT-AT Walker&quot;,
+      &quot;type&quot;: &quot;land&quot;
+    },
+    {
+      &quot;id&quot;: 35,
+      &quot;name&quot;: &quot;TIE Fighter&quot;,
+      &quot;type&quot;: &quot;space&quot;
+    },
+    {
+      &quot;id&quot;: 36,
+      &quot;name&quot;: &quot;B-Wing Fighter&quot;,
+      &quot;type&quot;: &quot;space&quot;
+    },
+    {
+      &quot;id&quot;: 37,
+      &quot;name&quot;: &quot;ETA-2 Jedi Starfighter&quot;,
+      &quot;type&quot;: &quot;space&quot;
+    },
+    {
+      &quot;id&quot;: 38,
+      &quot;name&quot;: &quot;TIE Interceptor&quot;,
+      &quot;type&quot;: &quot;space&quot;
+    },
+    {
+      &quot;id&quot;: 39,
+      &quot;name&quot;: &quot;X-34 Landspeeder&quot;,
+      &quot;type&quot;: &quot;land&quot;
+    },
+    {
+      &quot;id&quot;: 40,
+      &quot;name&quot;: &quot;Snow Speeder&quot;,
+      &quot;type&quot;: &quot;land&quot;
+    },
+    {
+      &quot;id&quot;: 41,
+      &quot;name&quot;: &quot;X-34 Landspeeder&quot;,
+      &quot;type&quot;: &quot;land&quot;
+    }
+  ]
+}"><input type="hidden" name="files[license.md]" value="Copyright 2010-2015 Google, Inc. http://angularjs.org
+
+Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License."><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="first look"><input type="hidden" name="tags[3]" value="angular 1"><input type="hidden" name="private" value="true"><input type="hidden" name="description" value="Angular 2 Example - Angular 1 - Http"></form><script>document.getElementById("mainForm").submit();</script></body></html>
