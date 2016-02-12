@@ -1,0 +1,313 @@
+<html lang="en"><head></head><body><form id="mainForm" method="post" action="http://plnkr.co/edit/?p=preview" target="_self"><input type="hidden" name="files[app/app.component.ts]" value="import { Component } from 'angular2/core';
+import { HTTP_PROVIDERS } from 'angular2/http';
+
+import { Vehicle, VehicleService } from './vehicle.service';
+import { VehicleListComponent } from './vehicle-list.component';
+
+@Component({
+  selector: 'my-app',
+  template: '<my-vehicle-list></my-vehicle-list>',
+  directives: [VehicleListComponent],
+  providers: [
+    HTTP_PROVIDERS,
+    VehicleService
+  ]
+})
+export class AppComponent {}
+
+"><input type="hidden" name="files[app/main.ts]" value="import { bootstrap } from 'angular2/platform/browser';
+import { AppComponent } from './app.component';
+import 'rxjs/Rx';
+
+bootstrap(AppComponent)
+  .then(success => console.log(`Bootstrap success`))
+  .catch(error => console.log(error));
+
+"><input type="hidden" name="files[app/vehicle-list.component.ts]" value="import { Component } from 'angular2/core';
+import { Vehicle, VehicleService } from './vehicle.service';
+import { VehicleComponent } from './vehicle.component';
+
+@Component({
+  selector: 'my-vehicle-list',
+  templateUrl: 'app/vehicle-list.component.html',
+  styles: ['li {cursor: pointer;} .error {color:red;}'],
+  directives: [VehicleComponent]
+})
+export class VehicleListComponent {
+  errorMessage: string;
+  vehicles: Promise<Vehicle[]>;
+  selectedVehicle: Vehicle;
+
+  constructor(private _vehicleService: VehicleService) { }
+
+  ngOnInit() { this.getHeroes(); }
+
+  getHeroes(value?: string) {
+    this.vehicles = this._vehicleService.getVehicles(value)
+    // this._vehicleService.getVehicles()
+    //   .then(vehicles => this.vehicles = vehicles)
+    //   .catch(error => this.errorMessage = <any>error);
+  }
+
+  select(vehicle: Vehicle) {
+    this.selectedVehicle = vehicle;
+  }
+}
+
+"><input type="hidden" name="files[app/vehicle.component.ts]" value="import { Component, EventEmitter, Input, Output } from 'angular2/core';
+import { Vehicle } from './vehicle.service';
+
+@Component({
+  selector: 'my-vehicle',
+  templateUrl: 'app/vehicle.component.html'
+})
+export class VehicleComponent {
+  @Input() vehicle: Vehicle;
+}
+
+"><input type="hidden" name="files[app/vehicle.service.ts]" value="import { Injectable } from 'angular2/core';
+import { Http, Response } from 'angular2/http';
+import { Observable } from 'rxjs/Rx';
+
+export class Vehicle {
+  constructor(public id: number, public name: string, public side: string) { }
+}
+
+@Injectable()
+export class VehicleService {
+  constructor(private _http: Http) { }
+
+  getVehicles(value?: string) {
+    return this._http.get('api/vehicles.json')
+      .map((response: Response) => {
+        let vehicles = <Vehicle[]>response.json().data;
+        if (!value) return vehicles;
+        return vehicles.filter(v => v.name.toLowerCase().includes(value.toLowerCase()))
+      })
+      .toPromise()
+      .catch(this.handleError);
+    // return this._http.get('api/vehicles.json')
+    //   .map((response: Response) => <Vehicle[]>response.json().data)
+    //   .toPromise()
+    //   .catch(this.handleError);
+  }
+
+  private handleError(error: Response) {
+    console.error(error);
+    return Observable.throw(error.json().error || 'Server error');
+  }
+}
+"><input type="hidden" name="files[app/vehicle-list.component.html]" value="<input #text (keyup)=&quot;getHeroes(text.value)&quot;>
+
+<ul>
+  <li *ngFor=&quot;#vehicle of vehicles | async&quot;
+    (click)=&quot;select(vehicle)&quot;>
+    {{ vehicle.name }}
+  </li>
+</ul>
+
+<ul class=&quot;messages&quot;>
+  <li *ngFor=&quot;#msg of messages&quot;>{{msg}}</li>
+</ul>
+
+<div class=&quot;error&quot; *ngIf=&quot;errorMessage&quot;>{{errorMessage}}</div>
+
+<my-vehicle *ngIf=&quot;selectedvehicle&quot; [vehicle]=&quot;selectedvehicle&quot;></my-vehicle>"><input type="hidden" name="files[app/vehicle.component.html]" value="<h3>We selected {{vehicle.name}}</h3>
+
+
+
+"><input type="hidden" name="files[index.html]" value="<!DOCTYPE html>
+<html>
+
+<head>
+  <script>document.write('<base href=&quot;' + document.location + '&quot; />');</script>
+
+  <meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;>
+
+  <!-- IE required polyfills, in this exact order -->
+  <script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.34.1/es6-shim.js&quot;></script>
+  <script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.19.16/system-polyfills.js&quot;></script>
+
+  <!-- Angular polyfill required everywhere -->
+  <script src=&quot;https://code.angularjs.org/2.0.0-beta.3/angular2-polyfills.js&quot;></script>
+
+  <script src=&quot;https://code.angularjs.org/tools/system.js&quot;></script>
+    <script src=&quot;https://code.angularjs.org/tools/typescript.js&quot;></script>
+  <script src=&quot;https://code.angularjs.org/2.0.0-beta.3/Rx.js&quot;></script>
+  <script src=&quot;https://code.angularjs.org/2.0.0-beta.3/angular2.dev.js&quot;></script>
+  <script src=&quot;https://code.angularjs.org/2.0.0-beta.3/router.dev.js&quot;></script>
+  <script src=&quot;https://code.angularjs.org/2.0.0-beta.3/http.dev.js&quot;></script>
+
+  <script>
+      System.config({
+        transpiler: 'typescript', 
+        typescriptOptions: { emitDecoratorMetadata: true }, 
+        packages: {
+          'api': {defaultExtension: 'ts'}, 
+          'app': {defaultExtension: 'ts'} 
+        } 
+      });
+    System.import('app/main')
+          .then(null, console.error.bind(console));
+  </script>
+
+</head>
+
+<body>
+  <my-app>Loading Demo ...</my-app>
+</body>
+
+</html>"><input type="hidden" name="files[api/characters.json]" value="{
+  &quot;data&quot;: [
+    {
+      &quot;id&quot;: 11,
+      &quot;name&quot;: &quot;Chewbacca&quot;,
+      &quot;side&quot;: &quot;light&quot;
+    },
+    {
+      &quot;id&quot;: 12,
+      &quot;name&quot;: &quot;Rey&quot;,
+      &quot;side&quot;: &quot;light&quot;
+    },
+    {
+      &quot;id&quot;: 13,
+      &quot;name&quot;: &quot;Finn (FN2187)&quot;,
+      &quot;side&quot;: &quot;light&quot;
+    },
+    {
+      &quot;id&quot;: 14,
+      &quot;name&quot;: &quot;Han Solo&quot;,
+      &quot;side&quot;: &quot;light&quot;
+    },
+    {
+      &quot;id&quot;: 15,
+      &quot;name&quot;: &quot;Leia Organa&quot;,
+      &quot;side&quot;: &quot;light&quot;
+    },
+    {
+      &quot;id&quot;: 16,
+      &quot;name&quot;: &quot;Luke Skywalker&quot;,
+      &quot;side&quot;: &quot;light&quot;
+    },
+    {
+      &quot;id&quot;: 17,
+      &quot;name&quot;: &quot;Poe Dameron&quot;,
+      &quot;side&quot;: &quot;light&quot;
+    },
+    {
+      &quot;id&quot;: 18,
+      &quot;name&quot;: &quot;Kylo Ren&quot;,
+      &quot;side&quot;: &quot;dark&quot;
+    },
+    {
+      &quot;id&quot;: 19,
+      &quot;name&quot;: &quot;Supreme Commander Snoke&quot;,
+      &quot;side&quot;: &quot;dark&quot;
+    },
+    {
+      &quot;id&quot;: 20,
+      &quot;name&quot;: &quot;R2-D2&quot;,
+      &quot;side&quot;: &quot;light&quot;
+    },
+    {
+      &quot;id&quot;: 21,
+      &quot;name&quot;: &quot;BB8&quot;,
+      &quot;side&quot;: &quot;light&quot;
+    },
+    {
+      &quot;id&quot;: 22,
+      &quot;name&quot;: &quot;C-3PO&quot;,
+      &quot;side&quot;: &quot;light&quot;
+    },
+    {
+      &quot;id&quot;: 23,
+      &quot;name&quot;: &quot;Maz Kanata&quot;,
+      &quot;side&quot;: &quot;light&quot;
+    },
+    {
+      &quot;id&quot;: 24,
+      &quot;name&quot;: &quot;Captain Phasma&quot;,
+      &quot;side&quot;: &quot;dark&quot;
+    },
+    {
+      &quot;id&quot;: 25,
+      &quot;name&quot;: &quot;General Hux&quot;,
+      &quot;side&quot;: &quot;dark&quot;
+    },
+    {
+      &quot;id&quot;: 26,
+      &quot;name&quot;: &quot;Lor San Tekka&quot;,
+      &quot;side&quot;: &quot;light&quot;
+    }
+  ]
+}"><input type="hidden" name="files[api/vehicles.json]" value="{
+  &quot;data&quot;: [
+    {
+      &quot;id&quot;: 30,
+      &quot;name&quot;: &quot;Millennium Falcon&quot;,
+      &quot;type&quot;: &quot;space&quot;
+    },
+    {
+      &quot;id&quot;: 32,
+      &quot;name&quot;: &quot;X-Wing Fighter&quot;,
+      &quot;type&quot;: &quot;space&quot;
+    },
+    {
+      &quot;id&quot;: 33,
+      &quot;name&quot;: &quot;Imperial Star Destroyer&quot;,
+      &quot;type&quot;: &quot;space&quot;
+    },
+    {
+      &quot;id&quot;: 34,
+      &quot;name&quot;: &quot;AT-AT Walker&quot;,
+      &quot;type&quot;: &quot;land&quot;
+    },
+    {
+      &quot;id&quot;: 35,
+      &quot;name&quot;: &quot;TIE Fighter&quot;,
+      &quot;type&quot;: &quot;space&quot;
+    },
+    {
+      &quot;id&quot;: 36,
+      &quot;name&quot;: &quot;B-Wing Fighter&quot;,
+      &quot;type&quot;: &quot;space&quot;
+    },
+    {
+      &quot;id&quot;: 37,
+      &quot;name&quot;: &quot;ETA-2 Jedi Starfighter&quot;,
+      &quot;type&quot;: &quot;space&quot;
+    },
+    {
+      &quot;id&quot;: 38,
+      &quot;name&quot;: &quot;TIE Interceptor&quot;,
+      &quot;type&quot;: &quot;space&quot;
+    },
+    {
+      &quot;id&quot;: 39,
+      &quot;name&quot;: &quot;X-34 Landspeeder&quot;,
+      &quot;type&quot;: &quot;land&quot;
+    },
+    {
+      &quot;id&quot;: 40,
+      &quot;name&quot;: &quot;Snow Speeder&quot;,
+      &quot;type&quot;: &quot;land&quot;
+    },
+    {
+      &quot;id&quot;: 41,
+      &quot;name&quot;: &quot;X-34 Landspeeder&quot;,
+      &quot;type&quot;: &quot;land&quot;
+    }
+  ]
+}"><input type="hidden" name="files[license.md]" value="Copyright 2010-2015 Google, Inc. http://angularjs.org
+
+Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License."><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="first look"><input type="hidden" name="tags[3]" value="angular 2"><input type="hidden" name="private" value="true"><input type="hidden" name="description" value="Angular 2 Example - Http with promise"></form><script>document.getElementById("mainForm").submit();</script></body></html>

@@ -10,12 +10,7 @@ import { CharacterComponent } from './character.component';
 })
 export class CharacterListComponent {
   selectedCharacter: Character;
-  characters = [
-    new Character(1, 'Han Solo', 'light'),
-    new Character(2, 'Luke Skywalker', 'light'),
-    new Character(3, 'Kylo', 'dark'),
-    new Character(4, 'Rey', 'light')
-  ];
+  characters: Character[];
   messages: string[] = [];
 
   constructor(private _characterService: CharacterService) {
