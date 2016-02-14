@@ -1,0 +1,107 @@
+<html lang="en"><head></head><body><form id="mainForm" method="post" action="http://plnkr.co/edit/?p=preview" target="_self"><input type="hidden" name="files[app/character-list.component.ts]" value="import { Component } from 'angular2/core';
+import { Character } from './character';
+import { CharacterComponent } from './character.component';
+
+@Component({
+  selector: 'my-character-list',
+  templateUrl: 'app/character-list.component.html',
+  directives: [CharacterComponent]
+})
+export class CharacterListComponent {
+  selectedCharacter: Character;
+  characters = [
+    new Character(1, 'Han Solo'),
+    new Character(2, 'Luke Skywalker'),
+    new Character(3, 'BB-8'),
+    new Character(4, 'Rey')
+  ];
+
+  select(character: Character) {
+    this.selectedCharacter = character;
+  }
+}
+
+"><input type="hidden" name="files[app/character.component.ts]" value="import { Component, Input } from 'angular2/core';
+import { Character } from './character';
+
+@Component({
+  selector: 'my-character',
+  templateUrl: 'app/character.component.html'
+})
+export class CharacterComponent {
+  @Input() character: Character;
+}
+
+"><input type="hidden" name="files[app/character.ts]" value="export class Character {
+  constructor(public id: number, public name: string) { }
+}"><input type="hidden" name="files[app/main.ts]" value="  import { bootstrap } from 'angular2/platform/browser';
+  import { CharacterListComponent } from './character-list.component';
+
+  bootstrap(CharacterListComponent)
+    .then(success => console.log(`Bootstrap success`))
+    .catch(error => console.log(error));
+
+"><input type="hidden" name="files[app/character-list.component.html]" value="<ul>
+  <li *ngFor=&quot;#character of characters&quot; (click)=&quot;select(character)&quot;>
+    {{ character.name }}
+  </li>
+</ul>
+
+<my-character *ngIf=&quot;selectedCharacter&quot; [character]=&quot;selectedCharacter&quot;></my-character>"><input type="hidden" name="files[app/character.component.html]" value="<h3>We selected {{character.name}}</h3>
+
+
+
+"><input type="hidden" name="files[index.html]" value="<!DOCTYPE html>
+<html>
+
+<head>
+  <script>document.write('<base href=&quot;' + document.location + '&quot; />');</script>
+
+  <meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;>
+
+  <!-- IE required polyfills, in this exact order -->
+  <script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.34.1/es6-shim.js&quot;></script>
+  <script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.19.20/system-polyfills.js&quot;></script>
+
+  <!-- Angular polyfill required everywhere -->
+  <script src=&quot;https://code.angularjs.org/2.0.0-beta.6/angular2-polyfills.js&quot;></script>
+
+  <script src=&quot;https://code.angularjs.org/tools/system.js&quot;></script>
+    <script src=&quot;https://code.angularjs.org/tools/typescript.js&quot;></script>
+  <script src=&quot;https://code.angularjs.org/2.0.0-beta.6/Rx.js&quot;></script>
+  <script src=&quot;https://code.angularjs.org/2.0.0-beta.6/angular2.dev.js&quot;></script>
+  <script src=&quot;https://code.angularjs.org/2.0.0-beta.6/router.dev.js&quot;></script>
+  <script src=&quot;https://code.angularjs.org/2.0.0-beta.6/http.dev.js&quot;></script>
+
+  <script>
+      System.config({
+        transpiler: 'typescript', 
+        typescriptOptions: { emitDecoratorMetadata: true }, 
+        packages: {
+          'api': {defaultExtension: 'ts'}, 
+          'app': {defaultExtension: 'ts'} 
+        } 
+      });
+    System.import('app/main')
+          .then(null, console.error.bind(console));
+  </script>
+
+</head>
+
+<body>
+  <my-character-list>Loading Demo ...</my-character-list>
+</body>
+
+</html>"><input type="hidden" name="files[license.md]" value="Copyright 2010-2015 Google, Inc. http://angularjs.org
+
+Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License."><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="first look"><input type="hidden" name="tags[3]" value="angular 2"><input type="hidden" name="private" value="true"><input type="hidden" name="description" value="Angular 2 Example - Nested Component"></form><script>document.getElementById("mainForm").submit();</script></body></html>

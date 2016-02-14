@@ -8,7 +8,7 @@ var globby = require('globby');
 var mkdirp = require('mkdirp');
 
 var indexHtmlTranslator = require('./indexHtmlTranslator');
-var regionExtractor = require('./doc-shredder/regionExtractor');
+var regionExtractor = require('../doc-shredder/regionExtractor');
 
 module.exports = {
   buildPlunkers: buildPlunkers
