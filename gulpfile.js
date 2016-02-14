@@ -13,9 +13,10 @@ var Q = require("q");
 var TOOLS_PATH = './tools';
 // var EXAMPLES_PATH = path.join('./', '');
 var EXAMPLES_PATH = path.join('./', 'examples');
-var PUBLIC_PATH = './plunker';
-var RESOURCES_PATH = path.join(PUBLIC_PATH, 'resources');
-var LIVE_EXAMPLES_PATH = path.join(RESOURCES_PATH, 'live-examples');
+// var PUBLIC_PATH = './plunker';
+// var RESOURCES_PATH = path.join(PUBLIC_PATH, 'resources');
+// var LIVE_EXAMPLES_PATH = path.join(RESOURCES_PATH, 'live-examples');
+var LIVE_EXAMPLES_PATH = path.join('./', 'live-examples');
 // var LIVE_EXAMPLES_PATH = undefined;
 var TEMP_PATH = './_temp';
 
