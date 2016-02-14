@@ -28,8 +28,8 @@ import { CONFIG } from './config';
 })
 @RouteConfig([
   { path: '/characters', name: 'Characters', component: CharacterListComponent, useAsDefault: true },
-  { path: '/characters/:id', name: 'Character', component: CharacterComponent },
+  { path: '/character/:id', name: 'Character', component: CharacterComponent },
   { path: '/vehicles', name: 'Vehicles', component: VehicleListComponent },
-	{ path: '/vehicles/:id', name: 'Vehicle', component: VehicleComponent }
+	{ path: '/vehicle/:id', name: 'Vehicle', component: VehicleComponent }
   ])
 export class AppComponent { }
