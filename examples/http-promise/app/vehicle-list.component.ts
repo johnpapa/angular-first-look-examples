@@ -18,7 +18,7 @@ export class VehicleListComponent {
   ngOnInit() { this.getHeroes(); }
 
   getHeroes(value?: string) {
-    this.vehicles = this._vehicleService.getVehicles(value)
+    this.vehicles = this._vehicleService.getVehicles(value);
   }
 
   select(vehicle: Vehicle) {

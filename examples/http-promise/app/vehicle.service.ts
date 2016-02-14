@@ -12,11 +12,7 @@ export class VehicleService {
 
   getVehicles(value?: string) {
     return this._http.get('api/vehicles.json')
-      .map((response: Response) => {
-        let vehicles = <Vehicle[]>response.json().data;
-        if (!value) return vehicles;
-        return vehicles.filter(v => v.name.toLowerCase().includes(value.toLowerCase()))
-      })
+      .map((response: Response) => <Vehicle[]>response.json().data)
       .toPromise()
       .catch(this.handleError);
   }
