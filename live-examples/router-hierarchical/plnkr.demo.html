@@ -3,12 +3,9 @@ import { HTTP_PROVIDERS } from 'angular2/http';
 import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from 'angular2/router';
 import 'rxjs/Rx'; // load the full rxjs
 
-import { CharacterListComponent } from './characters/character-list.component';
-import { CharacterComponent } from './characters/character.component';
+import { CharactersComponent } from './characters/characters.component';
 import { CharacterService } from './characters/character.service';
-import { VehicleListComponent } from './vehicles/vehicle-list.component';
-import { VehicleComponent } from './vehicles/vehicle.component';
-import { VehicleService } from './vehicles/vehicle.service';
+import { VehiclesComponent } from './vehicles/vehicles.component';
 import { CONFIG } from './config';
 
 @Component({
@@ -22,16 +19,13 @@ import { CONFIG } from './config';
   providers: [
     HTTP_PROVIDERS,
     ROUTER_PROVIDERS,
-    CharacterService,
-    VehicleService
+    CharacterService
   ]
 })
 @RouteConfig([
-  { path: '/characters', name: 'Characters', component: CharacterListComponent, useAsDefault: true },
-  { path: '/character/:id', name: 'Character', component: CharacterComponent },
-  { path: '/vehicles', name: 'Vehicles', component: VehicleListComponent },
-	{ path: '/vehicle/:id', name: 'Vehicle', component: VehicleComponent }
-  ])
+  { path: '/characters/...', name: 'Characters', component: CharactersComponent, useAsDefault: true },
+  { path: '/vehicles/...', name: 'Vehicles', component: VehiclesComponent }
+])
 export class AppComponent { }
 "><input type="hidden" name="files[app/characters/character-list.component.ts]" value="import { Component, OnInit } from 'angular2/core';
 import { ROUTER_DIRECTIVES } from 'angular2/router';
@@ -58,13 +52,14 @@ export class CharacterListComponent implements OnInit {
   }
 }
 "><input type="hidden" name="files[app/characters/character.component.ts]" value="import { Component, Input, OnInit } from 'angular2/core';
-import { RouteParams, Router } from 'angular2/router';
+import { RouteParams, Router, ROUTER_DIRECTIVES } from 'angular2/router';
 
 import { Character, CharacterService } from '../characters/character.service';
 
 @Component({
   selector: 'story-character',
-  templateUrl: 'app/characters/character.component.html'
+  templateUrl: 'app/characters/character.component.html',
+  directives: [ROUTER_DIRECTIVES]
 })
 export class CharacterComponent implements OnInit {
   @Input() character: Character;
@@ -122,6 +117,25 @@ export class CharacterService {
       .map(characters => characters.find(character => character.id == id));
   }
 }
+"><input type="hidden" name="files[app/characters/characters.component.ts]" value="import { Component } from 'angular2/core';
+import { RouteConfig, ROUTER_DIRECTIVES } from 'angular2/router';
+
+import { CharacterComponent } from './character.component';
+import { CharacterListComponent } from './character-list.component';
+import { CharacterService } from './character.service';
+
+@Component({
+  selector: 'story-characters-root',
+  template: `
+    <router-outlet></router-outlet>
+  `,
+  directives: [ROUTER_DIRECTIVES]
+})
+@RouteConfig([
+  { path: '/', name: 'Characters', component: CharacterListComponent, useAsDefault: true },
+	{ path: '/:id', name: 'Character', component: CharacterComponent }
+])
+export class CharactersComponent { }
 "><input type="hidden" name="files[app/config.ts]" value="export let CONFIG = {
   baseUrls: {
     characters: 'api/characters.json',
@@ -160,13 +174,14 @@ export class VehicleListComponent implements OnInit {
   }
 }
 "><input type="hidden" name="files[app/vehicles/vehicle.component.ts]" value="import { Component, Input, OnInit } from 'angular2/core';
-import { RouteParams, Router } from 'angular2/router';
+import { RouteParams, Router, ROUTER_DIRECTIVES } from 'angular2/router';
 
 import { Vehicle, VehicleService } from '../vehicles/vehicle.service';
 
 @Component({
   selector: 'story-vehicle',
-  templateUrl: 'app/vehicles/vehicle.component.html'
+  templateUrl: 'app/vehicles/vehicle.component.html',
+  directives: [ROUTER_DIRECTIVES]
 })
 export class VehicleComponent implements OnInit {
   @Input() vehicle: Vehicle;
@@ -223,10 +238,30 @@ export class VehicleService {
     return this.getVehicles()
       .map(vehicles => vehicles.find(vehicle => vehicle.id == id));
   }
-}"><input type="hidden" name="files[app/app.component.html]" value="<div>
+}"><input type="hidden" name="files[app/vehicles/vehicles.component.ts]" value="import { Component, OnInit } from 'angular2/core';
+import { RouteConfig, ROUTER_DIRECTIVES } from 'angular2/router';
+
+import { VehicleListComponent } from './vehicle-list.component';
+import { VehicleComponent } from './vehicle.component';
+import { VehicleService } from './vehicle.service';
+
+@Component({
+  selector: 'story-vehicles-root',
+  template: `
+    <router-outlet></router-outlet>
+  `,
+  directives: [ROUTER_DIRECTIVES],
+  providers: [VehicleService]
+})
+@RouteConfig([
+  { path: '/', name: 'Vehicles', component: VehicleListComponent, useAsDefault: true },
+	{ path: '/:id', name: 'Vehicle', component: VehicleComponent }
+])
+export class VehiclesComponent { }
+"><input type="hidden" name="files[app/app.component.html]" value="<div>
   <header>
     <h1>Storyline Tracker</h1>
-    <h3>Router Demo</h3>
+    <h3>Hierarchical Router Demo</h3>
     <nav>
       <ul>
         <li><a [routerLink]=&quot;['Characters']&quot; href=&quot;&quot;>Characters</a></li>
@@ -486,4 +521,4 @@ Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
-limitations under the License."><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="first look"><input type="hidden" name="tags[3]" value="angular 2"><input type="hidden" name="private" value="true"><input type="hidden" name="description" value="Angular 2 Example - Angular 2 - Router"></form><script>document.getElementById("mainForm").submit();</script></body></html>
+limitations under the License."><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="first look"><input type="hidden" name="tags[3]" value="angular 2"><input type="hidden" name="private" value="true"><input type="hidden" name="description" value="Angular 2 Example - Angular 2 - Hierarchical Routes"></form><script>document.getElementById("mainForm").submit();</script></body></html>
