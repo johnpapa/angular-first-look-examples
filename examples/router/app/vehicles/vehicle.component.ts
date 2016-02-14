@@ -1,12 +1,11 @@
 import { Component, Input, OnInit } from 'angular2/core';
-import { RouteParams, Router, ROUTER_DIRECTIVES } from 'angular2/router';
+import { RouteParams, Router } from 'angular2/router';
 
 import { Vehicle, VehicleService } from '../vehicles/vehicle.service';
 
 @Component({
   selector: 'story-vehicle',
-  templateUrl: 'app/vehicles/vehicle.component.html',
-  directives: [ROUTER_DIRECTIVES]
+  templateUrl: 'app/vehicles/vehicle.component.html'
 })
 export class VehicleComponent implements OnInit {
   @Input() vehicle: Vehicle;

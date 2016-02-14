@@ -1,0 +1,33 @@
+{
+  "name": "a2-first-look",
+  "version": "0.0.1",
+  "scripts": {
+    "postinstall": "npm run typings install",
+    "tsc": "tsc",
+    "tsc:w": "tsc -w",
+    "lite": "lite-server",
+    "start": "concurrent \"npm run tsc:w\" \"npm run lite\" ",
+    "typings": "typings"
+  },
+  "dependencies": {
+    "a2-in-memory-web-api": "~0.1.0",
+    "angular2": "2.0.0-beta.6",
+    "systemjs": "0.19.20",
+    "es6-promise": "^3.0.2",
+    "es6-shim": "^0.33.3",
+    "reflect-metadata": "0.1.2",
+    "rxjs": "5.0.0-beta.0",
+    "zone.js": "0.5.14"
+  },
+  "devDependencies": {
+    "concurrently": "^1.0.0",
+    "fs-extra": "^0.24.0",
+    "globby": "^4.0.0",
+    "lite-server": "^2.0.1",
+    "lodash": "^3.10.1",
+    "minimatch": "^2.0.10",
+    "q": "^1.4.1",
+    "typescript": "^1.8.0-dev.20160122",
+    "typings": "^0.6.8"
+  }
+}

@@ -1,12 +1,11 @@
 import { Component, Input, OnInit } from 'angular2/core';
-import { RouteParams, Router, ROUTER_DIRECTIVES } from 'angular2/router';
+import { RouteParams, Router } from 'angular2/router';
 
 import { Character, CharacterService } from '../characters/character.service';
 
 @Component({
   selector: 'story-character',
-  templateUrl: 'app/characters/character.component.html',
-  directives: [ROUTER_DIRECTIVES]
+  templateUrl: 'app/characters/character.component.html'
 })
 export class CharacterComponent implements OnInit {
   @Input() character: Character;
