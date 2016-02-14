@@ -43,11 +43,12 @@ export class VehicleListComponent {
   ngOnInit() { this.getHeroes(); }
 
   getHeroes() {
-    this._vehicleService.getVehicles()
-      .subscribe(
-        vehicles => this.vehicles = vehicles,
-        error =>  this.errorMessage = <any>error
-    );
+    this.vehicles = this._vehicleService.getVehicles();
+    // this._vehicleService.getVehicles()
+    //   .subscribe(
+    //     vehicles => this.vehicles = vehicles,
+    //     error =>  this.errorMessage = <any>error
+    // );
   }
 
   select(vehicle: Vehicle) {
@@ -67,28 +68,34 @@ export class VehicleComponent {
 }
 
 "><input type="hidden" name="files[app/vehicle.service.ts]" value="import { Injectable } from 'angular2/core';
-import { Http, Response } from 'angular2/http';
-import { Observable } from 'rxjs/Rx';
+// import { Http, Response } from 'angular2/http';
+// import { Observable } from 'rxjs/Rx';
 
 export class Vehicle {
-  constructor(public id: number, public name: string, public side: string) { }
+  constructor(public id: number, public name: string) { }
 }
 
 @Injectable()
 export class VehicleService {
-  constructor(private _http: Http) { }
+  // constructor(private _http: Http) { }
 
   getVehicles() {
-    return this._http.get('api/vehicles.json')
-      .map((response: Response) => <Vehicle[]>response.json().data)
-      .do(data => console.log(data))
-      .catch(this.handleError);
+    return [
+      new Vehicle(1, 'X-Wing Fighter'),
+      new Vehicle(2, 'B-Wing Fighter'),
+      new Vehicle(3, 'Y-Wing Fighter')
+    ];
+
+    // return this._http.get('api/vehicles.json')
+    //   .map((response: Response) => <Vehicle[]>response.json().data)
+    //   .do(data => console.log(data))
+    //   .catch(this.handleError);
   }
 
-  private handleError(error: Response) {
-    console.error(error);
-    return Observable.throw(error.json().error || 'Server error');
-  }
+  // private handleError(error: Response) {
+  //   console.error(error);
+  //   return Observable.throw(error.json().error || 'Server error');
+  // }
 }
 "><input type="hidden" name="files[app/vehicle-list.component.html]" value="<ul>
   <li *ngFor=&quot;#vehicle of vehicles&quot; (click)=&quot;select(vehicle)&quot;>
@@ -102,7 +109,7 @@ export class VehicleService {
 
 <div class=&quot;error&quot; *ngIf=&quot;errorMessage&quot;>{{errorMessage}}</div>
 
-<my-vehicle *ngIf=&quot;selectedvehicle&quot; [vehicle]=&quot;selectedvehicle&quot;></my-vehicle>"><input type="hidden" name="files[app/vehicle.component.html]" value="<h3>We selected {{vehicle.name}}</h3>
+<my-vehicle *ngIf=&quot;selectedVehicle&quot; [vehicle]=&quot;selectedVehicle&quot;></my-vehicle>"><input type="hidden" name="files[app/vehicle.component.html]" value="<h3>We selected {{vehicle.name}}</h3>
 
 
 

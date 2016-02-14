@@ -19,11 +19,6 @@ export class VehicleListComponent {
 
   getHeroes() {
     this.vehicles = this._vehicleService.getVehicles();
-    // this._vehicleService.getVehicles()
-    //   .subscribe(
-    //     vehicles => this.vehicles = vehicles,
-    //     error =>  this.errorMessage = <any>error
-    // );
   }
 
   select(vehicle: Vehicle) {
