@@ -5,7 +5,7 @@
     "build-plunkers": "gulp build-plunkers",
     "add-bp": "gulp add-example-boilerplate",
     "rm-bp": "gulp remove-example-boilerplate",
-    "all": "npm run rm-bp add-bp build-plunkers"
+    "all": "npm run rm-bp && npm run add-bp && npm run build-plunkers"
   },
   "dependencies": {},
   "devDependencies": {
@@ -15,8 +15,10 @@
     "gulp": "^3.9.1",
     "gulp-task-listing": "^1.0.1",
     "gulp-util": "^3.0.7",
+    "jsdom": "^8.0.2",
     "lodash": "^3.10.1",
     "minimatch": "^2.0.10",
+    "mkdirp": "^0.5.1",
     "q": "^1.4.1",
     "typescript": "^1.8.0-dev.20160122"
   }
