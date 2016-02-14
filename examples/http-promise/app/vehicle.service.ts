@@ -19,10 +19,6 @@ export class VehicleService {
       })
       .toPromise()
       .catch(this.handleError);
-    // return this._http.get('api/vehicles.json')
-    //   .map((response: Response) => <Vehicle[]>response.json().data)
-    //   .toPromise()
-    //   .catch(this.handleError);
   }
 
   private handleError(error: Response) {

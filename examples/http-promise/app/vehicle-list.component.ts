@@ -19,9 +19,6 @@ export class VehicleListComponent {
 
   getHeroes(value?: string) {
     this.vehicles = this._vehicleService.getVehicles(value)
-    // this._vehicleService.getVehicles()
-    //   .then(vehicles => this.vehicles = vehicles)
-    //   .catch(error => this.errorMessage = <any>error);
   }
 
   select(vehicle: Vehicle) {
