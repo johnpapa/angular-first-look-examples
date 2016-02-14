@@ -1,6 +1,6 @@
 import { Injectable } from 'angular2/core';
-// import { Http, Response } from 'angular2/http';
-// import { Observable } from 'rxjs/Rx';
+import { Http, Response } from 'angular2/http';
+import { Observable } from 'rxjs/Rx';
 
 export class Vehicle {
   constructor(public id: number, public name: string) { }
@@ -8,23 +8,17 @@ export class Vehicle {
 
 @Injectable()
 export class VehicleService {
-  // constructor(private _http: Http) { }
+  constructor(private _http: Http) { }
 
   getVehicles() {
-    return [
-      new Vehicle(1, 'X-Wing Fighter'),
-      new Vehicle(2, 'B-Wing Fighter'),
-      new Vehicle(3, 'Y-Wing Fighter')
-    ];
-
-    // return this._http.get('api/vehicles.json')
-    //   .map((response: Response) => <Vehicle[]>response.json().data)
-    //   .do(data => console.log(data))
-    //   .catch(this.handleError);
+    return this._http.get('api/vehicles.json')
+      .map((response: Response) => <Vehicle[]>response.json().data)
+      .do(data => console.log(data))
+      .catch(this.handleError);
   }
 
-  // private handleError(error: Response) {
-  //   console.error(error);
-  //   return Observable.throw(error.json().error || 'Server error');
-  // }
+  private handleError(error: Response) {
+    console.error(error);
+    return Observable.throw(error.json().error || 'Server error');
+  }
 }

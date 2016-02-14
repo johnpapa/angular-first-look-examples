@@ -18,12 +18,11 @@ export class VehicleListComponent {
   ngOnInit() { this.getHeroes(); }
 
   getHeroes() {
-    this.vehicles = this._vehicleService.getVehicles();
-    // this._vehicleService.getVehicles()
-    //   .subscribe(
-    //     vehicles => this.vehicles = vehicles,
-    //     error =>  this.errorMessage = <any>error
-    // );
+    this._vehicleService.getVehicles()
+      .subscribe(
+        vehicles => this.vehicles = vehicles,
+        error =>  this.errorMessage = <any>error
+    );
   }
 
   select(vehicle: Vehicle) {
