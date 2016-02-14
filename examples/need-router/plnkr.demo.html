@@ -3,7 +3,6 @@ import { HTTP_PROVIDERS } from 'angular2/http';
 import 'rxjs/Rx'; // load the full rxjs
 
 import { CharacterListComponent } from './characters/character-list.component';
-import { CharacterComponent } from './characters/character.component';
 import { CharacterService } from './characters/character.service';
 import { VehicleListComponent } from './vehicles/vehicle-list.component';
 import { VehicleComponent } from './vehicles/vehicle.component';
