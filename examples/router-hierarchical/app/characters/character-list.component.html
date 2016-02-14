@@ -1,0 +1,11 @@
+<article>
+  <h4>My Characters</h4>
+
+  <ul class="characters">
+    <li *ngFor="#character of characters | async">
+      <a href="" [routerLink]="['Character', {id: character.id}]">
+       {{character.id}}. {{character.name}}
+      </a>
+    </li>
+  </ul>
+</article>

@@ -3,9 +3,12 @@ import { HTTP_PROVIDERS } from 'angular2/http';
 import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from 'angular2/router';
 import 'rxjs/Rx'; // load the full rxjs
 
-import { CharactersComponent } from './characters/characters.component';
+import { CharacterListComponent } from './characters/character-list.component';
+import { CharacterComponent } from './characters/character.component';
 import { CharacterService } from './characters/character.service';
-import { VehiclesComponent } from './vehicles/vehicles.component';
+import { VehicleListComponent } from './vehicles/vehicle-list.component';
+import { VehicleComponent } from './vehicles/vehicle.component';
+import { VehicleService } from './vehicles/vehicle.service';
 import { CONFIG } from './config';
 
 @Component({
@@ -19,11 +22,14 @@ import { CONFIG } from './config';
   providers: [
     HTTP_PROVIDERS,
     ROUTER_PROVIDERS,
-    CharacterService
+    CharacterService,
+    VehicleService
   ]
 })
 @RouteConfig([
-  { path: '/characters/...', name: 'Characters', component: CharactersComponent, useAsDefault: true },
-  { path: '/vehicles/...', name: 'Vehicles', component: VehiclesComponent }
-])
+  { path: '/characters', name: 'Characters', component: CharacterListComponent, useAsDefault: true },
+  { path: '/characters/:id', name: 'Character', component: CharacterComponent },
+  { path: '/vehicles', name: 'Vehicles', component: VehicleListComponent },
+	{ path: '/vehicles/:id', name: 'Vehicle', component: VehicleComponent }
+  ])
 export class AppComponent { }

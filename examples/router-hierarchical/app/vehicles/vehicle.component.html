@@ -1,0 +1,15 @@
+<article>
+  <div *ngIf="vehicle">
+    <h4>{{vehicle.name}} details</h4>
+
+    <div>
+      <label for="nametext">Name</label>
+      <input type="text" id="nametext" [(ngModel)]="vehicle.name" />
+    </div>
+
+    <div>
+      <label for="typetext">Type</label>
+      <input type="text" id="typetext" [(ngModel)]="vehicle.type" />
+    </div>
+  </div>
+</article>
