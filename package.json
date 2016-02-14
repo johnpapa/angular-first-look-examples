@@ -2,10 +2,10 @@
   "name": "a2-first-look",
   "version": "0.0.1",
   "scripts": {
-    "build-plunkers": "gulp build-plunkers",
+    "plunk": "gulp build-plunkers",
     "add-bp": "gulp add-example-boilerplate",
     "rm-bp": "gulp remove-example-boilerplate",
-    "all": "npm run rm-bp && npm run add-bp && npm run build-plunkers"
+    "all": "npm run rm-bp && npm run add-bp && npm run plunk"
   },
   "dependencies": {},
   "devDependencies": {
