@@ -43,10 +43,7 @@ export class VehicleListComponent {
   ngOnInit() { this.getHeroes(); }
 
   getHeroes(value?: string) {
-    this.vehicles = this._vehicleService.getVehicles(value)
-    // this._vehicleService.getVehicles()
-    //   .then(vehicles => this.vehicles = vehicles)
-    //   .catch(error => this.errorMessage = <any>error);
+    this.vehicles = this._vehicleService.getVehicles(value);
   }
 
   select(vehicle: Vehicle) {
@@ -79,17 +76,9 @@ export class VehicleService {
 
   getVehicles(value?: string) {
     return this._http.get('api/vehicles.json')
-      .map((response: Response) => {
-        let vehicles = <Vehicle[]>response.json().data;
-        if (!value) return vehicles;
-        return vehicles.filter(v => v.name.toLowerCase().includes(value.toLowerCase()))
-      })
+      .map((response: Response) => <Vehicle[]>response.json().data)
       .toPromise()
       .catch(this.handleError);
-    // return this._http.get('api/vehicles.json')
-    //   .map((response: Response) => <Vehicle[]>response.json().data)
-    //   .toPromise()
-    //   .catch(this.handleError);
   }
 
   private handleError(error: Response) {
@@ -97,9 +86,7 @@ export class VehicleService {
     return Observable.throw(error.json().error || 'Server error');
   }
 }
-"><input type="hidden" name="files[app/vehicle-list.component.html]" value="<input #text (keyup)=&quot;getHeroes(text.value)&quot;>
-
-<ul>
+"><input type="hidden" name="files[app/vehicle-list.component.html]" value="<ul>
   <li *ngFor=&quot;#vehicle of vehicles | async&quot;
     (click)=&quot;select(vehicle)&quot;>
     {{ vehicle.name }}
