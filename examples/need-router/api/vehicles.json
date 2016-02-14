@@ -6,6 +6,11 @@
       "type": "space"
     },
     {
+      "id": 31,
+      "name": "Y-Wing Fighter",
+      "type": "space"
+    },
+    {
       "id": 32,
       "name": "X-Wing Fighter",
       "type": "space"
@@ -48,11 +53,6 @@
     {
       "id": 40,
       "name": "Snow Speeder",
-      "type": "land"
-    },
-    {
-      "id": 41,
-      "name": "X-34 Landspeeder",
       "type": "land"
     }
   ]
