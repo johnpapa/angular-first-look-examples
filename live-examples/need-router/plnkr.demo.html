@@ -109,8 +109,6 @@ export class VehicleListComponent implements OnInit {
 }
 "><input type="hidden" name="files[app/vehicles/vehicle.component.ts]" value="import { Component, Input, OnInit } from 'angular2/core';
 
-import { Vehicle, VehicleService } from '../vehicles/vehicle.service';
-
 @Component({
   selector: 'story-vehicle',
   templateUrl: 'app/vehicles/vehicle.component.html'
@@ -118,15 +116,9 @@ import { Vehicle, VehicleService } from '../vehicles/vehicle.service';
 export class VehicleComponent implements OnInit {
   @Input() vehicle: Vehicle;
 
-  constructor(
-    private _vehicleService: VehicleService) { }
+  constructor() { }
 
   ngOnInit() {
-    if (!this.vehicle) {
-      // let id = +this._routeParams.get('id');
-      this._vehicleService.getVehicle(id)
-        .subscribe((vehicle: Vehicle) => this.vehicle = vehicle);
-    }
   }
 }
 "><input type="hidden" name="files[app/vehicles/vehicle.service.ts]" value="import { Injectable } from 'angular2/core';
