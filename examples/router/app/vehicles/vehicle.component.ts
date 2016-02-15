@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from 'angular2/core';
 import { RouteParams, Router } from 'angular2/router';
 
-import { Vehicle, VehicleService } from '../vehicles/vehicle.service';
+import { Vehicle, VehicleService } from './vehicle.service';
 
 @Component({
   selector: 'story-vehicle',

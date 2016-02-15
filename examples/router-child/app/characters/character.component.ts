@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from 'angular2/core';
 import { RouteParams, Router, ROUTER_DIRECTIVES } from 'angular2/router';
 
-import { Character, CharacterService } from '../characters/character.service';
+import { Character, CharacterService } from './character.service';
 
 @Component({
   selector: 'story-character',
