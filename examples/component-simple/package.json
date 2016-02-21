@@ -23,7 +23,7 @@
     "concurrently": "^1.0.0",
     "fs-extra": "^0.24.0",
     "globby": "^4.0.0",
-    "lite-server": "^2.0.1",
+    "lite-server": "^2.1.0",
     "lodash": "^3.10.1",
     "minimatch": "^2.0.10",
     "q": "^1.4.1",
