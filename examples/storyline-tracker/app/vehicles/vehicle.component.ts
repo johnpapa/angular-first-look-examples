@@ -12,7 +12,7 @@ import { Vehicle, VehicleService } from '../vehicles/vehicle.service';
   directives: [ROUTER_DIRECTIVES]
 })
 export class VehicleComponent implements CanDeactivate, OnDestroy, OnInit {
-  private _dbResetSubscription: Subscription<any>;
+  private _dbResetSubscription: Subscription;
 
   @Input() vehicle: Vehicle;
   editVehicle: Vehicle = <Vehicle>{};

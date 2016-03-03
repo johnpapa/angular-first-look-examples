@@ -432,7 +432,7 @@ const ACTIVE_CLASS = 'is-active';
 export class SpinnerComponent implements OnDestroy, OnInit {
   visible = false;
 
-  private _spinnerStateChanged: Subscription<any>;
+  private _spinnerStateChanged: Subscription;
 
   constructor(private _spinnerService: SpinnerService) { }
 
@@ -537,7 +537,7 @@ import { FilterService, FilterTextComponent } from '../blocks/blocks';
   providers: [FilterService]
 })
 export class CharacterListComponent implements OnDestroy, OnInit {
-  private _dbResetSubscription: Subscription<any>;
+  private _dbResetSubscription: Subscription;
 
   characters: Character[];
   filteredCharacters = this.characters;
@@ -585,7 +585,7 @@ import { Character, CharacterService } from '../characters/character.service';
   directives: [ROUTER_DIRECTIVES]
 })
 export class CharacterComponent implements CanDeactivate, OnDestroy, OnInit {
-  private _dbResetSubscription: Subscription<any>;
+  private _dbResetSubscription: Subscription;
 
   @Input() character: Character;
   editCharacter: Character = <Character>{};
@@ -812,7 +812,7 @@ import { ToastService } from '../blocks/blocks';
   styleUrls: ['app/dashboard/dashboard.component.css']
 })
 export class DashboardComponent implements OnDestroy, OnInit {
-  private _dbResetSubscription: Subscription<any>;
+  private _dbResetSubscription: Subscription;
 
   characters: Observable<Character[]>;
 
@@ -907,7 +907,7 @@ import { Vehicle, VehicleService } from './vehicle.service';
   providers: [FilterService]
 })
 export class VehicleListComponent implements OnDestroy, OnInit {
-  private _dbResetSubscription: Subscription<any>;
+  private _dbResetSubscription: Subscription;
 
   vehicles: Vehicle[];
   filteredVehicles = this.vehicles;
@@ -955,7 +955,7 @@ import { Vehicle, VehicleService } from '../vehicles/vehicle.service';
   directives: [ROUTER_DIRECTIVES]
 })
 export class VehicleComponent implements CanDeactivate, OnDestroy, OnInit {
-  private _dbResetSubscription: Subscription<any>;
+  private _dbResetSubscription: Subscription;
 
   @Input() vehicle: Vehicle;
   editVehicle: Vehicle = <Vehicle>{};
@@ -12126,19 +12126,7 @@ iframe.heightSet {
   <story-app>Loading Storyline Tracker ...</story-app>
 </body>
 
-</html>"><input type="hidden" name="files[plunker-builder/license.md]" value="Copyright 2010-2015 Google, Inc. http://angularjs.org
-
-Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-   [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License."><input type="hidden" name="files[README.md]" value="# Storyline Tracker
+</html>"><input type="hidden" name="files[README.md]" value="# Storyline Tracker
 
 # Getting Started
 

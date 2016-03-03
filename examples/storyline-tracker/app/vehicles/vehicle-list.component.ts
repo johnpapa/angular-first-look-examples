@@ -14,7 +14,7 @@ import { Vehicle, VehicleService } from './vehicle.service';
   providers: [FilterService]
 })
 export class VehicleListComponent implements OnDestroy, OnInit {
-  private _dbResetSubscription: Subscription<any>;
+  private _dbResetSubscription: Subscription;
 
   vehicles: Vehicle[];
   filteredVehicles = this.vehicles;

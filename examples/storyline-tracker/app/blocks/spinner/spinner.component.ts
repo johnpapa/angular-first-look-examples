@@ -18,7 +18,7 @@ const ACTIVE_CLASS = 'is-active';
 export class SpinnerComponent implements OnDestroy, OnInit {
   visible = false;
 
-  private _spinnerStateChanged: Subscription<any>;
+  private _spinnerStateChanged: Subscription;
 
   constructor(private _spinnerService: SpinnerService) { }
 

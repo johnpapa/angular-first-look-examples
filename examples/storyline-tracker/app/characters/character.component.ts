@@ -12,7 +12,7 @@ import { Character, CharacterService } from '../characters/character.service';
   directives: [ROUTER_DIRECTIVES]
 })
 export class CharacterComponent implements CanDeactivate, OnDestroy, OnInit {
-  private _dbResetSubscription: Subscription<any>;
+  private _dbResetSubscription: Subscription;
 
   @Input() character: Character;
   editCharacter: Character = <Character>{};

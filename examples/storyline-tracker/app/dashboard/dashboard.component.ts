@@ -11,7 +11,7 @@ import { ToastService } from '../blocks/blocks';
   styleUrls: ['app/dashboard/dashboard.component.css']
 })
 export class DashboardComponent implements OnDestroy, OnInit {
-  private _dbResetSubscription: Subscription<any>;
+  private _dbResetSubscription: Subscription;
 
   characters: Observable<Character[]>;
 

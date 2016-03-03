@@ -15,7 +15,7 @@ import { FilterService, FilterTextComponent } from '../blocks/blocks';
   providers: [FilterService]
 })
 export class CharacterListComponent implements OnDestroy, OnInit {
-  private _dbResetSubscription: Subscription<any>;
+  private _dbResetSubscription: Subscription;
 
   characters: Character[];
   filteredCharacters = this.characters;

@@ -20,6 +20,6 @@
     "minimatch": "^2.0.10",
     "mkdirp": "^0.5.1",
     "q": "^1.4.1",
-    "typescript": "^1.8.0-dev.20160122"
+    "typescript": "^1.8.7"
   }
 }
