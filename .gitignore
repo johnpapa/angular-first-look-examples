@@ -6,6 +6,7 @@ examples/**/in-memory-backend/**/*.js
 node_modules
 jspm_packages
 bower_components
+typings
 
 plnkr.html
 #plnkr.demo.html
