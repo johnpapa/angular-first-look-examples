@@ -10,7 +10,7 @@
     "typings": "typings"
   },
   "dependencies": {
-    "a2-in-memory-web-api": "~0.1.0",
+    "a2-in-memory-web-api": "~0.1.11",
     "angular2": "2.0.0-beta.11",
     "systemjs": "0.19.24",
     "es6-promise": "^3.0.2",

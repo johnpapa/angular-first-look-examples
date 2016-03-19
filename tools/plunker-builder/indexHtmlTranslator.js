@@ -49,32 +49,32 @@ var _rxData = [
   {
     pattern: 'script',
     from: 'node_modules/es6-shim/es6-shim.min.js',
-    to: 'https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.34.1/es6-shim.js'
+    to: 'https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.0/es6-shim.js'
   },
   {
     pattern: 'script',
     from: 'node_modules/systemjs/dist/system-polyfills.js',
-    to: 'https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.19.20/system-polyfills.js'
+    to: 'https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.19.24/system-polyfills.js'
   },
   {
     pattern: 'script',
     from: 'node_modules/angular2/bundles/angular2-polyfills.js',
-    to: 'https://code.angularjs.org/2.0.0-beta.8/angular2-polyfills.js'
+    to: 'https://code.angularjs.org/2.0.0-beta.11/angular2-polyfills.js'
   },
   {
     pattern: 'script',
     from: 'node_modules/angular2/bundles/angular2.dev.js',
-    to: 'https://code.angularjs.org/2.0.0-beta.8/angular2.dev.js'
+    to: 'https://code.angularjs.org/2.0.0-beta.11/angular2.dev.js'
   },
   {
     pattern: 'script',
     from: 'node_modules/angular2/bundles/angular2-all.umd.js',
-    to: 'https://code.angularjs.org/2.0.0-beta.8/angular2-all.umd.dev.js'
+    to: 'https://code.angularjs.org/2.0.0-beta.11/angular2-all.umd.dev.js'
   },
   {
     pattern: 'script',
     from: 'node_modules/angular2/bundles/angular2-polyfills.js',
-    to: 'https://code.angularjs.org/2.0.0-beta.8/angular2-polyfills.js'
+    to: 'https://code.angularjs.org/2.0.0-beta.11/angular2-polyfills.js'
   },
   {
     pattern: 'script',
@@ -84,27 +84,27 @@ var _rxData = [
   {
     pattern: 'script',
     from: 'node_modules/rxjs/bundles/Rx.js',
-    to: 'https://code.angularjs.org/2.0.0-beta.8/Rx.js'
+    to: 'https://code.angularjs.org/2.0.0-beta.11/Rx.js'
   },
   {
     pattern: 'script',
     from: 'node_modules/rxjs/bundles/Rx.umd.js',
-    to: 'https://code.angularjs.org/2.0.0-beta.8/Rx.umd.js'
+    to: 'https://code.angularjs.org/2.0.0-beta.11/Rx.umd.js'
   },
   {
     pattern: 'script',
     from: 'node_modules/angular2/bundles/router.dev.js',
-    to: 'https://code.angularjs.org/2.0.0-beta.8/router.dev.js'
+    to: 'https://code.angularjs.org/2.0.0-beta.11/router.dev.js'
   },
   {
     pattern: 'script',
     from: 'node_modules/angular2/bundles/http.dev.js',
-    to: 'https://code.angularjs.org/2.0.0-beta.8/http.dev.js'
+    to: 'https://code.angularjs.org/2.0.0-beta.11/http.dev.js'
   },
   {
     pattern: 'script',
     from: 'node_modules/angular2/bundles/testing.dev.js',
-    to: 'https://code.angularjs.org/2.0.0-beta.8/testing.dev.js'
+    to: 'https://code.angularjs.org/2.0.0-beta.11/testing.dev.js'
   },
   {
     pattern: 'script',
