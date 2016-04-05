@@ -10,21 +10,20 @@
     "typings": "typings"
   },
   "dependencies": {
-    "a2-in-memory-web-api": "~0.1.11",
-    "angular2": "2.0.0-beta.11",
-    "systemjs": "0.19.24",
-    "es6-promise": "^3.0.2",
+    "a2-in-memory-web-api": "~0.1.13",
+    "angular2": "2.0.0-beta.13",
+    "systemjs": "0.19.25",
     "es6-shim": "^0.35.0",
     "reflect-metadata": "0.1.2",
     "rxjs": "5.0.0-beta.2",
-    "zone.js": "0.6.4"
+    "zone.js": "0.6.6"
   },
   "devDependencies": {
     "concurrently": "^2.0.0",
     "fs-extra": "^0.24.0",
     "globby": "^4.0.0",
-    "lite-server": "^2.1.0",
-    "lodash": "^3.10.1",
+    "lite-server": "^2.2.0",
+    "lodash": "^4.0.0",
     "minimatch": "^2.0.10",
     "q": "^1.4.1",
     "typescript": "^1.8.9",
