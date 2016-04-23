@@ -54,27 +54,27 @@ var _rxData = [
   {
     pattern: 'script',
     from: 'node_modules/systemjs/dist/system-polyfills.js',
-    to: 'https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.19.25/system-polyfills.js'
+    to: 'https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.19.26/system-polyfills.js'
   },
   {
     pattern: 'script',
     from: 'node_modules/angular2/bundles/angular2-polyfills.js',
-    to: 'https://code.angularjs.org/2.0.0-beta.13/angular2-polyfills.js'
+    to: 'https://code.angularjs.org/2.0.0-beta.15/angular2-polyfills.js'
   },
   {
     pattern: 'script',
     from: 'node_modules/angular2/bundles/angular2.dev.js',
-    to: 'https://code.angularjs.org/2.0.0-beta.13/angular2.dev.js'
+    to: 'https://code.angularjs.org/2.0.0-beta.15/angular2.dev.js'
   },
   {
     pattern: 'script',
     from: 'node_modules/angular2/bundles/angular2-all.umd.js',
-    to: 'https://code.angularjs.org/2.0.0-beta.13/angular2-all.umd.dev.js'
+    to: 'https://code.angularjs.org/2.0.0-beta.15/angular2-all.umd.dev.js'
   },
   {
     pattern: 'script',
     from: 'node_modules/angular2/bundles/angular2-polyfills.js',
-    to: 'https://code.angularjs.org/2.0.0-beta.13/angular2-polyfills.js'
+    to: 'https://code.angularjs.org/2.0.0-beta.15/angular2-polyfills.js'
   },
   {
     pattern: 'script',
@@ -84,27 +84,27 @@ var _rxData = [
   {
     pattern: 'script',
     from: 'node_modules/rxjs/bundles/Rx.js',
-    to: 'https://code.angularjs.org/2.0.0-beta.13/Rx.js'
+    to: 'https://code.angularjs.org/2.0.0-beta.15/Rx.js'
   },
   {
     pattern: 'script',
     from: 'node_modules/rxjs/bundles/Rx.umd.js',
-    to: 'https://code.angularjs.org/2.0.0-beta.13/Rx.umd.js'
+    to: 'https://code.angularjs.org/2.0.0-beta.15/Rx.umd.js'
   },
   {
     pattern: 'script',
     from: 'node_modules/angular2/bundles/router.dev.js',
-    to: 'https://code.angularjs.org/2.0.0-beta.13/router.dev.js'
+    to: 'https://code.angularjs.org/2.0.0-beta.15/router.dev.js'
   },
   {
     pattern: 'script',
     from: 'node_modules/angular2/bundles/http.dev.js',
-    to: 'https://code.angularjs.org/2.0.0-beta.13/http.dev.js'
+    to: 'https://code.angularjs.org/2.0.0-beta.15/http.dev.js'
   },
   {
     pattern: 'script',
     from: 'node_modules/angular2/bundles/testing.dev.js',
-    to: 'https://code.angularjs.org/2.0.0-beta.13/testing.dev.js'
+    to: 'https://code.angularjs.org/2.0.0-beta.15/testing.dev.js'
   },
   {
     pattern: 'script',
