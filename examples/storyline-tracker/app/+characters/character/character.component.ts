@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { CanDeactivate, OnActivate, Router, RouteSegment, RouteTree } from '@angular/router';
-import { Observable, Subscription } from 'rxjs/Rx';
+import { CanDeactivate, Router, RouteSegment, RouteTree } from '@angular/router';
+import { Subscription } from 'rxjs/Rx';
 
 import { Character, CharacterService, EntityService, ModalService, ToastService } from '../../../app/shared';
 
