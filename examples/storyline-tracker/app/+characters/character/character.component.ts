@@ -41,7 +41,10 @@ export class CharacterComponent implements CanDeactivate, OnDestroy, OnInit {
           .subscribe(() => {
             this.toastService.activate(`Deleted ${this.character.name}`);
             this.gotoCharacters();
-          });
+          },
+          (err) => this.handleServiceError('Delete', err), // Failure path
+          () => console.log('Delete Completed') // Completed actions
+          );
       }
     });
   }
@@ -94,7 +97,9 @@ export class CharacterComponent implements CanDeactivate, OnDestroy, OnInit {
   }
 
   private getCharacter() {
-    if (this.id === 0) return;
+    if (this.id === 0) {
+      return;
+    }
     if (this.isAddMode()) {
       this.character = <Character>{ name: '', side: 'dark' };
       this.editCharacter = this.entityService.clone(this.character);
@@ -105,8 +110,7 @@ export class CharacterComponent implements CanDeactivate, OnDestroy, OnInit {
   }
 
   private gotoCharacters() {
-    let id = this.character ? this.character.id : null;
-    this.router.navigate(['/characters', id]);
+    this.router.navigate(['/characters']);
   }
 
   private handleServiceError(op: string, err: any) {

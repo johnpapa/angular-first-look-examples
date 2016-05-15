@@ -6,10 +6,11 @@ import { FilterTextComponent, FilterService, InitCapsPipe } from '../../../app/s
 import { Vehicle, VehicleService } from '../shared';
 
 @Component({
+  moduleId: module.id,
   selector: 'story-vehicles',
-  templateUrl: './app/vehicles/vehicle-list.component.html',
+  templateUrl: 'vehicle-list.component.html',
   directives: [FilterTextComponent, ROUTER_DIRECTIVES],
-  styleUrls: ['./app/vehicles/vehicle-list.component.css'],
+  styleUrls: ['vehicle-list.component.css'],
   pipes: [InitCapsPipe],
   providers: [FilterService]
 })

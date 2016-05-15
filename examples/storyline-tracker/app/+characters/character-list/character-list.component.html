@@ -1,7 +1,7 @@
 <article class="template animated slideInRight">
   <h4>My Characters</h4>
 
-  <a href="" [routerLink]="['/character', 'new']"><button class="dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Add</button></a>
+  <a href="" [routerLink]="['/characters', 'new']"><button class="dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Add</button></a>
 
   <filter-text (changed)="filterChanged($event)"></filter-text>
 
@@ -14,7 +14,7 @@
 {{character.name}}</h2>
         </div>
         <div class="mdl-card__menu">
-          <a href="" [routerLink]="['/character', character.id]"><button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+          <a href="" [routerLink]="['/characters', character.id]"><button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
 
             <div class="icon mdl-color--accent icon-ic_play_circle_filled_white_24dp"></div>
 

@@ -8,7 +8,7 @@ import { Vehicle, VehicleService } from '../shared';
 @Component({
   moduleId: module.id,
   selector: 'story-vehicle',
-  templateUrl: 'app/vehicles/vehicle.component.html',
+  templateUrl: 'vehicle.component.html',
   styles: ['.mdl-textfield__label {top: 0;}']
 })
 export class VehicleComponent implements CanDeactivate, OnDestroy, OnInit {
@@ -113,8 +113,7 @@ export class VehicleComponent implements CanDeactivate, OnDestroy, OnInit {
   }
 
   private gotoVehicles() {
-    let id = this.vehicle ? this.vehicle.id : null;
-    this.router.navigate(['/vehicles', id ]);
+    this.router.navigate(['/vehicles']);
   }
 
   private handleServiceError(op: string, err: any) {
