@@ -200,7 +200,7 @@ export class CharacterListComponent implements OnDestroy, OnInit {
 }
 "><input type="hidden" name="files[app/+characters/character-list/index.ts]" value="export * from './character-list.component';
 "><input type="hidden" name="files[app/+characters/character/character.component.ts]" value="import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { CanDeactivate, ComponentInstruction, RouteParams, Router, ROUTER_DIRECTIVES } from '@angular/router';
+import { CanDeactivate, OnActivate, Router, RouteSegment, RouteTree } from '@angular/router';
 import { Observable, Subscription } from 'rxjs/Rx';
 
 import { Character, CharacterService, EntityService, ModalService, ToastService } from '../../../app/shared';
@@ -209,8 +209,7 @@ import { Character, CharacterService, EntityService, ModalService, ToastService 
   moduleId: module.id,
   selector: 'story-character',
   templateUrl: 'character.component.html',
-  styles: ['.mdl-textfield__label {top: 0;}'],
-  directives: [ROUTER_DIRECTIVES]
+  styles: ['.mdl-textfield__label {top: 0;}']
 })
 export class CharacterComponent implements CanDeactivate, OnDestroy, OnInit {
   @Input() character: Character;
@@ -218,12 +217,12 @@ export class CharacterComponent implements CanDeactivate, OnDestroy, OnInit {
   editCharacter: Character = <Character>{};
 
   private dbResetSubscription: Subscription;
+  private id: any;
 
   constructor(
     private characterService: CharacterService,
     private entityService: EntityService,
     private modalService: ModalService,
-    private routeParams: RouteParams,
     private router: Router,
     private toastService: ToastService) { }
 
@@ -249,8 +248,7 @@ export class CharacterComponent implements CanDeactivate, OnDestroy, OnInit {
   }
 
   isAddMode() {
-    let id = +this.routeParams.get('id');
-    return isNaN(id);
+    return isNaN(this.id);
   }
 
   ngOnDestroy() {
@@ -264,10 +262,21 @@ export class CharacterComponent implements CanDeactivate, OnDestroy, OnInit {
       .subscribe(() => this.getCharacter());
   }
 
-  routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
-    return !this.character ||
+  routerOnActivate(
+    current: RouteSegment,
+    prev?: RouteSegment,
+    currTree?: RouteTree,
+    prevTree?: RouteTree
+  ) {
+    let id = +current.getParam('id');
+    this.id = id;
+  }
+
+  routerCanDeactivate(currTree?: RouteTree, futureTree?: RouteTree) {
+    let deactivate = !this.character ||
       !this.isDirty() ||
       this.modalService.activate();
+    return <Promise<boolean>>deactivate;
   }
 
   save() {
@@ -286,21 +295,19 @@ export class CharacterComponent implements CanDeactivate, OnDestroy, OnInit {
   }
 
   private getCharacter() {
-    let id = +this.routeParams.get('id');
-    if (id === 0) return;
+    if (this.id === 0) return;
     if (this.isAddMode()) {
       this.character = <Character>{ name: '', side: 'dark' };
       this.editCharacter = this.entityService.clone(this.character);
       return;
     }
-    this.characterService.getCharacter(id)
+    this.characterService.getCharacter(this.id)
       .subscribe(character => this.setEditCharacter(character));
   }
 
   private gotoCharacters() {
     let id = this.character ? this.character.id : null;
-    let route = ['Characters', { id: id }];
-    this.router.navigate(route);
+    this.router.navigate(['/characters', id]);
   }
 
   private handleServiceError(op: string, err: any) {
@@ -322,7 +329,7 @@ export class CharacterComponent implements CanDeactivate, OnDestroy, OnInit {
 }
 "><input type="hidden" name="files[app/+characters/character/index.ts]" value="export * from './character.component';
 "><input type="hidden" name="files[app/+characters/characters.component.ts]" value="import { Component } from '@angular/core';
-import { RouteConfig, ROUTER_DIRECTIVES } from '@angular/router';
+import { Routes, ROUTER_DIRECTIVES } from '@angular/router';
 
 import { CharacterComponent } from './character';
 import { CharacterListComponent } from './character-list';
@@ -335,7 +342,7 @@ import { CharacterService } from '../../app/shared';
   `,
   directives: [ROUTER_DIRECTIVES]
 })
-@RouteConfig([
+@Routes([
   { path: '/', component: CharacterListComponent },
 	{ path: '/list/:id', component: CharacterListComponent	},
 	{ path: '/:id', component: CharacterComponent }
@@ -388,8 +395,8 @@ export class DashboardComponent implements OnDestroy, OnInit {
     this.characters = this.characterService.getCharacters()
       .catch((e: any) => {
         this.toastService.activate(`${e}`);
-        return Observable.of();
-      })
+        return Observable.of([]);
+      });
       // .finally(() => { this._spinnerService.hide(); })
   }
 
@@ -411,26 +418,28 @@ export class DashboardComponent implements OnDestroy, OnInit {
 "><input type="hidden" name="files[app/+dashboard/index.ts]" value="export * from './dashboard.component';"><input type="hidden" name="files[app/+vehicles/index.ts]" value="export * from './vehicles.component';
 export * from './vehicle';
 export * from './vehicle-list';
-"><input type="hidden" name="files[app/+vehicles/shared/index.ts]" value="export * from './vehicle.service';
-"><input type="hidden" name="files[app/+vehicles/shared/vehicle.service.ts]" value="import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
-import { Observable } from 'rxjs/Rx';
-
-import { CONFIG, ExceptionService, MessageService, SpinnerService } from '../../../app/shared';
-
-let vehiclesUrl = CONFIG.baseUrls.vehicles;
-
-export interface Vehicle {
+"><input type="hidden" name="files[app/+vehicles/shared/index.ts]" value="export * from './vehicle.model';
+export * from './vehicle.service';
+"><input type="hidden" name="files[app/+vehicles/shared/vehicle.model.ts]" value="export class Vehicle {
   id: number;
   name: string;
   type: string;
 }
 
+"><input type="hidden" name="files[app/+vehicles/shared/vehicle.service.ts]" value="import { Injectable } from '@angular/core';
+import { Http, Response } from '@angular/http';
+import { Observable } from 'rxjs/Rx';
+
+import { Vehicle } from './vehicle.model';
+import { CONFIG, ExceptionService, MessageService, SpinnerService } from '../../../app/shared';
+
+let vehiclesUrl = CONFIG.baseUrls.vehicles;
+
 @Injectable()
 export class VehicleService {
   onDbReset = this.messageService.state;
 
-  constructor(private _http: Http,
+  constructor(private http: Http,
     private exceptionService: ExceptionService,
     private messageService: MessageService,
     private spinnerService: SpinnerService) {
@@ -440,7 +449,7 @@ export class VehicleService {
   addVehicle(vehicle: Vehicle) {
     let body = JSON.stringify(vehicle);
     this.spinnerService.show();
-    return <Observable<Vehicle>>this._http
+    return <Observable<Vehicle>>this.http
       .post(`${vehiclesUrl}`, body)
       .map((res: Response) => res.json().data)
       .catch(this.exceptionService.catchBadResponse)
@@ -449,7 +458,7 @@ export class VehicleService {
 
   deleteVehicle(vehicle: Vehicle) {
     this.spinnerService.show();
-    return <Observable<Vehicle>>this._http
+    return <Observable<Vehicle>>this.http
       .delete(`${vehiclesUrl}/${vehicle.id}`)
       .catch(this.exceptionService.catchBadResponse)
       .finally(() => this.spinnerService.hide());
@@ -457,7 +466,7 @@ export class VehicleService {
 
   getVehicles() {
     this.spinnerService.show();
-    return <Observable<Vehicle[]>>this._http
+    return <Observable<Vehicle[]>>this.http
       .get(vehiclesUrl)
       .map((response: Response) => <Vehicle[]>response.json().data)
       .catch(this.exceptionService.catchBadResponse)
@@ -466,7 +475,7 @@ export class VehicleService {
 
   getVehicle(id: number) {
     this.spinnerService.show();
-    return <Observable<Vehicle>>this._http
+    return <Observable<Vehicle>>this.http
       .get(`${vehiclesUrl}/${id}`)
       .map((response: Response) => response.json().data)
       .catch(this.exceptionService.catchBadResponse)
@@ -477,15 +486,16 @@ export class VehicleService {
     let body = JSON.stringify(vehicle);
     this.spinnerService.show();
 
-    return <Observable<Vehicle>>this._http
+    return <Observable<Vehicle>>this.http
       .put(`${vehiclesUrl}/${vehicle.id}`, body)
       .catch(this.exceptionService.catchBadResponse)
       .finally(() => this.spinnerService.hide());
   }
-}"><input type="hidden" name="files[app/+vehicles/vehicle-list/index.ts]" value="export * from './vehicle-list.component';
+}
+"><input type="hidden" name="files[app/+vehicles/vehicle-list/index.ts]" value="export * from './vehicle-list.component';
 "><input type="hidden" name="files[app/+vehicles/vehicle-list/vehicle-list.component.ts]" value="import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ROUTER_DIRECTIVES } from '@angular/router';
-import { Observable, Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs/Rx';
 
 import { FilterTextComponent, FilterService, InitCapsPipe } from '../../../app/shared';
 import { Vehicle, VehicleService } from '../shared';
@@ -499,23 +509,23 @@ import { Vehicle, VehicleService } from '../shared';
   providers: [FilterService]
 })
 export class VehicleListComponent implements OnDestroy, OnInit {
-  private _dbResetSubscription: Subscription;
+  private dbResetSubscription: Subscription;
 
   vehicles: Vehicle[];
   filteredVehicles = this.vehicles;
   @ViewChild(FilterTextComponent) filterComponent: FilterTextComponent;
 
   constructor(
-    private _filterService: FilterService,
-    private _vehicleService: VehicleService) { }
+    private filterService: FilterService,
+    private vehicleService: VehicleService) { }
 
   filterChanged(searchText: string) {
-    this.filteredVehicles = this._filterService.filter(searchText, ['id', 'name', 'type'], this.vehicles);
+    this.filteredVehicles = this.filterService.filter(searchText, ['id', 'name', 'type'], this.vehicles);
   }
 
   getVehicles() {
     this.vehicles = [];
-    this._vehicleService.getVehicles()
+    this.vehicleService.getVehicles()
       .subscribe(vehicles => {
         this.vehicles = this.filteredVehicles = vehicles;
         this.filterComponent.clear();
@@ -523,20 +533,20 @@ export class VehicleListComponent implements OnDestroy, OnInit {
   }
 
   ngOnDestroy() {
-    this._dbResetSubscription.unsubscribe();
+    this.dbResetSubscription.unsubscribe();
   }
 
   ngOnInit() {
     componentHandler.upgradeDom();
     this.getVehicles();
-    this._dbResetSubscription = this._vehicleService.onDbReset
+    this.dbResetSubscription = this.vehicleService.onDbReset
       .subscribe(() => this.getVehicles());
   }
 }
 "><input type="hidden" name="files[app/+vehicles/vehicle/index.ts]" value="export * from './vehicle.component';
 "><input type="hidden" name="files[app/+vehicles/vehicle/vehicle.component.ts]" value="import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { CanDeactivate, ComponentInstruction, RouteParams, Router, ROUTER_DIRECTIVES } from '@angular/router';
-import { Observable, Subscription } from 'rxjs/Rx';
+import { CanDeactivate, Router, RouteSegment, RouteTree } from '@angular/router';
+import { Subscription } from 'rxjs/Rx';
 
 import { EntityService, ModalService, ToastService } from '../../../app/shared';
 import { Vehicle, VehicleService } from '../shared';
@@ -545,8 +555,7 @@ import { Vehicle, VehicleService } from '../shared';
   moduleId: module.id,
   selector: 'story-vehicle',
   templateUrl: 'app/vehicles/vehicle.component.html',
-  styles: ['.mdl-textfield__label {top: 0;}'],
-  directives: [ROUTER_DIRECTIVES]
+  styles: ['.mdl-textfield__label {top: 0;}']
 })
 export class VehicleComponent implements CanDeactivate, OnDestroy, OnInit {
   @Input() vehicle: Vehicle;
@@ -554,11 +563,11 @@ export class VehicleComponent implements CanDeactivate, OnDestroy, OnInit {
   editVehicle: Vehicle = <Vehicle>{};
 
   private dbResetSubscription: Subscription;
+  private id: any;
 
   constructor(
     private entityService: EntityService,
     private modalService: ModalService,
-    private routeParams: RouteParams,
     private router: Router,
     private toastService: ToastService,
     private vehicleService: VehicleService) { }
@@ -588,8 +597,7 @@ export class VehicleComponent implements CanDeactivate, OnDestroy, OnInit {
   }
 
   isAddMode() {
-    let id = +this.routeParams.get('id');
-    return isNaN(id);
+    return isNaN(this.id);
   }
 
   ngOnDestroy() {
@@ -605,10 +613,21 @@ export class VehicleComponent implements CanDeactivate, OnDestroy, OnInit {
       });
   }
 
-  routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
-    return !this.vehicle ||
+  routerOnActivate(
+    current: RouteSegment,
+    prev?: RouteSegment,
+    currTree?: RouteTree,
+    prevTree?: RouteTree
+  ) {
+    let id = +current.getParam('id');
+    this.id = id;
+  }
+
+  routerCanDeactivate(currTree?: RouteTree, futureTree?: RouteTree) {
+    let deactivate = !this.vehicle ||
       !this.isDirty() ||
       this.modalService.activate();
+    return <Promise<boolean>>deactivate;
   }
 
   save() {
@@ -627,21 +646,21 @@ export class VehicleComponent implements CanDeactivate, OnDestroy, OnInit {
   }
 
   private getVehicle() {
-    let id = +this.routeParams.get('id');
-    if (id === 0) return;
+    if (this.id === 0) {
+      return;
+    }
     if (this.isAddMode()) {
       this.vehicle = <Vehicle>{ name: '', type: '' };
       this.editVehicle = this.entityService.clone(this.vehicle);
       return;
     }
-    this.vehicleService.getVehicle(id)
+    this.vehicleService.getVehicle(this.id)
       .subscribe((vehicle: Vehicle) => this.setEditVehicle(vehicle));
   }
 
   private gotoVehicles() {
     let id = this.vehicle ? this.vehicle.id : null;
-    let route = ['Vehicles', { id: id }];
-    this.router.navigate(route);
+    this.router.navigate(['/vehicles', id ]);
   }
 
   private handleServiceError(op: string, err: any) {
@@ -662,7 +681,7 @@ export class VehicleComponent implements CanDeactivate, OnDestroy, OnInit {
   }
 }
 "><input type="hidden" name="files[app/+vehicles/vehicles.component.ts]" value="import { Component, OnInit } from '@angular/core';
-import { RouteConfig, ROUTER_DIRECTIVES } from '@angular/router';
+import { Routes, ROUTER_DIRECTIVES } from '@angular/router';
 
 import { VehicleListComponent } from './vehicle-list';
 import { VehicleComponent } from './vehicle';
@@ -676,7 +695,7 @@ import { VehicleService } from './shared';
   directives: [ROUTER_DIRECTIVES],
   providers: [VehicleService]
 })
-@RouteConfig([
+@Routes([
   { path: '/', component: VehicleListComponent },
 	{ path: '/list/:id', component: VehicleListComponent	},
 	{ path: '/:id', component: VehicleComponent }
@@ -684,13 +703,13 @@ import { VehicleService } from './shared';
 export class VehiclesComponent { }
 "><input type="hidden" name="files[app/app.component.ts]" value="import { Component, provide } from '@angular/core';
 import { HTTP_PROVIDERS, XHRBackend } from '@angular/http';
-import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/router';
+import { Routes, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/router';
 import 'rxjs/Rx'; // load the full rxjs
 
 import {
   InMemoryBackendConfig,
   InMemoryBackendService,
-  SEED_DATA 
+  SEED_DATA
 } from 'angular2-in-memory-web-api/core';
 import { InMemoryStoryService } from '../api/in-memory-story.service';
 import { CharactersComponent } from './+characters';
@@ -698,7 +717,6 @@ import { DashboardComponent } from './+dashboard';
 import { VehiclesComponent } from './+vehicles';
 import {
   CharacterService,
-  CONFIG,
   EntityService,
   ExceptionService,
   MessageService,
@@ -731,7 +749,7 @@ import {
     ToastService
   ]
 })
-@RouteConfig([
+@Routes([
   { path: '/', component: DashboardComponent },
   { path: '/dashboard', component: DashboardComponent },
   { path: '/vehicles', component: VehiclesComponent },
@@ -745,15 +763,15 @@ export class AppComponent {
   ];
 
   constructor(
-    private _messageService: MessageService,
-    private _modalService: ModalService) {
+    private messageService: MessageService,
+    private modalService: ModalService) {
   }
 
   resetDb() {
     let msg = 'Are you sure you want to reset the database?';
-    this._modalService.activate(msg).then(responseOK => {
+    this.modalService.activate(msg).then(responseOK => {
       if (responseOK) {
-        this._messageService.resetDb();
+        this.messageService.resetDb();
       }
     });
   }
@@ -767,25 +785,28 @@ export const environment = {
 };
 "><input type="hidden" name="files[app/index.ts]" value="export * from './app.component';
 export * from './environment';
-"><input type="hidden" name="files[app/shared/character.service.ts]" value="import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
-import { Observable } from 'rxjs/Rx';
-
-import { CONFIG, ExceptionService, MessageService, SpinnerService } from './';
-
-let charactersUrl = CONFIG.baseUrls.characters;
-
-export class Character {
+"><input type="hidden" name="files[app/shared/character-services/character.model.ts]" value="export class Character {
   id: number;
   name: string;
   side: string;
 }
+"><input type="hidden" name="files[app/shared/character-services/character.service.ts]" value="import { Injectable } from '@angular/core';
+import { Http, Response } from '@angular/http';
+import { Observable } from 'rxjs/Rx';
+
+import { Character } from './character.model';
+import { CONFIG } from '../config';
+import { ExceptionService } from '../exception.service';
+import { MessageService } from '../message.service';
+import { SpinnerService } from '../spinner';
+
+let charactersUrl = CONFIG.baseUrls.characters;
 
 @Injectable()
 export class CharacterService {
   onDbReset = this.messageService.state;
 
-  constructor(private _http: Http,
+  constructor(private http: Http,
     private exceptionService: ExceptionService,
     private messageService: MessageService,
     private spinnerService: SpinnerService) {
@@ -795,7 +816,7 @@ export class CharacterService {
   addCharacter(character: Character) {
     let body = JSON.stringify(character);
     this.spinnerService.show();
-    return <Observable<Character>>this._http
+    return <Observable<Character>>this.http
       .post(`${charactersUrl}`, body)
       .map((res: Response) => res.json().data)
       .catch(this.exceptionService.catchBadResponse)
@@ -804,7 +825,7 @@ export class CharacterService {
 
   deleteCharacter(character: Character) {
     this.spinnerService.show();
-    return <Observable<Character>>this._http
+    return <Observable<Character>>this.http
       .delete(`${charactersUrl}/${character.id}`)
       .catch(this.exceptionService.catchBadResponse)
       .finally(() => this.spinnerService.hide());
@@ -812,16 +833,16 @@ export class CharacterService {
 
   getCharacters() {
     this.spinnerService.show();
-    return <Observable<Character[]>>this._http
+    return <Observable<Character[]>>this.http
       .get(charactersUrl)
-      .map((response: Response) => <Character[]>response.json().data)
+      .map(res => <Character[]>res.json().data)
       .catch(this.exceptionService.catchBadResponse)
       .finally(() => this.spinnerService.hide());
   }
 
   getCharacter(id: number) {
     this.spinnerService.show();
-    return <Observable<Character>>this._http
+    return <Observable<Character>>this.http
       .get(`${charactersUrl}/${id}`)
       .map((response: Response) => response.json().data)
       .catch(this.exceptionService.catchBadResponse)
@@ -832,12 +853,14 @@ export class CharacterService {
     let body = JSON.stringify(character);
     this.spinnerService.show();
 
-    return <Observable<Character>>this._http
+    return <Observable<Character>>this.http
       .put(`${charactersUrl}/${character.id}`, body)
       .catch(this.exceptionService.catchBadResponse)
       .finally(() => this.spinnerService.hide());
   }
 }
+"><input type="hidden" name="files[app/shared/character-services/index.ts]" value="export * from './character.model';
+export * from './character.service';
 "><input type="hidden" name="files[app/shared/config.ts]" value="export let CONFIG = {
   baseUrls: {
     config: 'commands/config',
@@ -845,8 +868,8 @@ export class CharacterService {
     characters: 'api/characters.json',
     vehicles: 'api/vehicles.json'
   }
-}
-"><input type="hidden" name="files[app/shared/entity.service.ts]" value="import {Injectable} from '@angular/core';
+};
+"><input type="hidden" name="files[app/shared/entity.service.ts]" value="import { Injectable } from '@angular/core';
 
 @Injectable()
 export class EntityService {
@@ -855,7 +878,8 @@ export class EntityService {
   merge = (target: any, ...sources: any[]) => Object.assign(target, ...sources);
 
   propertiesDiffer = (entityA: {}, entityB: {}) => Object.keys(entityA).find(key => entityA[key] !== entityB[key]);
-}"><input type="hidden" name="files[app/shared/exception.service.ts]" value="import { Injectable } from '@angular/core';
+}
+"><input type="hidden" name="files[app/shared/exception.service.ts]" value="import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 
@@ -876,7 +900,7 @@ export class ExceptionService {
     //return Observable.throw(emsg); // TODO: We should NOT swallow error here.
     return Observable.of();
   }
-}"><input type="hidden" name="files[app/shared/filter-text/filter-text.component.ts]" value="import { Component, EventEmitter, Input, Output } from '@angular/core';
+}"><input type="hidden" name="files[app/shared/filter-text/filter-text.component.ts]" value="import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   moduleId: module.id,
@@ -885,11 +909,11 @@ export class ExceptionService {
 })
 export class FilterTextComponent {
   @Output() changed: EventEmitter<string>;
-  
+
   filter: string;
 
   constructor() {
-    this.changed = new EventEmitter();
+    this.changed = new EventEmitter<string>();
 
     componentHandler.upgradeDom();
   }
@@ -903,9 +927,8 @@ export class FilterTextComponent {
     console.log(`Filter Changed: ${this.filter}`);
     this.changed.emit(this.filter);
   }
-}"><input type="hidden" name="files[app/shared/filter-text/index.ts]" value="export * from './filter-text.component';
-export * from './shared';
-"><input type="hidden" name="files[app/shared/filter-text/shared/filter-text.service.ts]" value="import { Injectable } from '@angular/core';
+}
+"><input type="hidden" name="files[app/shared/filter-text/filter-text.service.ts]" value="import { Injectable } from '@angular/core';
 
 @Injectable()
 export class FilterService {
@@ -930,8 +953,9 @@ export class FilterService {
     }
     return filteredList;
   }
-}"><input type="hidden" name="files[app/shared/filter-text/shared/index.ts]" value="export * from './filter-text.service';
-"><input type="hidden" name="files[app/shared/index.ts]" value="export * from './character.service';
+}"><input type="hidden" name="files[app/shared/filter-text/index.ts]" value="export * from './filter-text.component';
+export * from './filter-text.service';
+"><input type="hidden" name="files[app/shared/index.ts]" value="export * from './character-services';
 export * from './config';
 export * from './message.service';
 export * from './entity.service';
@@ -956,21 +980,21 @@ export class InitCapsPipe implements PipeTransform {
 
 
 "><input type="hidden" name="files[app/shared/message.service.ts]" value="import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
-import { Observable, Subject } from 'rxjs/Rx';
+import { Http } from '@angular/http';
+import { Subject } from 'rxjs/Rx';
 
 import { CONFIG } from './config';
 import { ToastService } from './toast';
 
 export interface ResetMessage {
-  message: string
+  message: string;
 }
 
 @Injectable()
 export class MessageService {
-  state = <Observable<ResetMessage>>this.subject;
+  private subject = new Subject<ResetMessage>();
 
-  private subject = new Subject();
+  state = this.subject;
 
   constructor(private http: Http, private toastService: ToastService) { }
 
@@ -984,10 +1008,10 @@ export class MessageService {
   }
 }
 "><input type="hidden" name="files[app/shared/modal/index.ts]" value="export * from './modal.component';
-export * from './shared';
+export * from './modal.service';
 "><input type="hidden" name="files[app/shared/modal/modal.component.ts]" value="import { Component, OnInit } from '@angular/core';
 
-import { ModalService } from './shared'
+import { ModalService } from './modal.service';
 
 const KEY_ESC = 27;
 
@@ -1079,42 +1103,18 @@ export class ModalComponent implements OnInit {
     this.modalElement.style.opacity = 1;
   }
 }
-"><input type="hidden" name="files[app/shared/modal/shared/index.ts]" value="export * from './modal.service';
-"><input type="hidden" name="files[app/shared/modal/shared/modal.service.ts]" value="import { Injectable } from '@angular/core';
+"><input type="hidden" name="files[app/shared/modal/modal.service.ts]" value="import { Injectable } from '@angular/core';
 
 @Injectable()
 export class ModalService {
   activate: (message?: string, title?: string) => Promise<boolean>;
 }
 "><input type="hidden" name="files[app/shared/spinner/index.ts]" value="export * from './spinner.component';
-export * from './shared';
-"><input type="hidden" name="files[app/shared/spinner/shared/index.ts]" value="export * from './spinner.service';
-"><input type="hidden" name="files[app/shared/spinner/shared/spinner.service.ts]" value="import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs/Rx';
-
-export interface SpinnerState {
-  show: boolean
-}
-
-@Injectable()
-export class SpinnerService {
-  private _spinnerSubject = new Subject();
-
-  spinnerState = <Observable<SpinnerState>>this._spinnerSubject;
-
-  show() {
-    this._spinnerSubject.next(<SpinnerState>{ show: true });
-  }
-
-  hide() {
-    this._spinnerSubject.next(<SpinnerState>{ show: false });
-  }
-}"><input type="hidden" name="files[app/shared/spinner/spinner.component.ts]" value="import {Component, OnDestroy, OnInit} from '@angular/core';
+export * from './spinner.service';
+"><input type="hidden" name="files[app/shared/spinner/spinner.component.ts]" value="import {Component, OnDestroy, OnInit} from '@angular/core';
 import { Subscription } from 'rxjs/Rx';
 
-import { SpinnerState, SpinnerService } from './shared';
-
-const ACTIVE_CLASS = 'is-active';
+import { SpinnerState, SpinnerService } from './spinner.service';
 
 @Component({
   moduleId: module.id,
@@ -1130,31 +1130,46 @@ const ACTIVE_CLASS = 'is-active';
 export class SpinnerComponent implements OnDestroy, OnInit {
   visible = false;
 
-  private _spinnerStateChanged: Subscription;
+  private spinnerStateChanged: Subscription;
 
-  constructor(private _spinnerService: SpinnerService) { }
+  constructor(private spinnerService: SpinnerService) { }
 
   ngOnInit() {
     componentHandler.upgradeDom();
-    this._spinnerStateChanged = this._spinnerService.spinnerState
+    this.spinnerStateChanged = this.spinnerService.spinnerState
       .subscribe((state: SpinnerState) => this.visible = state.show);
   }
 
   ngOnDestroy() {
-    this._spinnerStateChanged.unsubscribe();
+    this.spinnerStateChanged.unsubscribe();
   }
-}"><input type="hidden" name="files[app/shared/toast/index.ts]" value="export * from './toast.component';
-export * from './shared';
-"><input type="hidden" name="files[app/shared/toast/shared/index.ts]" value="export * from './toast.service';
-"><input type="hidden" name="files[app/shared/toast/shared/toast.service.ts]" value="import { Injectable } from '@angular/core';
+}
+"><input type="hidden" name="files[app/shared/spinner/spinner.service.ts]" value="import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs/Rx';
+
+export interface SpinnerState {
+  show: boolean;
+}
 
 @Injectable()
-export class ToastService {
-  activate: (message?: string, title?: string) => void;
+export class SpinnerService {
+  private spinnerSubject = new Subject<SpinnerState>();
+
+  spinnerState = this.spinnerSubject;
+
+  show() {
+    this.spinnerSubject.next(<SpinnerState>{ show: true });
+  }
+
+  hide() {
+    this.spinnerSubject.next(<SpinnerState>{ show: false });
+  }
 }
+"><input type="hidden" name="files[app/shared/toast/index.ts]" value="export * from './toast.component';
+export * from './toast.service';
 "><input type="hidden" name="files[app/shared/toast/toast.component.ts]" value="import { Component, OnInit } from '@angular/core';
 
-import { ToastService } from './shared'
+import { ToastService } from './toast.service';
 
 @Component({
   moduleId: module.id,
@@ -1198,6 +1213,12 @@ export class ToastComponent implements OnInit {
 
     window.setTimeout(() => this.hide(), 2500);
   }
+}
+"><input type="hidden" name="files[app/shared/toast/toast.service.ts]" value="import { Injectable } from '@angular/core';
+
+@Injectable()
+export class ToastService {
+  activate: (message?: string, title?: string) => void;
 }
 "><input type="hidden" name="files[main.ts]" value="import { enableProdMode } from '@angular/core';
 import { bootstrap } from '@angular/platform-browser-dynamic';
@@ -1249,20 +1270,21 @@ const barrels = [
 
   // App specific barrels.
   'app',
+  'app/+characters',
+  'app/+characters/character',
+  'app/+characters/character-list',
+  'app/+characters/shared',
   'app/+dashboard',
   'app/+vehicles',
   'app/+vehicles/vehicle',
   'app/+vehicles/vehicle-list',
   'app/+vehicles/shared',
-  'app/+characters',
-  'app/+characters/character',
-  'app/+characters/character-list',
-  'app/+characters/shared',
   'app/shared',
+  'app/shared/character-services',
   'app/shared/filter-text',
   'app/shared/modal',
   'app/shared/spinner',
-  'app/shared/toast'
+  'app/shared/toast',
   /** @cli-barrel */
 ];
 
@@ -12117,7 +12139,7 @@ iframe.heightSet {
 </article>"><input type="hidden" name="files[app/+vehicles/vehicle-list/vehicle-list.component.html]" value="<article class=&quot;template animated slideInRight&quot;>
   <h4>My Vehicles</h4>
 
-  <button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot; [routerLink]=&quot;['Vehicle', 'new']&quot;>Add</button>
+  <button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot; [routerLink]=&quot;['/vehicle', 'new']&quot;>Add</button>
 
   <filter-text (changed)=&quot;filterChanged($event)&quot;></filter-text>
 
@@ -12387,7 +12409,100 @@ iframe.heightSet {
       &quot;type&quot;: &quot;land&quot;
     }
   ]
-}"><input type="hidden" name="files[typings.json]" value="{
+}"><input type="hidden" name="files[tslint.json]" value="{
+  &quot;rules&quot;: {
+    &quot;class-name&quot;: true,
+    &quot;comment-format&quot;: [
+      true,
+      &quot;check-space&quot;
+    ],
+    &quot;curly&quot;: true,
+    &quot;eofline&quot;: true,
+    &quot;forin&quot;: true,
+    &quot;indent&quot;: [
+      true,
+      &quot;spaces&quot;
+    ],
+    &quot;label-position&quot;: true,
+    &quot;label-undefined&quot;: true,
+    &quot;max-line-length&quot;: [
+      true,
+      140
+    ],
+    &quot;member-access&quot;: false,
+    &quot;member-ordering&quot;: [
+      true,
+      &quot;static-before-instance&quot;,
+      &quot;variables-before-functions&quot;
+    ],
+    &quot;no-arg&quot;: true,
+    &quot;no-bitwise&quot;: true,
+    &quot;no-console&quot;: [
+      true,
+      &quot;debug&quot;,
+      &quot;info&quot;,
+      &quot;time&quot;,
+      &quot;timeEnd&quot;,
+      &quot;trace&quot;
+    ],
+    &quot;no-construct&quot;: true,
+    &quot;no-debugger&quot;: true,
+    &quot;no-duplicate-key&quot;: true,
+    &quot;no-duplicate-variable&quot;: true,
+    &quot;no-empty&quot;: false,
+    &quot;no-eval&quot;: true,
+    &quot;no-inferrable-types&quot;: true,
+    &quot;no-shadowed-variable&quot;: true,
+    &quot;no-string-literal&quot;: false,
+    &quot;no-switch-case-fall-through&quot;: true,
+    &quot;no-trailing-whitespace&quot;: true,
+    &quot;no-unused-expression&quot;: true,
+    &quot;no-unused-variable&quot;: true,
+    &quot;no-unreachable&quot;: true,
+    &quot;no-use-before-declare&quot;: true,
+    &quot;no-var-keyword&quot;: true,
+    &quot;object-literal-sort-keys&quot;: false,
+    &quot;one-line&quot;: [
+      true,
+      &quot;check-open-brace&quot;,
+      &quot;check-catch&quot;,
+      &quot;check-else&quot;,
+      &quot;check-whitespace&quot;
+    ],
+    &quot;quotemark&quot;: [
+      true,
+      &quot;single&quot;
+    ],
+    &quot;radix&quot;: true,
+    &quot;semicolon&quot;: [
+      &quot;always&quot;
+    ],
+    &quot;triple-equals&quot;: [
+      true,
+      &quot;allow-null-check&quot;
+    ],
+    &quot;typedef-whitespace&quot;: [
+      true,
+      {
+        &quot;call-signature&quot;: &quot;nospace&quot;,
+        &quot;index-signature&quot;: &quot;nospace&quot;,
+        &quot;parameter&quot;: &quot;nospace&quot;,
+        &quot;property-declaration&quot;: &quot;nospace&quot;,
+        &quot;variable-declaration&quot;: &quot;nospace&quot;
+      }
+    ],
+    &quot;variable-name&quot;: false,
+    &quot;whitespace&quot;: [
+      true,
+      &quot;check-branch&quot;,
+      &quot;check-decl&quot;,
+      &quot;check-operator&quot;,
+      &quot;check-separator&quot;,
+      &quot;check-type&quot;
+    ]
+  }
+}
+"><input type="hidden" name="files[typings.json]" value="{
   &quot;ambientDependencies&quot;: {
     &quot;es6-shim&quot;: &quot;github:DefinitelyTyped/DefinitelyTyped/es6-shim/es6-shim.d.ts#7de6c3dd94feaeb21f20054b9f30d5dabc5efabd&quot;,
     &quot;jasmine&quot;: &quot;github:DefinitelyTyped/DefinitelyTyped/jasmine/jasmine.d.ts#5c182b9af717f73146399c2485f70f1e2ac0ff2b&quot;

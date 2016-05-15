@@ -25,7 +25,7 @@ var fsUtils = require(path.resolve(TOOLS_PATH, 'fs-utils/fsUtils'));
 // vardocs docShredder = require(path.resolve(TOOLS_PATH, 'doc-shredder/doc-shredder'));
 var plunkerBuilder = require(path.resolve(TOOLS_PATH, 'plunker-builder/plunkerBuilder'));
 
-var _exampleBoilerplateFiles = ['package.json', 'tsconfig.json', 'typings.json', 'karma.conf.js', 'karma-test-shim.js', 'typings.d.ts' ];
+var _exampleBoilerplateFiles = ['package.json', 'tsconfig.json', 'typings.json', 'karma.conf.js', 'karma-test-shim.js', 'typings.d.ts', 'tslint.json' ];
 
 gulp.task('default', ['help']);
 
