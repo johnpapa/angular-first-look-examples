@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Routes, ROUTER_DIRECTIVES } from '@angular/router';
 
 import { VehicleListComponent } from './vehicle-list';
@@ -15,7 +15,7 @@ import { VehicleService } from './shared';
 })
 @Routes([
   { path: '/', component: VehicleListComponent },
-	{ path: '/list/:id', component: VehicleListComponent	},
-	{ path: '/:id', component: VehicleComponent }
+  { path: '/list/:id', component: VehicleListComponent },
+  { path: '/:id', component: VehicleComponent }
 ])
 export class VehiclesComponent { }

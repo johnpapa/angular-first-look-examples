@@ -1,7 +1,7 @@
 <article class="template animated slideInRight">
   <h4>My Vehicles</h4>
 
-  <button class="dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" [routerLink]="['/vehicle', 'new']">Add</button>
+  <a href="" [routerLink]="['/vehicle', 'new']"<button class="dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" [routerLink]="['/vehicle', 'new']">Add</button></a>
 
   <filter-text (changed)="filterChanged($event)"></filter-text>
 
@@ -13,11 +13,11 @@
           <h2 class="mdl-card__title-text">{{vehicle.id}}. {{vehicle.name | initCaps}}</h2>
         </div>
         <div class="mdl-card__menu">
-          <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" [routerLink]="['/vehicle', vehicle.id]">
+          [routerLink]="['/vehicle', vehicle.id]"<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" [routerLink]="['/vehicle', vehicle.id]">
 
             <div class="icon mdl-color--primary icon-ic_play_circle_filled_white_24dp"></div>
 
-          </button>
+          </button></a>
         </div>
       </div>
 

@@ -47,7 +47,6 @@ import {
   ]
 })
 @Routes([
-  { path: '/', component: DashboardComponent },
   { path: '/dashboard', component: DashboardComponent },
   { path: '/vehicles', component: VehiclesComponent },
   { path: '/characters', component: CharactersComponent },

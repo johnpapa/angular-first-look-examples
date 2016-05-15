@@ -62,19 +62,25 @@ export class ModalComponent implements OnInit {
   private show() {
     document.onkeyup = null;
 
-    if (!this.modalElement || !this.cancelButton || !this.okButton) return;
+    if (!this.modalElement || !this.cancelButton || !this.okButton) {
+      return;
+    }
 
     this.modalElement.style.opacity = 0;
     this.modalElement.style.zIndex = 9999;
 
     this.cancelButton.onclick = ((e: any) => {
       e.preventDefault();
-      if (!this.negativeOnClick(e)) this.hideDialog()
+      if (!this.negativeOnClick(e)) {
+        this.hideDialog();
+      }
     });
 
     this.okButton.onclick = ((e: any) => {
       e.preventDefault();
-      if (!this.positiveOnClick(e)) this.hideDialog()
+      if (!this.positiveOnClick(e)) {
+        this.hideDialog();
+      }
     });
 
     this.modalElement.onclick = () => {
@@ -83,7 +89,7 @@ export class ModalComponent implements OnInit {
     };
 
     document.onkeyup = (e: any) => {
-      if (e.which == KEY_ESC) {
+      if (e.which === KEY_ESC) {
         this.hideDialog();
         return this.negativeOnClick(null);
       }
