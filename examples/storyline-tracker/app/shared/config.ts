@@ -5,4 +5,4 @@ export let CONFIG = {
     characters: 'api/characters.json',
     vehicles: 'api/vehicles.json'
   }
-}
+};

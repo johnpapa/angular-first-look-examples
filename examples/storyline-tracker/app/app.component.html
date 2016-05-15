@@ -6,7 +6,7 @@
       <button id="reset-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent mdl-button--raised" (click)="resetDb()">Reset Data</button>
     </div>
     <div class="mdl-navigation">
-      <a *ngFor="#item of menuItems" [routerLink]="item.link" class="nav-link" href="">{{item.caption}}</a>
+      <a *ngFor="let item of menuItems" [routerLink]="item.link" class="nav-link" href="">{{item.caption}}</a>
     </div>
   </header>
   <main class="mdl-layout__content">
@@ -16,6 +16,7 @@
       </div>
     </section>
   </main>
+  
   <story-spinner></story-spinner>
   <toast></toast>
   <modal-confirm></modal-confirm>

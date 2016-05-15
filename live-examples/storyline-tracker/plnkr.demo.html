@@ -147,413 +147,40 @@
 
     return { characters, vehicles };
   }
-}"><input type="hidden" name="files[app/app.component.ts]" value="import { Component, provide } from 'angular2/core';
-import { HTTP_PROVIDERS, XHRBackend } from 'angular2/http';
-import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from 'angular2/router';
-import 'rxjs/Rx'; // load the full rxjs
-
-import { InMemoryBackendConfig, InMemoryBackendService, SEED_DATA } from 'a2-in-memory-web-api/core';
-import { InMemoryStoryService } from '../api/in-memory-story.service';
-import { CharactersComponent, CharacterService } from './characters/characters';
-import { DashboardComponent } from './dashboard/dashboard';
-import { VehiclesComponent } from './vehicles/vehicles';
-import { CONFIG, MessageService } from './shared/shared';
-import { EntityService, ExceptionService, ModalComponent, ModalService, SpinnerComponent, SpinnerService, ToastComponent, ToastService } from './blocks/blocks';
-
-@Component({
-  selector: 'story-app',
-  templateUrl: 'app/app.component.html',
-  styleUrls: ['app/app.component.css'],
-  directives: [ROUTER_DIRECTIVES, ModalComponent, SpinnerComponent, ToastComponent],
-  providers: [
-    HTTP_PROVIDERS,
-    provide(XHRBackend, { useClass: InMemoryBackendService }),
-    provide(SEED_DATA, { useClass: InMemoryStoryService }),
-    provide(InMemoryBackendConfig, { useValue: { delay: 600 } }),
-    ROUTER_PROVIDERS,
-    CharacterService,
-    EntityService,
-    ExceptionService,
-    MessageService,
-    ModalService,
-    SpinnerService,
-    ToastService
-  ]
-})
-@RouteConfig([
-  { path: '/dashboard', name: 'Dashboard', component: DashboardComponent, useAsDefault: true },
-  { path: '/vehicles/...', name: 'Vehicles', component: VehiclesComponent },
-  { path: '/characters/...', name: 'Characters', component: CharactersComponent },
-])
-export class AppComponent {
-  public menuItems = [
-    { caption: 'Dashboard', link: ['Dashboard'] },
-    { caption: 'Characters', link: ['Characters'] },
-    { caption: 'Vehicles', link: ['Vehicles'] }
-  ];
-
-  constructor(
-    private _messageService: MessageService,
-    private _modalService: ModalService) {
-  }
-
-  resetDb() {
-    let msg = 'Are you sure you want to reset the database?';
-    this._modalService.activate(msg).then(responseOK => {
-      if (responseOK) {
-        this._messageService.resetDb();
-      }
-    });
-  }
-}
-"><input type="hidden" name="files[app/blocks/blocks.ts]" value="export * from './entity.service';
-export * from './exception.service';
-export * from './filter-text/filter-text';
-export * from './init-caps.pipe';
-export * from './modal/modal';
-export * from './spinner/spinner';
-export * from './toast/toast';
-"><input type="hidden" name="files[app/blocks/entity.service.ts]" value="import {Injectable} from 'angular2/core';
-
-@Injectable()
-export class EntityService {
-  clone = (source: {}) => Object.assign({}, source);
-
-  merge = (target: any, ...sources: any[]) => Object.assign(target, ...sources);
-
-  propertiesDiffer = (entityA: {}, entityB: {}) => Object.keys(entityA).find(key => entityA[key] !== entityB[key]);
-}"><input type="hidden" name="files[app/blocks/exception.service.ts]" value="import { Injectable } from 'angular2/core';
-import { Response } from 'angular2/http';
-import { Observable } from 'rxjs/Rx';
-
-import { ToastService } from './toast/toast.service';
-
-@Injectable()
-export class ExceptionService {
-
-  constructor(private _toastService: ToastService) { }
-
-  catchBadResponse: (errorResponse: any) => Observable<any> = (errorResponse: any) => {
-    let res = <Response>errorResponse;
-    let err = res.json();
-    let emsg = err ?
-      (err.error ? err.error : JSON.stringify(err)) :
-      (res.statusText || 'unknown error');
-    this._toastService.activate(`Error - Bad Response - ${emsg}`);
-    //return Observable.throw(emsg); // TODO: We should NOT swallow error here.
-    return Observable.of();
-  }
-}"><input type="hidden" name="files[app/blocks/filter-text/filter-text.component.ts]" value="import { Component, EventEmitter, Input, Output } from 'angular2/core';
-
-@Component({
-  selector: 'filter-text',
-  templateUrl: 'app/blocks/filter-text/filter-text.component.html'
-})
-export class FilterTextComponent {
-  @Output() changed: EventEmitter<string>;
-  filter: string;
-
-  constructor() {
-    this.changed = new EventEmitter();
-
-    componentHandler.upgradeDom();
-  }
-
-  clear() {
-    this.filter = '';
-  }
-
-  filterChanged(event: any) {
-    event.preventDefault();
-    console.log(`Filter Changed: ${this.filter}`);
-    this.changed.emit(this.filter);
-  }
-}"><input type="hidden" name="files[app/blocks/filter-text/filter-text.service.ts]" value="import { Injectable } from 'angular2/core';
-
-@Injectable()
-export class FilterService {
-	constructor() { }
-
-  filter(data: string, props: Array<string>, originalList: Array<any>) {
-    let filteredList: any[];
-    if (data &amp;&amp; props &amp;&amp; originalList) {
-      data = data.toLowerCase();
-      let filtered = originalList.filter(item => {
-        let match = false;
-        for (let prop of props) {
-          if (item[prop].toString().toLowerCase().indexOf(data) > -1) {
-            match = true;
-            break;
-          }
-        };
-        return match;
-      });
-      filteredList = filtered;
-    }
-    else {
-      filteredList = originalList;
-    }
-    return filteredList;
-  }
-}"><input type="hidden" name="files[app/blocks/filter-text/filter-text.ts]" value="export * from './filter-text.component';
-export * from './filter-text.service';
-"><input type="hidden" name="files[app/blocks/init-caps.pipe.ts]" value="import { Pipe, PipeTransform } from 'angular2/core';
-
-@Pipe({ name: 'initCaps' })
-export class InitCapsPipe implements PipeTransform {
-  transform(value: string, args: any[]) {
-    return value
-      .toLowerCase()
-      .replace(/(?:^|\s)[a-z]/g, function(m) {
-        return m.toUpperCase();
-      });
-  }
-}
-
-
-"><input type="hidden" name="files[app/blocks/modal/modal.component.ts]" value="import { Component, OnInit } from 'angular2/core';
-
-import { ModalService } from './modal.service'
-
-const KEY_ESC = 27;
-
-@Component({
-  selector: 'modal-confirm',
-  templateUrl: 'app/blocks/modal/modal.component.html',
-  styleUrls: ['app/blocks/modal/modal.component.css']
-})
-export class ModalComponent implements OnInit {
-  private _defaults = {
-    title: 'Confirmation',
-    message: 'Do you want to cancel your changes?',
-    cancelText: 'Cancel',
-    okText: 'OK'
-  };
-  title: string;
-  message: string;
-  okText: string;
-  cancelText: string;
-  negativeOnClick: (e: any) => void;
-  positiveOnClick: (e: any) => void;
-
-  private _modalElement: any;
-  private _cancelButton: any;
-  private _okButton: any;
-
-  constructor(modalService: ModalService) {
-    modalService.activate = this.activate.bind(this);
-  }
-
-  activate(message = this._defaults.message, title = this._defaults.title) {
-    this.title = title;
-    this.message = message;
-    this.okText = this._defaults.okText;
-    this.cancelText = this._defaults.cancelText;
-
-    let promise = new Promise<boolean>((resolve, reject) => {
-      this.negativeOnClick = (e: any) => resolve(false);
-      this.positiveOnClick = (e: any) => resolve(true);
-      this._show();
-    });
-
-    return promise;
-  }
-
-  ngOnInit() {
-    this._modalElement = document.getElementById('confirmationModal');
-    this._cancelButton = document.getElementById('cancelButton');
-    this._okButton = document.getElementById('okButton');
-  }
-
-  private _show() {
-    document.onkeyup = null;
-
-    if (!this._modalElement || !this._cancelButton || !this._okButton) return;
-
-    this._modalElement.style.opacity = 0;
-    this._modalElement.style.zIndex = 9999;
-
-    this._cancelButton.onclick = ((e: any) => {
-      e.preventDefault();
-      if (!this.negativeOnClick(e)) this._hideDialog()
-    });
-
-    this._okButton.onclick = ((e: any) => {
-      e.preventDefault();
-      if (!this.positiveOnClick(e)) this._hideDialog()
-    });
-
-    this._modalElement.onclick = () => {
-      this._hideDialog();
-      return this.negativeOnClick(null);
-    };
-
-    document.onkeyup = (e: any) => {
-      if (e.which == KEY_ESC) {
-        this._hideDialog();
-        return this.negativeOnClick(null);
-      }
-    };
-
-    this._modalElement.style.opacity = 1;
-  }
-
-  private _hideDialog() {
-    document.onkeyup = null;
-    this._modalElement.style.opacity = 0;
-    window.setTimeout(() => this._modalElement.style.zIndex = 0, 400);
-  }
-}
-"><input type="hidden" name="files[app/blocks/modal/modal.service.ts]" value="import { Injectable } from 'angular2/core';
-
-@Injectable()
-export class ModalService {
-  activate: (message?: string, title?: string) => Promise<boolean>;
-}
-"><input type="hidden" name="files[app/blocks/modal/modal.ts]" value="export * from './modal.component';
-export * from './modal.service';
-"><input type="hidden" name="files[app/blocks/spinner/spinner.component.ts]" value="import {Component, OnDestroy, OnInit} from 'angular2/core';
-import { Subscription } from 'rxjs/Rx';
-
-import { ISpinnerState, SpinnerService } from './spinner.service';
-
-const ACTIVE_CLASS = 'is-active';
-
-@Component({
-  selector: 'story-spinner',
-  template: `
-    <div
-      class=&quot;spinner mdl-spinner mdl-js-spinner mdl-spinner--single-color&quot;
-      [class.is-active]=&quot;visible&quot;></div>
-  `,
-  styles: [`.spinner {position: absolute;left: 46%;top: 12%`]
-})
-
-export class SpinnerComponent implements OnDestroy, OnInit {
-  visible = false;
-
-  private _spinnerStateChanged: Subscription;
-
-  constructor(private _spinnerService: SpinnerService) { }
-
-  ngOnInit() {
-    componentHandler.upgradeDom();
-    this._spinnerStateChanged = this._spinnerService.spinnerState
-      .subscribe((state: ISpinnerState) => this.visible = state.show);
-  }
-
-  ngOnDestroy() {
-    this._spinnerStateChanged.unsubscribe();
-  }
-}"><input type="hidden" name="files[app/blocks/spinner/spinner.service.ts]" value="import { Injectable } from 'angular2/core';
-import { Observable, Subject } from 'rxjs/Rx';
-
-export interface ISpinnerState {
-  show: boolean
-}
-
-@Injectable()
-export class SpinnerService {
-  private _spinnerSubject = new Subject();
-
-  spinnerState = <Observable<ISpinnerState>>this._spinnerSubject;
-
-  show() {
-    this._spinnerSubject.next(<ISpinnerState>{ show: true });
-  }
-
-  hide() {
-    this._spinnerSubject.next(<ISpinnerState>{ show: false });
-  }
-}"><input type="hidden" name="files[app/blocks/spinner/spinner.ts]" value="export * from './spinner.component';
-export * from './spinner.service';"><input type="hidden" name="files[app/blocks/toast/toast.component.ts]" value="import { Component, OnInit } from 'angular2/core';
-
-import { ToastService } from './toast.service'
-
-@Component({
-  selector: 'toast',
-  templateUrl: 'app/blocks/toast/toast.component.html',
-  styleUrls: ['app/blocks/toast/toast.component.css']
-})
-export class ToastComponent implements OnInit {
-  private _defaults = {
-    title: '',
-    message: 'May the Force be with You'
-  };
-  title: string;
-  message: string;
-
-  private _toastElement: any;
-
-  constructor(toastService: ToastService) {
-    toastService.activate = this.activate.bind(this);
-  }
-
-  activate(message = this._defaults.message, title = this._defaults.title) {
-    this.title = title;
-    this.message = message;
-    this._show();
-  }
-
-  ngOnInit() {
-    this._toastElement = document.getElementById('toast');
-  }
-
-  private _show() {
-    console.log(this.message);
-    this._toastElement.style.opacity = 1;
-    this._toastElement.style.zIndex = 9999;
-
-    window.setTimeout(() => this._hide(), 2500);
-  }
-
-  private _hide() {
-    this._toastElement.style.opacity = 0;
-    window.setTimeout(() => this._toastElement.style.zIndex = 0, 400);
-  }
-}
-"><input type="hidden" name="files[app/blocks/toast/toast.service.ts]" value="import { Injectable } from 'angular2/core';
-
-@Injectable()
-export class ToastService {
-  activate: (message?: string, title?: string) => void;
-}
-"><input type="hidden" name="files[app/blocks/toast/toast.ts]" value="export * from './toast.component';
-export * from './toast.service';
-"><input type="hidden" name="files[app/characters/character-list.component.ts]" value="import { Component, OnDestroy, OnInit, ViewChild } from 'angular2/core';
-import { ROUTER_DIRECTIVES } from 'angular2/router';
+}"><input type="hidden" name="files[app/+characters/character-list/character-list.component.ts]" value="import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ROUTER_DIRECTIVES } from '@angular/router';
 import { Observable, Subscription } from 'rxjs/Rx';
 
-import { Character, CharacterService } from './character.service';
-import { SortCharactersPipe } from './sort-characters.pipe';
-import { FilterService, FilterTextComponent } from '../blocks/blocks';
+import { SortCharactersPipe } from '../shared';
+import { Character, CharacterService, FilterService, FilterTextComponent } from '../../../app/shared';
 
 @Component({
+  moduleId: module.id,
   selector: 'story-characters',
-  templateUrl: './app/characters/character-list.component.html',
+  templateUrl: 'character-list.component.html',
   directives: [FilterTextComponent, ROUTER_DIRECTIVES],
-  styleUrls: ['./app/characters/character-list.component.css'],
+  styleUrls: ['character-list.component.css'],
   pipes: [SortCharactersPipe],
   providers: [FilterService]
 })
 export class CharacterListComponent implements OnDestroy, OnInit {
-  private _dbResetSubscription: Subscription;
+  private dbResetSubscription: Subscription;
 
   characters: Character[];
   filteredCharacters = this.characters;
   @ViewChild(FilterTextComponent) filterComponent: FilterTextComponent;
 
-  constructor(private _characterService: CharacterService,
-    private _filterService: FilterService) { }
+  constructor(private characterService: CharacterService,
+    private filterService: FilterService) { }
 
   filterChanged(searchText: string) {
-    this.filteredCharacters = this._filterService.filter(searchText, ['id', 'name', 'side'], this.characters);
+    this.filteredCharacters = this.filterService.filter(searchText, ['id', 'name', 'side'], this.characters);
   }
 
   getCharacters() {
     this.characters = [];
 
-    this._characterService.getCharacters()
+    this.characterService.getCharacters()
       .subscribe(characters => {
         this.characters = this.filteredCharacters = characters;
         this.filterComponent.clear();
@@ -561,212 +188,145 @@ export class CharacterListComponent implements OnDestroy, OnInit {
   }
 
   ngOnDestroy() {
-    this._dbResetSubscription.unsubscribe();
+    this.dbResetSubscription.unsubscribe();
   }
 
   ngOnInit() {
     componentHandler.upgradeDom();
     this.getCharacters();
-    this._dbResetSubscription = this._characterService.onDbReset
+    this.dbResetSubscription = this.characterService.onDbReset
       .subscribe(() => this.getCharacters());
   }
 }
-"><input type="hidden" name="files[app/characters/character.component.ts]" value="import { Component, Input, OnDestroy, OnInit } from 'angular2/core';
-import { CanDeactivate, ComponentInstruction, RouteParams, Router, ROUTER_DIRECTIVES } from 'angular2/router';
+"><input type="hidden" name="files[app/+characters/character-list/index.ts]" value="export * from './character-list.component';
+"><input type="hidden" name="files[app/+characters/character/character.component.ts]" value="import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { CanDeactivate, ComponentInstruction, RouteParams, Router, ROUTER_DIRECTIVES } from '@angular/router';
 import { Observable, Subscription } from 'rxjs/Rx';
 
-import { EntityService, ModalService, ToastService } from '../blocks/blocks';
-import { Character, CharacterService } from '../characters/character.service';
+import { Character, CharacterService, EntityService, ModalService, ToastService } from '../../../app/shared';
 
 @Component({
+  moduleId: module.id,
   selector: 'story-character',
-  templateUrl: 'app/characters/character.component.html',
+  templateUrl: 'character.component.html',
   styles: ['.mdl-textfield__label {top: 0;}'],
   directives: [ROUTER_DIRECTIVES]
 })
 export class CharacterComponent implements CanDeactivate, OnDestroy, OnInit {
-  private _dbResetSubscription: Subscription;
-
   @Input() character: Character;
+
   editCharacter: Character = <Character>{};
 
+  private dbResetSubscription: Subscription;
+
   constructor(
-    private _characterService: CharacterService,
-    private _entityService: EntityService,
-    private _modalService: ModalService,
-    private _routeParams: RouteParams,
-    private _router: Router,
-    private _toastService: ToastService) { }
+    private characterService: CharacterService,
+    private entityService: EntityService,
+    private modalService: ModalService,
+    private routeParams: RouteParams,
+    private router: Router,
+    private toastService: ToastService) { }
 
   cancel(showToast = true) {
-    this.editCharacter = this._entityService.clone(this.character);
+    this.editCharacter = this.entityService.clone(this.character);
     if (showToast) {
-      this._toastService.activate(`Cancelled changes to ${this.character.name}`);
+      this.toastService.activate(`Cancelled changes to ${this.character.name}`);
     }
   }
 
   delete() {
     let msg = `Do you want to delete ${this.character.name}?`;
-    this._modalService.activate(msg).then(responseOK => {
+    this.modalService.activate(msg).then(responseOK => {
       if (responseOK) {
         this.cancel(false);
-        this._characterService.deleteCharacter(this.character)
+        this.characterService.deleteCharacter(this.character)
           .subscribe(() => {
-            this._toastService.activate(`Deleted ${this.character.name}`);
-            this._gotoCharacters();
+            this.toastService.activate(`Deleted ${this.character.name}`);
+            this.gotoCharacters();
           });
       }
     });
   }
 
   isAddMode() {
-    let id = +this._routeParams.get('id');
+    let id = +this.routeParams.get('id');
     return isNaN(id);
   }
 
   ngOnDestroy() {
-    this._dbResetSubscription.unsubscribe();
+    this.dbResetSubscription.unsubscribe();
   }
 
   ngOnInit() {
     componentHandler.upgradeDom();
-    this._getCharacter();
-    this._dbResetSubscription = this._characterService.onDbReset
-      .subscribe(() => this._getCharacter());
+    this.getCharacter();
+    this.dbResetSubscription = this.characterService.onDbReset
+      .subscribe(() => this.getCharacter());
   }
 
   routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
     return !this.character ||
-      !this._isDirty() ||
-      this._modalService.activate();
+      !this.isDirty() ||
+      this.modalService.activate();
   }
 
   save() {
-    let character = this.character = this._entityService.merge(this.character, this.editCharacter);
+    let character = this.character = this.entityService.merge(this.character, this.editCharacter);
     if (character.id == null) {
-      this._characterService.addCharacter(character)
+      this.characterService.addCharacter(character)
         .subscribe(char => {
-          this._setEditCharacter(char);
-          this._toastService.activate(`Successfully added ${char.name}`);
-          this._gotoCharacters();
+          this.setEditCharacter(char);
+          this.toastService.activate(`Successfully added ${char.name}`);
+          this.gotoCharacters();
         });
       return;
     }
-    this._characterService.updateCharacter(character)
-      .subscribe(() => this._toastService.activate(`Successfully saved ${character.name}`));
+    this.characterService.updateCharacter(character)
+      .subscribe(() => this.toastService.activate(`Successfully saved ${character.name}`));
   }
 
-  private _getCharacter() {
-    let id = +this._routeParams.get('id');
+  private getCharacter() {
+    let id = +this.routeParams.get('id');
     if (id === 0) return;
     if (this.isAddMode()) {
       this.character = <Character>{ name: '', side: 'dark' };
-      this.editCharacter = this._entityService.clone(this.character);
+      this.editCharacter = this.entityService.clone(this.character);
       return;
     }
-    this._characterService.getCharacter(id)
-      .subscribe(character => this._setEditCharacter(character));
+    this.characterService.getCharacter(id)
+      .subscribe(character => this.setEditCharacter(character));
   }
 
-  private _gotoCharacters() {
+  private gotoCharacters() {
     let id = this.character ? this.character.id : null;
     let route = ['Characters', { id: id }];
-    this._router.navigate(route);
+    this.router.navigate(route);
   }
 
-  private _handleServiceError(op: string, err: any) {
+  private handleServiceError(op: string, err: any) {
     console.error(`${op} error: ${err.message || err}`);
   }
 
-  private _isDirty() {
-    return this._entityService.propertiesDiffer(this.character, this.editCharacter);
+  private isDirty() {
+    return this.entityService.propertiesDiffer(this.character, this.editCharacter);
   }
 
-  private _setEditCharacter(character: Character) {
+  private setEditCharacter(character: Character) {
     if (character) {
       this.character = character;
-      this.editCharacter = this._entityService.clone(this.character);
+      this.editCharacter = this.entityService.clone(this.character);
     } else {
-      this._gotoCharacters();
+      this.gotoCharacters();
     }
   }
 }
-"><input type="hidden" name="files[app/characters/character.service.ts]" value="import { Injectable } from 'angular2/core';
-import { Http, Response } from 'angular2/http';
-import { Observable } from 'rxjs/Rx';
+"><input type="hidden" name="files[app/+characters/character/index.ts]" value="export * from './character.component';
+"><input type="hidden" name="files[app/+characters/characters.component.ts]" value="import { Component } from '@angular/core';
+import { RouteConfig, ROUTER_DIRECTIVES } from '@angular/router';
 
-import { ExceptionService, SpinnerService } from '../blocks/blocks';
-import { CONFIG, MessageService } from '../shared/shared';
-
-let charactersUrl = CONFIG.baseUrls.characters;
-
-export interface Character {
-  id: number;
-  name: string;
-  side: string;
-}
-
-@Injectable()
-export class CharacterService {
-  constructor(private _http: Http,
-    private _exceptionService: ExceptionService,
-    private _messageService: MessageService,
-    private _spinnerService: SpinnerService) {
-    this._messageService.state.subscribe(state => this.getCharacters());
-  }
-
-  addCharacter(character: Character) {
-    let body = JSON.stringify(character);
-    this._spinnerService.show();
-    return this._http
-      .post(`${charactersUrl}`, body)
-      .map(res => res.json().data)
-      .catch(this._exceptionService.catchBadResponse)
-      .finally(() => this._spinnerService.hide());
-  }
-
-  deleteCharacter(character: Character) {
-    this._spinnerService.show();
-    return this._http
-      .delete(`${charactersUrl}/${character.id}`)
-      .catch(this._exceptionService.catchBadResponse)
-      .finally(() => this._spinnerService.hide());
-  }
-
-  getCharacters() {
-    this._spinnerService.show();
-    return this._http.get(charactersUrl)
-      .map((response: Response) => <Character[]>response.json().data)
-      .catch(this._exceptionService.catchBadResponse)
-      .finally(() => this._spinnerService.hide());
-  }
-
-  getCharacter(id: number) {
-    this._spinnerService.show();
-    return this._http.get(`${charactersUrl}/${id}`)
-      .map((response: Response) => response.json().data)
-      .catch(this._exceptionService.catchBadResponse)
-      .finally(() => this._spinnerService.hide());
-  }
-
-  onDbReset = this._messageService.state;
-
-  updateCharacter(character: Character) {
-    let body = JSON.stringify(character);
-    this._spinnerService.show();
-
-    return this._http
-      .put(`${charactersUrl}/${character.id}`, body)
-      .catch(this._exceptionService.catchBadResponse)
-      .finally(() => this._spinnerService.hide());
-  }
-}
-"><input type="hidden" name="files[app/characters/characters.component.ts]" value="import { Component } from 'angular2/core';
-import { RouteConfig, ROUTER_DIRECTIVES } from 'angular2/router';
-
-import { CharacterComponent } from './character.component';
-import { CharacterListComponent } from './character-list.component';
-import { CharacterService } from './character.service';
+import { CharacterComponent } from './character';
+import { CharacterListComponent } from './character-list';
+import { CharacterService } from '../../app/shared';
 
 @Component({
   selector: 'story-characters-root',
@@ -776,17 +336,19 @@ import { CharacterService } from './character.service';
   directives: [ROUTER_DIRECTIVES]
 })
 @RouteConfig([
-  { path: '/', name: 'Characters', component: CharacterListComponent, useAsDefault: true },
-	{ path: '/list/:id', name: 'Characters', component: CharacterListComponent	},
-	{ path: '/:id', name: 'Character', component: CharacterComponent }
+  { path: '/', component: CharacterListComponent },
+	{ path: '/list/:id', component: CharacterListComponent	},
+	{ path: '/:id', component: CharacterComponent }
 ])
 export class CharactersComponent { }
-"><input type="hidden" name="files[app/characters/characters.ts]" value="export * from './characters.component';
-export * from './character.component';
-export * from './character-list.component';
-export * from './character.service';
-export * from './sort-characters.pipe';"><input type="hidden" name="files[app/characters/sort-characters.pipe.ts]" value="import { Pipe, PipeTransform } from 'angular2/core';
-import { Character } from './character.service';
+"><input type="hidden" name="files[app/+characters/index.ts]" value="export * from './character';
+export * from './character-list';
+export * from './characters.component';
+export * from './shared';
+"><input type="hidden" name="files[app/+characters/shared/index.ts]" value="export * from './sort-characters.pipe';
+"><input type="hidden" name="files[app/+characters/shared/sort-characters.pipe.ts]" value="import { Pipe, PipeTransform } from '@angular/core';
+
+import { Character } from '../../../app/shared';
 
 @Pipe({ name: 'sortCharacters' })
 export class SortCharactersPipe implements PipeTransform {
@@ -799,33 +361,33 @@ export class SortCharactersPipe implements PipeTransform {
       return 0;
     });
   }
-}"><input type="hidden" name="files[app/dashboard/dashboard.component.ts]" value="import { Component, OnDestroy, OnInit } from 'angular2/core';
-import { Router } from 'angular2/router';
+}"><input type="hidden" name="files[app/+dashboard/dashboard.component.ts]" value="import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs/Rx';
 
-import { Character, CharacterService } from '../characters/characters';
-import { ToastService } from '../blocks/blocks';
+import { Character, CharacterService, ToastService } from '../../app/shared';
 
 @Component({
+  moduleId: module.id,
   selector: 'my-dashboard',
-  templateUrl: 'app/dashboard/dashboard.component.html',
-  styleUrls: ['app/dashboard/dashboard.component.css']
+  templateUrl: 'dashboard.component.html',
+  styleUrls: ['dashboard.component.css']
 })
 export class DashboardComponent implements OnDestroy, OnInit {
-  private _dbResetSubscription: Subscription;
+  private dbResetSubscription: Subscription;
 
   characters: Observable<Character[]>;
 
   constructor(
-    private _characterService: CharacterService,
-    private _router: Router,
-    private _toastService: ToastService) { }
+    private characterService: CharacterService,
+    private router: Router,
+    private toastService: ToastService) { }
 
   getCharacters() {
     // this._spinnerService.show();
-    this.characters = this._characterService.getCharacters()
-      .catch(e => {
-        this._toastService.activate(`${e}`);
+    this.characters = this.characterService.getCharacters()
+      .catch((e: any) => {
+        this.toastService.activate(`${e}`);
         return Observable.of();
       })
       // .finally(() => { this._spinnerService.hide(); })
@@ -833,70 +395,100 @@ export class DashboardComponent implements OnDestroy, OnInit {
 
   gotoDetail(character: Character) {
     let link = ['Characters', 'Character', { id: character.id }];
-    this._router.navigate(link);
+    this.router.navigate(link);
   }
 
   ngOnDestroy() {
-    this._dbResetSubscription.unsubscribe();
+    this.dbResetSubscription.unsubscribe();
   }
 
   ngOnInit() {
     this.getCharacters();
-    this._dbResetSubscription = this._characterService.onDbReset
+    this.dbResetSubscription = this.characterService.onDbReset
       .subscribe(() => this.getCharacters());
   }
 }
-"><input type="hidden" name="files[app/dashboard/dashboard.ts]" value="export * from './dashboard.component';"><input type="hidden" name="files[app/main.ts]" value="import { bootstrap } from 'angular2/platform/browser';
-import { AppComponent } from './app.component';
+"><input type="hidden" name="files[app/+dashboard/index.ts]" value="export * from './dashboard.component';"><input type="hidden" name="files[app/+vehicles/index.ts]" value="export * from './vehicles.component';
+export * from './vehicle';
+export * from './vehicle-list';
+"><input type="hidden" name="files[app/+vehicles/shared/index.ts]" value="export * from './vehicle.service';
+"><input type="hidden" name="files[app/+vehicles/shared/vehicle.service.ts]" value="import { Injectable } from '@angular/core';
+import { Http, Response } from '@angular/http';
+import { Observable } from 'rxjs/Rx';
 
-bootstrap(AppComponent, [])
-  .then(success => console.log(`Bootstrap success`))
-  .catch(error => console.log(error));
-"><input type="hidden" name="files[app/shared/config.ts]" value="export let CONFIG = {
-  baseUrls: {
-    config: 'commands/config',
-    resetDb: 'commands/resetDb',
-    characters: 'api/characters.json',
-    vehicles: 'api/vehicles.json'
-  }
-}
-"><input type="hidden" name="files[app/shared/message.service.ts]" value="import { Injectable } from 'angular2/core';
-import { Http, Response } from 'angular2/http';
-import { Observable, Subject } from 'rxjs/Rx';
+import { CONFIG, ExceptionService, MessageService, SpinnerService } from '../../../app/shared';
 
-import { CONFIG } from './config';
-import { ToastService } from '../blocks/toast/toast.service';
+let vehiclesUrl = CONFIG.baseUrls.vehicles;
 
-export interface IResetMessage {
-  message: string
+export interface Vehicle {
+  id: number;
+  name: string;
+  type: string;
 }
 
 @Injectable()
-export class MessageService {
-  private _subject = new Subject();
-
-  state = <Observable<IResetMessage>>this._subject;
+export class VehicleService {
+  onDbReset = this.messageService.state;
 
   constructor(private _http: Http,
-    private _toastService: ToastService) {
+    private exceptionService: ExceptionService,
+    private messageService: MessageService,
+    private spinnerService: SpinnerService) {
+    this.messageService.state.subscribe(state => this.getVehicles());
   }
 
-  resetDb() {
-    let msg = 'Reset the Data Successfully';
-    this._http.post(CONFIG.baseUrls.resetDb, null)
-      .subscribe(() => {
-        this._subject.next({ message: msg });
-        this._toastService.activate(msg);
-      });
+  addVehicle(vehicle: Vehicle) {
+    let body = JSON.stringify(vehicle);
+    this.spinnerService.show();
+    return <Observable<Vehicle>>this._http
+      .post(`${vehiclesUrl}`, body)
+      .map((res: Response) => res.json().data)
+      .catch(this.exceptionService.catchBadResponse)
+      .finally(() => this.spinnerService.hide());
   }
-}
-"><input type="hidden" name="files[app/shared/shared.ts]" value="export * from './config';
-export * from './message.service';"><input type="hidden" name="files[app/vehicles/vehicle-list.component.ts]" value="import { Component, OnDestroy, OnInit, ViewChild } from 'angular2/core';
-import { ROUTER_DIRECTIVES } from 'angular2/router';
+
+  deleteVehicle(vehicle: Vehicle) {
+    this.spinnerService.show();
+    return <Observable<Vehicle>>this._http
+      .delete(`${vehiclesUrl}/${vehicle.id}`)
+      .catch(this.exceptionService.catchBadResponse)
+      .finally(() => this.spinnerService.hide());
+  }
+
+  getVehicles() {
+    this.spinnerService.show();
+    return <Observable<Vehicle[]>>this._http
+      .get(vehiclesUrl)
+      .map((response: Response) => <Vehicle[]>response.json().data)
+      .catch(this.exceptionService.catchBadResponse)
+      .finally(() => this.spinnerService.hide());
+  }
+
+  getVehicle(id: number) {
+    this.spinnerService.show();
+    return <Observable<Vehicle>>this._http
+      .get(`${vehiclesUrl}/${id}`)
+      .map((response: Response) => response.json().data)
+      .catch(this.exceptionService.catchBadResponse)
+      .finally(() => this.spinnerService.hide());
+  }
+
+  updateVehicle(vehicle: Vehicle) {
+    let body = JSON.stringify(vehicle);
+    this.spinnerService.show();
+
+    return <Observable<Vehicle>>this._http
+      .put(`${vehiclesUrl}/${vehicle.id}`, body)
+      .catch(this.exceptionService.catchBadResponse)
+      .finally(() => this.spinnerService.hide());
+  }
+}"><input type="hidden" name="files[app/+vehicles/vehicle-list/index.ts]" value="export * from './vehicle-list.component';
+"><input type="hidden" name="files[app/+vehicles/vehicle-list/vehicle-list.component.ts]" value="import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ROUTER_DIRECTIVES } from '@angular/router';
 import { Observable, Subscription } from 'rxjs/Rx';
 
-import { FilterTextComponent, FilterService, InitCapsPipe } from '../blocks/blocks';
-import { Vehicle, VehicleService } from './vehicle.service';
+import { FilterTextComponent, FilterService, InitCapsPipe } from '../../../app/shared';
+import { Vehicle, VehicleService } from '../shared';
 
 @Component({
   selector: 'story-vehicles',
@@ -941,51 +533,54 @@ export class VehicleListComponent implements OnDestroy, OnInit {
       .subscribe(() => this.getVehicles());
   }
 }
-"><input type="hidden" name="files[app/vehicles/vehicle.component.ts]" value="import { Component, Input, OnDestroy, OnInit } from 'angular2/core';
-import { CanDeactivate, ComponentInstruction, RouteParams, Router, ROUTER_DIRECTIVES } from 'angular2/router';
+"><input type="hidden" name="files[app/+vehicles/vehicle/index.ts]" value="export * from './vehicle.component';
+"><input type="hidden" name="files[app/+vehicles/vehicle/vehicle.component.ts]" value="import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { CanDeactivate, ComponentInstruction, RouteParams, Router, ROUTER_DIRECTIVES } from '@angular/router';
 import { Observable, Subscription } from 'rxjs/Rx';
 
-import { EntityService, ModalService, ToastService } from '../blocks/blocks';
-import { Vehicle, VehicleService } from '../vehicles/vehicle.service';
+import { EntityService, ModalService, ToastService } from '../../../app/shared';
+import { Vehicle, VehicleService } from '../shared';
 
 @Component({
+  moduleId: module.id,
   selector: 'story-vehicle',
   templateUrl: 'app/vehicles/vehicle.component.html',
   styles: ['.mdl-textfield__label {top: 0;}'],
   directives: [ROUTER_DIRECTIVES]
 })
 export class VehicleComponent implements CanDeactivate, OnDestroy, OnInit {
-  private _dbResetSubscription: Subscription;
-
   @Input() vehicle: Vehicle;
+
   editVehicle: Vehicle = <Vehicle>{};
 
+  private dbResetSubscription: Subscription;
+
   constructor(
-    private _entityService: EntityService,
-    private _modalService: ModalService,
-    private _routeParams: RouteParams,
-    private _router: Router,
-    private _toastService: ToastService,
-    private _vehicleService: VehicleService) { }
+    private entityService: EntityService,
+    private modalService: ModalService,
+    private routeParams: RouteParams,
+    private router: Router,
+    private toastService: ToastService,
+    private vehicleService: VehicleService) { }
 
   cancel(showToast = true) {
-    this.editVehicle = this._entityService.clone(this.vehicle);
+    this.editVehicle = this.entityService.clone(this.vehicle);
     if (showToast) {
-      this._toastService.activate(`Cancelled changes to ${this.vehicle.name}`);
+      this.toastService.activate(`Cancelled changes to ${this.vehicle.name}`);
     }
   }
 
   delete() {
     let msg = `Do you want to delete the ${this.vehicle.name}?`;
-    this._modalService.activate(msg).then((responseOK) => {
+    this.modalService.activate(msg).then((responseOK) => {
       if (responseOK) {
         this.cancel(false);
-        this._vehicleService.deleteVehicle(this.vehicle)
+        this.vehicleService.deleteVehicle(this.vehicle)
           .subscribe(() => { // Success path
-            this._toastService.activate(`Deleted ${this.vehicle.name}`);
-            this._gotoVehicles();
+            this.toastService.activate(`Deleted ${this.vehicle.name}`);
+            this.gotoVehicles();
           },
-          (err) => this._handleServiceError('Delete', err), // Failure path
+          (err) => this.handleServiceError('Delete', err), // Failure path
           () => console.log('Delete Completed') // Completed actions
           );
       }
@@ -993,157 +588,88 @@ export class VehicleComponent implements CanDeactivate, OnDestroy, OnInit {
   }
 
   isAddMode() {
-    let id = +this._routeParams.get('id');
+    let id = +this.routeParams.get('id');
     return isNaN(id);
   }
 
   ngOnDestroy() {
-    this._dbResetSubscription.unsubscribe();
+    this.dbResetSubscription.unsubscribe();
   }
 
   ngOnInit() {
     componentHandler.upgradeDom();
-    this._getVehicle();
-    this._dbResetSubscription = this._vehicleService.onDbReset
+    this.getVehicle();
+    this.dbResetSubscription = this.vehicleService.onDbReset
       .subscribe(() => {
-        this._getVehicle();
+        this.getVehicle();
       });
   }
 
   routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
     return !this.vehicle ||
-      !this._isDirty() ||
-      this._modalService.activate();
+      !this.isDirty() ||
+      this.modalService.activate();
   }
 
   save() {
-    let vehicle = this.vehicle = this._entityService.merge(this.vehicle, this.editVehicle);
+    let vehicle = this.vehicle = this.entityService.merge(this.vehicle, this.editVehicle);
     if (vehicle.id == null) {
-      this._vehicleService.addVehicle(vehicle)
+      this.vehicleService.addVehicle(vehicle)
         .subscribe(v => {
-          this._setEditVehicle(v);
-          this._toastService.activate(`Successfully added ${v.name}`);
-          this._gotoVehicles();
+          this.setEditVehicle(v);
+          this.toastService.activate(`Successfully added ${v.name}`);
+          this.gotoVehicles();
         });
       return;
     }
-    this._vehicleService.updateVehicle(this.vehicle)
-      .subscribe(() => this._toastService.activate(`Successfully saved ${this.vehicle.name}`));
+    this.vehicleService.updateVehicle(this.vehicle)
+      .subscribe(() => this.toastService.activate(`Successfully saved ${this.vehicle.name}`));
   }
 
-  private _getVehicle() {
-    let id = +this._routeParams.get('id');
+  private getVehicle() {
+    let id = +this.routeParams.get('id');
     if (id === 0) return;
     if (this.isAddMode()) {
       this.vehicle = <Vehicle>{ name: '', type: '' };
-      this.editVehicle = this._entityService.clone(this.vehicle);
+      this.editVehicle = this.entityService.clone(this.vehicle);
       return;
     }
-    this._vehicleService.getVehicle(id)
-      .subscribe((vehicle: Vehicle) => this._setEditVehicle(vehicle));
+    this.vehicleService.getVehicle(id)
+      .subscribe((vehicle: Vehicle) => this.setEditVehicle(vehicle));
   }
 
-  private _gotoVehicles() {
+  private gotoVehicles() {
     let id = this.vehicle ? this.vehicle.id : null;
     let route = ['Vehicles', { id: id }];
-    this._router.navigate(route);
+    this.router.navigate(route);
   }
 
-  private _handleServiceError(op: string, err: any) {
+  private handleServiceError(op: string, err: any) {
     console.error(`${op} error: ${err.message || err}`);
   }
 
-  private _isDirty() {
-    return this._entityService.propertiesDiffer(this.vehicle, this.editVehicle);
+  private isDirty() {
+    return this.entityService.propertiesDiffer(this.vehicle, this.editVehicle);
   }
 
-  private _setEditVehicle(vehicle: Vehicle) {
+  private setEditVehicle(vehicle: Vehicle) {
     if (vehicle) {
       this.vehicle = vehicle;
-      this.editVehicle = this._entityService.clone(this.vehicle);
+      this.editVehicle = this.entityService.clone(this.vehicle);
     } else {
-      this._gotoVehicles();
+      this.gotoVehicles();
     }
   }
 }
-"><input type="hidden" name="files[app/vehicles/vehicle.service.ts]" value="import { Injectable } from 'angular2/core';
-import { Http, Response } from 'angular2/http';
-import { Observable } from 'rxjs/Rx';
+"><input type="hidden" name="files[app/+vehicles/vehicles.component.ts]" value="import { Component, OnInit } from '@angular/core';
+import { RouteConfig, ROUTER_DIRECTIVES } from '@angular/router';
 
-import { ExceptionService, SpinnerService } from '../blocks/blocks';
-import { CONFIG, MessageService } from '../shared/shared';
-
-let vehiclesUrl = CONFIG.baseUrls.vehicles;
-
-export interface Vehicle {
-  id: number;
-  name: string;
-  type: string;
-}
-
-@Injectable()
-export class VehicleService {
-  constructor(private _http: Http,
-    private _exceptionService: ExceptionService,
-    private _messageService: MessageService,
-    private _spinnerService: SpinnerService) {
-    this._messageService.state.subscribe(state => this.getVehicles());
-  }
-
-  addVehicle(vehicle: Vehicle) {
-    let body = JSON.stringify(vehicle);
-    this._spinnerService.show();
-    return this._http
-      .post(`${vehiclesUrl}`, body)
-      .map(res => res.json().data)
-      .catch(this._exceptionService.catchBadResponse)
-      .finally(() => this._spinnerService.hide());
-  }
-
-  deleteVehicle(vehicle: Vehicle) {
-    this._spinnerService.show();
-    return this._http
-      .delete(`${vehiclesUrl}/${vehicle.id}`)
-      .catch(this._exceptionService.catchBadResponse)
-      .finally(() => this._spinnerService.hide());
-  }
-
-  getVehicles() {
-    this._spinnerService.show();
-    return this._http.get(vehiclesUrl)
-      .map((response: Response) => <Vehicle[]>response.json().data)
-      .catch(this._exceptionService.catchBadResponse)
-      .finally(() => this._spinnerService.hide());
-  }
-
-  getVehicle(id: number) {
-    this._spinnerService.show();
-    return this._http.get(`${vehiclesUrl}/${id}`)
-      .map((response: Response) => response.json().data)
-      .catch(this._exceptionService.catchBadResponse)
-      .finally(() => this._spinnerService.hide());
-  }
-
-  onDbReset = this._messageService.state;
-
-  updateVehicle(vehicle: Vehicle) {
-    let body = JSON.stringify(vehicle);
-    this._spinnerService.show();
-
-    return this._http
-      .put(`${vehiclesUrl}/${vehicle.id}`, body)
-      .catch(this._exceptionService.catchBadResponse)
-      .finally(() => this._spinnerService.hide());
-  }
-}"><input type="hidden" name="files[app/vehicles/vehicles.component.ts]" value="import { Component, OnInit } from 'angular2/core';
-import { RouteConfig, ROUTER_DIRECTIVES } from 'angular2/router';
-
-import { VehicleListComponent } from './vehicle-list.component';
-import { VehicleComponent } from './vehicle.component';
-import { VehicleService } from './vehicle.service';
+import { VehicleListComponent } from './vehicle-list';
+import { VehicleComponent } from './vehicle';
+import { VehicleService } from './shared';
 
 @Component({
-  selector: 'story-vehicles-root',
+  selector: 'story-vehicles',
   template: `
     <router-outlet></router-outlet>
   `,
@@ -1151,15 +677,679 @@ import { VehicleService } from './vehicle.service';
   providers: [VehicleService]
 })
 @RouteConfig([
-  { path: '/', name: 'Vehicles', component: VehicleListComponent, useAsDefault: true },
-	{ path: '/list/:id', name: 'Vehicles', component: VehicleListComponent	},
-	{ path: '/:id', name: 'Vehicle', component: VehicleComponent }
+  { path: '/', component: VehicleListComponent },
+	{ path: '/list/:id', component: VehicleListComponent	},
+	{ path: '/:id', component: VehicleComponent }
 ])
 export class VehiclesComponent { }
-"><input type="hidden" name="files[app/vehicles/vehicles.ts]" value="export * from './vehicle.component';
-export * from './vehicle.service';
-export * from './vehicle-list.component';
-export * from './vehicles.component';"><input type="hidden" name="files[app/app.component.css]" value=".mdl-layout__header {
+"><input type="hidden" name="files[app/app.component.ts]" value="import { Component, provide } from '@angular/core';
+import { HTTP_PROVIDERS, XHRBackend } from '@angular/http';
+import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/router';
+import 'rxjs/Rx'; // load the full rxjs
+
+import {
+  InMemoryBackendConfig,
+  InMemoryBackendService,
+  SEED_DATA 
+} from 'angular2-in-memory-web-api/core';
+import { InMemoryStoryService } from '../api/in-memory-story.service';
+import { CharactersComponent } from './+characters';
+import { DashboardComponent } from './+dashboard';
+import { VehiclesComponent } from './+vehicles';
+import {
+  CharacterService,
+  CONFIG,
+  EntityService,
+  ExceptionService,
+  MessageService,
+  ModalComponent,
+  ModalService,
+  SpinnerComponent,
+  SpinnerService,
+  ToastComponent,
+  ToastService
+} from './shared';
+
+@Component({
+  moduleId: module.id,
+  selector: 'story-app',
+  templateUrl: 'app.component.html',
+  styleUrls: ['app.component.css'],
+  directives: [ROUTER_DIRECTIVES, ModalComponent, SpinnerComponent, ToastComponent],
+  providers: [
+    HTTP_PROVIDERS,
+    provide(XHRBackend, { useClass: InMemoryBackendService }),
+    provide(SEED_DATA, { useClass: InMemoryStoryService }),
+    provide(InMemoryBackendConfig, { useValue: { delay: 600 } }),
+    ROUTER_PROVIDERS,
+    CharacterService,
+    EntityService,
+    ExceptionService,
+    MessageService,
+    ModalService,
+    SpinnerService,
+    ToastService
+  ]
+})
+@RouteConfig([
+  { path: '/', component: DashboardComponent },
+  { path: '/dashboard', component: DashboardComponent },
+  { path: '/vehicles', component: VehiclesComponent },
+  { path: '/characters', component: CharactersComponent },
+])
+export class AppComponent {
+  public menuItems = [
+    { caption: 'Dashboard', link: ['/dashboard'] },
+    { caption: 'Characters', link: ['/characters'] },
+    { caption: 'Vehicles', link: ['/vehicles'] }
+  ];
+
+  constructor(
+    private _messageService: MessageService,
+    private _modalService: ModalService) {
+  }
+
+  resetDb() {
+    let msg = 'Are you sure you want to reset the database?';
+    this._modalService.activate(msg).then(responseOK => {
+      if (responseOK) {
+        this._messageService.resetDb();
+      }
+    });
+  }
+}
+"><input type="hidden" name="files[app/environment.ts]" value="// The file for the current environment will overwrite this one during build
+// Different environments can be found in config/environment.{dev|prod}.ts
+// The build system defaults to the dev environment
+
+export const environment = {
+  production: false
+};
+"><input type="hidden" name="files[app/index.ts]" value="export * from './app.component';
+export * from './environment';
+"><input type="hidden" name="files[app/shared/character.service.ts]" value="import { Injectable } from '@angular/core';
+import { Http, Response } from '@angular/http';
+import { Observable } from 'rxjs/Rx';
+
+import { CONFIG, ExceptionService, MessageService, SpinnerService } from './';
+
+let charactersUrl = CONFIG.baseUrls.characters;
+
+export class Character {
+  id: number;
+  name: string;
+  side: string;
+}
+
+@Injectable()
+export class CharacterService {
+  onDbReset = this.messageService.state;
+
+  constructor(private _http: Http,
+    private exceptionService: ExceptionService,
+    private messageService: MessageService,
+    private spinnerService: SpinnerService) {
+    this.messageService.state.subscribe(state => this.getCharacters());
+  }
+
+  addCharacter(character: Character) {
+    let body = JSON.stringify(character);
+    this.spinnerService.show();
+    return <Observable<Character>>this._http
+      .post(`${charactersUrl}`, body)
+      .map((res: Response) => res.json().data)
+      .catch(this.exceptionService.catchBadResponse)
+      .finally(() => this.spinnerService.hide());
+  }
+
+  deleteCharacter(character: Character) {
+    this.spinnerService.show();
+    return <Observable<Character>>this._http
+      .delete(`${charactersUrl}/${character.id}`)
+      .catch(this.exceptionService.catchBadResponse)
+      .finally(() => this.spinnerService.hide());
+  }
+
+  getCharacters() {
+    this.spinnerService.show();
+    return <Observable<Character[]>>this._http
+      .get(charactersUrl)
+      .map((response: Response) => <Character[]>response.json().data)
+      .catch(this.exceptionService.catchBadResponse)
+      .finally(() => this.spinnerService.hide());
+  }
+
+  getCharacter(id: number) {
+    this.spinnerService.show();
+    return <Observable<Character>>this._http
+      .get(`${charactersUrl}/${id}`)
+      .map((response: Response) => response.json().data)
+      .catch(this.exceptionService.catchBadResponse)
+      .finally(() => this.spinnerService.hide());
+  }
+
+  updateCharacter(character: Character) {
+    let body = JSON.stringify(character);
+    this.spinnerService.show();
+
+    return <Observable<Character>>this._http
+      .put(`${charactersUrl}/${character.id}`, body)
+      .catch(this.exceptionService.catchBadResponse)
+      .finally(() => this.spinnerService.hide());
+  }
+}
+"><input type="hidden" name="files[app/shared/config.ts]" value="export let CONFIG = {
+  baseUrls: {
+    config: 'commands/config',
+    resetDb: 'commands/resetDb',
+    characters: 'api/characters.json',
+    vehicles: 'api/vehicles.json'
+  }
+}
+"><input type="hidden" name="files[app/shared/entity.service.ts]" value="import {Injectable} from '@angular/core';
+
+@Injectable()
+export class EntityService {
+  clone = (source: {}) => Object.assign({}, source);
+
+  merge = (target: any, ...sources: any[]) => Object.assign(target, ...sources);
+
+  propertiesDiffer = (entityA: {}, entityB: {}) => Object.keys(entityA).find(key => entityA[key] !== entityB[key]);
+}"><input type="hidden" name="files[app/shared/exception.service.ts]" value="import { Injectable } from '@angular/core';
+import { Response } from '@angular/http';
+import { Observable } from 'rxjs/Rx';
+
+import { ToastService } from './toast';
+
+@Injectable()
+export class ExceptionService {
+
+  constructor(private toastService: ToastService) { }
+
+  catchBadResponse: (errorResponse: any) => Observable<any> = (errorResponse: any) => {
+    let res = <Response>errorResponse;
+    let err = res.json();
+    let emsg = err ?
+      (err.error ? err.error : JSON.stringify(err)) :
+      (res.statusText || 'unknown error');
+    this.toastService.activate(`Error - Bad Response - ${emsg}`);
+    //return Observable.throw(emsg); // TODO: We should NOT swallow error here.
+    return Observable.of();
+  }
+}"><input type="hidden" name="files[app/shared/filter-text/filter-text.component.ts]" value="import { Component, EventEmitter, Input, Output } from '@angular/core';
+
+@Component({
+  moduleId: module.id,
+  selector: 'filter-text',
+  templateUrl: 'filter-text.component.html'
+})
+export class FilterTextComponent {
+  @Output() changed: EventEmitter<string>;
+  
+  filter: string;
+
+  constructor() {
+    this.changed = new EventEmitter();
+
+    componentHandler.upgradeDom();
+  }
+
+  clear() {
+    this.filter = '';
+  }
+
+  filterChanged(event: any) {
+    event.preventDefault();
+    console.log(`Filter Changed: ${this.filter}`);
+    this.changed.emit(this.filter);
+  }
+}"><input type="hidden" name="files[app/shared/filter-text/index.ts]" value="export * from './filter-text.component';
+export * from './shared';
+"><input type="hidden" name="files[app/shared/filter-text/shared/filter-text.service.ts]" value="import { Injectable } from '@angular/core';
+
+@Injectable()
+export class FilterService {
+  filter(data: string, props: Array<string>, originalList: Array<any>) {
+    let filteredList: any[];
+    if (data &amp;&amp; props &amp;&amp; originalList) {
+      data = data.toLowerCase();
+      let filtered = originalList.filter(item => {
+        let match = false;
+        for (let prop of props) {
+          if (item[prop].toString().toLowerCase().indexOf(data) > -1) {
+            match = true;
+            break;
+          }
+        };
+        return match;
+      });
+      filteredList = filtered;
+    }
+    else {
+      filteredList = originalList;
+    }
+    return filteredList;
+  }
+}"><input type="hidden" name="files[app/shared/filter-text/shared/index.ts]" value="export * from './filter-text.service';
+"><input type="hidden" name="files[app/shared/index.ts]" value="export * from './character.service';
+export * from './config';
+export * from './message.service';
+export * from './entity.service';
+export * from './exception.service';
+export * from './filter-text';
+export * from './init-caps.pipe';
+export * from './modal';
+export * from './spinner';
+export * from './toast';
+"><input type="hidden" name="files[app/shared/init-caps.pipe.ts]" value="import { Pipe, PipeTransform } from '@angular/core';
+
+@Pipe({ name: 'initCaps' })
+export class InitCapsPipe implements PipeTransform {
+  transform(value: string, args: any[]) {
+    return value
+      .toLowerCase()
+      .replace(/(?:^|\s)[a-z]/g, function(m) {
+        return m.toUpperCase();
+      });
+  }
+}
+
+
+"><input type="hidden" name="files[app/shared/message.service.ts]" value="import { Injectable } from '@angular/core';
+import { Http, Response } from '@angular/http';
+import { Observable, Subject } from 'rxjs/Rx';
+
+import { CONFIG } from './config';
+import { ToastService } from './toast';
+
+export interface ResetMessage {
+  message: string
+}
+
+@Injectable()
+export class MessageService {
+  state = <Observable<ResetMessage>>this.subject;
+
+  private subject = new Subject();
+
+  constructor(private http: Http, private toastService: ToastService) { }
+
+  resetDb() {
+    let msg = 'Reset the Data Successfully';
+    this.http.post(CONFIG.baseUrls.resetDb, null)
+      .subscribe(() => {
+        this.subject.next({ message: msg });
+        this.toastService.activate(msg);
+      });
+  }
+}
+"><input type="hidden" name="files[app/shared/modal/index.ts]" value="export * from './modal.component';
+export * from './shared';
+"><input type="hidden" name="files[app/shared/modal/modal.component.ts]" value="import { Component, OnInit } from '@angular/core';
+
+import { ModalService } from './shared'
+
+const KEY_ESC = 27;
+
+@Component({
+  moduleId: module.id,
+  selector: 'modal-confirm',
+  templateUrl: 'modal.component.html',
+  styleUrls: ['modal.component.css']
+})
+export class ModalComponent implements OnInit {
+  title: string;
+  message: string;
+  okText: string;
+  cancelText: string;
+  negativeOnClick: (e: any) => void;
+  positiveOnClick: (e: any) => void;
+
+  private defaults = {
+    title: 'Confirmation',
+    message: 'Do you want to cancel your changes?',
+    cancelText: 'Cancel',
+    okText: 'OK'
+  };
+  private modalElement: any;
+  private cancelButton: any;
+  private okButton: any;
+
+  constructor(modalService: ModalService) {
+    modalService.activate = this.activate.bind(this);
+  }
+
+  activate(message = this.defaults.message, title = this.defaults.title) {
+    this.title = title;
+    this.message = message;
+    this.okText = this.defaults.okText;
+    this.cancelText = this.defaults.cancelText;
+
+    let promise = new Promise<boolean>((resolve, reject) => {
+      this.negativeOnClick = (e: any) => resolve(false);
+      this.positiveOnClick = (e: any) => resolve(true);
+      this.show();
+    });
+
+    return promise;
+  }
+
+  ngOnInit() {
+    this.modalElement = document.getElementById('confirmationModal');
+    this.cancelButton = document.getElementById('cancelButton');
+    this.okButton = document.getElementById('okButton');
+  }
+
+  private hideDialog() {
+    document.onkeyup = null;
+    this.modalElement.style.opacity = 0;
+    window.setTimeout(() => this.modalElement.style.zIndex = 0, 400);
+  }
+
+  private show() {
+    document.onkeyup = null;
+
+    if (!this.modalElement || !this.cancelButton || !this.okButton) return;
+
+    this.modalElement.style.opacity = 0;
+    this.modalElement.style.zIndex = 9999;
+
+    this.cancelButton.onclick = ((e: any) => {
+      e.preventDefault();
+      if (!this.negativeOnClick(e)) this.hideDialog()
+    });
+
+    this.okButton.onclick = ((e: any) => {
+      e.preventDefault();
+      if (!this.positiveOnClick(e)) this.hideDialog()
+    });
+
+    this.modalElement.onclick = () => {
+      this.hideDialog();
+      return this.negativeOnClick(null);
+    };
+
+    document.onkeyup = (e: any) => {
+      if (e.which == KEY_ESC) {
+        this.hideDialog();
+        return this.negativeOnClick(null);
+      }
+    };
+
+    this.modalElement.style.opacity = 1;
+  }
+}
+"><input type="hidden" name="files[app/shared/modal/shared/index.ts]" value="export * from './modal.service';
+"><input type="hidden" name="files[app/shared/modal/shared/modal.service.ts]" value="import { Injectable } from '@angular/core';
+
+@Injectable()
+export class ModalService {
+  activate: (message?: string, title?: string) => Promise<boolean>;
+}
+"><input type="hidden" name="files[app/shared/spinner/index.ts]" value="export * from './spinner.component';
+export * from './shared';
+"><input type="hidden" name="files[app/shared/spinner/shared/index.ts]" value="export * from './spinner.service';
+"><input type="hidden" name="files[app/shared/spinner/shared/spinner.service.ts]" value="import { Injectable } from '@angular/core';
+import { Observable, Subject } from 'rxjs/Rx';
+
+export interface SpinnerState {
+  show: boolean
+}
+
+@Injectable()
+export class SpinnerService {
+  private _spinnerSubject = new Subject();
+
+  spinnerState = <Observable<SpinnerState>>this._spinnerSubject;
+
+  show() {
+    this._spinnerSubject.next(<SpinnerState>{ show: true });
+  }
+
+  hide() {
+    this._spinnerSubject.next(<SpinnerState>{ show: false });
+  }
+}"><input type="hidden" name="files[app/shared/spinner/spinner.component.ts]" value="import {Component, OnDestroy, OnInit} from '@angular/core';
+import { Subscription } from 'rxjs/Rx';
+
+import { SpinnerState, SpinnerService } from './shared';
+
+const ACTIVE_CLASS = 'is-active';
+
+@Component({
+  moduleId: module.id,
+  selector: 'story-spinner',
+  template: `
+    <div
+      class=&quot;spinner mdl-spinner mdl-js-spinner mdl-spinner--single-color&quot;
+      [class.is-active]=&quot;visible&quot;></div>
+  `,
+  styles: [`.spinner {position: absolute;left: 46%;top: 12%`]
+})
+
+export class SpinnerComponent implements OnDestroy, OnInit {
+  visible = false;
+
+  private _spinnerStateChanged: Subscription;
+
+  constructor(private _spinnerService: SpinnerService) { }
+
+  ngOnInit() {
+    componentHandler.upgradeDom();
+    this._spinnerStateChanged = this._spinnerService.spinnerState
+      .subscribe((state: SpinnerState) => this.visible = state.show);
+  }
+
+  ngOnDestroy() {
+    this._spinnerStateChanged.unsubscribe();
+  }
+}"><input type="hidden" name="files[app/shared/toast/index.ts]" value="export * from './toast.component';
+export * from './shared';
+"><input type="hidden" name="files[app/shared/toast/shared/index.ts]" value="export * from './toast.service';
+"><input type="hidden" name="files[app/shared/toast/shared/toast.service.ts]" value="import { Injectable } from '@angular/core';
+
+@Injectable()
+export class ToastService {
+  activate: (message?: string, title?: string) => void;
+}
+"><input type="hidden" name="files[app/shared/toast/toast.component.ts]" value="import { Component, OnInit } from '@angular/core';
+
+import { ToastService } from './shared'
+
+@Component({
+  moduleId: module.id,
+  selector: 'toast',
+  templateUrl: 'toast.component.html',
+  styleUrls: ['toast.component.css']
+})
+export class ToastComponent implements OnInit {
+  title: string;
+  message: string;
+
+  private defaults = {
+    title: '',
+    message: 'May the Force be with You'
+  };
+  private toastElement: any;
+
+  constructor(toastService: ToastService) {
+    toastService.activate = this.activate.bind(this);
+  }
+
+  activate(message = this.defaults.message, title = this.defaults.title) {
+    this.title = title;
+    this.message = message;
+    this.show();
+  }
+
+  ngOnInit() {
+    this.toastElement = document.getElementById('toast');
+  }
+
+  private hide() {
+    this.toastElement.style.opacity = 0;
+    window.setTimeout(() => this.toastElement.style.zIndex = 0, 400);
+  }
+
+  private show() {
+    console.log(this.message);
+    this.toastElement.style.opacity = 1;
+    this.toastElement.style.zIndex = 9999;
+
+    window.setTimeout(() => this.hide(), 2500);
+  }
+}
+"><input type="hidden" name="files[main.ts]" value="import { enableProdMode } from '@angular/core';
+import { bootstrap } from '@angular/platform-browser-dynamic';
+
+import { AppComponent, environment } from './app';
+
+if (environment.production) {
+  enableProdMode();
+}
+
+bootstrap(AppComponent)
+  .then(success => console.log(`Bootstrap success`))
+  .catch(error => console.log(error));
+"><input type="hidden" name="files[system-config.ts]" value="/***********************************************************************************************
+ * User Configuration.
+ **********************************************************************************************/
+/** Map relative paths to URLs. */
+const map: any = {
+  'app': 'app', // 'dist',
+  'angular2-in-memory-web-api': 'node_modules/angular2-in-memory-web-api'
+};
+
+const packages: any = {
+  // Add your custom SystemJS packages here.
+  'angular2-in-memory-web-api': { defaultExtension: 'js' },
+  'api': { defaultExtension: 'js' },
+  'app': { defaultExtension: 'js' },
+  // 'rxjs': { defaultExtension: 'js' }
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+/***********************************************************************************************
+ * Everything underneath this line is managed by the CLI.
+ **********************************************************************************************/
+const barrels = [
+  // Angular specific barrels.
+  '@angular/common',
+  '@angular/compiler',
+  '@angular/core',
+  '@angular/http',
+  '@angular/platform-browser',
+  '@angular/platform-browser-dynamic',
+  '@angular/router',
+  // '@angular/testing',
+  // '@angular/upgrade',
+
+  // Thirdparty barrels.
+  'rxjs',
+
+  // App specific barrels.
+  'app',
+  'app/+dashboard',
+  'app/+vehicles',
+  'app/+vehicles/vehicle',
+  'app/+vehicles/vehicle-list',
+  'app/+vehicles/shared',
+  'app/+characters',
+  'app/+characters/character',
+  'app/+characters/character-list',
+  'app/+characters/shared',
+  'app/shared',
+  'app/shared/filter-text',
+  'app/shared/modal',
+  'app/shared/spinner',
+  'app/shared/toast'
+  /** @cli-barrel */
+];
+
+const _cliSystemConfig = {};
+barrels.forEach((barrelName: string) => {
+  _cliSystemConfig[barrelName] = { main: 'index' };
+});
+
+/** Type declaration for ambient System. */
+declare var System: any;
+
+// Apply the CLI SystemJS configuration.
+System.config({
+  map: {
+    // '@angular': 'vendor/@angular',
+    // 'rxjs': 'vendor/rxjs',
+    '@angular': 'node_modules/@angular',
+    'rxjs': 'node_modules/rxjs',
+    'main': 'main.js'
+  },
+  packages: _cliSystemConfig
+});
+
+// Apply the user's configuration.
+System.config({ map, packages });
+"><input type="hidden" name="files[app/+characters/character-list/character-list.component.css]" value=".characters {
+  list-style-type: none;
+  padding: 0;
+}
+
+*.characters li {
+  padding: 4px;
+}
+
+.list-text,
+.mdl-card__title-text {
+  font-size: 16px;
+}
+
+.mdl-card {
+  min-height: 60px;
+}
+"><input type="hidden" name="files[app/+dashboard/dashboard.component.css]" value=".dashboard-button {
+  width: 200px;
+  height: 70px;
+}
+
+.mdl-cell--col-3 {
+  width: 25%;
+}
+
+@media (max-width: 1024px) {
+  .mdl-cell.mdl-cell--3-col > button {
+    width: 180px;
+    line-height: 18px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 839px) and (min-width: 480px){
+  .mdl-cell.mdl-cell--3-col {
+    width: 25%;
+  }
+  .mdl-cell.mdl-cell--3-col > button {
+    width: 120px;
+    line-height: 18px;
+    font-size: 12px;
+  }
+}
+"><input type="hidden" name="files[app/+vehicles/vehicle-list/vehicle-list.component.css]" value=".vehicles {
+  list-style-type: none;
+  padding: 0;
+}
+
+*.vehicles li {
+  padding: 4px;
+}
+
+.list-text,
+.mdl-card__title-text {
+  font-size: 16px;
+}
+
+.mdl-card {
+  min-height: 60px;
+}
+"><input type="hidden" name="files[app/app.component.css]" value=".mdl-layout__header {
   position: fixed;
   background-color: #222;
 }
@@ -1243,7 +1433,7 @@ article.template {
     display: none
   }
 }
-"><input type="hidden" name="files[app/blocks/modal/modal.component.css]" value=".dialog-container,
+"><input type="hidden" name="files[app/shared/modal/modal.component.css]" value=".dialog-container,
 .loading-container {
     position: absolute;
     top: 0;
@@ -1289,7 +1479,7 @@ article.template {
 
 .dialog-container .dialog-button-bar button {
   margin: 0 0 0 1em;
-}"><input type="hidden" name="files[app/blocks/toast/toast.component.css]" value=".toast-container {
+}"><input type="hidden" name="files[app/shared/toast/toast.component.css]" value=".toast-container {
   /*-webkit-transition-property: opacity, bottom, left, right, width, margin, border-radius;
   transition-property: opacity, bottom, left, right, width, margin, border-radius;
   -webkit-transition-duration: 1.0s;
@@ -1333,67 +1523,6 @@ article.template {
   text-transform: uppercase;
   margin: 16px;
   font-size: 18px;
-}
-"><input type="hidden" name="files[app/characters/character-list.component.css]" value=".characters {
-  list-style-type: none;
-  padding: 0;
-}
-
-*.characters li {
-  padding: 4px;
-}
-
-.list-text,
-.mdl-card__title-text {
-  font-size: 16px;
-}
-
-.mdl-card {
-  min-height: 60px;
-}
-"><input type="hidden" name="files[app/dashboard/dashboard.component.css]" value=".dashboard-button {
-  width: 200px;
-  height: 70px;
-}
-
-.mdl-cell--col-3 {
-  width: 25%;
-}
-
-@media (max-width: 1024px) {
-  .mdl-cell.mdl-cell--3-col > button {
-    width: 180px;
-    line-height: 18px;
-    font-size: 12px;
-  }
-}
-
-@media (max-width: 839px) and (min-width: 480px){
-  .mdl-cell.mdl-cell--3-col {
-    width: 25%;
-  }
-  .mdl-cell.mdl-cell--3-col > button {
-    width: 120px;
-    line-height: 18px;
-    font-size: 12px;
-  }
-}
-"><input type="hidden" name="files[app/vehicles/vehicle-list.component.css]" value=".vehicles {
-  list-style-type: none;
-  padding: 0;
-}
-
-*.vehicles li {
-  padding: 4px;
-}
-
-.list-text,
-.mdl-card__title-text {
-  font-size: 16px;
-}
-
-.mdl-card {
-  min-height: 60px;
 }
 "><input type="hidden" name="files[assets/animate.css]" value="@charset &quot;UTF-8&quot;;
 
@@ -11918,57 +12047,15 @@ iframe.heightSet {
   width: 32px;
   height: 32px;
 }
-"><input type="hidden" name="files[app/app.component.html]" value="<div class=&quot;mdl-layout mdl-js-layout mdl-layout--fixed-header&quot;>
-  <header class=&quot;mdl-layout__header&quot;>
-    <div class=&quot;mdl-layout__header-row&quot;>
-      <a class=&quot;md-title-icon&quot; href=&quot;http://pluralsight.com&quot; target=&quot;_blank&quot;><i></i></a>
-      <span class=&quot;mdl-layout-title&quot;>Storyline Tracker</span>
-      <button id=&quot;reset-button&quot; class=&quot;mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent mdl-button--raised&quot; (click)=&quot;resetDb()&quot;>Reset Data</button>
-    </div>
-    <div class=&quot;mdl-navigation&quot;>
-      <a *ngFor=&quot;#item of menuItems&quot; [routerLink]=&quot;item.link&quot; class=&quot;nav-link&quot; href=&quot;&quot;>{{item.caption}}</a>
-    </div>
-  </header>
-  <main class=&quot;mdl-layout__content&quot;>
-    <section>
-      <div class=&quot;page-content&quot;>
-        <router-outlet></router-outlet>
-      </div>
-    </section>
-  </main>
-  <story-spinner></story-spinner>
-  <toast></toast>
-  <modal-confirm></modal-confirm>
-</div>"><input type="hidden" name="files[app/blocks/filter-text/filter-text.component.html]" value="<form>
-  <div class=&quot;mdl-textfield mdl-js-textfield mdl-textfield--floating-label&quot;>
-    <label class=&quot;mdl-textfield__label&quot; for=&quot;filterText&quot;>Filter...</label>
-    <input type=&quot;text&quot; id=&quot;filterText&quot; class=&quot;mdl-textfield__input&quot; [(ngModel)]=&quot;filter&quot; (keyup)=&quot;filterChanged($event)&quot; />
-  </div>
-</form>"><input type="hidden" name="files[app/blocks/modal/modal.component.html]" value="<div id=&quot;confirmationModal&quot; class=&quot;dialog-container&quot;>
-  <div class=&quot;mdl-card mdl-shadow--16dp&quot;>
-    <h5>{{title}}</h5>
-    <p>{{message}}</p>
-    <div class=&quot;mdl-card__actions dialog-button-bar&quot;>
-      <button class=&quot;mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot; id=&quot;cancelButton&quot; data-upgraded=&quot;,MaterialButton,MaterialRipple&quot;>{{cancelText}}<span class=&quot;mdl-button__ripple-container&quot;><span class=&quot;mdl-ripple&quot;></span></span>
-      </button>
-      <button class=&quot;mdl-button mdl-button--accent mdl-button--raised mdl-js-button mdl-js-ripple-effect&quot; id=&quot;okButton&quot; data-upgraded=&quot;,MaterialButton,MaterialRipple&quot;>{{okText}}<span class=&quot;mdl-button__ripple-container&quot;><span class=&quot;mdl-ripple&quot;></span></span>
-      </button>
-    </div>
-  </div>
-</div>"><input type="hidden" name="files[app/blocks/toast/toast.component.html]" value="<div id=&quot;toast&quot; class=&quot;toast-container&quot;>
-  <div class=&quot;toast-card mdl-shadow--16dp&quot;>
-    <h5 class=&quot;toast-title&quot;>{{title}}</h5>
-    <p class=&quot;toast-message&quot;>{{message}}</p>
-  </div>
-</div>"><input type="hidden" name="files[app/characters/character-list.component.html]" value="<article class=&quot;template animated slideInRight&quot;>
+"><input type="hidden" name="files[app/+characters/character-list/character-list.component.html]" value="<article class=&quot;template animated slideInRight&quot;>
   <h4>My Characters</h4>
 
-  <button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot; [routerLink]=&quot;['Character', {id: 'new'}]&quot;>Add</button>
+  <button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot; [routerLink]=&quot;['/character', 'new']&quot;>Add</button>
 
   <filter-text (changed)=&quot;filterChanged($event)&quot;></filter-text>
 
   <ul class=&quot;characters&quot;>
-    <li *ngFor=&quot;#character of filteredCharacters | sortCharacters&quot;>
+    <li *ngFor=&quot;let character of filteredCharacters | sortCharacters&quot;>
 
       <div class=&quot;mdl-card mdl-shadow--2dp&quot;>
         <div class=&quot;mdl-card__title&quot;>
@@ -11976,7 +12063,7 @@ iframe.heightSet {
 {{character.name}}</h2>
         </div>
         <div class=&quot;mdl-card__menu&quot;>
-          <button class=&quot;mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect&quot; [routerLink]=&quot;['Character', {id: character.id}]&quot;>
+          <button class=&quot;mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect&quot; [routerLink]=&quot;['/character', character.id]&quot;>
 
             <div class=&quot;icon mdl-color--accent icon-ic_play_circle_filled_white_24dp&quot;></div>
 
@@ -11986,7 +12073,7 @@ iframe.heightSet {
 
     </li>
   </ul>
-</article>"><input type="hidden" name="files[app/characters/character.component.html]" value="<article class=&quot;template animated slideInRight&quot;>
+</article>"><input type="hidden" name="files[app/+characters/character/character.component.html]" value="<article class=&quot;template animated slideInRight&quot;>
   <div *ngIf=&quot;character&quot;>
     <h4>{{editCharacter.name | uppercase}} details</h4>
 
@@ -12011,12 +12098,12 @@ iframe.heightSet {
     </div>
 
   </div>
-</article>"><input type="hidden" name="files[app/dashboard/dashboard.component.html]" value="<article class=&quot;template animated slideInRight&quot;>
+</article>"><input type="hidden" name="files[app/+dashboard/dashboard.component.html]" value="<article class=&quot;template animated slideInRight&quot;>
   <h4>Top Characters</h4>
   <div>
     <div class=&quot;mdl-grid&quot;>
       <div class=&quot;mdl-cell mdl-cell--3-col&quot;
-        *ngFor=&quot;#character of characters | async&quot;
+        *ngFor=&quot;let character of characters | async&quot;
         (click)=&quot;gotoDetail(character)&quot;>
 
         <button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect
@@ -12027,22 +12114,22 @@ iframe.heightSet {
       </div>
     </div>
   </div>
-</article>"><input type="hidden" name="files[app/vehicles/vehicle-list.component.html]" value="<article class=&quot;template animated slideInRight&quot;>
+</article>"><input type="hidden" name="files[app/+vehicles/vehicle-list/vehicle-list.component.html]" value="<article class=&quot;template animated slideInRight&quot;>
   <h4>My Vehicles</h4>
 
-  <button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot; [routerLink]=&quot;['Vehicle', {id: 'new'}]&quot;>Add</button>
+  <button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot; [routerLink]=&quot;['Vehicle', 'new']&quot;>Add</button>
 
   <filter-text (changed)=&quot;filterChanged($event)&quot;></filter-text>
 
   <ul class=&quot;vehicles&quot;>
-    <li *ngFor=&quot;#vehicle of filteredVehicles&quot;>
+    <li *ngFor=&quot;let vehicle of filteredVehicles&quot;>
 
       <div class=&quot;mdl-card mdl-shadow--2dp&quot;>
         <div class=&quot;mdl-card__title&quot;>
           <h2 class=&quot;mdl-card__title-text&quot;>{{vehicle.id}}. {{vehicle.name | initCaps}}</h2>
         </div>
         <div class=&quot;mdl-card__menu&quot;>
-          <button class=&quot;mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect&quot; [routerLink]=&quot;['Vehicle', {id: vehicle.id}]&quot;>
+          <button class=&quot;mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect&quot; [routerLink]=&quot;['/vehicle', vehicle.id]&quot;>
 
             <div class=&quot;icon mdl-color--primary icon-ic_play_circle_filled_white_24dp&quot;></div>
 
@@ -12052,7 +12139,7 @@ iframe.heightSet {
 
     </li>
   </ul>
-</article>"><input type="hidden" name="files[app/vehicles/vehicle.component.html]" value="<article class=&quot;template animated slideInRight&quot;>
+</article>"><input type="hidden" name="files[app/+vehicles/vehicle/vehicle.component.html]" value="<article class=&quot;template animated slideInRight&quot;>
   <div *ngIf=&quot;vehicle&quot;>
     <h4>{{editVehicle.name | uppercase}} details</h4>
 
@@ -12076,7 +12163,50 @@ iframe.heightSet {
     </div>
 
   </div>
-</article>"><input type="hidden" name="files[index.html]" value="<!DOCTYPE html>
+</article>"><input type="hidden" name="files[app/app.component.html]" value="<div class=&quot;mdl-layout mdl-js-layout mdl-layout--fixed-header&quot;>
+  <header class=&quot;mdl-layout__header&quot;>
+    <div class=&quot;mdl-layout__header-row&quot;>
+      <a class=&quot;md-title-icon&quot; href=&quot;http://pluralsight.com&quot; target=&quot;_blank&quot;><i></i></a>
+      <span class=&quot;mdl-layout-title&quot;>Storyline Tracker</span>
+      <button id=&quot;reset-button&quot; class=&quot;mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent mdl-button--raised&quot; (click)=&quot;resetDb()&quot;>Reset Data</button>
+    </div>
+    <div class=&quot;mdl-navigation&quot;>
+      <a *ngFor=&quot;let item of menuItems&quot; [routerLink]=&quot;item.link&quot; class=&quot;nav-link&quot; href=&quot;&quot;>{{item.caption}}</a>
+    </div>
+  </header>
+  <main class=&quot;mdl-layout__content&quot;>
+    <section>
+      <div class=&quot;page-content&quot;>
+        <router-outlet></router-outlet>
+      </div>
+    </section>
+  </main>
+  
+  <story-spinner></story-spinner>
+  <toast></toast>
+  <modal-confirm></modal-confirm>
+</div>"><input type="hidden" name="files[app/shared/filter-text/filter-text.component.html]" value="<form>
+  <div class=&quot;mdl-textfield mdl-js-textfield mdl-textfield--floating-label&quot;>
+    <label class=&quot;mdl-textfield__label&quot; for=&quot;filterText&quot;>Filter...</label>
+    <input type=&quot;text&quot; id=&quot;filterText&quot; class=&quot;mdl-textfield__input&quot; [(ngModel)]=&quot;filter&quot; (keyup)=&quot;filterChanged($event)&quot; />
+  </div>
+</form>"><input type="hidden" name="files[app/shared/modal/modal.component.html]" value="<div id=&quot;confirmationModal&quot; class=&quot;dialog-container&quot;>
+  <div class=&quot;mdl-card mdl-shadow--16dp&quot;>
+    <h5>{{title}}</h5>
+    <p>{{message}}</p>
+    <div class=&quot;mdl-card__actions dialog-button-bar&quot;>
+      <button class=&quot;mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot; id=&quot;cancelButton&quot; data-upgraded=&quot;,MaterialButton,MaterialRipple&quot;>{{cancelText}}<span class=&quot;mdl-button__ripple-container&quot;><span class=&quot;mdl-ripple&quot;></span></span>
+      </button>
+      <button class=&quot;mdl-button mdl-button--accent mdl-button--raised mdl-js-button mdl-js-ripple-effect&quot; id=&quot;okButton&quot; data-upgraded=&quot;,MaterialButton,MaterialRipple&quot;>{{okText}}<span class=&quot;mdl-button__ripple-container&quot;><span class=&quot;mdl-ripple&quot;></span></span>
+      </button>
+    </div>
+  </div>
+</div>"><input type="hidden" name="files[app/shared/toast/toast.component.html]" value="<div id=&quot;toast&quot; class=&quot;toast-container&quot;>
+  <div class=&quot;toast-card mdl-shadow--16dp&quot;>
+    <h5 class=&quot;toast-title&quot;>{{title}}</h5>
+    <p class=&quot;toast-message&quot;>{{message}}</p>
+  </div>
+</div>"><input type="hidden" name="files[index.html]" value="<!DOCTYPE html>
 <html>
 
 <head>
@@ -12089,41 +12219,22 @@ iframe.heightSet {
   <link rel=&quot;stylesheet&quot; href=&quot;assets/sprite-av-white.css&quot;>
   <link rel=&quot;stylesheet&quot; href=&quot;assets/animate.css&quot;>
   <link rel=&quot;stylesheet&quot; href=&quot;assets/app.css&quot;>
-
-  <!-- IE required polyfills, in this exact order -->
-  <script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.0/es6-shim.js&quot;></script>
-  <script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.19.26/system-polyfills.js&quot;></script>
-  <script src=&quot;https://npmcdn.com/angular2/es6/dev/src/testing/shims_for_IE.js&quot;></script>
-
-  <!-- Angular polyfill required everywhere -->
-  <script src=&quot;https://code.angularjs.org/2.0.0-beta.15/angular2-polyfills.js&quot;></script>
-
-  <script src=&quot;https://code.angularjs.org/tools/system.js&quot;></script>
-    <script src=&quot;https://code.angularjs.org/tools/typescript.js&quot;></script>
-  <script src=&quot;https://code.angularjs.org/2.0.0-beta.15/Rx.js&quot;></script>
-  <script src=&quot;https://code.angularjs.org/2.0.0-beta.15/angular2.dev.js&quot;></script>
-  <script src=&quot;https://code.angularjs.org/2.0.0-beta.15/router.dev.js&quot;></script>
-  <script src=&quot;https://code.angularjs.org/2.0.0-beta.15/http.dev.js&quot;></script>
-
-  <script src=&quot;https://npmcdn.com/a2-in-memory-web-api/web-api.js&quot;></script>
-
-  <script>
-      System.config({
-        transpiler: 'typescript', 
-        typescriptOptions: { emitDecoratorMetadata: true }, 
-        packages: {
-          'api': {defaultExtension: 'ts'}, 
-          'app': {defaultExtension: 'ts'} 
-        } 
-      });
-    System.import('app/main')
-          .then(null, console.error.bind(console));
-  </script>
-
 </head>
 
 <body>
   <story-app>Loading Storyline Tracker ...</story-app>
+
+  <script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.0/es6-shim.js&quot;></script>
+  <script src=&quot;node_modules/zone.js/dist/zone.js&quot;></script>
+  <script src=&quot;node_modules/reflect-metadata/Reflect.js&quot;></script>
+  <script src=&quot;https://code.angularjs.org/tools/system.js&quot;></script>
+    <script src=&quot;https://code.angularjs.org/tools/typescript.js&quot;></script>
+
+  <script>
+    System.import('system-config.js')
+      .then(function () { System.import('main') })
+      .catch(console.error.bind(console));
+  </script>
 </body>
 
 </html>"><input type="hidden" name="files[README.md]" value="# Storyline Tracker
