@@ -242,7 +242,10 @@ export class CharacterComponent implements CanDeactivate, OnDestroy, OnInit {
           .subscribe(() => {
             this.toastService.activate(`Deleted ${this.character.name}`);
             this.gotoCharacters();
-          });
+          },
+          (err) => this.handleServiceError('Delete', err), // Failure path
+          () => console.log('Delete Completed') // Completed actions
+          );
       }
     });
   }
@@ -295,7 +298,9 @@ export class CharacterComponent implements CanDeactivate, OnDestroy, OnInit {
   }
 
   private getCharacter() {
-    if (this.id === 0) return;
+    if (this.id === 0) {
+      return;
+    }
     if (this.isAddMode()) {
       this.character = <Character>{ name: '', side: 'dark' };
       this.editCharacter = this.entityService.clone(this.character);
@@ -306,8 +311,7 @@ export class CharacterComponent implements CanDeactivate, OnDestroy, OnInit {
   }
 
   private gotoCharacters() {
-    let id = this.character ? this.character.id : null;
-    this.router.navigate(['/characters', id]);
+    this.router.navigate(['/characters']);
   }
 
   private handleServiceError(op: string, err: any) {
@@ -501,10 +505,11 @@ import { FilterTextComponent, FilterService, InitCapsPipe } from '../../../app/s
 import { Vehicle, VehicleService } from '../shared';
 
 @Component({
+  moduleId: module.id,
   selector: 'story-vehicles',
-  templateUrl: './app/vehicles/vehicle-list.component.html',
+  templateUrl: 'vehicle-list.component.html',
   directives: [FilterTextComponent, ROUTER_DIRECTIVES],
-  styleUrls: ['./app/vehicles/vehicle-list.component.css'],
+  styleUrls: ['vehicle-list.component.css'],
   pipes: [InitCapsPipe],
   providers: [FilterService]
 })
@@ -554,7 +559,7 @@ import { Vehicle, VehicleService } from '../shared';
 @Component({
   moduleId: module.id,
   selector: 'story-vehicle',
-  templateUrl: 'app/vehicles/vehicle.component.html',
+  templateUrl: 'vehicle.component.html',
   styles: ['.mdl-textfield__label {top: 0;}']
 })
 export class VehicleComponent implements CanDeactivate, OnDestroy, OnInit {
@@ -659,8 +664,7 @@ export class VehicleComponent implements CanDeactivate, OnDestroy, OnInit {
   }
 
   private gotoVehicles() {
-    let id = this.vehicle ? this.vehicle.id : null;
-    this.router.navigate(['/vehicles', id ]);
+    this.router.navigate(['/vehicles']);
   }
 
   private handleServiceError(op: string, err: any) {
@@ -680,7 +684,7 @@ export class VehicleComponent implements CanDeactivate, OnDestroy, OnInit {
     }
   }
 }
-"><input type="hidden" name="files[app/+vehicles/vehicles.component.ts]" value="import { Component, OnInit } from '@angular/core';
+"><input type="hidden" name="files[app/+vehicles/vehicles.component.ts]" value="import { Component } from '@angular/core';
 import { Routes, ROUTER_DIRECTIVES } from '@angular/router';
 
 import { VehicleListComponent } from './vehicle-list';
@@ -697,8 +701,8 @@ import { VehicleService } from './shared';
 })
 @Routes([
   { path: '/', component: VehicleListComponent },
-	{ path: '/list/:id', component: VehicleListComponent	},
-	{ path: '/:id', component: VehicleComponent }
+  { path: '/list/:id', component: VehicleListComponent },
+  { path: '/:id', component: VehicleComponent }
 ])
 export class VehiclesComponent { }
 "><input type="hidden" name="files[app/app.component.ts]" value="import { Component, provide } from '@angular/core';
@@ -750,7 +754,6 @@ import {
   ]
 })
 @Routes([
-  { path: '/', component: DashboardComponent },
   { path: '/dashboard', component: DashboardComponent },
   { path: '/vehicles', component: VehiclesComponent },
   { path: '/characters', component: CharactersComponent },
@@ -1073,19 +1076,25 @@ export class ModalComponent implements OnInit {
   private show() {
     document.onkeyup = null;
 
-    if (!this.modalElement || !this.cancelButton || !this.okButton) return;
+    if (!this.modalElement || !this.cancelButton || !this.okButton) {
+      return;
+    }
 
     this.modalElement.style.opacity = 0;
     this.modalElement.style.zIndex = 9999;
 
     this.cancelButton.onclick = ((e: any) => {
       e.preventDefault();
-      if (!this.negativeOnClick(e)) this.hideDialog()
+      if (!this.negativeOnClick(e)) {
+        this.hideDialog();
+      }
     });
 
     this.okButton.onclick = ((e: any) => {
       e.preventDefault();
-      if (!this.positiveOnClick(e)) this.hideDialog()
+      if (!this.positiveOnClick(e)) {
+        this.hideDialog();
+      }
     });
 
     this.modalElement.onclick = () => {
@@ -1094,7 +1103,7 @@ export class ModalComponent implements OnInit {
     };
 
     document.onkeyup = (e: any) => {
-      if (e.which == KEY_ESC) {
+      if (e.which === KEY_ESC) {
         this.hideDialog();
         return this.negativeOnClick(null);
       }
@@ -1232,84 +1241,6 @@ if (environment.production) {
 bootstrap(AppComponent)
   .then(success => console.log(`Bootstrap success`))
   .catch(error => console.log(error));
-"><input type="hidden" name="files[system-config.ts]" value="/***********************************************************************************************
- * User Configuration.
- **********************************************************************************************/
-/** Map relative paths to URLs. */
-const map: any = {
-  'app': 'app', // 'dist',
-  'angular2-in-memory-web-api': 'node_modules/angular2-in-memory-web-api'
-};
-
-const packages: any = {
-  // Add your custom SystemJS packages here.
-  'angular2-in-memory-web-api': { defaultExtension: 'js' },
-  'api': { defaultExtension: 'js' },
-  'app': { defaultExtension: 'js' },
-  // 'rxjs': { defaultExtension: 'js' }
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-/***********************************************************************************************
- * Everything underneath this line is managed by the CLI.
- **********************************************************************************************/
-const barrels = [
-  // Angular specific barrels.
-  '@angular/common',
-  '@angular/compiler',
-  '@angular/core',
-  '@angular/http',
-  '@angular/platform-browser',
-  '@angular/platform-browser-dynamic',
-  '@angular/router',
-  // '@angular/testing',
-  // '@angular/upgrade',
-
-  // Thirdparty barrels.
-  'rxjs',
-
-  // App specific barrels.
-  'app',
-  'app/+characters',
-  'app/+characters/character',
-  'app/+characters/character-list',
-  'app/+characters/shared',
-  'app/+dashboard',
-  'app/+vehicles',
-  'app/+vehicles/vehicle',
-  'app/+vehicles/vehicle-list',
-  'app/+vehicles/shared',
-  'app/shared',
-  'app/shared/character-services',
-  'app/shared/filter-text',
-  'app/shared/modal',
-  'app/shared/spinner',
-  'app/shared/toast',
-  /** @cli-barrel */
-];
-
-const _cliSystemConfig = {};
-barrels.forEach((barrelName: string) => {
-  _cliSystemConfig[barrelName] = { main: 'index' };
-});
-
-/** Type declaration for ambient System. */
-declare var System: any;
-
-// Apply the CLI SystemJS configuration.
-System.config({
-  map: {
-    // '@angular': 'vendor/@angular',
-    // 'rxjs': 'vendor/rxjs',
-    '@angular': 'node_modules/@angular',
-    'rxjs': 'node_modules/rxjs',
-    'main': 'main.js'
-  },
-  packages: _cliSystemConfig
-});
-
-// Apply the user's configuration.
-System.config({ map, packages });
 "><input type="hidden" name="files[app/+characters/character-list/character-list.component.css]" value=".characters {
   list-style-type: none;
   padding: 0;
@@ -12072,7 +12003,7 @@ iframe.heightSet {
 "><input type="hidden" name="files[app/+characters/character-list/character-list.component.html]" value="<article class=&quot;template animated slideInRight&quot;>
   <h4>My Characters</h4>
 
-  <button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot; [routerLink]=&quot;['/character', 'new']&quot;>Add</button>
+  <a href=&quot;&quot; [routerLink]=&quot;['/characters', 'new']&quot;><button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot;>Add</button></a>
 
   <filter-text (changed)=&quot;filterChanged($event)&quot;></filter-text>
 
@@ -12085,11 +12016,11 @@ iframe.heightSet {
 {{character.name}}</h2>
         </div>
         <div class=&quot;mdl-card__menu&quot;>
-          <button class=&quot;mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect&quot; [routerLink]=&quot;['/character', character.id]&quot;>
+          <a href=&quot;&quot; [routerLink]=&quot;['/characters', character.id]&quot;><button class=&quot;mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect&quot;>
 
             <div class=&quot;icon mdl-color--accent icon-ic_play_circle_filled_white_24dp&quot;></div>
 
-          </button>
+          </button></a>
         </div>
       </div>
 
@@ -12139,7 +12070,7 @@ iframe.heightSet {
 </article>"><input type="hidden" name="files[app/+vehicles/vehicle-list/vehicle-list.component.html]" value="<article class=&quot;template animated slideInRight&quot;>
   <h4>My Vehicles</h4>
 
-  <button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot; [routerLink]=&quot;['/vehicle', 'new']&quot;>Add</button>
+  <a href=&quot;&quot; [routerLink]=&quot;['/vehicles', 'new']&quot;><button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot;>Add</button></a>
 
   <filter-text (changed)=&quot;filterChanged($event)&quot;></filter-text>
 
@@ -12151,11 +12082,11 @@ iframe.heightSet {
           <h2 class=&quot;mdl-card__title-text&quot;>{{vehicle.id}}. {{vehicle.name | initCaps}}</h2>
         </div>
         <div class=&quot;mdl-card__menu&quot;>
-          <button class=&quot;mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect&quot; [routerLink]=&quot;['/vehicle', vehicle.id]&quot;>
+          <a href=&quot;&quot; [routerLink]=&quot;['/vehicles', vehicle.id]&quot;><button class=&quot;mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect&quot;>
 
             <div class=&quot;icon mdl-color--primary icon-ic_play_circle_filled_white_24dp&quot;></div>
 
-          </button>
+          </button></a>
         </div>
       </div>
 

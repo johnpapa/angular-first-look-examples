@@ -1,4 +1,4 @@
-import { Component } from 'angular2/core';
+import { Component } from '@angular/core';
 import { Vehicle, VehicleService } from './vehicle.service';
 import { VehicleComponent } from './vehicle.component';
 

@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from 'angular2/core';
-import { RouteParams, Router } from 'angular2/router';
+import { Component, Input, OnInit } from '@angular/core';
+import { RouteParams, Router } from '@angular/router';
 
 import { Vehicle, VehicleService } from './vehicle.service';
 

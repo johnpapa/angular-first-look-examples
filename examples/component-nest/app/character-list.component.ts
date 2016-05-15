@@ -1,4 +1,4 @@
-import { Component } from 'angular2/core';
+import { Component } from '@angular/core';
 import { Character } from './character';
 import { CharacterComponent } from './character.component';
 

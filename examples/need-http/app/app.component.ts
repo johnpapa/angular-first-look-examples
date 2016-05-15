@@ -1,6 +1,7 @@
-import { Component } from 'angular2/core';
+import { Component } from '@angular/core';
+import 'rxjs/Rx'; // load the full rxjs
 
-import { Vehicle, VehicleService } from './vehicle.service';
+import { VehicleService } from './vehicle.service';
 import { VehicleListComponent } from './vehicle-list.component';
 
 @Component({

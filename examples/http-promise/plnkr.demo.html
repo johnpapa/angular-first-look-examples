@@ -1,7 +1,8 @@
-<html lang="en"><head></head><body><form id="mainForm" method="post" action="http://plnkr.co/edit/?p=preview" target="_self"><input type="hidden" name="files[app/app.component.ts]" value="import { Component } from 'angular2/core';
-import { HTTP_PROVIDERS } from 'angular2/http';
+<html lang="en"><head></head><body><form id="mainForm" method="post" action="http://plnkr.co/edit/?p=preview" target="_self"><input type="hidden" name="files[app/app.component.ts]" value="import { Component } from '@angular/core';
+import { HTTP_PROVIDERS } from '@angular/http';
+import 'rxjs/Rx'; // load the full rxjs
 
-import { Vehicle, VehicleService } from './vehicle.service';
+import { VehicleService } from './vehicle.service';
 import { VehicleListComponent } from './vehicle-list.component';
 
 @Component({
@@ -15,15 +16,7 @@ import { VehicleListComponent } from './vehicle-list.component';
 })
 export class AppComponent {}
 
-"><input type="hidden" name="files[app/main.ts]" value="import { bootstrap } from 'angular2/platform/browser';
-import { AppComponent } from './app.component';
-import 'rxjs/Rx';
-
-bootstrap(AppComponent)
-  .then(success => console.log(`Bootstrap success`))
-  .catch(error => console.log(error));
-
-"><input type="hidden" name="files[app/vehicle-list.component.ts]" value="import { Component } from 'angular2/core';
+"><input type="hidden" name="files[app/vehicle-list.component.ts]" value="import { Component } from '@angular/core';
 import { Vehicle, VehicleService } from './vehicle.service';
 import { VehicleComponent } from './vehicle.component';
 
@@ -51,7 +44,7 @@ export class VehicleListComponent {
   }
 }
 
-"><input type="hidden" name="files[app/vehicle.component.ts]" value="import { Component, EventEmitter, Input, Output } from 'angular2/core';
+"><input type="hidden" name="files[app/vehicle.component.ts]" value="import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Vehicle } from './vehicle.service';
 
 @Component({
@@ -62,8 +55,8 @@ export class VehicleComponent {
   @Input() vehicle: Vehicle;
 }
 
-"><input type="hidden" name="files[app/vehicle.service.ts]" value="import { Injectable } from 'angular2/core';
-import { Http, Response } from 'angular2/http';
+"><input type="hidden" name="files[app/vehicle.service.ts]" value="import { Injectable } from '@angular/core';
+import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 
 export class Vehicle {
@@ -86,6 +79,13 @@ export class VehicleService {
     return Observable.throw(error.json().error || 'Server error');
   }
 }
+"><input type="hidden" name="files[main.ts]" value="import { bootstrap } from '@angular/platform-browser-dynamic';
+import { AppComponent } from './app/app.component';
+
+bootstrap(AppComponent)
+  .then(success => console.log(`Bootstrap success`))
+  .catch(error => console.log(error));
+
 "><input type="hidden" name="files[app/vehicle-list.component.html]" value="<ul>
   <li *ngFor=&quot;#vehicle of vehicles | async&quot;
     (click)=&quot;select(vehicle)&quot;>
@@ -110,39 +110,22 @@ export class VehicleService {
   <script>document.write('<base href=&quot;' + document.location + '&quot; />');</script>
 
   <meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;>
-
-  <!-- IE required polyfills, in this exact order -->
-  <script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.0/es6-shim.js&quot;></script>
-  <script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.19.26/system-polyfills.js&quot;></script>
-  <script src=&quot;https://npmcdn.com/angular2/es6/dev/src/testing/shims_for_IE.js&quot;></script>
-
-  <!-- Angular polyfill required everywhere -->
-  <script src=&quot;https://code.angularjs.org/2.0.0-beta.15/angular2-polyfills.js&quot;></script>
-
-  <script src=&quot;https://code.angularjs.org/tools/system.js&quot;></script>
-    <script src=&quot;https://code.angularjs.org/tools/typescript.js&quot;></script>
-  <script src=&quot;https://code.angularjs.org/2.0.0-beta.15/Rx.js&quot;></script>
-  <script src=&quot;https://code.angularjs.org/2.0.0-beta.15/angular2.dev.js&quot;></script>
-  <script src=&quot;https://code.angularjs.org/2.0.0-beta.15/router.dev.js&quot;></script>
-  <script src=&quot;https://code.angularjs.org/2.0.0-beta.15/http.dev.js&quot;></script>
-
-  <script>
-      System.config({
-        transpiler: 'typescript', 
-        typescriptOptions: { emitDecoratorMetadata: true }, 
-        packages: {
-          'api': {defaultExtension: 'ts'}, 
-          'app': {defaultExtension: 'ts'} 
-        } 
-      });
-    System.import('app/main')
-          .then(null, console.error.bind(console));
-  </script>
-
 </head>
 
 <body>
   <my-app>Loading Demo ...</my-app>
+
+  <script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.0/es6-shim.js&quot;></script>
+  <script src=&quot;node_modules/zone.js/dist/zone.js&quot;></script>
+  <script src=&quot;node_modules/reflect-metadata/Reflect.js&quot;></script>
+  <script src=&quot;https://code.angularjs.org/tools/system.js&quot;></script>
+    <script src=&quot;https://code.angularjs.org/tools/typescript.js&quot;></script>
+
+  <script>
+    System.import('system-config.js')
+      .then(function () { System.import('main') })
+      .catch(console.error.bind(console));
+  </script>
 </body>
 
 </html>"><input type="hidden" name="files[api/characters.json]" value="{

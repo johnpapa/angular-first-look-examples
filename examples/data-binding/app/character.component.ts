@@ -1,4 +1,4 @@
-import { Component } from 'angular2/core';
+import { Component } from '@angular/core';
 
 class Character {
   constructor(public id: number, public name: string, public side: string, public imageUrl: string, public link: string) { }

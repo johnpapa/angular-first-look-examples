@@ -1,4 +1,4 @@
-import { Component, OnInit } from 'angular2/core';
+import { Component, OnInit } from '@angular/core';
 import { Character, CharacterService } from './character.service';
 import { CharacterComponent } from './character.component';
 

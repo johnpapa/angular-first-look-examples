@@ -1,4 +1,4 @@
-<html lang="en"><head></head><body><form id="mainForm" method="post" action="http://plnkr.co/edit/?p=preview" target="_self"><input type="hidden" name="files[app/app.component.ts]" value="import { Component } from 'angular2/core';
+<html lang="en"><head></head><body><form id="mainForm" method="post" action="http://plnkr.co/edit/?p=preview" target="_self"><input type="hidden" name="files[app/app.component.ts]" value="import { Component } from '@angular/core';
 import { Character, CharacterService } from './character.service';
 import { CharacterListComponent } from './character-list.component';
 
@@ -10,7 +10,7 @@ import { CharacterListComponent } from './character-list.component';
 })
 export class AppComponent {}
 
-"><input type="hidden" name="files[app/character-list.component.ts]" value="import { Component, OnInit } from 'angular2/core';
+"><input type="hidden" name="files[app/character-list.component.ts]" value="import { Component, OnInit } from '@angular/core';
 import { Character, CharacterService } from './character.service';
 import { CharacterComponent } from './character.component';
 
@@ -45,7 +45,7 @@ export class CharacterListComponent implements OnInit {
   }
 }
 
-"><input type="hidden" name="files[app/character.component.ts]" value="import { Component, EventEmitter, Input, Output, OnChanges, OnInit, AfterViewInit, OnDestroy } from 'angular2/core';
+"><input type="hidden" name="files[app/character.component.ts]" value="import { Component, EventEmitter, Input, Output, OnChanges, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { Character } from './character.service';
 
 @Component({
@@ -74,7 +74,7 @@ export class CharacterComponent implements OnChanges, OnInit, AfterViewInit, OnD
 
 }
 
-"><input type="hidden" name="files[app/character.service.ts]" value="import { Injectable } from 'angular2/core';
+"><input type="hidden" name="files[app/character.service.ts]" value="import { Injectable } from '@angular/core';
 
 export class Character {
   constructor(public id: number, public name: string, public side: string) {}
@@ -91,12 +91,12 @@ export class CharacterService {
     ];
   }
 }
-"><input type="hidden" name="files[app/main.ts]" value="  import { bootstrap } from 'angular2/platform/browser';
-  import { AppComponent } from './app.component';
+"><input type="hidden" name="files[main.ts]" value="import { bootstrap } from '@angular/platform-browser-dynamic';
+import { AppComponent } from './app/app.component';
 
-  bootstrap(AppComponent)
-    .then(success => console.log(`Bootstrap success`))
-    .catch(error => console.log(error));
+bootstrap(AppComponent)
+  .then(success => console.log(`Bootstrap success`))
+  .catch(error => console.log(error));
 
 "><input type="hidden" name="files[app/character-list.component.html]" value="<ul>
   <li *ngFor=&quot;#character of characters&quot; (click)=&quot;select(character)&quot;>
@@ -124,39 +124,22 @@ export class CharacterService {
   <script>document.write('<base href=&quot;' + document.location + '&quot; />');</script>
 
   <meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;>
-
-  <!-- IE required polyfills, in this exact order -->
-  <script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.0/es6-shim.js&quot;></script>
-  <script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.19.26/system-polyfills.js&quot;></script>
-  <script src=&quot;https://npmcdn.com/angular2/es6/dev/src/testing/shims_for_IE.js&quot;></script>
-
-  <!-- Angular polyfill required everywhere -->
-  <script src=&quot;https://code.angularjs.org/2.0.0-beta.15/angular2-polyfills.js&quot;></script>
-
-  <script src=&quot;https://code.angularjs.org/tools/system.js&quot;></script>
-    <script src=&quot;https://code.angularjs.org/tools/typescript.js&quot;></script>
-  <script src=&quot;https://code.angularjs.org/2.0.0-beta.15/Rx.js&quot;></script>
-  <script src=&quot;https://code.angularjs.org/2.0.0-beta.15/angular2.dev.js&quot;></script>
-  <script src=&quot;https://code.angularjs.org/2.0.0-beta.15/router.dev.js&quot;></script>
-  <script src=&quot;https://code.angularjs.org/2.0.0-beta.15/http.dev.js&quot;></script>
-
-  <script>
-      System.config({
-        transpiler: 'typescript', 
-        typescriptOptions: { emitDecoratorMetadata: true }, 
-        packages: {
-          'api': {defaultExtension: 'ts'}, 
-          'app': {defaultExtension: 'ts'} 
-        } 
-      });
-    System.import('app/main')
-          .then(null, console.error.bind(console));
-  </script>
-
 </head>
 
 <body>
   <my-app>Loading Demo ...</my-app>
+
+  <script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.0/es6-shim.js&quot;></script>
+  <script src=&quot;node_modules/zone.js/dist/zone.js&quot;></script>
+  <script src=&quot;node_modules/reflect-metadata/Reflect.js&quot;></script>
+  <script src=&quot;https://code.angularjs.org/tools/system.js&quot;></script>
+    <script src=&quot;https://code.angularjs.org/tools/typescript.js&quot;></script>
+
+  <script>
+    System.import('system-config.js')
+      .then(function () { System.import('main') })
+      .catch(console.error.bind(console));
+  </script>
 </body>
 
 </html>"><input type="hidden" name="files[api/characters.json]" value="{

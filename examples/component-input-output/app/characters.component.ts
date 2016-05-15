@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from 'angular2/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Character, CharacterService } from './character.service';
 import { CharacterComponent } from './character.component';
 

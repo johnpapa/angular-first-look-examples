@@ -1,5 +1,5 @@
-import { Component } from 'angular2/core';
-import { HTTP_PROVIDERS } from 'angular2/http';
+import { Component } from '@angular/core';
+import { HTTP_PROVIDERS } from '@angular/http';
 
 import { CharacterComponent } from './character.component';
 import { CharacterSolvedComponent } from './solution/character-solved.component';

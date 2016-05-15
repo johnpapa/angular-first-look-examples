@@ -1,4 +1,4 @@
-import { Injectable } from 'angular2/core';
+import { Injectable } from '@angular/core';
 
 export class Character {
   constructor(public id: number, public name: string, public side: string) {}

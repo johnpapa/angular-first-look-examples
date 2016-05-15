@@ -25,7 +25,17 @@ var fsUtils = require(path.resolve(TOOLS_PATH, 'fs-utils/fsUtils'));
 // vardocs docShredder = require(path.resolve(TOOLS_PATH, 'doc-shredder/doc-shredder'));
 var plunkerBuilder = require(path.resolve(TOOLS_PATH, 'plunker-builder/plunkerBuilder'));
 
-var _exampleBoilerplateFiles = ['package.json', 'tsconfig.json', 'typings.json', 'karma.conf.js', 'karma-test-shim.js', 'typings.d.ts', 'tslint.json' ];
+var _exampleBoilerplateFiles = [
+  'karma.conf.js',
+  'karma-test-shim.js',
+  'package.json',
+  'system-config.ts',
+  'tsconfig.json',
+  'tslint.json',
+  'typings.json',
+  'typings.d.ts',
+];
+//, 'index.html' ];
 
 gulp.task('default', ['help']);
 
@@ -107,14 +117,14 @@ function copyExampleBoilerplate() {
 }
 
 function getNodeModulesPaths(basePath) {
-  var paths = getExamplePaths(basePath).map(function(examplePath) {
+  var paths = getExamplePaths(basePath).map(function (examplePath) {
     return path.join(examplePath, "/node_modules");
   });
   return paths;
 }
 
 function getTypingsPaths(basePath) {
-  var paths = getExamplePaths(basePath).map(function(examplePath) {
+  var paths = getExamplePaths(basePath).map(function (examplePath) {
     return path.join(examplePath, "/typings");
   });
   return paths;
@@ -127,7 +137,7 @@ function getExamplePaths(basePath, includeBase) {
 
 function getPaths(basePath, filename, includeBase) {
   var filenames = getFilenames(basePath, filename, includeBase);
-  var paths = filenames.map(function(fileName) {
+  var paths = filenames.map(function (fileName) {
     return path.dirname(fileName);
   });
   return paths;
@@ -141,7 +151,7 @@ function getFilenames(basePath, filename, includeBase) {
     includePatterns.push("!" + path.join(basePath, "/" + filename));
   }
   var nmPattern = path.join(basePath, "**/node_modules/**");
-  var filenames = globby.sync(includePatterns, {ignore: [nmPattern]});
+  var filenames = globby.sync(includePatterns, { ignore: [nmPattern] });
   return filenames;
 }
 
@@ -149,11 +159,11 @@ function getFilenames(basePath, filename, includeBase) {
 function copyFiles(fileNames, destPaths) {
   var copy = Q.denodeify(fsExtra.copy);
   var copyPromises = [];
-  destPaths.forEach(function(destPath) {
-    fileNames.forEach(function(fileName) {
+  destPaths.forEach(function (destPath) {
+    fileNames.forEach(function (fileName) {
       var baseName = path.basename(fileName);
       var destName = path.join(destPath, baseName);
-      var p = copy(fileName, destName, { clobber: true});
+      var p = copy(fileName, destName, { clobber: true });
       copyPromises.push(p);
     });
   });
@@ -163,8 +173,8 @@ function copyFiles(fileNames, destPaths) {
 function deleteFiles(baseFileNames, destPaths) {
   var remove = Q.denodeify(fsExtra.remove);
   var delPromises = [];
-  destPaths.forEach(function(destPath) {
-    baseFileNames.forEach(function(baseFileName) {
+  destPaths.forEach(function (destPath) {
+    baseFileNames.forEach(function (baseFileName) {
       var destFileName = path.join(destPath, baseFileName);
       var p = remove(destFileName);
       delPromises.push(p);
