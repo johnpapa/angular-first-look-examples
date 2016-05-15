@@ -29,7 +29,7 @@ var _exampleBoilerplateFiles = [
   'karma.conf.js',
   'karma-test-shim.js',
   'package.json',
-  'system-config.ts',
+  'system-config.js',
   'tsconfig.json',
   'tslint.json',
   'typings.json',
