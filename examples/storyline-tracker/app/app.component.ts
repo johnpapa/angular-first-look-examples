@@ -1,6 +1,7 @@
 import { Component, provide } from '@angular/core';
 import { HTTP_PROVIDERS, XHRBackend } from '@angular/http';
 import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/router-deprecated';
+import 'rxjs/Rx'; // for now, til we start importing just what we need
 
 import {
   InMemoryBackendConfig,
