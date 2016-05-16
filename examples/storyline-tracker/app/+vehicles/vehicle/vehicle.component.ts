@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { CanDeactivate, Router, RouteSegment, RouteTree } from '@angular/router';
+import { CanDeactivate, ComponentInstruction, RouteParams, Router } from '@angular/router-deprecated';
 import { Subscription } from 'rxjs/Rx';
 
 import { EntityService, ModalService, ToastService } from '../../../app/shared';
@@ -22,6 +22,7 @@ export class VehicleComponent implements CanDeactivate, OnDestroy, OnInit {
   constructor(
     private entityService: EntityService,
     private modalService: ModalService,
+    private routeParams: RouteParams,
     private router: Router,
     private toastService: ToastService,
     private vehicleService: VehicleService) { }
@@ -60,6 +61,7 @@ export class VehicleComponent implements CanDeactivate, OnDestroy, OnInit {
 
   ngOnInit() {
     componentHandler.upgradeDom();
+    this.id = +this.routeParams.get('id');
     this.getVehicle();
     this.dbResetSubscription = this.vehicleService.onDbReset
       .subscribe(() => {
@@ -67,21 +69,10 @@ export class VehicleComponent implements CanDeactivate, OnDestroy, OnInit {
       });
   }
 
-  routerOnActivate(
-    current: RouteSegment,
-    prev?: RouteSegment,
-    currTree?: RouteTree,
-    prevTree?: RouteTree
-  ) {
-    let id = +current.getParam('id');
-    this.id = id;
-  }
-
-  routerCanDeactivate(currTree?: RouteTree, futureTree?: RouteTree) {
-    let deactivate = !this.vehicle ||
+  routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
+    return !this.vehicle ||
       !this.isDirty() ||
       this.modalService.activate();
-    return <Promise<boolean>>deactivate;
   }
 
   save() {
@@ -113,7 +104,7 @@ export class VehicleComponent implements CanDeactivate, OnDestroy, OnInit {
   }
 
   private gotoVehicles() {
-    this.router.navigate(['/vehicles']);
+    this.router.navigate(['Vehicles']);
   }
 
   private handleServiceError(op: string, err: any) {

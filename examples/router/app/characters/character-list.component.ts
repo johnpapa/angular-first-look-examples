@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { ROUTER_DIRECTIVES } from '@angular/router';
-import { Observable } from 'rxjs/Rx';
+import { ROUTER_DIRECTIVES } from '@angular/router-deprecated';
+import 'rxjs/Observable';
 
 import { Character, CharacterService } from './character.service';
 
 @Component({
+  moduleId: module.id,
   selector: 'story-characters',
-  templateUrl: './app/characters/character-list.component.html',
+  templateUrl: 'character-list.component.html',
   styles: [`
     .characters {list-style-type: none;}
     *.characters li {padding: 4px;cursor: pointer;}
@@ -16,9 +17,9 @@ import { Character, CharacterService } from './character.service';
 export class CharacterListComponent implements OnInit {
   characters: Observable<Character[]>;
 
-  constructor(private _characterService: CharacterService) { }
+  constructor(private characterService: CharacterService) { }
 
   ngOnInit() {
-    this.characters = this._characterService.getCharacters();
+    this.characters = this.characterService.getCharacters();
   }
 }

@@ -1,39 +1,40 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { RouteParams, Router, ROUTER_DIRECTIVES } from '@angular/router';
+import { RouteParams, Router, ROUTER_DIRECTIVES } from '@angular/router-deprecated';
 
 import { Vehicle, VehicleService } from './vehicle.service';
 
 @Component({
+  moduleId: module.id,
   selector: 'story-vehicle',
-  templateUrl: 'app/vehicles/vehicle.component.html',
+  templateUrl: 'vehicle.component.html',
   directives: [ROUTER_DIRECTIVES]
 })
 export class VehicleComponent implements OnInit {
   @Input() vehicle: Vehicle;
 
   constructor(
-    private _routeParams: RouteParams,
-    private _router: Router,
-    private _vehicleService: VehicleService) { }
+    private routeParams: RouteParams,
+    private router: Router,
+    private vehicleService: VehicleService) { }
 
   ngOnInit() {
     if (!this.vehicle) {
-      let id = +this._routeParams.get('id');
-      this._vehicleService.getVehicle(id)
-        .subscribe((vehicle: Vehicle) => this._setEditVehicle(vehicle));
+      let id = +this.routeParams.get('id');
+      this.vehicleService.getVehicle(id)
+        .subscribe((vehicle: Vehicle) => this.setEditVehicle(vehicle));
     }
   }
 
-  private _gotoVehicles() {
-    let route = ['Vehicles', { id: this.vehicle ? this.vehicle.id : null }]
-    this._router.navigate(route);
+  private gotoVehicles() {
+    let route = ['Vehicles', { id: this.vehicle ? this.vehicle.id : null }];
+    this.router.navigate(route);
   }
 
-  private _setEditVehicle(vehicle: Vehicle) {
+  private setEditVehicle(vehicle: Vehicle) {
     if (vehicle) {
       this.vehicle = vehicle;
     } else {
-      this._gotoVehicles();
+      this.gotoVehicles();
     }
   }
 }

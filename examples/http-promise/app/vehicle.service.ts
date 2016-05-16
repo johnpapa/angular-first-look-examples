@@ -8,10 +8,10 @@ export class Vehicle {
 
 @Injectable()
 export class VehicleService {
-  constructor(private _http: Http) { }
+  constructor(private http: Http) { }
 
   getVehicles(value?: string) {
-    return this._http.get('api/vehicles.json')
+    return this.http.get('api/vehicles.json')
       .map((response: Response) => <Vehicle[]>response.json().data)
       .toPromise()
       .catch(this.handleError);

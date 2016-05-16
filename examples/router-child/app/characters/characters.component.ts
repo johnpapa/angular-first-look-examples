@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { RouteConfig, ROUTER_DIRECTIVES } from '@angular/router';
+import { RouteConfig, ROUTER_DIRECTIVES } from '@angular/router-deprecated';
 
 import { CharacterComponent } from './character.component';
 import { CharacterListComponent } from './character-list.component';
-import { CharacterService } from './character.service';
 
 @Component({
+  moduleId: module.id,
   selector: 'story-characters-root',
   template: `
     <router-outlet></router-outlet>
@@ -14,6 +14,6 @@ import { CharacterService } from './character.service';
 })
 @RouteConfig([
   { path: '/', name: 'Characters', component: CharacterListComponent, useAsDefault: true },
-	{ path: '/:id', name: 'Character', component: CharacterComponent }
+  { path: '/:id', name: 'Character', component: CharacterComponent }
 ])
 export class CharactersComponent { }

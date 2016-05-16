@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 
 @Component({
+  moduleId: module.id,
   selector: 'my-vehicles',
-  templateUrl: 'app/vehicles.component.html'
+  templateUrl: 'vehicles.component.html'
 })
 export class VehiclesComponent {
   vehicles = [
@@ -11,5 +12,3 @@ export class VehiclesComponent {
     { id: 3, name: 'Y-Wing Fighter' }
   ];
 }
-
-

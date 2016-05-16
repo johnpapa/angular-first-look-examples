@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ROUTER_DIRECTIVES } from '@angular/router';
+import { ROUTER_DIRECTIVES } from '@angular/router-deprecated';
 import { Subscription } from 'rxjs/Rx';
 
 import { FilterTextComponent, FilterService, InitCapsPipe } from '../../../app/shared';

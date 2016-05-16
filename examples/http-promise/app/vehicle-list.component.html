@@ -1,12 +1,12 @@
 <ul>
-  <li *ngFor="#vehicle of vehicles | async"
+  <li *ngFor="let vehicle of vehicles | async"
     (click)="select(vehicle)">
     {{ vehicle.name }}
   </li>
 </ul>
 
 <ul class="messages">
-  <li *ngFor="#msg of messages">{{msg}}</li>
+  <li *ngFor="let msg of messages">{{msg}}</li>
 </ul>
 
 <div class="error" *ngIf="errorMessage">{{errorMessage}}</div>

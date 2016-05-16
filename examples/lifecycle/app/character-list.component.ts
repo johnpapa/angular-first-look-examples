@@ -3,25 +3,18 @@ import { Character, CharacterService } from './character.service';
 import { CharacterComponent } from './character.component';
 
 @Component({
+  moduleId: module.id,
   selector: 'my-character-list',
-  templateUrl: 'app/character-list.component.html',
+  templateUrl: 'character-list.component.html',
   styles: ['li {cursor: pointer;}'],
   directives: [CharacterComponent]
 })
 export class CharacterListComponent implements OnInit {
-  selectedCharacter: Character;
   characters: Character[] = [];
   messages: string[] = [];
+  selectedCharacter: Character;
 
-  constructor(private _characterService: CharacterService) { }
-
-  ngOnInit() {
-    this.characters = this._characterService.getCharacters();
-  }
-
-  select(character: Character) {
-    this.selectedCharacter = character;
-  }
+  constructor(private characterService: CharacterService) { }
 
   clear() {
     this.selectedCharacter = null;
@@ -31,5 +24,12 @@ export class CharacterListComponent implements OnInit {
     this.messages.splice(0, 0, msg);
     console.log(msg);
   }
-}
 
+  ngOnInit() {
+    this.characters = this.characterService.getCharacters();
+  }
+
+  select(character: Character) {
+    this.selectedCharacter = character;
+  }
+}

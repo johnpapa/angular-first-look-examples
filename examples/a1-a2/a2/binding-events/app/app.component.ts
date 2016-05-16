@@ -1,18 +1,19 @@
-//our root app component
-import {Component} from '@angular/core'
+// our root app component
+import { Component } from '@angular/core';
 
 @Component({
+  moduleId: module.id,
   selector: 'my-app',
-  templateUrl: 'app/app.component.html',
-  styleUrls: ['app/app.component.css']
+  templateUrl: 'app.component.html',
+  styleUrls: ['app.component.css']
 })
 export class AppComponent {
-  title: string;
   imagePath = 'angular.png';
   messages: string[] = [];
+  title: string;
 
   constructor() {
-    this.title = 'Angular 2 Binding Events'
+    this.title = 'Angular 2 Binding Events';
   }
 
   log(msg: string, data: string) {

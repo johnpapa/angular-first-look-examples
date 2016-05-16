@@ -3,14 +3,16 @@ import { Component } from '@angular/core';
 class Character {
   constructor(public id: number, public name: string, public side: string, public imageUrl: string, public link: string) { }
 }
+
 class Vehicle {
   constructor(public id: number, public name: string) { }
 }
 
 @Component({
+  moduleId: module.id,
   selector: 'story-character-solved',
-  templateUrl: './app/solution/character-solved.component.html',
-  styleUrls: ['./app/solution/character-solved.component.css']
+  templateUrl: 'character-solved.component.html',
+  styleUrls: ['character-solved.component.css']
 })
 export class CharacterSolvedComponent {
   character: Character;
@@ -32,5 +34,4 @@ export class CharacterSolvedComponent {
     console.log(msg);
     this.isSelected = !this.isSelected;
   }
-
 }

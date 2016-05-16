@@ -50,7 +50,7 @@
     <div class="row" *ngIf="isSelected">
       Your character {{character.name}} has these vehicles:
       <ul>
-        <li *ngFor="#vehicle of vehicles">{{vehicle.name}}</li>
+        <li *ngFor="let vehicle of vehicles">{{vehicle.name}}</li>
       </ul>
     </div>
 

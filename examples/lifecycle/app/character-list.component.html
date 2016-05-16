@@ -1,12 +1,12 @@
 <ul>
-  <li *ngFor="#character of characters" (click)="select(character)">
+  <li *ngFor="let character of characters" (click)="select(character)">
     {{ character.name }}
   </li>
 </ul>
 
 <button (click)="clear()">clear</button>
 <ul class="messages">
-  <li *ngFor="#msg of messages">{{msg}}</li>
+  <li *ngFor="let msg of messages">{{msg}}</li>
 </ul>
 
 

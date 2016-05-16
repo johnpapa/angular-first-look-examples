@@ -1,8 +1,11 @@
-import { Component, Input, OnInit } from 'angular2/core';
+import { Component, Input, OnInit } from '@angular/core';
+
+import { Vehicle } from './vehicle.service';
 
 @Component({
+  moduleId: module.id,
   selector: 'story-vehicle',
-  templateUrl: 'app/vehicles/vehicle.component.html'
+  templateUrl: 'vehicle.component.html'
 })
 export class VehicleComponent implements OnInit {
   @Input() vehicle: Vehicle;

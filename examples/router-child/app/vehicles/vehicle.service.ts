@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
+import 'rxjs/add/operator/map';
 
 import { CONFIG } from '../config';
 
 let vehiclesUrl = CONFIG.baseUrls.vehicles;
 
-export interface Vehicle {
+export class Vehicle {
   id: number;
   name: string;
   type: string;
@@ -13,15 +14,16 @@ export interface Vehicle {
 
 @Injectable()
 export class VehicleService {
-  constructor(private _http: Http) { }
-
-  getVehicles() {
-    return this._http.get(vehiclesUrl)
-      .map((response: Response) => <Vehicle[]>response.json().data);
-  }
+  constructor(private http: Http) { }
 
   getVehicle(id: number) {
     return this.getVehicles()
-      .map(vehicles => vehicles.find(vehicle => vehicle.id == id));
+      .map(vehicles => vehicles.find(vehicle => vehicle.id === id));
+  }
+
+  getVehicles() {
+    return this.http
+      .get(vehiclesUrl)
+      .map((response: Response) => <Vehicle[]>response.json().data);
   }
 }

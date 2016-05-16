@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { HTTP_PROVIDERS } from '@angular/http';
-import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/router';
+import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/router-deprecated';
 import 'rxjs/Rx'; // load the full rxjs
 
 import { CharacterListComponent } from './characters/character-list.component';
@@ -9,11 +9,11 @@ import { CharacterService } from './characters/character.service';
 import { VehicleListComponent } from './vehicles/vehicle-list.component';
 import { VehicleComponent } from './vehicles/vehicle.component';
 import { VehicleService } from './vehicles/vehicle.service';
-import { CONFIG } from './config';
 
 @Component({
+  moduleId: module.id,
   selector: 'story-app',
-  templateUrl: 'app/app.component.html',
+  templateUrl: 'app.component.html',
   styles: [`
     nav ul {list-style-type: none;}
     nav ul li {padding: 4px;cursor: pointer;display:inline-block}
@@ -30,6 +30,6 @@ import { CONFIG } from './config';
   { path: '/characters', name: 'Characters', component: CharacterListComponent, useAsDefault: true },
   { path: '/character/:id', name: 'Character', component: CharacterComponent },
   { path: '/vehicles', name: 'Vehicles', component: VehicleListComponent },
-	{ path: '/vehicle/:id', name: 'Vehicle', component: VehicleComponent }
+  { path: '/vehicle/:id', name: 'Vehicle', component: VehicleComponent }
   ])
 export class AppComponent { }

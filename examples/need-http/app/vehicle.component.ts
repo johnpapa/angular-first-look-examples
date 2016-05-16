@@ -1,11 +1,11 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Vehicle } from './vehicle.service';
 
 @Component({
+  moduleId: module.id,
   selector: 'my-vehicle',
-  templateUrl: 'app/vehicle.component.html'
+  templateUrl: 'vehicle.component.html'
 })
 export class VehicleComponent {
   @Input() vehicle: Vehicle;
 }
-

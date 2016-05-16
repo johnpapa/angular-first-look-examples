@@ -2,8 +2,9 @@ import { Component } from '@angular/core';
 import { Vehicle, VehicleService } from './vehicle.service';
 
 @Component({
+  moduleId: module.id,
   selector: 'my-vehicle-list',
-  templateUrl: 'app/vehicle-list.component.html',
+  templateUrl: 'vehicle-list.component.html',
   styles: ['li {cursor: pointer;} .error {color:red;}']
 })
 export class VehicleListComponent {
@@ -12,8 +13,6 @@ export class VehicleListComponent {
 
   constructor(private _vehicleService: VehicleService) { }
 
-  ngOnInit() { this.getHeroes(); }
-
   getHeroes() {
     this._vehicleService.getVehicles()
       .subscribe(
@@ -21,5 +20,7 @@ export class VehicleListComponent {
         error =>  this.errorMessage = <any>error
     );
   }
+
+  ngOnInit() { this.getHeroes(); }
 }
 

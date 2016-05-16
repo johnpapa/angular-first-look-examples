@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { ROUTER_DIRECTIVES } from '@angular/router';
+import { ROUTER_DIRECTIVES } from '@angular/router-deprecated';
 
 import { Vehicle, VehicleService } from './vehicle.service';
 
 @Component({
+  moduleId: module.id,
   selector: 'story-vehicles',
-  templateUrl: './app/vehicles/vehicle-list.component.html',
+  templateUrl: 'vehicle-list.component.html',
   styles: [`
     .vehicles {list-style-type: none;}
     *.vehicles li {padding: 4px;cursor: pointer;}
@@ -15,11 +16,11 @@ import { Vehicle, VehicleService } from './vehicle.service';
 export class VehicleListComponent implements OnInit {
   vehicles: Vehicle[];
 
-  constructor(private _vehicleService: VehicleService) { }
+  constructor(private vehicleService: VehicleService) { }
 
   ngOnInit() {
     this.vehicles = [];
-    this._vehicleService.getVehicles()
+    this.vehicleService.getVehicles()
       .subscribe(vehicles => this.vehicles = vehicles);
   }
 }

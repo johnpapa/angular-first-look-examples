@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { CanDeactivate, Router, RouteSegment, RouteTree } from '@angular/router';
+import { CanDeactivate, ComponentInstruction, RouteParams, Router } from '@angular/router-deprecated';
 import { Subscription } from 'rxjs/Rx';
 
 import { Character, CharacterService, EntityService, ModalService, ToastService } from '../../../app/shared';
@@ -22,6 +22,7 @@ export class CharacterComponent implements CanDeactivate, OnDestroy, OnInit {
     private characterService: CharacterService,
     private entityService: EntityService,
     private modalService: ModalService,
+    private routeParams: RouteParams,
     private router: Router,
     private toastService: ToastService) { }
 
@@ -59,26 +60,16 @@ export class CharacterComponent implements CanDeactivate, OnDestroy, OnInit {
 
   ngOnInit() {
     componentHandler.upgradeDom();
+    this.id = +this.routeParams.get('id');
     this.getCharacter();
     this.dbResetSubscription = this.characterService.onDbReset
       .subscribe(() => this.getCharacter());
   }
 
-  routerOnActivate(
-    current: RouteSegment,
-    prev?: RouteSegment,
-    currTree?: RouteTree,
-    prevTree?: RouteTree
-  ) {
-    let id = +current.getParam('id');
-    this.id = id;
-  }
-
-  routerCanDeactivate(currTree?: RouteTree, futureTree?: RouteTree) {
-    let deactivate = !this.character ||
+  routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
+    return !this.character ||
       !this.isDirty() ||
       this.modalService.activate();
-    return <Promise<boolean>>deactivate;
   }
 
   save() {
@@ -110,7 +101,7 @@ export class CharacterComponent implements CanDeactivate, OnDestroy, OnInit {
   }
 
   private gotoCharacters() {
-    this.router.navigate(['/characters']);
+    this.router.navigate(['Characters']);
   }
 
   private handleServiceError(op: string, err: any) {

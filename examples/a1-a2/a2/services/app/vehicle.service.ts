@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
 @Injectable()
 export class VehicleService {
@@ -8,4 +8,3 @@ export class VehicleService {
     { id: 3, name: 'Y-Wing Fighter' }
   ];
 }
-

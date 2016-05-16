@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
-import { Observable } from 'rxjs/Rx';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
+import 'rxjs/Observable';
 
 export class Vehicle {
   constructor(public id: number, public name: string, public side: string) { }
@@ -8,10 +10,11 @@ export class Vehicle {
 
 @Injectable()
 export class VehicleService {
-  constructor(private _http: Http) { }
+  constructor(private http: Http) { }
 
   getVehicles() {
-    return this._http.get('api/vehicles.json')
+    return this.http
+      .get('api/vehicles.json')
       .map((response: Response) =>
         <Vehicle[]>response.json().data
       )

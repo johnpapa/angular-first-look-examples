@@ -1,5 +1,5 @@
 <ul>
-  <li *ngFor="#character of characters" (click)="select(character)">
+  <li *ngFor="let character of characters" (click)="select(character)">
     {{ character.name }}
   </li>
 </ul>

@@ -7,6 +7,10 @@ var _rxRules = {
     from: /<base href=".*"[/]?>/,
     to: '<script>document.write(\'<base href="\' + document.location + \'" />\');</script>'
   },
+  angular_pkg: {
+    from: /src=".?node_modules\/@angular/g,
+    to: 'src="https://npmcdn.com/@angular'
+  },
   script: {
     from: /<script.*".*%tag%".*>.*<\/script>/,
     to: '<script src="%tag%"></script>'
@@ -14,20 +18,7 @@ var _rxRules = {
   link: {
     from: '/<link rel="stylesheet" href=".*%tag%".*>/',
     to: '<link rel="stylesheet" href="%tag%">'
-  },
-  config: {
-    from: /\s*System.config\(\{[\s\S]*\}\);/m,
-    to: "\n" +
-        "      System.config({\n" +
-        "        transpiler: 'typescript', \n" +
-        "        typescriptOptions: { emitDecoratorMetadata: true }, \n" +
-        "        packages: {\n" +
-        "          'api': {defaultExtension: 'ts'}, \n" +
-        "          'app': {defaultExtension: 'ts'} \n" +
-        "        } \n" +
-        "      });"
-  },
-
+  }
 };
 
 var _rxData = [
@@ -36,93 +27,43 @@ var _rxData = [
   },
   {
     pattern: 'script',
-    from: 'node_modules/systemjs/dist/system.src.js',
-    to:   ['https://code.angularjs.org/tools/system.js', 'https://code.angularjs.org/tools/typescript.js']
-    //to:   ['https://rawgithub.com/systemjs/systemjs/0.19.6/dist/system.js', 'https://code.angularjs.org/tools/typescript.js']
-    // to: ['https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.18.4/system.js', 'https://code.angularjs.org/tools/typescript.js' ]
-  },
-  {
-    pattern: 'script',
-    from: 'assets/material.min.js',
-    to: 'https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js'
-  },
-  {
-    pattern: 'script',
     from: 'node_modules/es6-shim/es6-shim.min.js',
-    to: 'https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.0/es6-shim.js'
+    to:   'https://npmcdn.com/es6-shim@0.35.0/es6-shim.min.js'
   },
   {
     pattern: 'script',
-    from: 'node_modules/systemjs/dist/system-polyfills.js',
-    to: 'https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.19.26/system-polyfills.js'
+    from: 'node_modules/zone.js/dist/zone.js',
+    to:   'https://npmcdn.com/zone.js@0.6.12?main=browser'
   },
   {
     pattern: 'script',
-    from: 'node_modules/angular2/bundles/angular2-polyfills.js',
-    to: 'https://code.angularjs.org/2.0.0-beta.15/angular2-polyfills.js'
-  },
-  {
-    pattern: 'script',
-    from: 'node_modules/angular2/bundles/angular2.dev.js',
-    to: 'https://code.angularjs.org/2.0.0-beta.15/angular2.dev.js'
-  },
-  {
-    pattern: 'script',
-    from: 'node_modules/angular2/bundles/angular2-all.umd.js',
-    to: 'https://code.angularjs.org/2.0.0-beta.15/angular2-all.umd.dev.js'
-  },
-  {
-    pattern: 'script',
-    from: 'node_modules/angular2/bundles/angular2-polyfills.js',
-    to: 'https://code.angularjs.org/2.0.0-beta.15/angular2-polyfills.js'
-  },
-  {
-    pattern: 'script',
-    from: 'node_modules/angular2/es6/dev/src/testing/shims_for_IE.js',
-    to: 'https://npmcdn.com/angular2/es6/dev/src/testing/shims_for_IE.js'
-  },
-  {
-    pattern: 'script',
-    from: 'node_modules/rxjs/bundles/Rx.js',
-    to: 'https://code.angularjs.org/2.0.0-beta.15/Rx.js'
+    from: 'node_modules/reflect-metadata/Reflect.js',
+    to:   'https://npmcdn.com/reflect-metadata@0.1.3'
   },
   {
     pattern: 'script',
     from: 'node_modules/rxjs/bundles/Rx.umd.js',
-    to: 'https://code.angularjs.org/2.0.0-beta.15/Rx.umd.js'
+    to:   'https://npmcdn.com/rxjs@5.0.0-beta.6/bundles/Rx.umd.js'
   },
   {
     pattern: 'script',
-    from: 'node_modules/angular2/bundles/router.dev.js',
-    to: 'https://code.angularjs.org/2.0.0-beta.15/router.dev.js'
+    from: 'node_modules/systemjs/dist/system.src.js',
+    to:   'https://npmcdn.com/systemjs@0.19.27/dist/system.src.js'
   },
   {
     pattern: 'script',
-    from: 'node_modules/angular2/bundles/http.dev.js',
-    to: 'https://code.angularjs.org/2.0.0-beta.15/http.dev.js'
-  },
-  {
-    pattern: 'script',
-    from: 'node_modules/angular2/bundles/testing.dev.js',
-    to: 'https://code.angularjs.org/2.0.0-beta.15/testing.dev.js'
-  },
-  {
-    pattern: 'script',
-    from: 'node_modules/a2-in-memory-web-api/web-api.js',
-    to: 'https://npmcdn.com/a2-in-memory-web-api/web-api.js'
+    from: 'node_modules/angular/in-memory-web-api/web-api.js',
+    to:   'https://npmcdn.com/angular/in-memory-web-api/web-api.js'
   },
   {
     pattern: 'link',
     from: 'node_modules/bootstrap/dist/css/bootstrap.min.css',
-    to: 'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap-theme.min.css'
-    // to: 'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css'
+    to:   'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css'
   },
   {
-    pattern: 'config',
+    pattern: 'angular_pkg',
   }
 ];
-
-
 
 function translate(html) {
   _rxData.forEach(function(rxDatum) {

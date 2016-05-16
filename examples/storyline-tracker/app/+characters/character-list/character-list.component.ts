@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ROUTER_DIRECTIVES } from '@angular/router';
-import { Observable, Subscription } from 'rxjs/Rx';
+import { ROUTER_DIRECTIVES } from '@angular/router-deprecated';
+import { Subscription } from 'rxjs/Rx';
 
 import { SortCharactersPipe } from '../shared';
 import { Character, CharacterService, FilterService, FilterTextComponent } from '../../../app/shared';

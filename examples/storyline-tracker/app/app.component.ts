@@ -1,7 +1,6 @@
 import { Component, provide } from '@angular/core';
 import { HTTP_PROVIDERS, XHRBackend } from '@angular/http';
-import { Routes, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/router';
-import 'rxjs/Rx'; // load the full rxjs
+import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/router-deprecated';
 
 import {
   InMemoryBackendConfig,
@@ -46,16 +45,16 @@ import {
     ToastService
   ]
 })
-@Routes([
-  { path: '/dashboard', component: DashboardComponent },
-  { path: '/vehicles', component: VehiclesComponent },
-  { path: '/characters', component: CharactersComponent },
+@RouteConfig([
+  { path: '/dashboard', name: 'Dashboard', component: DashboardComponent, useAsDefault: true },
+  { path: '/vehicles/...', name: 'Vehicles', component: VehiclesComponent },
+  { path: '/characters/...', name: 'Characters', component: CharactersComponent },
 ])
 export class AppComponent {
   public menuItems = [
-    { caption: 'Dashboard', link: ['/dashboard'] },
-    { caption: 'Characters', link: ['/characters'] },
-    { caption: 'Vehicles', link: ['/vehicles'] }
+    { caption: 'Dashboard', link: ['Dashboard'] },
+    { caption: 'Characters', link: ['Characters'] },
+    { caption: 'Vehicles', link: ['Vehicles'] }
   ];
 
   constructor(

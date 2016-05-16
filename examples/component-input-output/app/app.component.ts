@@ -4,6 +4,7 @@ import { HTTP_PROVIDERS } from '@angular/http';
 import { CharactersComponent } from './characters.component';
 
 @Component({
+  moduleId: module.id,
   selector: 'story-app',
   template: `
   <div>

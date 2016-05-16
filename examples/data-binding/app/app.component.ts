@@ -5,6 +5,7 @@ import { CharacterComponent } from './character.component';
 import { CharacterSolvedComponent } from './solution/character-solved.component';
 
 @Component({
+  moduleId: module.id,
   selector: 'story-app',
   template: `
   <div>
@@ -30,8 +31,8 @@ import { CharacterSolvedComponent } from './solution/character-solved.component'
   providers: [HTTP_PROVIDERS]
 })
 export class AppComponent {
-  showSolution = false;
   buttonText = 'Switch to Solution';
+  showSolution = false;
 
   solve() {
     this.showSolution = !this.showSolution;

@@ -26,16 +26,18 @@ var fsUtils = require(path.resolve(TOOLS_PATH, 'fs-utils/fsUtils'));
 var plunkerBuilder = require(path.resolve(TOOLS_PATH, 'plunker-builder/plunkerBuilder'));
 
 var _exampleBoilerplateFiles = [
-  'karma.conf.js',
-  'karma-test-shim.js',
+  '.editorconfig',
+  // 'karma.conf.js',
+  // 'karma-test-shim.js',
   'package.json',
-  'system-config.js',
+  // 'styles.css',
+  'systemjs.config.js',
   'tsconfig.json',
   'tslint.json',
-  'typings.json',
   'typings.d.ts',
-];
-//, 'index.html' ];
+  'typings.json',
+  // 'wallaby.js'
+ ];
 
 gulp.task('default', ['help']);
 
@@ -47,50 +49,76 @@ gulp.task('help', taskListing.withFilters(function (taskName) {
   return shouldRemove;
 }));
 
-gulp.task('build-plunkers', function () {
-  return plunkerBuilder.buildPlunkers(EXAMPLES_PATH, LIVE_EXAMPLES_PATH, { errFn: gutil.log });
+gulp.task('build-plunkers', function() {
+  return copyExampleBoilerplate()
+    .then(function() {
+      return plunkerBuilder.buildPlunkers(EXAMPLES_PATH, LIVE_EXAMPLES_PATH, { errFn: gutil.log });
+    });
 });
 
-
 // requires admin access
-gulp.task('add-example-boilerplate', function () {
+gulp.task('add-example-boilerplate', function() {
   var realPath = path.join(EXAMPLES_PATH, '/node_modules');
   var nodeModulesPaths = getNodeModulesPaths(EXAMPLES_PATH);
 
-  nodeModulesPaths.forEach(function (linkPath) {
+  nodeModulesPaths.forEach(function(linkPath) {
     gutil.log("symlinking " + linkPath + ' -> ' + realPath)
     fsUtils.addSymlink(realPath, linkPath);
   });
 
   realPath = path.join(EXAMPLES_PATH, '/typings');
   var typingsPaths = getTypingsPaths(EXAMPLES_PATH);
-  typingsPaths.forEach(function (linkPath) {
+  typingsPaths.forEach(function(linkPath) {
     gutil.log("symlinking " + linkPath + ' -> ' + realPath)
     fsUtils.addSymlink(realPath, linkPath);
   });
 
-  copyExampleBoilerplate();
+  return copyExampleBoilerplate();
 });
 
-gulp.task('remove-example-boilerplate', function () {
+gulp.task('remove-example-boilerplate', function() {
   var nodeModulesPaths = getNodeModulesPaths(EXAMPLES_PATH);
-  nodeModulesPaths.forEach(function (linkPath) {
+  nodeModulesPaths.forEach(function(linkPath) {
     fsUtils.removeSymlink(linkPath);
   });
 
   var typingsPaths = getTypingsPaths(EXAMPLES_PATH);
-  typingsPaths.forEach(function (linkPath) {
+  typingsPaths.forEach(function(linkPath) {
     fsUtils.removeSymlink(linkPath);
   });
 
   var examplePaths = getExamplePaths(EXAMPLES_PATH);
-  return deleteFiles(_exampleBoilerplateFiles, examplePaths).then(function () {
-    var e2eSpecPaths = getE2eSpecPaths(EXAMPLES_PATH);
-    return deleteFiles(['protractor.config.js'], e2eSpecPaths);
-  })
+
+  return deleteFiles(_exampleBoilerplateFiles, examplePaths)
+    .then(function() {
+      var e2eSpecPaths = getE2eSpecPaths(EXAMPLES_PATH);
+      return deleteFiles(['protractor.config.js'], e2eSpecPaths);
+    })
 });
 
 ////////////////////
+
+
+// copies boilerplate files to locations
+// where an example app is found
+// also copies certain web files (e.g., styles.css) to ~/_examples/**/dart/**/web
+// also copies protractor.config.js file
+function copyExampleBoilerplate() {
+  var sourceFiles = _exampleBoilerplateFiles.map(function(fn) {
+    return path.join(EXAMPLES_PATH, fn);
+  });
+  var examplePaths = getExamplePaths(EXAMPLES_PATH);
+
+  return copyFiles(sourceFiles, examplePaths)
+    // copy protractor.config.js from _examples dir to each subdir that
+    // contains a e2e-spec file.
+    .then(function() {
+      var sourceFiles = [ path.join(EXAMPLES_PATH, 'protractor.config.js') ];
+      var e2eSpecPaths = getE2eSpecPaths(EXAMPLES_PATH);
+      return copyFiles(sourceFiles, e2eSpecPaths);
+    });
+}
+
 
 // TODO: filter out all paths that are subdirs of another
 // path in the result.

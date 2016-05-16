@@ -1,18 +1,19 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
-import 'rxjs/Rx'; // load the full rxjs
+import 'rxjs/add/operator/map';
 
-export interface Character {
+export class Character {
   id: number;
   name: string;
 }
 
 @Injectable()
 export class CharacterService {
-  constructor(private _http: Http) { }
+  constructor(private http: Http) { }
 
   getCharacters(storyId: number) {
-    return this._http.get('api/characters.json')
+    return this.http
+      .get('api/characters.json')
       .map((response: Response) => response.json().data);
   }
 }

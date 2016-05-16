@@ -9,12 +9,26 @@ var mkdirp = require('mkdirp');
 
 var indexHtmlTranslator = require('./indexHtmlTranslator');
 var regionExtractor = require('../doc-shredder/regionExtractor');
+var COPYRIGHT, COPYRIGHT_JS, COPYRIGHT_HTML;
+var SYSTEMJS_CONFIG; // content of systemjs.config.js for plunkers that use systemjs
+var TSCONFIG;  // content of tsconfig.json for plunkers that use systemjs
 
 module.exports = {
   buildPlunkers: buildPlunkers
 };
 
+buildCopyrightStrings();
+
+function buildCopyrightStrings() {
+  var COPYRIGHT = 'Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.\n'
+    + 'Use of this source code is governed by an MIT-style license';
+  var pad = '\n\n';
+  COPYRIGHT_JS_CSS = pad + '/*\n' + COPYRIGHT + '\n*/';
+  COPYRIGHT_HTML = pad + '<!-- \n' + COPYRIGHT + '\n-->'
+}
+
 function buildPlunkers(basePath, destPath, options) {
+  getSystemJsConfigPlunker(basePath);
   var errFn = options.errFn || function(e) { console.log(e); };
   var configExtns = ['plnkr.json', '*plnkr.json'];
   var gpaths = configExtns.map(function(extn) {
@@ -36,8 +50,8 @@ function buildPlunkers(basePath, destPath, options) {
 //   tags: [] - optional array of strings
 //   main: string - filename of what will become index.html in the plunker - defaults to index.html
 function buildPlunkerFrom(configFileName, basePath, destPath ) {
-  // replace ending 'plnkr.json' with 'plnkr.demo.html' to create output file name;
-  var outputFileName = configFileName.substr(0, configFileName.length - 'plnkr.json'.length) + 'plnkr.demo.html';
+  // replace ending 'plnkr.json' with 'plnkr.no-link.html' to create output file name;
+  var outputFileName = configFileName.substr(0, configFileName.length - 'plnkr.json'.length) + 'plnkr.no-link.html';
   var altFileName;
   if (destPath && destPath.length > 0) {
     var partPath = path.dirname(path.relative(basePath, outputFileName));
@@ -46,6 +60,7 @@ function buildPlunkerFrom(configFileName, basePath, destPath ) {
   try {
     var config = initConfigAndCollectFileNames(configFileName);
     var postData = createPostData(config);
+    addSystemJsConfig(config, postData);
     var html = createPlunkerHtml(postData);
     fs.writeFileSync(outputFileName, html, 'utf-8');
     if (altFileName) {
@@ -65,6 +80,26 @@ function buildPlunkerFrom(configFileName, basePath, destPath ) {
     }
     throw e;
   }
+}
+
+/**
+ * Add plunker versions of systemjs.config and tsconfig.json
+ */
+function addSystemJsConfig(config, postData){
+  //PAPA - i dont have a /ts folder to worry about
+  // if (config.basePath.indexOf('/ts') > -1) {
+     // uses systemjs.config.js so add plunker version
+     var relativeFileName = 'systemjs.config.js';
+     postData['files[' + relativeFileName + ']'] = SYSTEMJS_CONFIG;
+     postData['files[tsconfig.json]'] = TSCONFIG;
+  // }
+}
+
+function getSystemJsConfigPlunker(basePath) {
+  // Assume plunker version is sibling of node_modules version
+  SYSTEMJS_CONFIG = fs.readFileSync(basePath + '/systemjs.config.plunker.js', 'utf-8');
+  SYSTEMJS_CONFIG +=  COPYRIGHT_JS_CSS;
+  TSCONFIG = fs.readFileSync(basePath + '/tsconfig.json', 'utf-8');
 }
 
 function initConfigAndCollectFileNames(configFileName) {
@@ -94,19 +129,25 @@ function initConfigAndCollectFileNames(configFileName) {
       return path.join(basePath, fileName);
     }
   });
-  // var defaultExcludes = [ '!**/node_modules/**','!**/typings/**','!**/tsconfig.json', '!**/*plnkr.json', '!**/*plnkr.html', '!**/*plnkr.demo.html' ];
+
+  // var defaultExcludes = [ '!**/node_modules/**','!**/typings/**','!**/tsconfig.json', '!**/*plnkr.json', '!**/*plnkr.html', '!**/*plnkr.no-link.html' ];
   var defaultExcludes = [
     '!**/typings/**',
+    '!**/typings.json',
     '!**/tsconfig.json',
     '!**/*plnkr.*',
     '!**/package.json',
     '!**/example-config.json',
-    '!**/*.spec.*'
+    '!**/*.spec.*',
+    '!**/tslint.json',
+    '!**/.editorconfig',
+    '!**/systemjs.config.js',
    ];
   Array.prototype.push.apply(gpaths, defaultExcludes);
 
   config.fileNames = globby.sync(gpaths, { ignore: ["**/node_modules/**"] });
   config.basePath = basePath;
+
   return config;
 }
 
@@ -120,6 +161,12 @@ function createPostData(config) {
       fileName = fileName.substr(0, fileName.length - 4) + '.base64.png'
     } else {
       content = fs.readFileSync(fileName, 'utf-8');
+    }
+
+    if (extn == '.js' || extn == '.ts' || extn == '.css') {
+      content = content + COPYRIGHT_JS_CSS;
+    } else if (extn == '.html') {
+      content = content + COPYRIGHT_HTML;
     }
     // var escapedValue = escapeHtml(content);
 
@@ -143,7 +190,9 @@ function createPostData(config) {
 
     postData['files[' + relativeFileName + ']'] = content;
   });
-  postData['files[license.md]'] = fs.readFileSync(path.join(__dirname, "license.md"));
+
+  // Leave here in case we want to add a md file later.
+  // postData['files[license.md]'] = fs.readFileSync(path.join(__dirname, "license.md"));
 
   var tags = ['angular2', 'example'].concat(config.tags || []);
   tags.forEach(function(tag,ix) {
@@ -173,7 +222,6 @@ function encodeBase64(file) {
   return new Buffer(bitmap).toString('base64');
 }
 
-
 function createPlunkerHtml(postData) {
   useNewWindow = false;
   var baseHtml = createBasePlunkerHtml(useNewWindow);
@@ -185,8 +233,10 @@ function createPlunkerHtml(postData) {
     form.appendChild(ele)
   });
   var html = doc.documentElement.outerHTML;
+
   return html;
 }
+
 
 function createBasePlunkerHtml(useNewWindow) {
   var url = 'http://plnkr.co/edit/?p=preview';
@@ -221,25 +271,3 @@ function escapeHtml(unsafe) {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
 }
-
-//// Old version - no longer used
-//function createPlunkerHtmlAsync(basePath, postData) {
-//
-//  useNewWindow = false;
-//  jsdom.env({
-//    html: createBasePlunkerHtml(useNewWindow),
-//    done: function (err, window) {
-//      var doc = window.document;
-//      var form = doc.querySelector('form');
-//
-//      _.forEach(postData, function(value, key) {
-//        var ele = htmlToElement(doc, '<input type="hidden" name="' + key + '">');
-//        ele.setAttribute('value', value);
-//        form.appendChild(ele)
-//      });
-//      var html = doc.documentElement.outerHTML;
-//      var outputFn = path.join(basePath, "plnkr.html");
-//      fs.writeFileSync(outputFn, html, 'utf-8' );
-//    }
-//  });
-//}

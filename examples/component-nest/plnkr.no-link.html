@@ -1,0 +1,211 @@
+<html lang="en"><head></head><body><form id="mainForm" method="post" action="http://plnkr.co/edit/?p=preview" target="_self"><input type="hidden" name="files[app/character-list.component.ts]" value="import { Component } from '@angular/core';
+import { Character } from './character';
+import { CharacterComponent } from './character.component';
+
+@Component({
+  moduleId: module.id,
+  selector: 'my-character-list',
+  templateUrl: 'character-list.component.html',
+  directives: [CharacterComponent]
+})
+export class CharacterListComponent {
+  characters = [
+    new Character(1, 'Han Solo'),
+    new Character(2, 'Luke Skywalker'),
+    new Character(3, 'BB-8'),
+    new Character(4, 'Rey')
+  ];
+  selectedCharacter: Character;
+
+  select(character: Character) {
+    this.selectedCharacter = character;
+  }
+}
+
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license
+*/"><input type="hidden" name="files[app/character.component.ts]" value="import { Component, Input } from '@angular/core';
+import { Character } from './character';
+
+@Component({
+  moduleId: module.id,
+  selector: 'my-character',
+  templateUrl: 'character.component.html'
+})
+export class CharacterComponent {
+  @Input() character: Character;
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license
+*/"><input type="hidden" name="files[app/character.ts]" value="export class Character {
+  constructor(public id: number, public name: string) { }
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license
+*/"><input type="hidden" name="files[main.ts]" value="import { bootstrap } from '@angular/platform-browser-dynamic';
+import { CharacterListComponent } from './app/character-list.component';
+
+bootstrap(CharacterListComponent)
+  .then(success => console.log(`Bootstrap success`))
+  .catch(error => console.log(error));
+
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license
+*/"><input type="hidden" name="files[app/character-list.component.html]" value="<ul>
+  <li *ngFor=&quot;let character of characters&quot; (click)=&quot;select(character)&quot;>
+    {{ character.name }}
+  </li>
+</ul>
+
+<my-character *ngIf=&quot;selectedCharacter&quot; [character]=&quot;selectedCharacter&quot;></my-character>
+
+
+<!-- 
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license
+-->"><input type="hidden" name="files[app/character.component.html]" value="<h3>We selected {{character.name}}</h3>
+
+
+<!-- 
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license
+-->"><input type="hidden" name="files[index.html]" value="<!DOCTYPE html>
+<html>
+
+<head>
+  <script>document.write('<base href=&quot;' + document.location + '&quot; />');</script>
+
+  <meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;>
+</head>
+
+<body>
+  <my-character-list>Loading Demo ...</my-character-list>
+
+  <script src=&quot;https://npmcdn.com/es6-shim@0.35.0/es6-shim.min.js&quot;></script>
+  <script src=&quot;https://npmcdn.com/zone.js@0.6.12?main=browser&quot;></script>
+  <script src=&quot;https://npmcdn.com/reflect-metadata@0.1.3&quot;></script>
+  <script src=&quot;https://npmcdn.com/systemjs@0.19.27/dist/system.src.js&quot;></script>
+
+  <script>
+    System.import('systemjs.config.js')
+      .then(function () { System.import('main') })
+      .catch(console.error.bind(console));
+  </script>
+</body>
+
+</html>
+
+<!-- 
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license
+-->"><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="first look"><input type="hidden" name="tags[3]" value="angular 2"><input type="hidden" name="private" value="true"><input type="hidden" name="description" value="Angular 2 Example - Nested Component"><input type="hidden" name="files[systemjs.config.js]" value="/**
+ * PLUNKER VERSION (based on systemjs.config.js in angular.io)
+ * System configuration for Angular 2 samples
+ * Adjust as necessary for your application needs.
+ */
+(function(global) {
+
+  var ngVer = '@2.0.0-rc.1'; // lock in the angular package version; do not let it float to current!
+
+  //map tells the System loader where to look for things
+  var  map = {
+    'app':                        'app',
+
+    '@angular':                   'https://npmcdn.com/@angular', // sufficient if we didn't pin the version
+    'angular2-in-memory-web-api': 'https://npmcdn.com/angular2-in-memory-web-api', // get latest
+    'rxjs':                       'https://npmcdn.com/rxjs@5.0.0-beta.6',
+    'ts':                         'https://npmcdn.com/plugin-typescript@4.0.10/lib/plugin.js',
+    'typescript':                 'https://npmcdn.com/typescript@1.8.10/lib/typescript.js',
+ };
+
+  //packages tells the System loader how to load when no filename and/or no extension
+  var packages = {
+    // PAPA -iput main.ts in the root
+    // 'app':                        { main: 'main.ts',  defaultExtension: 'ts' },
+    '':                        { main: 'main.ts',  defaultExtension: 'ts' },
+    'rxjs':                       { defaultExtension: 'js' },
+    'angular2-in-memory-web-api': { defaultExtension: 'js' },
+  };
+
+  var ngPackageNames = [
+    'common',
+    'compiler',
+    'core',
+    'http',
+    'platform-browser',
+    'platform-browser-dynamic',
+    'router',
+    'router-deprecated',
+    'upgrade',
+  ];
+
+  // Add map entries for each angular package
+  // only because we're pinning the version with `ngVer`.
+  ngPackageNames.forEach(function(pkgName) {
+    map['@angular/'+pkgName] = 'https://npmcdn.com/@angular/' + pkgName + ngVer;
+  });
+
+  // Add package entries for angular packages
+  ngPackageNames.forEach(function(pkgName) {
+
+    // Bundled (~40 requests):
+    packages['@angular/'+pkgName] = { main: pkgName + '.umd.js', defaultExtension: 'js' };
+
+    // Individual files (~300 requests):
+    //packages['@angular/'+pkgName] = { main: 'index.js', defaultExtension: 'js' };
+  });
+
+  var config = {
+    // DEMO ONLY! REAL CODE SHOULD NOT TRANSPILE IN THE BROWSER
+    transpiler: 'ts',
+    typescriptOptions: {
+      tsconfig: true
+    },
+    meta: {
+      'typescript': {
+        &quot;exports&quot;: &quot;ts&quot;
+      }
+    },
+    map: map,
+    packages: packages
+  }
+
+  System.config(config);
+
+})(this);
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license
+*/"><input type="hidden" name="files[tsconfig.json]" value="{
+  &quot;compilerOptions&quot;: {
+    &quot;target&quot;: &quot;es5&quot;,
+    &quot;module&quot;: &quot;commonjs&quot;,
+    &quot;moduleResolution&quot;: &quot;node&quot;,
+    &quot;sourceMap&quot;: true,
+    &quot;emitDecoratorMetadata&quot;: true,
+    &quot;experimentalDecorators&quot;: true,
+    &quot;removeComments&quot;: false,
+    &quot;noImplicitAny&quot;: true,
+    &quot;suppressImplicitAnyIndexErrors&quot;: true
+  },
+  &quot;exclude&quot;: [
+    &quot;node_modules&quot;,
+    &quot;typings/main&quot;,
+    &quot;typings/main.d.ts&quot;
+  ]
+}
+"></form><script>document.getElementById("mainForm").submit();</script></body></html>

@@ -5,6 +5,9 @@
   <base href="/">
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script src="assets/material.min.js"></script>
+  <link rel="stylesheet" href="assets/material.deep_orange-pink.min.css">
 </head>
 
 <body>
@@ -16,7 +19,7 @@
   <script src="node_modules/systemjs/dist/system.src.js"></script>
 
   <script>
-    System.import('system-config.js')
+    System.import('systemjs.config.js')
       .then(function () { System.import('main') })
       .catch(console.error.bind(console));
   </script>

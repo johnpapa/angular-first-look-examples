@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router } from '@angular/router-deprecated';
 import { Observable, Subscription } from 'rxjs/Rx';
 
 import { Character, CharacterService, ToastService } from '../../app/shared';
