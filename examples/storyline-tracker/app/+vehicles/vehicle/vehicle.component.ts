@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { CanDeactivate, ComponentInstruction, RouteParams, Router } from '@angular/router-deprecated';
-import { Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs/Subscription';
 
 import { EntityService, ModalService, ToastService } from '../../../app/shared';
 import { Vehicle, VehicleService } from '../shared';

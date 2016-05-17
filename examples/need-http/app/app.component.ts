@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
-import 'rxjs/Rx'; // load the full rxjs
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/finally';
+import 'rxjs/add/operator/map';
 
 import { VehicleService } from './vehicle.service';
 import { VehicleListComponent } from './vehicle-list.component';

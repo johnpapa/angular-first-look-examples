@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import 'rxjs/Observable';
+import { Observable } from 'rxjs/Observable';
 
 import { Vehicle, VehicleService } from './vehicle.service';
 import { VehicleComponent } from './vehicle.component';

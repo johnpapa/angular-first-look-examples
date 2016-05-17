@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
 import { HTTP_PROVIDERS } from '@angular/http';
 import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/router-deprecated';
-import 'rxjs/Rx'; // load the full rxjs
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/finally';
+import 'rxjs/add/operator/map';
 
 import { CharacterListComponent } from './characters/character-list.component';
 import { CharacterComponent } from './characters/character.component';
