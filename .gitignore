@@ -1,4 +1,5 @@
 **/*.map
+examples/storyline-tracker/app/**/*.js
 examples/**/app/**/*.js
 examples/**/api/**/*.js
 examples/**/in-memory-backend/**/*.js
