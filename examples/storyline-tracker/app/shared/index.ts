@@ -4,6 +4,7 @@ export * from './message.service';
 export * from './entity.service';
 export * from './exception.service';
 export * from './filter-text';
+export * from './guard.service';
 export * from './init-caps.pipe';
 export * from './modal';
 export * from './spinner';

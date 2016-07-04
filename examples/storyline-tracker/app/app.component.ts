@@ -1,6 +1,6 @@
 import { Component, provide } from '@angular/core';
 import { HTTP_PROVIDERS, XHRBackend } from '@angular/http';
-import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/router-deprecated';
+import { ROUTER_DIRECTIVES } from '@angular/router';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/finally';
@@ -10,11 +10,11 @@ import {
   InMemoryBackendConfig,
   InMemoryBackendService,
   SEED_DATA
-} from 'angular2-in-memory-web-api/core';
+} from 'angular2-in-memory-web-api';
 import { InMemoryStoryService } from '../api/in-memory-story.service';
-import { CharactersComponent } from './+characters';
-import { DashboardComponent } from './+dashboard';
-import { VehiclesComponent } from './+vehicles';
+import { CharactersComponent } from './characters';
+import { DashboardComponent } from './dashboard';
+import { VehiclesComponent } from './vehicles';
 import {
   CharacterService,
   EntityService,
@@ -39,7 +39,6 @@ import {
     provide(XHRBackend, { useClass: InMemoryBackendService }),
     provide(SEED_DATA, { useClass: InMemoryStoryService }),
     provide(InMemoryBackendConfig, { useValue: { delay: 600 } }),
-    ROUTER_PROVIDERS,
     CharacterService,
     EntityService,
     ExceptionService,
@@ -49,16 +48,11 @@ import {
     ToastService
   ]
 })
-@RouteConfig([
-  { path: '/dashboard', name: 'Dashboard', component: DashboardComponent, useAsDefault: true },
-  { path: '/vehicles/...', name: 'Vehicles', component: VehiclesComponent },
-  { path: '/characters/...', name: 'Characters', component: CharactersComponent },
-])
 export class AppComponent {
   public menuItems = [
-    { caption: 'Dashboard', link: ['Dashboard'] },
-    { caption: 'Characters', link: ['Characters'] },
-    { caption: 'Vehicles', link: ['Vehicles'] }
+    { caption: 'Dashboard', link: ['/dashboard'] },
+    { caption: 'Characters', link: ['/characters'] },
+    { caption: 'Vehicles', link: ['/vehicles'] }
   ];
 
   constructor(

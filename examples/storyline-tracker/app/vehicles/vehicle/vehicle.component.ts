@@ -1,8 +1,8 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { CanDeactivate, ComponentInstruction, RouteParams, Router } from '@angular/router-deprecated';
-import { Subscription } from 'rxjs/Subscription';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs/subscription';
 
-import { EntityService, ModalService, ToastService } from '../../../app/shared';
+import { EntityService, GuardService, ModalService, ToastService } from '../../../app/shared';
 import { Vehicle, VehicleService } from '../shared';
 
 @Component({
@@ -11,18 +11,20 @@ import { Vehicle, VehicleService } from '../shared';
   templateUrl: 'vehicle.component.html',
   styles: ['.mdl-textfield__label {top: 0;}']
 })
-export class VehicleComponent implements CanDeactivate, OnDestroy, OnInit {
+export class VehicleComponent implements OnDestroy, OnInit {
   @Input() vehicle: Vehicle;
 
   editVehicle: Vehicle = <Vehicle>{};
 
   private dbResetSubscription: Subscription;
   private id: any;
+  private routerSub: any;
 
   constructor(
     private entityService: EntityService,
     private modalService: ModalService,
-    private routeParams: RouteParams,
+    private guardService: GuardService,
+    private route: ActivatedRoute,
     private router: Router,
     private toastService: ToastService,
     private vehicleService: VehicleService) { }
@@ -32,6 +34,13 @@ export class VehicleComponent implements CanDeactivate, OnDestroy, OnInit {
     if (showToast) {
       this.toastService.activate(`Cancelled changes to ${this.vehicle.name}`);
     }
+  }
+
+  canDeactivate() {
+    let deactivate = !this.vehicle ||
+      !this.isDirty() ||
+      this.modalService.activate();
+    return this.guardService.canDeactivate(deactivate);
   }
 
   delete() {
@@ -57,22 +66,22 @@ export class VehicleComponent implements CanDeactivate, OnDestroy, OnInit {
 
   ngOnDestroy() {
     this.dbResetSubscription.unsubscribe();
+    if (this.routerSub) {
+      this.routerSub.unsubscribe();
+    }
   }
 
   ngOnInit() {
     componentHandler.upgradeDom();
-    this.id = +this.routeParams.get('id');
-    this.getVehicle();
     this.dbResetSubscription = this.vehicleService.onDbReset
       .subscribe(() => {
         this.getVehicle();
       });
-  }
 
-  routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
-    return !this.vehicle ||
-      !this.isDirty() ||
-      this.modalService.activate();
+    this.routerSub = this.route.params.subscribe(params => {
+      this.id = +params['id'];
+      this.getVehicle();
+    });
   }
 
   save() {
@@ -104,7 +113,7 @@ export class VehicleComponent implements CanDeactivate, OnDestroy, OnInit {
   }
 
   private gotoVehicles() {
-    this.router.navigate(['Vehicles']);
+    this.router.navigate(['/vehicles']);
   }
 
   private handleServiceError(op: string, err: any) {

@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router-deprecated';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs/observable';
+import 'rxjs/add/observable/of';
+import { Subscription } from 'rxjs/subscription';
 
 import { Character, CharacterService, ToastService } from '../../app/shared';
 
@@ -32,7 +33,7 @@ export class DashboardComponent implements OnDestroy, OnInit {
   }
 
   gotoDetail(character: Character) {
-    let link = ['Characters', 'Character', { id: character.id }];
+    let link = ['/characters', character.id ];
     this.router.navigate(link);
   }
 

@@ -1,8 +1,8 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { CanDeactivate, ComponentInstruction, RouteParams, Router } from '@angular/router-deprecated';
-import { Subscription } from 'rxjs/Subscription';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs/subscription';
 
-import { Character, CharacterService, EntityService, ModalService, ToastService } from '../../../app/shared';
+import { Character, CharacterService, EntityService, GuardService, ModalService, ToastService } from '../../../app/shared';
 
 @Component({
   moduleId: module.id,
@@ -10,19 +10,21 @@ import { Character, CharacterService, EntityService, ModalService, ToastService 
   templateUrl: 'character.component.html',
   styles: ['.mdl-textfield__label {top: 0;}']
 })
-export class CharacterComponent implements CanDeactivate, OnDestroy, OnInit {
+export class CharacterComponent implements OnDestroy, OnInit {
   @Input() character: Character;
 
   editCharacter: Character = <Character>{};
 
   private dbResetSubscription: Subscription;
   private id: any;
+  private routerSub: any;
 
   constructor(
     private characterService: CharacterService,
     private entityService: EntityService,
+    private guardService: GuardService,
     private modalService: ModalService,
-    private routeParams: RouteParams,
+    private route: ActivatedRoute,
     private router: Router,
     private toastService: ToastService) { }
 
@@ -31,6 +33,13 @@ export class CharacterComponent implements CanDeactivate, OnDestroy, OnInit {
     if (showToast) {
       this.toastService.activate(`Cancelled changes to ${this.character.name}`);
     }
+  }
+
+  canDeactivate() {
+    let deactivate = !this.character ||
+      !this.isDirty() ||
+      this.modalService.activate();
+    return this.guardService.canDeactivate(deactivate);
   }
 
   delete() {
@@ -56,20 +65,20 @@ export class CharacterComponent implements CanDeactivate, OnDestroy, OnInit {
 
   ngOnDestroy() {
     this.dbResetSubscription.unsubscribe();
+    if (this.routerSub) {
+      this.routerSub.unsubscribe();
+    }
   }
 
   ngOnInit() {
     componentHandler.upgradeDom();
-    this.id = +this.routeParams.get('id');
-    this.getCharacter();
-    this.dbResetSubscription = this.characterService.onDbReset
-      .subscribe(() => this.getCharacter());
-  }
+    this.dbResetSubscription =
+      this.characterService.onDbReset.subscribe(() => this.getCharacter());
 
-  routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
-    return !this.character ||
-      !this.isDirty() ||
-      this.modalService.activate();
+    this.routerSub = this.route.params.subscribe(params => {
+      this.id = +params['id'];
+      this.getCharacter();
+    });
   }
 
   save() {
@@ -101,7 +110,7 @@ export class CharacterComponent implements CanDeactivate, OnDestroy, OnInit {
   }
 
   private gotoCharacters() {
-    this.router.navigate(['Characters']);
+    this.router.navigate(['/characters']);
   }
 
   private handleServiceError(op: string, err: any) {

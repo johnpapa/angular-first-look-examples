@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouteConfig, ROUTER_DIRECTIVES } from '@angular/router-deprecated';
+import { ROUTER_DIRECTIVES } from '@angular/router';
 
 import { VehicleListComponent } from './vehicle-list';
 import { VehicleComponent } from './vehicle';
@@ -13,8 +13,4 @@ import { VehicleService } from './shared';
   directives: [ROUTER_DIRECTIVES],
   providers: [VehicleService]
 })
-@RouteConfig([
-  { path: '/', name: 'Vehicles', component: VehicleListComponent, useAsDefault: true },
-  { path: '/:id', name: 'Vehicle', component: VehicleComponent }
-])
 export class VehiclesComponent { }

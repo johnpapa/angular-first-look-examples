@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouteConfig, ROUTER_DIRECTIVES } from '@angular/router-deprecated';
+import { ROUTER_DIRECTIVES } from '@angular/router';
 
 import { CharacterComponent } from './character';
 import { CharacterListComponent } from './character-list';
@@ -12,8 +12,4 @@ import { CharacterListComponent } from './character-list';
   `,
   directives: [ROUTER_DIRECTIVES]
 })
-@RouteConfig([
-  { path: '/', name: 'Characters', component: CharacterListComponent, useAsDefault: true },
-  { path: '/:id', name: 'Character', component: CharacterComponent }
-])
 export class CharactersComponent { }
