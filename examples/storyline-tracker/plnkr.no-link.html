@@ -152,9 +152,126 @@
 /*
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license
-*/"><input type="hidden" name="files[app/+characters/character-list/character-list.component.ts]" value="import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ROUTER_DIRECTIVES } from '@angular/router-deprecated';
-import { Subscription } from 'rxjs/Rx';
+*/"><input type="hidden" name="files[app/app.component.ts]" value="import { Component, provide } from '@angular/core';
+import { HTTP_PROVIDERS, XHRBackend } from '@angular/http';
+import { ROUTER_DIRECTIVES } from '@angular/router';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/finally';
+import 'rxjs/add/operator/map';
+
+import {
+  InMemoryBackendConfig,
+  InMemoryBackendService,
+  SEED_DATA
+} from 'angular2-in-memory-web-api';
+import { InMemoryStoryService } from '../api/in-memory-story.service';
+import { CharactersComponent } from './characters';
+import { DashboardComponent } from './dashboard';
+import { VehiclesComponent } from './vehicles';
+import {
+  CharacterService,
+  EntityService,
+  ExceptionService,
+  GuardService,
+  MessageService,
+  ModalComponent,
+  ModalService,
+  SpinnerComponent,
+  SpinnerService,
+  ToastComponent,
+  ToastService
+} from './shared';
+
+@Component({
+  moduleId: module.id,
+  selector: 'story-app',
+  templateUrl: 'app.component.html',
+  styleUrls: ['app.component.css'],
+  directives: [ROUTER_DIRECTIVES, ModalComponent, SpinnerComponent, ToastComponent],
+  providers: [
+    HTTP_PROVIDERS,
+    provide(XHRBackend, { useClass: InMemoryBackendService }),
+    provide(SEED_DATA, { useClass: InMemoryStoryService }),
+    provide(InMemoryBackendConfig, { useValue: { delay: 600 } }),
+    CharacterService,
+    EntityService,
+    ExceptionService,
+    GuardService,
+    MessageService,
+    ModalService,
+    SpinnerService,
+    ToastService
+  ]
+})
+export class AppComponent {
+  public menuItems = [
+    { caption: 'Dashboard', link: ['/dashboard'] },
+    { caption: 'Characters', link: ['/characters'] },
+    { caption: 'Vehicles', link: ['/vehicles'] }
+  ];
+
+  constructor(
+    private messageService: MessageService,
+    private modalService: ModalService) {
+  }
+
+  resetDb() {
+    let msg = 'Are you sure you want to reset the database?';
+    this.modalService.activate(msg).then(responseOK => {
+      if (responseOK) {
+        this.messageService.resetDb();
+      }
+    });
+  }
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license
+*/"><input type="hidden" name="files[app/app.interfaces.ts]" value="import { CanDeactivate } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+
+export interface CanComponentDeactivate {
+ canDeactivate: () => boolean | Observable<boolean>;
+}
+
+export class CanDeactivateGuard implements CanDeactivate<CanComponentDeactivate> {
+  canDeactivate(component: CanComponentDeactivate): Observable<boolean> | boolean {
+    return component.canDeactivate ? component.canDeactivate() : true;
+  }
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license
+*/"><input type="hidden" name="files[app/app.routes.ts]" value="import { provideRouter, RouterConfig } from '@angular/router';
+
+import { DashboardRoutes } from './dashboard';
+import { CharactersRoutes } from './characters';
+import { VehiclesRoutes } from './vehicles';
+import { CanDeactivateGuard } from './app.interfaces';
+
+export const routes: RouterConfig = [
+  ...DashboardRoutes,
+  ...CharactersRoutes,
+  ...VehiclesRoutes,
+];
+
+export const APP_ROUTER_PROVIDERS = [
+  provideRouter(routes),
+  CanDeactivateGuard
+];
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license
+*/"><input type="hidden" name="files[app/characters/character-list/character-list.component.ts]" value="import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ROUTER_DIRECTIVES } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 
 import { SortCharactersPipe } from '../shared';
 import { Character, CharacterService, FilterService, FilterTextComponent } from '../../../app/shared';
@@ -208,17 +325,17 @@ export class CharacterListComponent implements OnDestroy, OnInit {
 /*
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license
-*/"><input type="hidden" name="files[app/+characters/character-list/index.ts]" value="export * from './character-list.component';
+*/"><input type="hidden" name="files[app/characters/character-list/index.ts]" value="export * from './character-list.component';
 
 
 /*
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license
-*/"><input type="hidden" name="files[app/+characters/character/character.component.ts]" value="import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { CanDeactivate, ComponentInstruction, RouteParams, Router } from '@angular/router-deprecated';
-import { Subscription } from 'rxjs/Rx';
+*/"><input type="hidden" name="files[app/characters/character/character.component.ts]" value="import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs/subscription';
 
-import { Character, CharacterService, EntityService, ModalService, ToastService } from '../../../app/shared';
+import { Character, CharacterService, EntityService, GuardService, ModalService, ToastService } from '../../../app/shared';
 
 @Component({
   moduleId: module.id,
@@ -226,19 +343,21 @@ import { Character, CharacterService, EntityService, ModalService, ToastService 
   templateUrl: 'character.component.html',
   styles: ['.mdl-textfield__label {top: 0;}']
 })
-export class CharacterComponent implements CanDeactivate, OnDestroy, OnInit {
+export class CharacterComponent implements OnDestroy, OnInit {
   @Input() character: Character;
 
   editCharacter: Character = <Character>{};
 
   private dbResetSubscription: Subscription;
   private id: any;
+  private routerSub: any;
 
   constructor(
     private characterService: CharacterService,
     private entityService: EntityService,
+    private guardService: GuardService,
     private modalService: ModalService,
-    private routeParams: RouteParams,
+    private route: ActivatedRoute,
     private router: Router,
     private toastService: ToastService) { }
 
@@ -247,6 +366,13 @@ export class CharacterComponent implements CanDeactivate, OnDestroy, OnInit {
     if (showToast) {
       this.toastService.activate(`Cancelled changes to ${this.character.name}`);
     }
+  }
+
+  canDeactivate() {
+    let deactivate = !this.character ||
+      !this.isDirty() ||
+      this.modalService.activate();
+    return this.guardService.canDeactivate(deactivate);
   }
 
   delete() {
@@ -272,20 +398,20 @@ export class CharacterComponent implements CanDeactivate, OnDestroy, OnInit {
 
   ngOnDestroy() {
     this.dbResetSubscription.unsubscribe();
+    if (this.routerSub) {
+      this.routerSub.unsubscribe();
+    }
   }
 
   ngOnInit() {
     componentHandler.upgradeDom();
-    this.id = +this.routeParams.get('id');
-    this.getCharacter();
-    this.dbResetSubscription = this.characterService.onDbReset
-      .subscribe(() => this.getCharacter());
-  }
+    this.dbResetSubscription =
+      this.characterService.onDbReset.subscribe(() => this.getCharacter());
 
-  routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
-    return !this.character ||
-      !this.isDirty() ||
-      this.modalService.activate();
+    this.routerSub = this.route.params.subscribe(params => {
+      this.id = +params['id'];
+      this.getCharacter();
+    });
   }
 
   save() {
@@ -317,7 +443,7 @@ export class CharacterComponent implements CanDeactivate, OnDestroy, OnInit {
   }
 
   private gotoCharacters() {
-    this.router.navigate(['Characters']);
+    this.router.navigate(['/characters']);
   }
 
   private handleServiceError(op: string, err: any) {
@@ -342,14 +468,14 @@ export class CharacterComponent implements CanDeactivate, OnDestroy, OnInit {
 /*
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license
-*/"><input type="hidden" name="files[app/+characters/character/index.ts]" value="export * from './character.component';
+*/"><input type="hidden" name="files[app/characters/character/index.ts]" value="export * from './character.component';
 
 
 /*
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license
-*/"><input type="hidden" name="files[app/+characters/characters.component.ts]" value="import { Component } from '@angular/core';
-import { RouteConfig, ROUTER_DIRECTIVES } from '@angular/router-deprecated';
+*/"><input type="hidden" name="files[app/characters/characters.component.ts]" value="import { Component } from '@angular/core';
+import { ROUTER_DIRECTIVES } from '@angular/router';
 
 import { CharacterComponent } from './character';
 import { CharacterListComponent } from './character-list';
@@ -362,33 +488,60 @@ import { CharacterListComponent } from './character-list';
   `,
   directives: [ROUTER_DIRECTIVES]
 })
-@RouteConfig([
-  { path: '/', name: 'Characters', component: CharacterListComponent, useAsDefault: true },
-  { path: '/list/:id', name: 'Characters', component: CharacterListComponent	},
-  { path: '/:id', name: 'Character', component: CharacterComponent }
-])
 export class CharactersComponent { }
 
 
 /*
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license
-*/"><input type="hidden" name="files[app/+characters/index.ts]" value="export * from './character';
+*/"><input type="hidden" name="files[app/characters/characters.routes.ts]" value="import { RouterConfig }          from '@angular/router';
+
+import { CharacterListComponent } from './character-list';
+import { CharacterComponent } from './character';
+import { CharactersComponent } from './characters.component';
+
+import { CanDeactivateGuard } from '../app.interfaces';
+
+export const CharactersRoutes: RouterConfig = [
+  {
+    path: 'characters',
+    component: CharactersComponent,
+    children: [
+      {
+        path: '',
+        component: CharacterListComponent
+      },
+      {
+        path: ':id',
+        component: CharacterComponent,
+        canDeactivate: [CanDeactivateGuard]
+      },
+    ]
+  },
+];
+
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license
+*/"><input type="hidden" name="files[app/characters/index.ts]" value="export * from './character';
 export * from './character-list';
 export * from './characters.component';
+export * from './characters.routes';
 export * from './shared';
 
 
 /*
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license
-*/"><input type="hidden" name="files[app/+characters/shared/index.ts]" value="export * from './sort-characters.pipe';
+*/"><input type="hidden" name="files[app/characters/shared/index.ts]" value="export * from './sort-characters.pipe';
 
 
 /*
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license
-*/"><input type="hidden" name="files[app/+characters/shared/sort-characters.pipe.ts]" value="import { Pipe, PipeTransform } from '@angular/core';
+*/"><input type="hidden" name="files[app/characters/shared/sort-characters.pipe.ts]" value="import { Pipe, PipeTransform } from '@angular/core';
 
 import { Character } from '../../../app/shared';
 
@@ -409,9 +562,11 @@ export class SortCharactersPipe implements PipeTransform {
 /*
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license
-*/"><input type="hidden" name="files[app/+dashboard/dashboard.component.ts]" value="import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router-deprecated';
-import { Observable, Subscription } from 'rxjs/Rx';
+*/"><input type="hidden" name="files[app/dashboard/dashboard.component.ts]" value="import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs/observable';
+import 'rxjs/add/observable/of';
+import { Subscription } from 'rxjs/subscription';
 
 import { Character, CharacterService, ToastService } from '../../app/shared';
 
@@ -442,7 +597,7 @@ export class DashboardComponent implements OnDestroy, OnInit {
   }
 
   gotoDetail(character: Character) {
-    let link = ['Characters', 'Character', { id: character.id }];
+    let link = ['/characters', character.id ];
     this.router.navigate(link);
   }
 
@@ -461,406 +616,20 @@ export class DashboardComponent implements OnDestroy, OnInit {
 /*
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license
-*/"><input type="hidden" name="files[app/+dashboard/index.ts]" value="export * from './dashboard.component';
+*/"><input type="hidden" name="files[app/dashboard/dashboard.routes.ts]" value="import { RouterConfig }          from '@angular/router';
+import { DashboardComponent }     from './dashboard.component';
 
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license
-*/"><input type="hidden" name="files[app/+vehicles/index.ts]" value="export * from './vehicles.component';
-export * from './vehicle';
-export * from './vehicle-list';
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license
-*/"><input type="hidden" name="files[app/+vehicles/shared/index.ts]" value="export * from './vehicle.model';
-export * from './vehicle.service';
+export const DashboardRoutes: RouterConfig = [
+  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+  { path: 'dashboard',  component: DashboardComponent },
+];
 
 
 /*
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license
-*/"><input type="hidden" name="files[app/+vehicles/shared/vehicle.model.ts]" value="export class Vehicle {
-  id: number;
-  name: string;
-  type: string;
-}
-
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license
-*/"><input type="hidden" name="files[app/+vehicles/shared/vehicle.service.ts]" value="import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
-import { Observable } from 'rxjs/Rx';
-
-import { Vehicle } from './vehicle.model';
-import { CONFIG, ExceptionService, MessageService, SpinnerService } from '../../../app/shared';
-
-let vehiclesUrl = CONFIG.baseUrls.vehicles;
-
-@Injectable()
-export class VehicleService {
-  onDbReset = this.messageService.state;
-
-  constructor(private http: Http,
-    private exceptionService: ExceptionService,
-    private messageService: MessageService,
-    private spinnerService: SpinnerService) {
-    this.messageService.state.subscribe(state => this.getVehicles());
-  }
-
-  addVehicle(vehicle: Vehicle) {
-    let body = JSON.stringify(vehicle);
-    this.spinnerService.show();
-    return <Observable<Vehicle>>this.http
-      .post(`${vehiclesUrl}`, body)
-      .map((res: Response) => res.json().data)
-      .catch(this.exceptionService.catchBadResponse)
-      .finally(() => this.spinnerService.hide());
-  }
-
-  deleteVehicle(vehicle: Vehicle) {
-    this.spinnerService.show();
-    return <Observable<Vehicle>>this.http
-      .delete(`${vehiclesUrl}/${vehicle.id}`)
-      .catch(this.exceptionService.catchBadResponse)
-      .finally(() => this.spinnerService.hide());
-  }
-
-  getVehicles() {
-    this.spinnerService.show();
-    return <Observable<Vehicle[]>>this.http
-      .get(vehiclesUrl)
-      .map((response: Response) => <Vehicle[]>response.json().data)
-      .catch(this.exceptionService.catchBadResponse)
-      .finally(() => this.spinnerService.hide());
-  }
-
-  getVehicle(id: number) {
-    this.spinnerService.show();
-    return <Observable<Vehicle>>this.http
-      .get(`${vehiclesUrl}/${id}`)
-      .map((response: Response) => response.json().data)
-      .catch(this.exceptionService.catchBadResponse)
-      .finally(() => this.spinnerService.hide());
-  }
-
-  updateVehicle(vehicle: Vehicle) {
-    let body = JSON.stringify(vehicle);
-    this.spinnerService.show();
-
-    return <Observable<Vehicle>>this.http
-      .put(`${vehiclesUrl}/${vehicle.id}`, body)
-      .catch(this.exceptionService.catchBadResponse)
-      .finally(() => this.spinnerService.hide());
-  }
-}
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license
-*/"><input type="hidden" name="files[app/+vehicles/vehicle-list/index.ts]" value="export * from './vehicle-list.component';
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license
-*/"><input type="hidden" name="files[app/+vehicles/vehicle-list/vehicle-list.component.ts]" value="import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ROUTER_DIRECTIVES } from '@angular/router-deprecated';
-import { Subscription } from 'rxjs/Rx';
-
-import { FilterTextComponent, FilterService, InitCapsPipe } from '../../../app/shared';
-import { Vehicle, VehicleService } from '../shared';
-
-@Component({
-  moduleId: module.id,
-  selector: 'story-vehicles',
-  templateUrl: 'vehicle-list.component.html',
-  directives: [FilterTextComponent, ROUTER_DIRECTIVES],
-  styleUrls: ['vehicle-list.component.css'],
-  pipes: [InitCapsPipe],
-  providers: [FilterService]
-})
-export class VehicleListComponent implements OnDestroy, OnInit {
-  private dbResetSubscription: Subscription;
-
-  vehicles: Vehicle[];
-  filteredVehicles = this.vehicles;
-  @ViewChild(FilterTextComponent) filterComponent: FilterTextComponent;
-
-  constructor(
-    private filterService: FilterService,
-    private vehicleService: VehicleService) { }
-
-  filterChanged(searchText: string) {
-    this.filteredVehicles = this.filterService.filter(searchText, ['id', 'name', 'type'], this.vehicles);
-  }
-
-  getVehicles() {
-    this.vehicles = [];
-    this.vehicleService.getVehicles()
-      .subscribe(vehicles => {
-        this.vehicles = this.filteredVehicles = vehicles;
-        this.filterComponent.clear();
-      });
-  }
-
-  ngOnDestroy() {
-    this.dbResetSubscription.unsubscribe();
-  }
-
-  ngOnInit() {
-    componentHandler.upgradeDom();
-    this.getVehicles();
-    this.dbResetSubscription = this.vehicleService.onDbReset
-      .subscribe(() => this.getVehicles());
-  }
-}
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license
-*/"><input type="hidden" name="files[app/+vehicles/vehicle/index.ts]" value="export * from './vehicle.component';
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license
-*/"><input type="hidden" name="files[app/+vehicles/vehicle/vehicle.component.ts]" value="import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { CanDeactivate, ComponentInstruction, RouteParams, Router } from '@angular/router-deprecated';
-import { Subscription } from 'rxjs/Rx';
-
-import { EntityService, ModalService, ToastService } from '../../../app/shared';
-import { Vehicle, VehicleService } from '../shared';
-
-@Component({
-  moduleId: module.id,
-  selector: 'story-vehicle',
-  templateUrl: 'vehicle.component.html',
-  styles: ['.mdl-textfield__label {top: 0;}']
-})
-export class VehicleComponent implements CanDeactivate, OnDestroy, OnInit {
-  @Input() vehicle: Vehicle;
-
-  editVehicle: Vehicle = <Vehicle>{};
-
-  private dbResetSubscription: Subscription;
-  private id: any;
-
-  constructor(
-    private entityService: EntityService,
-    private modalService: ModalService,
-    private routeParams: RouteParams,
-    private router: Router,
-    private toastService: ToastService,
-    private vehicleService: VehicleService) { }
-
-  cancel(showToast = true) {
-    this.editVehicle = this.entityService.clone(this.vehicle);
-    if (showToast) {
-      this.toastService.activate(`Cancelled changes to ${this.vehicle.name}`);
-    }
-  }
-
-  delete() {
-    let msg = `Do you want to delete the ${this.vehicle.name}?`;
-    this.modalService.activate(msg).then((responseOK) => {
-      if (responseOK) {
-        this.cancel(false);
-        this.vehicleService.deleteVehicle(this.vehicle)
-          .subscribe(() => { // Success path
-            this.toastService.activate(`Deleted ${this.vehicle.name}`);
-            this.gotoVehicles();
-          },
-          (err) => this.handleServiceError('Delete', err), // Failure path
-          () => console.log('Delete Completed') // Completed actions
-          );
-      }
-    });
-  }
-
-  isAddMode() {
-    return isNaN(this.id);
-  }
-
-  ngOnDestroy() {
-    this.dbResetSubscription.unsubscribe();
-  }
-
-  ngOnInit() {
-    componentHandler.upgradeDom();
-    this.id = +this.routeParams.get('id');
-    this.getVehicle();
-    this.dbResetSubscription = this.vehicleService.onDbReset
-      .subscribe(() => {
-        this.getVehicle();
-      });
-  }
-
-  routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
-    return !this.vehicle ||
-      !this.isDirty() ||
-      this.modalService.activate();
-  }
-
-  save() {
-    let vehicle = this.vehicle = this.entityService.merge(this.vehicle, this.editVehicle);
-    if (vehicle.id == null) {
-      this.vehicleService.addVehicle(vehicle)
-        .subscribe(v => {
-          this.setEditVehicle(v);
-          this.toastService.activate(`Successfully added ${v.name}`);
-          this.gotoVehicles();
-        });
-      return;
-    }
-    this.vehicleService.updateVehicle(this.vehicle)
-      .subscribe(() => this.toastService.activate(`Successfully saved ${this.vehicle.name}`));
-  }
-
-  private getVehicle() {
-    if (this.id === 0) {
-      return;
-    }
-    if (this.isAddMode()) {
-      this.vehicle = <Vehicle>{ name: '', type: '' };
-      this.editVehicle = this.entityService.clone(this.vehicle);
-      return;
-    }
-    this.vehicleService.getVehicle(this.id)
-      .subscribe((vehicle: Vehicle) => this.setEditVehicle(vehicle));
-  }
-
-  private gotoVehicles() {
-    this.router.navigate(['Vehicles']);
-  }
-
-  private handleServiceError(op: string, err: any) {
-    console.error(`${op} error: ${err.message || err}`);
-  }
-
-  private isDirty() {
-    return this.entityService.propertiesDiffer(this.vehicle, this.editVehicle);
-  }
-
-  private setEditVehicle(vehicle: Vehicle) {
-    if (vehicle) {
-      this.vehicle = vehicle;
-      this.editVehicle = this.entityService.clone(this.vehicle);
-    } else {
-      this.gotoVehicles();
-    }
-  }
-}
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license
-*/"><input type="hidden" name="files[app/+vehicles/vehicles.component.ts]" value="import { Component } from '@angular/core';
-import { RouteConfig, ROUTER_DIRECTIVES } from '@angular/router-deprecated';
-
-import { VehicleListComponent } from './vehicle-list';
-import { VehicleComponent } from './vehicle';
-import { VehicleService } from './shared';
-
-@Component({
-  selector: 'story-vehicles',
-  template: `
-    <router-outlet></router-outlet>
-  `,
-  directives: [ROUTER_DIRECTIVES],
-  providers: [VehicleService]
-})
-@RouteConfig([
-  { path: '/', name: 'Vehicles', component: VehicleListComponent, useAsDefault: true },
-  { path: '/list/:id', name: 'Vehicles', component: VehicleListComponent },
-  { path: '/:id', name: 'Vehicle', component: VehicleComponent }
-])
-export class VehiclesComponent { }
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license
-*/"><input type="hidden" name="files[app/app.component.ts]" value="import { Component, provide } from '@angular/core';
-import { HTTP_PROVIDERS, XHRBackend } from '@angular/http';
-import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/router-deprecated';
-
-import {
-  InMemoryBackendConfig,
-  InMemoryBackendService,
-  SEED_DATA
-} from 'angular2-in-memory-web-api/core';
-import { InMemoryStoryService } from '../api/in-memory-story.service';
-import { CharactersComponent } from './+characters';
-import { DashboardComponent } from './+dashboard';
-import { VehiclesComponent } from './+vehicles';
-import {
-  CharacterService,
-  EntityService,
-  ExceptionService,
-  MessageService,
-  ModalComponent,
-  ModalService,
-  SpinnerComponent,
-  SpinnerService,
-  ToastComponent,
-  ToastService
-} from './shared';
-
-@Component({
-  moduleId: module.id,
-  selector: 'story-app',
-  templateUrl: 'app.component.html',
-  styleUrls: ['app.component.css'],
-  directives: [ROUTER_DIRECTIVES, ModalComponent, SpinnerComponent, ToastComponent],
-  providers: [
-    HTTP_PROVIDERS,
-    provide(XHRBackend, { useClass: InMemoryBackendService }),
-    provide(SEED_DATA, { useClass: InMemoryStoryService }),
-    provide(InMemoryBackendConfig, { useValue: { delay: 600 } }),
-    ROUTER_PROVIDERS,
-    CharacterService,
-    EntityService,
-    ExceptionService,
-    MessageService,
-    ModalService,
-    SpinnerService,
-    ToastService
-  ]
-})
-@RouteConfig([
-  { path: '/dashboard', name: 'Dashboard', component: DashboardComponent, useAsDefault: true },
-  { path: '/vehicles/...', name: 'Vehicles', component: VehiclesComponent },
-  { path: '/characters/...', name: 'Characters', component: CharactersComponent },
-])
-export class AppComponent {
-  public menuItems = [
-    { caption: 'Dashboard', link: ['Dashboard'] },
-    { caption: 'Characters', link: ['Characters'] },
-    { caption: 'Vehicles', link: ['Vehicles'] }
-  ];
-
-  constructor(
-    private messageService: MessageService,
-    private modalService: ModalService) {
-  }
-
-  resetDb() {
-    let msg = 'Are you sure you want to reset the database?';
-    this.modalService.activate(msg).then(responseOK => {
-      if (responseOK) {
-        this.messageService.resetDb();
-      }
-    });
-  }
-}
+*/"><input type="hidden" name="files[app/dashboard/index.ts]" value="export * from './dashboard.component';
+export * from './dashboard.routes';
 
 
 /*
@@ -897,11 +666,7 @@ Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license
 */"><input type="hidden" name="files[app/shared/character-services/character.service.ts]" value="import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/finally';
-import 'rxjs/add/operator/map';
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
 
 import { Character } from './character.model';
 import { CONFIG } from '../config';
@@ -1010,7 +775,7 @@ Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license
 */"><input type="hidden" name="files[app/shared/exception.service.ts]" value="import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
 
 import { ToastService } from './toast';
 
@@ -1105,12 +870,30 @@ export * from './filter-text.service';
 /*
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license
+*/"><input type="hidden" name="files[app/shared/guard.service.ts]" value="import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/fromPromise';
+
+@Injectable()
+export class GuardService {
+  canDeactivate(deactivate: Promise<boolean> | boolean ): Observable<boolean> | boolean {
+    let p = Promise.resolve(deactivate);
+    let o = Observable.fromPromise(p);
+    return o;
+  }
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license
 */"><input type="hidden" name="files[app/shared/index.ts]" value="export * from './character-services';
 export * from './config';
 export * from './message.service';
 export * from './entity.service';
 export * from './exception.service';
 export * from './filter-text';
+export * from './guard.service';
 export * from './init-caps.pipe';
 export * from './modal';
 export * from './spinner';
@@ -1141,7 +924,7 @@ Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license
 */"><input type="hidden" name="files[app/shared/message.service.ts]" value="import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-import { Subject } from 'rxjs/Rx';
+import { Subject } from 'rxjs/Subject';
 
 import { CONFIG } from './config';
 import { ToastService } from './toast';
@@ -1303,7 +1086,7 @@ export * from './spinner.service';
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license
 */"><input type="hidden" name="files[app/shared/spinner/spinner.component.ts]" value="import {Component, OnDestroy, OnInit} from '@angular/core';
-import { Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs/Subscription';
 
 import { SpinnerState, SpinnerService } from './spinner.service';
 
@@ -1341,7 +1124,7 @@ export class SpinnerComponent implements OnDestroy, OnInit {
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license
 */"><input type="hidden" name="files[app/shared/spinner/spinner.service.ts]" value="import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs/Rx';
+import { Subject } from 'rxjs/Subject';
 
 export interface SpinnerState {
   show: boolean;
@@ -1436,94 +1219,381 @@ export class ToastService {
 /*
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license
-*/"><input type="hidden" name="files[main.ts]" value="import { enableProdMode } from '@angular/core';
-import { bootstrap } from '@angular/platform-browser-dynamic';
+*/"><input type="hidden" name="files[app/vehicles/index.ts]" value="export * from './shared';
+export * from './vehicles.component';
+export * from './vehicle';
+export * from './vehicle-list';
+export * from './vehicles.routes';
 
-import { AppComponent, environment } from './app';
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license
+*/"><input type="hidden" name="files[app/vehicles/shared/index.ts]" value="export * from './vehicle.model';
+export * from './vehicle.service';
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license
+*/"><input type="hidden" name="files[app/vehicles/shared/vehicle.model.ts]" value="export class Vehicle {
+  id: number;
+  name: string;
+  type: string;
+}
+
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license
+*/"><input type="hidden" name="files[app/vehicles/shared/vehicle.service.ts]" value="import { Injectable } from '@angular/core';
+import { Http, Response } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
+
+import { Vehicle } from './vehicle.model';
+import { CONFIG, ExceptionService, MessageService, SpinnerService } from '../../../app/shared';
+
+let vehiclesUrl = CONFIG.baseUrls.vehicles;
+
+@Injectable()
+export class VehicleService {
+  onDbReset = this.messageService.state;
+
+  constructor(private http: Http,
+    private exceptionService: ExceptionService,
+    private messageService: MessageService,
+    private spinnerService: SpinnerService) {
+    this.messageService.state.subscribe(state => this.getVehicles());
+  }
+
+  addVehicle(vehicle: Vehicle) {
+    let body = JSON.stringify(vehicle);
+    this.spinnerService.show();
+    return <Observable<Vehicle>>this.http
+      .post(`${vehiclesUrl}`, body)
+      .map((res: Response) => res.json().data)
+      .catch(this.exceptionService.catchBadResponse)
+      .finally(() => this.spinnerService.hide());
+  }
+
+  deleteVehicle(vehicle: Vehicle) {
+    this.spinnerService.show();
+    return <Observable<Vehicle>>this.http
+      .delete(`${vehiclesUrl}/${vehicle.id}`)
+      .catch(this.exceptionService.catchBadResponse)
+      .finally(() => this.spinnerService.hide());
+  }
+
+  getVehicles() {
+    this.spinnerService.show();
+    return <Observable<Vehicle[]>>this.http
+      .get(vehiclesUrl)
+      .map((response: Response) => <Vehicle[]>response.json().data)
+      .catch(this.exceptionService.catchBadResponse)
+      .finally(() => this.spinnerService.hide());
+  }
+
+  getVehicle(id: number) {
+    this.spinnerService.show();
+    return <Observable<Vehicle>>this.http
+      .get(`${vehiclesUrl}/${id}`)
+      .map((response: Response) => response.json().data)
+      .catch(this.exceptionService.catchBadResponse)
+      .finally(() => this.spinnerService.hide());
+  }
+
+  updateVehicle(vehicle: Vehicle) {
+    let body = JSON.stringify(vehicle);
+    this.spinnerService.show();
+
+    return <Observable<Vehicle>>this.http
+      .put(`${vehiclesUrl}/${vehicle.id}`, body)
+      .catch(this.exceptionService.catchBadResponse)
+      .finally(() => this.spinnerService.hide());
+  }
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license
+*/"><input type="hidden" name="files[app/vehicles/vehicle-list/index.ts]" value="export * from './vehicle-list.component';
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license
+*/"><input type="hidden" name="files[app/vehicles/vehicle-list/vehicle-list.component.ts]" value="import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ROUTER_DIRECTIVES } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
+
+import { FilterTextComponent, FilterService, InitCapsPipe } from '../../../app/shared';
+import { Vehicle, VehicleService } from '../shared';
+
+@Component({
+  moduleId: module.id,
+  selector: 'story-vehicles',
+  templateUrl: 'vehicle-list.component.html',
+  directives: [FilterTextComponent, ROUTER_DIRECTIVES],
+  styleUrls: ['vehicle-list.component.css'],
+  pipes: [InitCapsPipe],
+  providers: [FilterService]
+})
+export class VehicleListComponent implements OnDestroy, OnInit {
+  private dbResetSubscription: Subscription;
+
+  vehicles: Vehicle[];
+  filteredVehicles = this.vehicles;
+  @ViewChild(FilterTextComponent) filterComponent: FilterTextComponent;
+
+  constructor(
+    private filterService: FilterService,
+    private vehicleService: VehicleService) { }
+
+  filterChanged(searchText: string) {
+    this.filteredVehicles = this.filterService.filter(searchText, ['id', 'name', 'type'], this.vehicles);
+  }
+
+  getVehicles() {
+    this.vehicles = [];
+    this.vehicleService.getVehicles()
+      .subscribe(vehicles => {
+        this.vehicles = this.filteredVehicles = vehicles;
+        this.filterComponent.clear();
+      });
+  }
+
+  ngOnDestroy() {
+    this.dbResetSubscription.unsubscribe();
+  }
+
+  ngOnInit() {
+    componentHandler.upgradeDom();
+    this.getVehicles();
+    this.dbResetSubscription = this.vehicleService.onDbReset
+      .subscribe(() => this.getVehicles());
+  }
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license
+*/"><input type="hidden" name="files[app/vehicles/vehicle/index.ts]" value="export * from './vehicle.component';
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license
+*/"><input type="hidden" name="files[app/vehicles/vehicle/vehicle.component.ts]" value="import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs/subscription';
+
+import { EntityService, GuardService, ModalService, ToastService } from '../../../app/shared';
+import { Vehicle, VehicleService } from '../shared';
+
+@Component({
+  moduleId: module.id,
+  selector: 'story-vehicle',
+  templateUrl: 'vehicle.component.html',
+  styles: ['.mdl-textfield__label {top: 0;}']
+})
+export class VehicleComponent implements OnDestroy, OnInit {
+  @Input() vehicle: Vehicle;
+
+  editVehicle: Vehicle = <Vehicle>{};
+
+  private dbResetSubscription: Subscription;
+  private id: any;
+  private routerSub: any;
+
+  constructor(
+    private entityService: EntityService,
+    private modalService: ModalService,
+    private guardService: GuardService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private toastService: ToastService,
+    private vehicleService: VehicleService) { }
+
+  cancel(showToast = true) {
+    this.editVehicle = this.entityService.clone(this.vehicle);
+    if (showToast) {
+      this.toastService.activate(`Cancelled changes to ${this.vehicle.name}`);
+    }
+  }
+
+  canDeactivate() {
+    let deactivate = !this.vehicle ||
+      !this.isDirty() ||
+      this.modalService.activate();
+    return this.guardService.canDeactivate(deactivate);
+  }
+
+  delete() {
+    let msg = `Do you want to delete the ${this.vehicle.name}?`;
+    this.modalService.activate(msg).then((responseOK) => {
+      if (responseOK) {
+        this.cancel(false);
+        this.vehicleService.deleteVehicle(this.vehicle)
+          .subscribe(() => { // Success path
+            this.toastService.activate(`Deleted ${this.vehicle.name}`);
+            this.gotoVehicles();
+          },
+          (err) => this.handleServiceError('Delete', err), // Failure path
+          () => console.log('Delete Completed') // Completed actions
+          );
+      }
+    });
+  }
+
+  isAddMode() {
+    return isNaN(this.id);
+  }
+
+  ngOnDestroy() {
+    this.dbResetSubscription.unsubscribe();
+    if (this.routerSub) {
+      this.routerSub.unsubscribe();
+    }
+  }
+
+  ngOnInit() {
+    componentHandler.upgradeDom();
+    this.dbResetSubscription = this.vehicleService.onDbReset
+      .subscribe(() => {
+        this.getVehicle();
+      });
+
+    this.routerSub = this.route.params.subscribe(params => {
+      this.id = +params['id'];
+      this.getVehicle();
+    });
+  }
+
+  save() {
+    let vehicle = this.vehicle = this.entityService.merge(this.vehicle, this.editVehicle);
+    if (vehicle.id == null) {
+      this.vehicleService.addVehicle(vehicle)
+        .subscribe(v => {
+          this.setEditVehicle(v);
+          this.toastService.activate(`Successfully added ${v.name}`);
+          this.gotoVehicles();
+        });
+      return;
+    }
+    this.vehicleService.updateVehicle(this.vehicle)
+      .subscribe(() => this.toastService.activate(`Successfully saved ${this.vehicle.name}`));
+  }
+
+  private getVehicle() {
+    if (this.id === 0) {
+      return;
+    }
+    if (this.isAddMode()) {
+      this.vehicle = <Vehicle>{ name: '', type: '' };
+      this.editVehicle = this.entityService.clone(this.vehicle);
+      return;
+    }
+    this.vehicleService.getVehicle(this.id)
+      .subscribe((vehicle: Vehicle) => this.setEditVehicle(vehicle));
+  }
+
+  private gotoVehicles() {
+    this.router.navigate(['/vehicles']);
+  }
+
+  private handleServiceError(op: string, err: any) {
+    console.error(`${op} error: ${err.message || err}`);
+  }
+
+  private isDirty() {
+    return this.entityService.propertiesDiffer(this.vehicle, this.editVehicle);
+  }
+
+  private setEditVehicle(vehicle: Vehicle) {
+    if (vehicle) {
+      this.vehicle = vehicle;
+      this.editVehicle = this.entityService.clone(this.vehicle);
+    } else {
+      this.gotoVehicles();
+    }
+  }
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license
+*/"><input type="hidden" name="files[app/vehicles/vehicles.component.ts]" value="import { Component } from '@angular/core';
+import { ROUTER_DIRECTIVES } from '@angular/router';
+
+import { VehicleListComponent } from './vehicle-list';
+import { VehicleComponent } from './vehicle';
+import { VehicleService } from './shared';
+
+@Component({
+  selector: 'story-vehicles',
+  template: `
+    <router-outlet></router-outlet>
+  `,
+  directives: [ROUTER_DIRECTIVES],
+  providers: [VehicleService]
+})
+export class VehiclesComponent { }
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license
+*/"><input type="hidden" name="files[app/vehicles/vehicles.routes.ts]" value="import { RouterConfig }          from '@angular/router';
+
+import { VehicleListComponent } from './vehicle-list';
+import { VehicleComponent } from './vehicle';
+import { VehiclesComponent } from './vehicles.component';
+
+import { CanDeactivateGuard } from '../app.interfaces';
+
+export const VehiclesRoutes: RouterConfig = [
+  {
+    path: 'vehicles',
+    component: VehiclesComponent,
+    children: [
+      {
+        path: '',
+        component: VehicleListComponent
+      },
+      {
+        path: ':id',
+        component: VehicleComponent,
+        canDeactivate: [CanDeactivateGuard]
+      },
+    ]
+  },
+];
+
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license
+*/"><input type="hidden" name="files[main.ts]" value="import { bootstrap } from '@angular/platform-browser-dynamic';
+import { enableProdMode } from '@angular/core';
+
+import { AppComponent } from './app/app.component';
+import { APP_ROUTER_PROVIDERS } from './app/app.routes';
+import { environment } from './app/environment';
 
 if (environment.production) {
   enableProdMode();
 }
 
-bootstrap(AppComponent)
+bootstrap(AppComponent, [
+  APP_ROUTER_PROVIDERS
+])
   .then(success => console.log(`Bootstrap success`))
   .catch(error => console.log(error));
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license
-*/"><input type="hidden" name="files[app/+characters/character-list/character-list.component.css]" value=".characters {
-  list-style-type: none;
-  padding: 0;
-}
-
-*.characters li {
-  padding: 4px;
-}
-
-.list-text,
-.mdl-card__title-text {
-  font-size: 16px;
-}
-
-.mdl-card {
-  min-height: 60px;
-}
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license
-*/"><input type="hidden" name="files[app/+dashboard/dashboard.component.css]" value=".dashboard-button {
-  width: 200px;
-  height: 70px;
-}
-
-.mdl-cell--col-3 {
-  width: 25%;
-}
-
-@media (max-width: 1024px) {
-  .mdl-cell.mdl-cell--3-col > button {
-    width: 180px;
-    line-height: 18px;
-    font-size: 12px;
-  }
-}
-
-@media (max-width: 839px) and (min-width: 480px){
-  .mdl-cell.mdl-cell--3-col {
-    width: 25%;
-  }
-  .mdl-cell.mdl-cell--3-col > button {
-    width: 120px;
-    line-height: 18px;
-    font-size: 12px;
-  }
-}
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license
-*/"><input type="hidden" name="files[app/+vehicles/vehicle-list/vehicle-list.component.css]" value=".vehicles {
-  list-style-type: none;
-  padding: 0;
-}
-
-*.vehicles li {
-  padding: 4px;
-}
-
-.list-text,
-.mdl-card__title-text {
-  font-size: 16px;
-}
-
-.mdl-card {
-  min-height: 60px;
-}
 
 
 /*
@@ -1611,6 +1681,60 @@ article.template {
 @media (max-width: 480px) {
   #reset-button {
     display: none
+  }
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license
+*/"><input type="hidden" name="files[app/characters/character-list/character-list.component.css]" value=".characters {
+  list-style-type: none;
+  padding: 0;
+}
+
+*.characters li {
+  padding: 4px;
+}
+
+.list-text,
+.mdl-card__title-text {
+  font-size: 16px;
+}
+
+.mdl-card {
+  min-height: 60px;
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license
+*/"><input type="hidden" name="files[app/dashboard/dashboard.component.css]" value=".dashboard-button {
+  width: 200px;
+  height: 70px;
+}
+
+.mdl-cell--col-3 {
+  width: 25%;
+}
+
+@media (max-width: 1024px) {
+  .mdl-cell.mdl-cell--3-col > button {
+    width: 180px;
+    line-height: 18px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 839px) and (min-width: 480px){
+  .mdl-cell.mdl-cell--3-col {
+    width: 25%;
+  }
+  .mdl-cell.mdl-cell--3-col > button {
+    width: 120px;
+    line-height: 18px;
+    font-size: 12px;
   }
 }
 
@@ -1713,6 +1837,28 @@ Use of this source code is governed by an MIT-style license
   text-transform: uppercase;
   margin: 16px;
   font-size: 18px;
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license
+*/"><input type="hidden" name="files[app/vehicles/vehicle-list/vehicle-list.component.css]" value=".vehicles {
+  list-style-type: none;
+  padding: 0;
+}
+
+*.vehicles li {
+  padding: 4px;
+}
+
+.list-text,
+.mdl-card__title-text {
+  font-size: 16px;
+}
+
+.mdl-card {
+  min-height: 60px;
 }
 
 
@@ -12262,10 +12408,39 @@ Use of this source code is governed by an MIT-style license
 /*
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license
-*/"><input type="hidden" name="files[app/+characters/character-list/character-list.component.html]" value="<article class=&quot;template animated slideInRight&quot;>
+*/"><input type="hidden" name="files[app/app.component.html]" value="<div class=&quot;mdl-layout mdl-js-layout mdl-layout--fixed-header&quot;>
+  <header class=&quot;mdl-layout__header&quot;>
+    <div class=&quot;mdl-layout__header-row&quot;>
+      <a class=&quot;md-title-icon&quot; href=&quot;http://pluralsight.com&quot; target=&quot;_blank&quot;><i></i></a>
+      <span class=&quot;mdl-layout-title&quot;>Storyline Tracker</span>
+      <button id=&quot;reset-button&quot; class=&quot;mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent mdl-button--raised&quot; (click)=&quot;resetDb()&quot;>Reset Data</button>
+    </div>
+    <div class=&quot;mdl-navigation&quot;>
+      <a *ngFor=&quot;let item of menuItems&quot; [routerLink]=&quot;item.link&quot;
+      class=&quot;nav-link&quot; routerLinkActive=&quot;router-link-active&quot; href=&quot;&quot;>{{item.caption}}</a>
+    </div>
+  </header>
+  <main class=&quot;mdl-layout__content&quot;>
+    <section>
+      <div class=&quot;page-content&quot;>
+        <router-outlet></router-outlet>
+      </div>
+    </section>
+  </main>
+
+  <story-spinner></story-spinner>
+  <toast></toast>
+  <modal-confirm></modal-confirm>
+</div>
+
+
+<!-- 
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license
+-->"><input type="hidden" name="files[app/characters/character-list/character-list.component.html]" value="<article class=&quot;template animated slideInRight&quot;>
   <h4>My Characters</h4>
 
-  <a href=&quot;&quot; [routerLink]=&quot;['Characters', {id: 'new'}]&quot;><button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot;>Add</button></a>
+  <a href=&quot;&quot; [routerLink]=&quot;['Character', {id: 'new'}]&quot;><button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot;>Add</button></a>
 
   <filter-text (changed)=&quot;filterChanged($event)&quot;></filter-text>
 
@@ -12278,7 +12453,7 @@ Use of this source code is governed by an MIT-style license
 {{character.name}}</h2>
         </div>
         <div class=&quot;mdl-card__menu&quot;>
-          <a href=&quot;&quot; [routerLink]=&quot;['Characters', {id: character.id}]&quot;><button class=&quot;mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect&quot;>
+          <a href=&quot;&quot; [routerLink]=&quot;['Character', {id: character.id}]&quot;><button class=&quot;mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect&quot;>
 
             <div class=&quot;icon mdl-color--accent icon-ic_play_circle_filled_white_24dp&quot;></div>
 
@@ -12294,7 +12469,7 @@ Use of this source code is governed by an MIT-style license
 <!-- 
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license
--->"><input type="hidden" name="files[app/+characters/character/character.component.html]" value="<article class=&quot;template animated slideInRight&quot;>
+-->"><input type="hidden" name="files[app/characters/character/character.component.html]" value="<article class=&quot;template animated slideInRight&quot;>
   <div *ngIf=&quot;character&quot;>
     <h4>{{editCharacter.name | uppercase}} details</h4>
 
@@ -12324,7 +12499,7 @@ Use of this source code is governed by an MIT-style license
 <!-- 
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license
--->"><input type="hidden" name="files[app/+dashboard/dashboard.component.html]" value="<article class=&quot;template animated slideInRight&quot;>
+-->"><input type="hidden" name="files[app/dashboard/dashboard.component.html]" value="<article class=&quot;template animated slideInRight&quot;>
   <h4>Top Characters</h4>
   <div>
     <div class=&quot;mdl-grid&quot;>
@@ -12341,93 +12516,6 @@ Use of this source code is governed by an MIT-style license
     </div>
   </div>
 </article>
-
-<!-- 
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license
--->"><input type="hidden" name="files[app/+vehicles/vehicle-list/vehicle-list.component.html]" value="<article class=&quot;template animated slideInRight&quot;>
-  <h4>My Vehicles</h4>
-
-  <a href=&quot;&quot; [routerLink]=&quot;['Vehicles', {id: 'new'}]&quot;><button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot;>Add</button></a>
-
-  <filter-text (changed)=&quot;filterChanged($event)&quot;></filter-text>
-
-  <ul class=&quot;vehicles&quot;>
-    <li *ngFor=&quot;let vehicle of filteredVehicles&quot;>
-
-      <div class=&quot;mdl-card mdl-shadow--2dp&quot;>
-        <div class=&quot;mdl-card__title&quot;>
-          <h2 class=&quot;mdl-card__title-text&quot;>{{vehicle.id}}. {{vehicle.name | initCaps}}</h2>
-        </div>
-        <div class=&quot;mdl-card__menu&quot;>
-          <a href=&quot;&quot; [routerLink]=&quot;['Vehicles', {id: vehicle.id} ]&quot;><button class=&quot;mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect&quot;>
-
-            <div class=&quot;icon mdl-color--primary icon-ic_play_circle_filled_white_24dp&quot;></div>
-
-          </button></a>
-        </div>
-      </div>
-
-    </li>
-  </ul>
-</article>
-
-
-<!-- 
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license
--->"><input type="hidden" name="files[app/+vehicles/vehicle/vehicle.component.html]" value="<article class=&quot;template animated slideInRight&quot;>
-  <div *ngIf=&quot;vehicle&quot;>
-    <h4>{{editVehicle.name | uppercase}} details</h4>
-
-    <div class=&quot;mdl-textfield mdl-js-textfield mdl-textfield--floating-label&quot;>
-      <label class=&quot;mdl-textfield__label&quot; for=&quot;nametext&quot;>Name</label>
-      <input type=&quot;text&quot; id=&quot;nametext&quot; class=&quot;mdl-textfield__input&quot; [(ngModel)]=&quot;editVehicle.name&quot; />
-    </div>
-
-    <div class=&quot;mdl-textfield mdl-js-textfield mdl-textfield--floating-label&quot;>
-      <label class=&quot;mdl-textfield__label&quot; for=&quot;typetext&quot;>Type</label>
-      <input type=&quot;text&quot; id=&quot;typetext&quot; class=&quot;mdl-textfield__input&quot; [(ngModel)]=&quot;editVehicle.type&quot; />
-    </div>
-
-    <div>
-      <button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect
-      mdl-button--accent&quot; (click)=&quot;save()&quot;>Save</button>
-      &amp;nbsp;
-      <button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot; (click)=&quot;cancel()&quot; [class.not-displayed]=&quot;isAddMode()&quot;>Cancel</button>
-      &amp;nbsp;
-      <button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot; (click)=&quot;delete()&quot; [class.not-displayed]=&quot;isAddMode()&quot;>Delete</button>
-    </div>
-
-  </div>
-</article>
-
-<!-- 
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license
--->"><input type="hidden" name="files[app/app.component.html]" value="<div class=&quot;mdl-layout mdl-js-layout mdl-layout--fixed-header&quot;>
-  <header class=&quot;mdl-layout__header&quot;>
-    <div class=&quot;mdl-layout__header-row&quot;>
-      <a class=&quot;md-title-icon&quot; href=&quot;http://pluralsight.com&quot; target=&quot;_blank&quot;><i></i></a>
-      <span class=&quot;mdl-layout-title&quot;>Storyline Tracker</span>
-      <button id=&quot;reset-button&quot; class=&quot;mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent mdl-button--raised&quot; (click)=&quot;resetDb()&quot;>Reset Data</button>
-    </div>
-    <div class=&quot;mdl-navigation&quot;>
-      <a *ngFor=&quot;let item of menuItems&quot; [routerLink]=&quot;item.link&quot; class=&quot;nav-link&quot; href=&quot;&quot;>{{item.caption}}</a>
-    </div>
-  </header>
-  <main class=&quot;mdl-layout__content&quot;>
-    <section>
-      <div class=&quot;page-content&quot;>
-        <router-outlet></router-outlet>
-      </div>
-    </section>
-  </main>
-  
-  <story-spinner></story-spinner>
-  <toast></toast>
-  <modal-confirm></modal-confirm>
-</div>
 
 <!-- 
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
@@ -12468,6 +12556,66 @@ Use of this source code is governed by an MIT-style license
 <!-- 
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license
+-->"><input type="hidden" name="files[app/vehicles/vehicle-list/vehicle-list.component.html]" value="<article class=&quot;template animated slideInRight&quot;>
+  <h4>My Vehicles</h4>
+
+  <a href=&quot;&quot; [routerLink]=&quot;['Vehicle', {id: 'new'}]&quot;><button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot;>Add</button></a>
+
+  <filter-text (changed)=&quot;filterChanged($event)&quot;></filter-text>
+
+  <ul class=&quot;vehicles&quot;>
+    <li *ngFor=&quot;let vehicle of filteredVehicles&quot;>
+
+      <div class=&quot;mdl-card mdl-shadow--2dp&quot;>
+        <div class=&quot;mdl-card__title&quot;>
+          <h2 class=&quot;mdl-card__title-text&quot;>{{vehicle.id}}. {{vehicle.name | initCaps}}</h2>
+        </div>
+        <div class=&quot;mdl-card__menu&quot;>
+          <a href=&quot;&quot; [routerLink]=&quot;['Vehicle', {id: vehicle.id} ]&quot;><button class=&quot;mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect&quot;>
+
+            <div class=&quot;icon mdl-color--primary icon-ic_play_circle_filled_white_24dp&quot;></div>
+
+          </button></a>
+        </div>
+      </div>
+
+    </li>
+  </ul>
+</article>
+
+
+<!-- 
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license
+-->"><input type="hidden" name="files[app/vehicles/vehicle/vehicle.component.html]" value="<article class=&quot;template animated slideInRight&quot;>
+  <div *ngIf=&quot;vehicle&quot;>
+    <h4>{{editVehicle.name | uppercase}} details</h4>
+
+    <div class=&quot;mdl-textfield mdl-js-textfield mdl-textfield--floating-label&quot;>
+      <label class=&quot;mdl-textfield__label&quot; for=&quot;nametext&quot;>Name</label>
+      <input type=&quot;text&quot; id=&quot;nametext&quot; class=&quot;mdl-textfield__input&quot; [(ngModel)]=&quot;editVehicle.name&quot; />
+    </div>
+
+    <div class=&quot;mdl-textfield mdl-js-textfield mdl-textfield--floating-label&quot;>
+      <label class=&quot;mdl-textfield__label&quot; for=&quot;typetext&quot;>Type</label>
+      <input type=&quot;text&quot; id=&quot;typetext&quot; class=&quot;mdl-textfield__input&quot; [(ngModel)]=&quot;editVehicle.type&quot; />
+    </div>
+
+    <div>
+      <button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect
+      mdl-button--accent&quot; (click)=&quot;save()&quot;>Save</button>
+      &amp;nbsp;
+      <button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot; (click)=&quot;cancel()&quot; [class.not-displayed]=&quot;isAddMode()&quot;>Cancel</button>
+      &amp;nbsp;
+      <button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot; (click)=&quot;delete()&quot; [class.not-displayed]=&quot;isAddMode()&quot;>Delete</button>
+    </div>
+
+  </div>
+</article>
+
+<!-- 
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license
 -->"><input type="hidden" name="files[index.html]" value="<!DOCTYPE html>
 <html>
 
@@ -12475,30 +12623,34 @@ Use of this source code is governed by an MIT-style license
   <script>document.write('<base href=&quot;' + document.location + '&quot; />');</script>
 
   <meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;>
+  <link rel=&quot;icon&quot; type=&quot;image/x-icon&quot; href=&quot;favicon.ico&quot;>
 
   <script src=&quot;assets/material.min.js&quot;></script>
   <link rel=&quot;stylesheet&quot; href=&quot;assets/material.deep_orange-pink.min.css&quot;>
   <link rel=&quot;stylesheet&quot; href=&quot;assets/sprite-av-white.css&quot;>
   <link rel=&quot;stylesheet&quot; href=&quot;assets/animate.css&quot;>
   <link rel=&quot;stylesheet&quot; href=&quot;assets/app.css&quot;>
+
+  <!-- Polyfill(s) for older browsers -->
+  <script src=&quot;node_modules/core-js/client/shim.min.js&quot;></script>
+
+  <script src=&quot;https://npmcdn.com/zone.js@0.6.12?main=browser&quot;></script>
+  <script src=&quot;https://npmcdn.com/reflect-metadata@0.1.3&quot;></script>
+  <script src=&quot;https://npmcdn.com/systemjs@0.19.27/dist/system.src.js&quot;></script>
 </head>
 
 <body>
   <story-app>Loading Storyline Tracker ...</story-app>
 
-  <script src=&quot;https://npmcdn.com/es6-shim@0.35.0/es6-shim.min.js&quot;></script>
-  <script src=&quot;https://npmcdn.com/zone.js@0.6.12?main=browser&quot;></script>
-  <script src=&quot;https://npmcdn.com/reflect-metadata@0.1.3&quot;></script>
-  <script src=&quot;https://npmcdn.com/systemjs@0.19.27/dist/system.src.js&quot;></script>
-
   <script>
-    System.import('systemjs.config.js')
-      .then(function () { System.import('main') })
-      .catch(console.error.bind(console));
+    System.import('system-config.js').then(function () {
+        System.import('main');
+      }).catch(console.error.bind(console));
   </script>
 </body>
 
 </html>
+
 
 <!-- 
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
@@ -12653,81 +12805,145 @@ Use of this source code is governed by an MIT-style license
       &quot;type&quot;: &quot;land&quot;
     }
   ]
-}"><input type="hidden" name="files[app/ps-icon.base64.png]" value="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"><input type="hidden" name="files[assets/sprite-av-white.base64.png]" value="iVBORw0KGgoAAAANSUhEUgAAARwAAAEcCAMAAAAiKvvSAAAC91BMVEUAAAD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8Y3nl4AAAA/HRSTlMAAQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyAhIiMkJSYnKCkqKywtLi8wMTIzNDU2Nzg5Ojs8PT4/QEFCQ0RFRkdISUpLTE1OT1BRUlNUVVZX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"><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="tutorial"><input type="hidden" name="private" value="true"><input type="hidden" name="description" value="Angular 2 Example - Storyline Tracker"><input type="hidden" name="files[systemjs.config.js]" value="/**
- * PLUNKER VERSION (based on systemjs.config.js in angular.io)
+}"><input type="hidden" name="files[app/ps-icon.base64.png]" value="iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAMGGlDQ1BJQ0MgUHJvZmlsZQAASImVVwdUU0kXnldSCAktEAEpoTdBepXeO9LBRkgChBJCIKjYkUUF14KKCFZ0VcS2FkDWigULImCvG0RUVtbFgg2Vf5IAuu5fzn/Pmfe+d+feO9+9M/PODACK9iyBIBtVAiCHXyCMDvRhJiYlM0ligAAiYAAjQGax8wXeUVFhAMro++/y7ha0hnLdUhLrn/3/VZQ53Hw2AEgUxKmcfHYOxEcAwDXZAmEBAIQOqDeYWSCQ4LcQqwohQQCIZAlOl2EtCU6VYWupTWy0L8R+AJCpLJYwHQAFSXxmITsdxlEQQGzN5/D4EG+F2IOdweJALIZ4Qk5OLsSKVIhNU7+Lk/63mKljMVms9DEsy0UqZD9eviCbNfv/LMf/lpxs0egY+rBRM4RB0ZKcYd12Z+WGSjDkjhznp0ZEQqwC8UUeR2ovwfcyREFxI/b97HxfWDM4zwAFHJZfKMSwlihDlBXnPYJtWUKpL7RHI3gFwbEjOFWYGz0SHy3kZ0eEjcRZmsENHsWbufn+MaM2abyAYIjhSkOPFGXEJsh4oucKefERECtA3JGfFRM64vuoKMM3YtRGKIqWcDaE+G2aMCBaZoOp5+SP5oVZsVnSsdQh9irIiA2S+WKJ3PzEsFEOHK6fv4wDxuHy40a4YXB1+USP+JYKsqNG7LHN3OzAaFmdsYP5hTGjvl0FcIHJ6oA9zmSFRMn4Y+8EBVGxMm44DsKAL/ADTCCCLRXkgkzAa+9v7Idfsp4AwAJCkA64wHJEM+qRIO3hw2cMKAJ/QsQF+WN+PtJeLiiE+i9jWtnTEqRJewulHlngKcQ5uCbugbvhYfDpBZst7oy7jPoxFUdHJfoT/YhBxACi2RgPNmSdDZsQ8P6NLhS+uTA7CRf+aA7f4hGeEjoJjwk3CWLCXRAPnkijjFjN4BULf2DOBOFADKMFjGSXCmP2jdrgxpC1A+6Du0P+kDvOwDWBJW4PM/HGPWFuDlD7PUPRGLdvtfxxPAnr7/MZ0SuYKziMsEgdmxnfMasfo/h+VyMOfIf+aIktxQ5jrdgZ7BJ2HGsETOwU1oS1YSckeGwlPJGuhNHRoqXcsmAc3qiNdb11n/Xnf4zOGmEglM43KODOKpBsCN9cwWwhLz2jgOkN/8hcZjCfbTWBaWtt4wiA5P8u+328YUj/2wjj8jdd3mkAXMqgMv2bjmUAwLGnANDffdMZvIbbaxUAJzrYImGhTIdLHgRAAYpwZ2gAHWAATGFOtsARuAEv4A9CQCSIBUlgOqx6BsiBrGeCuWARKAXlYBVYB6rBFrAd7Ab7wCHQCI6DM+ACuAI6wE1wH66NXvACDIB3YAhBEBJCQ+iIBqKLGCEWiC3ijHgg/kgYEo0kISlIOsJHRMhcZDFSjlQg1cg2pA75FTmGnEEuIZ3IXaQb6UNeI59QDKWiqqg2aoxORJ1RbzQUjUWnoeloHlqElqAr0Cq0Ft2LNqBn0CvoTVSMvkAHMYDJYwxMD7PEnDFfLBJLxtIwITYfK8MqsVpsP9YM5/o6Jsb6sY84EafjTNwSrs8gPA5n43n4fHw5Xo3vxhvwc/h1vBsfwL8SaAQtggXBlRBMSCSkE2YSSgmVhJ2Eo4TzcO/0Et4RiUQG0YToBPdmEjGTOIe4nLiJeIB4mthJ7CEOkkgkDZIFyZ0USWKRCkilpA2kvaRTpC5SL+kDWZ6sS7YlB5CTyXxyMbmSvId8ktxFfkYeklOSM5JzlYuU48jNllspt0OuWe6aXK/cEEWZYkJxp8RSMimLKFWU/ZTzlAeUN/Ly8vryLvKT5XnyC+Wr5A/KX5Tvlv9IVaGaU32pU6ki6grqLupp6l3qGxqNZkzzoiXTCmgraHW0s7RHtA8KdAUrhWAFjsIChRqFBoUuhZeKcopGit6K0xWLFCsVDyteU+xXklMyVvJVYinNV6pROqZ0W2lQma5soxypnKO8XHmP8iXl5yokFWMVfxWOSonKdpWzKj10jG5A96Wz6YvpO+jn6b2qRFUT1WDVTNVy1X2q7aoDaipq9mrxarPUatROqIkZGMOYEczIZqxkHGLcYnwapz3Oexx33LJx+8d1jXuvPl7dS52rXqZ+QP2m+icNpoa/RpbGao1GjYeauKa55mTNmZqbNc9r9o9XHe82nj2+bPyh8fe0UC1zrWitOVrbtdq0BrV1tAO1BdobtM9q9+swdLx0MnXW6pzU6dOl63ro8nTX6p7S/YOpxvRmZjOrmOeYA3paekF6Ir1teu16Q/om+nH6xfoH9B8aUAycDdIM1hq0GAwY6hqGG841rDe8ZyRn5GyUYbTeqNXovbGJcYLxEuNG4+cm6ibBJkUm9SYPTGmmnqZ5prWmN8yIZs5mWWabzDrMUXMH8wzzGvNrFqiFowXPYpNF5wTCBJcJ/Am1E25bUi29LQst6y27rRhWYVbFVo1WLycaTkyeuHpi68Sv1g7W2dY7rO/bqNiE2BTbNNu8tjW3ZdvW2N6wo9kF2C2wa7J7ZW9hz7XfbH/Hge4Q7rDEocXhi6OTo9Bxv2Ofk6FTitNGp9vOqs5RzsudL7oQXHxcFrgcd/no6uha4HrI9S83S7cstz1uzyeZTOJO2jGpx13fneW+zV3swfRI8djqIfbU82R51no+9jLw4njt9Hrmbead6b3X+6WPtY/Q56jPe19X33m+p/0wv0C/Mr92fxX/OP9q/0cB+gHpAfUBA4EOgXMCTwcRgkKDVgfdDtYOZgfXBQ+EOIXMCzkXSg2NCa0OfRxmHiYMaw5Hw0PC14Q/iDCK4Ec0RoLI4Mg1kQ+jTKLyon6bTJwcNblm8tNom+i50a0x9JgZMXti3sX6xK6MvR9nGieKa4lXjJ8aXxf/PsEvoSJBnDgxcV7ilSTNJF5SUzIpOT55Z/LgFP8p66b0TnWYWjr11jSTabOmXZquOT17+okZijNYMw6nEFISUvakfGZFsmpZg6nBqRtTB9i+7PXsFxwvzlpOH9edW8F9luaeVpH2PN09fU16X4ZnRmVGP8+XV817lRmUuSXzfVZk1q6s4eyE7AM55JyUnGN8FX4W/1yuTu6s3E6BhaBUIM5zzVuXNyAMFe7MR/Kn5TcVqMKjTpvIVPSTqLvQo7Cm8MPM+JmHZynP4s9qm20+e9nsZ0UBRb/Mweew57TM1Zu7aG73PO952+Yj81PntywwWFCyoHdh4MLdiyiLshZdLbYurih+uzhhcXOJdsnCkp6fAn+qL1UoFZbeXuK2ZMtSfClvafsyu2Ubln0t45RdLrcuryz/vJy9/PLPNj9X/Ty8Im1F+0rHlZtXEVfxV91a7bl6d4VyRVFFz5rwNQ1rmWvL1r5dN2PdpUr7yi3rKetF68VVYVVNGww3rNrwuTqj+maNT82BjVobl218v4mzqWuz1+b9W7S3lG/5tJW39c62wG0Ntca1lduJ2wu3P90Rv6P1F+df6nZq7izf+WUXf5d4d/Tuc3VOdXV7tPasrEfrRfV9e6fu7djnt69pv+X+bQcYB8oPgoOig3/8mvLrrUOhh1oOOx/ef8ToyMaj9KNlDUjD7IaBxoxGcVNSU+exkGMtzW7NR3+z+m3Xcb3jNSfUTqw8STlZcnL4VNGpwdOC0/1n0s/0tMxouX828eyNc5PPtZ8PPX/xQsCFs63eracuul88fsn10rHLzpcbrzheaWhzaDt61eHq0XbH9oZrTteaOlw6mjsndZ7s8uw6c93v+oUbwTeu3Iy42Xkr7tad21Nvi+9w7jy/m3331b3Ce0P3Fz4gPCh7qPSw8pHWo9rfzX4/IHYUn+j26257HPP4fg+758WT/Cefe0ue0p5WPtN9Vvfc9vnxvoC+jj+m/NH7QvBiqL/0T+U/N740fXnkL6+/2gYSB3pfCV8Nv17+RuPNrrf2b1sGowYfvct5N/S+7IPGh90fnT+2fkr49Gxo5mfS56ovZl+av4Z+fTCcMzwsYAlZ0qMABhualgbA610A0JLg2QHe4ygKsvuXVBDZnVGKwH/CsjuaVODJZZcXAHELAQiDZ5TNsBlBTIVvyfE71gugdnZjbUTy0+xsZbGo8BZD+DA8/EYbAFIzAF+Ew8NDm4aHv+yAZO8CcDpPdu+TCBGe8bdK7lbgqsES8KP8CzeZbCTmJqkiAAAK50lEQVRYCa1YeXBV1R3+zrnLey8Lm4ghIRABgRA2E0gDCKgIhUEEOpOpVop/1GqnrTOOLXaqMw4dp1o7nXE6tbVFZ2y1BQs61opLQQoUBBTSUAUiypJICKskLHnL3U6/cx8vhryXAMKZd9+99yy/33d++7kCV9lW1cIYmiyOtCaiVv+CQGhyvSypAluqk07SXbu6ObUMCL4um5DglS4mQ/nAd8pLbZV3swJujhq4yYO6QQoVgxJKQLAbKYmgOe6jQcGo8y21r/jlui+ulNcVAaxfWNanNNp3vpTGPFMY45Xyb5J8MWWabUBYmqBGJwVh8u6wU8FLCWUecD21VQnxznG/fV3F6j3n06t6/r9sgF/WVk+WUj1mSDHdMmQvpRRSGlH6B75mNWJEiJ13SxKwEMr3glOuUusg5fP9Vn64JWtRl45LAjxcW9EvXxU+akp1H6VV5NOaAqLJgacL6exXDVYQqMHlCkGLExjPtrWlXhz2ft2Z7Nnpnh4BnlpUU05VPWMbxnyfJH0tsWvQtGQpTU3J9f1ghTCNJ/qt3pLTPrsFeGLhlAlRIVeYUpYngyCnCq8WK4UJ25B+yve3x121dNCardu60swJsGX+5FFRWC/GTGNqwvepzmsjua7M9bsUEhEpfcfzNrfL5JKSN3cc7jwvC2DDzOrrBkRjL0RNY1GKBtc9NG1I6eVpbXUme2XP2jZNU7iui5e8PPWTAas3dni42YWUuD6S9zBDyKKkq8Fl4e80nWOKcxyfLkoyMvRXjne/pU6LL3okBQQOLANYrOKijq/LMxMuQnB81u2zI4axkrGqn3aKSzV7xnQIOwJ3w3oE7SkaFIFehTgNASUDtf+cp+4btH59aI8EnW7vzJ0bKfXxtCXNStcnOK2+rpfH/nC7YcCAPXsO8u++B8agIQja2uAfPQERJjWOd117Oe+BECaMXoEU/t0zZ65dXlcXdKi4KiWrLGndHmgQKqOuDHzePR/WpEqoRBLe3k91imAy84D8fNgzZ8KqqkLirTVw3l5LoMfSKcXs2H8nQj0/BkKaEcg7Svc3TuLMrSGF2tpaY955d3HUMOc5fkZyWgpfXSrlInLnPBQ8eD8U1apOtcEYMQzW0BuR2r4z5Bq5dQas8eMQeMzMJ1sRnGlnYCYLwasTrR6ftV8rWegpefw3jZ9vDAGuHTCgxAzsRw1pDulOvcoLYFeOgz2lGvaEcbAmT4IsHhiGifO/ewGJlf8ItarHIjMvAKW0/SZKM+nSiaisy1EzN2IpgzlR+Y+MKnsvBLh04NibDSEfVkpG076hfafLRa+2qybAHD0C7u4GmP37wyguCn3CbToCd+cn8HbshrdnHxCNwp40AXZ1FayywfCPf4ngVCvtl+ZDK0tn6C70M/xCSbMcUtJXrnhXAxRLS0cvMCAXUPQc0Cr+SrUdzxpg9XhYFSMR/9PfkFq1BsZNQ2GUFCFSNR7msKEsrlrg7toHb/NOuJ8fZKE4hEDHI3L7LRB9ekM1HkXQyhCnHU2rXZcSWbzS/HXJ5vryA2NPRa2db+DeqLSrvbA60RNyXHQeeyIBjhsF598fwv2gHkZZCazRw+nB58J7ZHoNVIwlYfMJuHW74W7bxfAT57xBiEyeCLOqAkEqheDYaaizCcqMAEOQ2fxsYToMqXXGgoFV0RttuTgizNE65+pyMzdASnASbW/cSDgbdsA/dBTWlCqYQ4rR/uxfkFq3HebY4YjOmgq7phLo2wdu/WdwN+6Et/1j+OfaEamZgOjsaaRRHvLwD12wz1CaF/ONCcuhFOvMIu4BgU4D/AWhSeqe7OZrdZCIbvqeedeF06kzBL0Twb4m2ItmIbboVhR8vxaRiWMRf/VfDOQ74C1/nUB3I3rPN6nyGlgjyriRCXSud+E1NIZkOycuJZigA1GgZUxmBBZogJe4tL1oKnoj+viRASwtKNLwW9rgfrwP/hnamWnCpGrNkWV8jiJIePAP0kb3NkIxDCE/RocbDjm4hPw1rc68DdKjP/hhbuI4I7iCyc7uzzbKp/eFoOiJlLbSIPUjJUhiBDIU0QfuQt6d09gXILWpHomX3oazfQ/BRBGZPhGx++ZRamOhTp9hUN+K5CvvwDt0BDBIWztOpjFdCpgso0Srefqs4RcXqFMu+YlQQplZXe5KA+JOtQS1ejVYOo7Iz0PeAwtgFF3HsNOfjrGHan0fzpZPoOIO7W4Mgc2B9Y3RzNsWkm9sRnLlOrgNTaTDHVqRcJOduekjl8/Dl6OQNDc1ljkjy5saJTuJmkLRYsnRWBeGoDikXA2skDn4BiAvQu8uDz3z7C9ehvMebZFZxhwyENFHZiN2Vw1ErwJ4Hx9E+/P/hPMR02R7ksC4YX3ayqE0LT9XwKPJtZjLsCz4kfe9Xb4pE4ZErNsqJmN/BGhNGYPot6YxY0xgTvaQfHMb4stp7PsPQ/bvh9iSOYjdexvM4cXMJCcR/8O7cKhS7UzaNkOpaWXkAMfeMDvRStrdIDiowzpSvvw8ZoqDRmBU+BzJ2bSKacwiYiGPzLV6gtPnwiIi+fcP4H16BJG5NYh9dwbsaWOgGJDbX94AZ+UmeJ81X5BYNE26GxZ6UOM26BKuCo46QrSEALfG2hpvc69fG5VWhRsw0afJXPyvPVzvnmJ2Nzcg/tf/MB+PQGz+JFjTxsKuvYXqrIag6hKvbUPq1S2MgwcoJVKzYmlaPQDLMNMApTQ9Vk87mvYPPKLfw3bsxh/Oj0lrlS9UlMrPdHfcmXcQu3sqRO98prltzB5nkb90IfJ+MDuUYgj8v4cQ/+N6OspeBPEU0672vA4WHbR6erB4RjEDefSc8h4qPvjc66EE9YJ4u/ORUWjttWBWKsU4FQq7EykyS75RxxKflYlupg1l2eE0v7kViVXbkVyxGcHZeChlGBzXNHKqI02i67/eCiOJn1RB/bmks0mPX7S942WPPEj9P0dPNrNlyNm61NES0XZKwHlLpkMO6c94RnXSBoX2Sp2UrgCUBpFpjK5gLdiaUt6Pi5t+u0L3d0hQv9SZ7p8rXXtOTNgLWTfrruwWMidIDidXfkRVJhl2fMY4SlO3nDtLD/X0ryVF7TnJwHnlrS8SqzNzL5Kg7jxW+tMxPBessqVZnlBanVlTMmsJhmj0MO3mahrPSmD14lNy23zXWlx89JdNGXo5uR8t+dk8FrAvRqRVlAxBZqZf+7sOyhFhKE/5jfzCsKS45ZktnbnQzbJb4blZByYVqMP8zHMHdxb1wjJbS+naXroetIXFEsBvZlp7orjlV291RZNTgplJzUWP1+YbxtNSmMMofioiY/09Lsss7+aepiEJzoQM+EGq3lXO0oHHntqQa8ElOR0vfnyKUPZTBsRUnrdMlzXQV0Bzkey5T3/YpI1zkko5QbCGR8Anbzjx5P+6W3VJgHphQ+HPr+uVb90fEfZD9LQSXdRooD5dVoPtiYiWV1g88d/igYkrKDV/vye9l9qc+O9Hnfo182X3rSfaWauai564zVKRb1uQ01gNDTeFaWsAOn9rqCFc2qv+9icJyOSlv17pyOMq/RlY7IbwNySVfK30+GMfZjHI0XFFADPrD/RdNjjPxJiIUTiXoWacC7+ENW9fqURvpiqDYDy+tzHInpSBPOwIfxc1uvF0PFZf0f4oDyKX374WwAz5Vai1R/WuzB+Mgj7n7URvyqpXXhAx240Ez27yfNRNtrYgcQatQ+MT8eCFHJlZfXn3/wNq2dDn04ra9AAAAABJRU5ErkJggg=="><input type="hidden" name="files[assets/sprite-av-white.base64.png]" value="iVBORw0KGgoAAAANSUhEUgAAARwAAAEcCAMAAAAiKvvSAAAC91BMVEUAAAD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8Y3nl4AAAA/HRSTlMAAQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyAhIiMkJSYnKCkqKywtLi8wMTIzNDU2Nzg5Ojs8PT4/QEFCQ0RFRkdISUpLTE1OT1BRUlNUVVZX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"><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="tutorial"><input type="hidden" name="private" value="true"><input type="hidden" name="description" value="Angular 2 Example - Storyline Tracker"><input type="hidden" name="files[system-config.ts]" value="/**
+ * PLUNKER VERSION (based on system-config.ts in angular.io)
  * System configuration for Angular 2 samples
  * Adjust as necessary for your application needs.
  */
-(function(global) {
 
-  var ngVer = '@2.0.0-rc.1'; // lock in the angular package version; do not let it float to current!
 
-  //map tells the System loader where to look for things
-  var  map = {
-    'app':                        'app',
+/***********************************************************************************************
+ * User Configuration.
+ **********************************************************************************************/
+let ngVer = '@2.0.0-rc.4'; // lock in the angular package version; do not let it float to current!
 
-    '@angular':                   'https://npmcdn.com/@angular', // sufficient if we didn't pin the version
-    'angular2-in-memory-web-api': 'https://npmcdn.com/angular2-in-memory-web-api', // get latest
-    'rxjs':                       'https://npmcdn.com/rxjs@5.0.0-beta.6',
-    'ts':                         'https://npmcdn.com/plugin-typescript@4.0.10/lib/plugin.js',
-    'typescript':                 'https://npmcdn.com/typescript@1.8.10/lib/typescript.js',
- };
+/** Map relative paths to URLs. */
+const map: any = {
+  'app' : 'app',
 
-  //packages tells the System loader how to load when no filename and/or no extension
-  var packages = {
-    // PAPA -iput main.ts in the root
-    // 'app':                        { main: 'main.ts',  defaultExtension: 'ts' },
-    '':                        { main: 'main.ts',  defaultExtension: 'ts' },
-    'rxjs':                       { defaultExtension: 'js' },
-    'angular2-in-memory-web-api': { defaultExtension: 'js' },
+  'main': 'main.js',
+  '@angular' : 'node_modules/@angular',
+  '@angular': 'https://npmcdn.com/@angular',
+  'angular2-in-memory-web-api' : 'https://npmcdn.com/angular2-in-memory-web-api',
+  'rxjs': 'https://npmcdn.com/rxjs@5.0.0-beta.6',
+  'ts': 'https://npmcdn.com/plugin-typescript@4.0.10/lib/plugin.js',
+  'typescript': 'https://npmcdn.com/typescript@1.8.10/lib/typescript.js',
+};
+
+// packages tells the System loader how to load when no filename and/or no
+// extension
+const packages: any = {
+  'app' : {main : 'main.js', defaultExtension : 'js'},
+  'api' : {defaultExtension : 'js'},
+  'rxjs' : {defaultExtension : 'js'},
+  'angular2-in-memory-web-api' : {defaultExtension : 'js'},
+};
+
+const barrels: any = [
+  // App specific barrels.
+    'app',
+    'app/characters',
+    'app/characters/character',
+    'app/characters/character-list',
+    'app/characters/shared',
+    'app/dashboard',
+    'app/vehicles',
+    'app/vehicles/vehicle',
+    'app/vehicles/vehicle-list',
+    'app/vehicles/shared',
+    'app/shared',
+    'app/shared/character-services',
+    'app/shared/filter-text',
+    'app/shared/modal',
+    'app/shared/spinner',
+    'app/shared/toast',
+];
+
+barrels.forEach((barrelName: string) => {
+  packages[barrelName] = { main: 'index' };
+});
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+/***********************************************************************************************
+ * Everything underneath this line is managed by the CLI.
+ **********************************************************************************************/
+
+const ngPackageNames: string[] = [
+  'common',
+  'compiler',
+  'core',
+  'forms',
+  'http',
+  'platform-browser',
+  'platform-browser-dynamic',
+  'router',
+  'router-deprecated',
+  'upgrade',
+];
+
+// Individual files (~300 requests):
+function packIndex(pkgName) {
+  packages['@angular/' + pkgName] = {
+    main : 'index.js',
+    defaultExtension : 'js'
   };
+}
 
-  var ngPackageNames = [
-    'common',
-    'compiler',
-    'core',
-    'http',
-    'platform-browser',
-    'platform-browser-dynamic',
-    'router',
-    'router-deprecated',
-    'upgrade',
-  ];
+// Bundled (~40 requests):
+function packUmd(pkgName) {
+  packages['@angular/' + pkgName] = {
+    main : '/bundles/' + pkgName + '.umd.js',
+    defaultExtension : 'js'
+  };
+}
 
-  // Add map entries for each angular package
-  // only because we're pinning the version with `ngVer`.
-  ngPackageNames.forEach(function(pkgName) {
-    map['@angular/'+pkgName] = 'https://npmcdn.com/@angular/' + pkgName + ngVer;
-  });
+declare var System: any;
 
-  // Add package entries for angular packages
-  ngPackageNames.forEach(function(pkgName) {
+// Most environments should use UMD; some (Karma) need the individual index
+// files
+var setPackageConfig = System.packageWithIndex ? packIndex : packUmd;
 
-    // Bundled (~40 requests):
-    packages['@angular/'+pkgName] = { main: pkgName + '.umd.js', defaultExtension: 'js' };
+// Add map entries for each angular package
+// only because we're pinning the version with `ngVer`.
+ngPackageNames.forEach(function(pkgName) {
+  map['@angular/'+pkgName] = 'https://npmcdn.com/@angular/' + pkgName + ngVer;
+});
 
-    // Individual files (~300 requests):
-    //packages['@angular/'+pkgName] = { main: 'index.js', defaultExtension: 'js' };
-  });
+// Add package entries for angular packages
+ngPackageNames.forEach(setPackageConfig);
 
-  var config = {
-    // DEMO ONLY! REAL CODE SHOULD NOT TRANSPILE IN THE BROWSER
-    transpiler: 'ts',
-    typescriptOptions: {
-      tsconfig: true
-    },
-    meta: {
-      'typescript': {
-        &quot;exports&quot;: &quot;ts&quot;
-      }
-    },
-    map: map,
-    packages: packages
-  }
+// No umd for router yet
+packages['@angular/router'] = {
+  main : 'index.js',
+  defaultExtension : 'js'
+};
 
-  System.config(config);
+var config = {
+  // DEMO ONLY! REAL CODE SHOULD NOT TRANSPILE IN THE BROWSER
+  transpiler: 'ts',
+  typescriptOptions: {
+    tsconfig: true
+  },
+  meta: {
+    'typescript': {
+      &quot;exports&quot;: &quot;ts&quot;
+    }
+  },
+  map: map,
+  packages: packages
+}
 
-})(this);
+System.config(config);
+
+// // Add package entries for angular packages
+// ngPackageNames.forEach(function(pkgName) {
+
+//   // Bundled (~40 requests):
+//   packages['@angular/'+pkgName] = { main: pkgName + '.umd.js', defaultExtension: 'js' };
+
+//   // Individual files (~300 requests):
+//   //packages['@angular/'+pkgName] = { main: 'index.js', defaultExtension: 'js' };
+// });
 
 
 /*
@@ -12735,20 +12951,19 @@ Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license
 */"><input type="hidden" name="files[tsconfig.json]" value="{
   &quot;compilerOptions&quot;: {
-    &quot;target&quot;: &quot;es5&quot;,
-    &quot;module&quot;: &quot;commonjs&quot;,
-    &quot;moduleResolution&quot;: &quot;node&quot;,
-    &quot;sourceMap&quot;: true,
     &quot;emitDecoratorMetadata&quot;: true,
     &quot;experimentalDecorators&quot;: true,
-    &quot;removeComments&quot;: false,
-    &quot;noImplicitAny&quot;: true,
+    &quot;module&quot;: &quot;commonjs&quot;,
+    &quot;moduleResolution&quot;: &quot;node&quot;,
+    &quot;noImplicitAny&quot;: false,
+    &quot;sourceMap&quot;: true,
+    &quot;target&quot;: &quot;es5&quot;,
     &quot;suppressImplicitAnyIndexErrors&quot;: true
   },
-  &quot;exclude&quot;: [
-    &quot;node_modules&quot;,
-    &quot;typings/main&quot;,
-    &quot;typings/main.d.ts&quot;
+  &quot;files&quot;: [
+    &quot;main.ts&quot;,
+    &quot;system-config.ts&quot;,
+    &quot;typings.d.ts&quot;
   ]
 }
 "></form><script>document.getElementById("mainForm").submit();</script></body></html>

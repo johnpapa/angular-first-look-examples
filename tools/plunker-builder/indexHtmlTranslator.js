@@ -53,7 +53,7 @@ var _rxData = [
   {
     pattern: 'script',
     from: 'node_modules/angular/in-memory-web-api/web-api.js',
-    to:   'https://npmcdn.com/angular/in-memory-web-api/web-api.js'
+    to:   'https://npmcdn.com/angular2-in-memory-web-api.js'
   },
   {
     pattern: 'link',

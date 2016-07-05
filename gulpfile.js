@@ -31,7 +31,7 @@ var _exampleBoilerplateFiles = [
   // 'karma-test-shim.js',
   'package.json',
   // 'styles.css',
-  'systemjs.config.js',
+  'system-config.ts',
   'tsconfig.json',
   'tslint.json',
   'typings.d.ts',
