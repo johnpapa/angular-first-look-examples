@@ -9,18 +9,23 @@
  * User Configuration.
  **********************************************************************************************/
 let ngVer = '@2.0.0-rc.4'; // lock in the angular package version; do not let it float to current!
+let routerVer = '@3.0.0-beta.1'; // lock router version
+let formsVer = '@0.2.0'; // lock forms version
+let routerDeprecatedVer = '@2.0.0-rc.2'; // temporarily until we update all the guides
 
 /** Map relative paths to URLs. */
 const map: any = {
   'app' : 'app',
-
   'main': 'main.js',
-  '@angular' : 'node_modules/@angular',
-  '@angular': 'https://npmcdn.com/@angular',
-  'angular2-in-memory-web-api' : 'https://npmcdn.com/angular2-in-memory-web-api',
-  'rxjs': 'https://npmcdn.com/rxjs@5.0.0-beta.6',
-  'ts': 'https://npmcdn.com/plugin-typescript@4.0.10/lib/plugin.js',
-  'typescript': 'https://npmcdn.com/typescript@1.8.10/lib/typescript.js',
+
+  '@angular':                   'https://npmcdn.com/@angular', // sufficient if we didn't pin the version
+  '@angular/router':            'https://npmcdn.com/@angular/router' + routerVer,
+  '@angular/forms':             'https://npmcdn.com/@angular/forms' + formsVer,
+  '@angular/router-deprecated': 'https://npmcdn.com/@angular/router-deprecated' + routerDeprecatedVer,
+  'angular2-in-memory-web-api': 'https://npmcdn.com/angular2-in-memory-web-api', // get latest
+  'rxjs':                       'https://npmcdn.com/rxjs@5.0.0-beta.6',
+  'ts':                         'https://npmcdn.com/plugin-typescript@4.0.10/lib/plugin.js',
+  'typescript':                 'https://npmcdn.com/typescript@1.9.0-dev.20160409/lib/typescript.js',
 };
 
 // packages tells the System loader how to load when no filename and/or no
@@ -74,13 +79,13 @@ const ngPackageNames: string[] = [
   'upgrade',
 ];
 
-// Individual files (~300 requests):
-function packIndex(pkgName) {
-  packages['@angular/' + pkgName] = {
-    main : 'index.js',
-    defaultExtension : 'js'
-  };
-}
+// // Individual files (~300 requests):
+// function packIndex(pkgName) {
+//   packages['@angular/' + pkgName] = {
+//     main : 'index.js',
+//     defaultExtension : 'js'
+//   };
+// }
 
 // Bundled (~40 requests):
 function packUmd(pkgName) {
@@ -94,7 +99,8 @@ declare var System: any;
 
 // Most environments should use UMD; some (Karma) need the individual index
 // files
-var setPackageConfig = System.packageWithIndex ? packIndex : packUmd;
+// var setPackageConfig = System.packageWithIndex ? packIndex : packUmd;
+var setPackageConfig = packUmd;
 
 // Add map entries for each angular package
 // only because we're pinning the version with `ngVer`.
@@ -106,10 +112,13 @@ ngPackageNames.forEach(function(pkgName) {
 ngPackageNames.forEach(setPackageConfig);
 
 // No umd for router yet
-packages['@angular/router'] = {
-  main : 'index.js',
-  defaultExtension : 'js'
-};
+packages['@angular/router'] = { main: 'index.js', defaultExtension: 'js' };
+
+// Forms not on rc yet
+packages['@angular/forms'] = { main: 'index.js', defaultExtension: 'js' };
+
+// Temporarily until we update the guides
+packages['@angular/router-deprecated'] = { main: '/bundles/router-deprecated' + '.umd.js', defaultExtension: 'js' };
 
 var config = {
   // DEMO ONLY! REAL CODE SHOULD NOT TRANSPILE IN THE BROWSER

@@ -37,6 +37,7 @@ function buildPlunkers(basePath, destPath, options) {
   var fileNames = globby.sync(gpaths, { ignore: "**/node_modules/**"});
   fileNames.forEach(function(configFileName) {
     try {
+      // console.log(configFileName); //TODO
       buildPlunkerFrom(configFileName, basePath, destPath);
     } catch (e) {
       errFn(e);
@@ -59,6 +60,7 @@ function buildPlunkerFrom(configFileName, basePath, destPath ) {
   }
   try {
     var config = initConfigAndCollectFileNames(configFileName);
+    // console.log(config); //TODO
     var postData = createPostData(config);
     addSystemJsConfig(config, postData);
     var html = createPlunkerHtml(postData);
@@ -146,7 +148,9 @@ function initConfigAndCollectFileNames(configFileName) {
     '!**/karma-test-shim.js',
     '!**/karma.conf.js',
     '!**/spec.js'
-   ];  Array.prototype.push.apply(gpaths, defaultExcludes);
+  ];  
+   
+  Array.prototype.push.apply(gpaths, defaultExcludes);
 
   config.fileNames = globby.sync(gpaths, { ignore: ["**/node_modules/**"] });
   config.basePath = basePath;
