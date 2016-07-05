@@ -141,9 +141,12 @@ function initConfigAndCollectFileNames(configFileName) {
     '!**/*.spec.*',
     '!**/tslint.json',
     '!**/.editorconfig',
-    '!**/system-config.ts',
-   ];
-  Array.prototype.push.apply(gpaths, defaultExcludes);
+    '!**/system-config.js',
+    '!**/wallaby.js',
+    '!**/karma-test-shim.js',
+    '!**/karma.conf.js',
+    '!**/spec.js'
+   ];  Array.prototype.push.apply(gpaths, defaultExcludes);
 
   config.fileNames = globby.sync(gpaths, { ignore: ["**/node_modules/**"] });
   config.basePath = basePath;
