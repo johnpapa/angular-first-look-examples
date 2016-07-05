@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ROUTER_DIRECTIVES } from '@angular/router-deprecated';
-import 'rxjs/Observable';
+import { Observable } from 'rxjs/Observable';
 
 import { Character, CharacterService } from './character.service';
 
