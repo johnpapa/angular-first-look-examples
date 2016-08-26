@@ -476,7 +476,9 @@ function copyExampleBoilerplate() {
   var sourceFiles = _exampleBoilerplateFiles.map(function(fn) {
     return path.join(EXAMPLES_PATH, fn);
   });
+  console.log(`sourceFiles=${sourceFiles.toString()}`)
   var examplePaths = excludeDartPaths(getExamplePaths(EXAMPLES_PATH));
+  console.log(`examplePaths=${examplePaths}`)
 
   // var dartWebSourceFiles = _exampleDartWebBoilerPlateFiles.map(function(fn){
   //   return path.join(EXAMPLES_PATH, fn);
@@ -486,17 +488,17 @@ function copyExampleBoilerplate() {
   // Make boilerplate files read-only to avoid that they be edited by mistake.
   var destFileMode = '444';
   return copyFiles(sourceFiles, examplePaths, destFileMode)
-    .then(function() {
-      return copyFiles(dartWebSourceFiles, dartExampleWebPaths, destFileMode);
-    })
+    // .then(function() {
+    //   return copyFiles(dartWebSourceFiles, dartExampleWebPaths, destFileMode);
+    // })
     // copy certain files from _examples/_protractor dir to each subdir that contains an e2e-spec file.
-    .then(function() {
-      var protractorSourceFiles =
-        _exampleProtractorBoilerplateFiles
-          .map(function(name) {return path.join(EXAMPLES_PROTRACTOR_PATH, name);});;
-      var e2eSpecPaths = getE2eSpecPaths(EXAMPLES_PATH);
-      return copyFiles(protractorSourceFiles, e2eSpecPaths, destFileMode);
-    });
+    // .then(function() {
+    //   var protractorSourceFiles =
+    //     _exampleProtractorBoilerplateFiles
+    //       .map(function(name) {return path.join(EXAMPLES_PROTRACTOR_PATH, name);});;
+    //   var e2eSpecPaths = getE2eSpecPaths(EXAMPLES_PATH);
+    //   return copyFiles(protractorSourceFiles, e2eSpecPaths, destFileMode);
+    // });
 }
 
 gulp.task('remove-example-boilerplate', function() {

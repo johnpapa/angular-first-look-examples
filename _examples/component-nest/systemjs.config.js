@@ -1,68 +1,59 @@
-/***********************************************************************************************
- * User Configuration.
- **********************************************************************************************/
-/** Map relative paths to URLs. */
-var map = {
-    'app': 'app',
-    'angular2-in-memory-web-api': 'node_modules/angular2-in-memory-web-api'
-};
-var packages = {
-    // Add your custom SystemJS packages here.
-    'angular2-in-memory-web-api': { defaultExtension: 'js' },
-    'api': { defaultExtension: 'js' },
-    'app': { defaultExtension: 'js' },
-};
-////////////////////////////////////////////////////////////////////////////////////////////////
-/***********************************************************************************************
- * Everything underneath this line is managed by the CLI.
- **********************************************************************************************/
-var barrels = [
-    // Angular specific barrels.
-    '@angular/common',
-    '@angular/compiler',
-    '@angular/core',
-    '@angular/http',
-    '@angular/platform-browser',
-    '@angular/platform-browser-dynamic',
-    '@angular/router',
-    '@angular/router-deprecated',
-    // '@angular/testing',
-    // '@angular/upgrade',
-    // Thirdparty barrels.
-    'rxjs',
-    // App specific barrels.
-    'app',
-    'app/+characters',
-    'app/+characters/character',
-    'app/+characters/character-list',
-    'app/+characters/shared',
-    'app/+dashboard',
-    'app/+vehicles',
-    'app/+vehicles/vehicle',
-    'app/+vehicles/vehicle-list',
-    'app/+vehicles/shared',
-    'app/shared',
-    'app/shared/character-services',
-    'app/shared/filter-text',
-    'app/shared/modal',
-    'app/shared/spinner',
-    'app/shared/toast',
-];
-var _cliSystemConfig = {};
-barrels.forEach(function (barrelName) {
-    _cliSystemConfig[barrelName] = { main: 'index' };
-});
-// Apply the CLI SystemJS configuration.
-System.config({
-    map: {
-        // '@angular': 'vendor/@angular',
-        // 'rxjs': 'vendor/rxjs',
-        '@angular': 'node_modules/@angular',
-        'rxjs': 'node_modules/rxjs',
-        'main': 'main.js'
-    },
-    packages: _cliSystemConfig
-});
-// Apply the user's configuration.
-System.config({ map: map, packages: packages });
-//# sourceMappingURL=system-config.js.map
+/**
+ * System configuration for Angular 2 samples
+ * Adjust as necessary for your application needs.
+ */
+(function(global) {
+
+  // map tells the System loader where to look for things
+  var map = {
+    'app':                        'app', // 'dist',
+
+    '@angular':                   'node_modules/@angular',
+    'angular2-in-memory-web-api': 'node_modules/angular2-in-memory-web-api',
+    'rxjs':                       'node_modules/rxjs'
+  };
+
+  // packages tells the System loader how to load when no filename and/or no extension
+  var packages = {
+    'app':                        { main: 'main.js',  defaultExtension: 'js' },
+    'rxjs':                       { defaultExtension: 'js' },
+    'angular2-in-memory-web-api': { main: 'index.js', defaultExtension: 'js' },
+  };
+
+  var ngPackageNames = [
+    'common',
+    'compiler',
+    'core',
+    'forms',
+    'http',
+    'platform-browser',
+    'platform-browser-dynamic',
+    'router',
+    'router-deprecated',
+    'upgrade',
+  ];
+
+  // Individual files (~300 requests):
+  function packIndex(pkgName) {
+    packages['@angular/'+pkgName] = { main: 'index.js', defaultExtension: 'js' };
+  }
+
+  // Bundled (~40 requests):
+  function packUmd(pkgName) {
+    packages['@angular/'+pkgName] = { main: 'bundles/' + pkgName + '.umd.js' };
+  }
+
+  // Most environments should use UMD; some (Karma) need the individual index files
+  var setPackageConfig = System.packageWithIndex ? packIndex : packUmd;
+
+  // Add package entries for angular packages
+  ngPackageNames.forEach(setPackageConfig);
+
+  var config = {
+    map: map,
+    packages: packages
+  };
+
+  System.config(config);
+
+})(this);
