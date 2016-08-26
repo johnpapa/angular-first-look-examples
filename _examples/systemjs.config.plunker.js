@@ -13,6 +13,7 @@
   //map tells the System loader where to look for things
   var map = {
     'app':                        'app',
+    'main':                       'main.js',
 
     '@angular':                   'https://npmcdn.com/@angular', // sufficient if we didn't pin the version
     '@angular/router':            'https://npmcdn.com/@angular/router' + routerVer,

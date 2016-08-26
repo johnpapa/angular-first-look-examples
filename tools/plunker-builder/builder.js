@@ -40,11 +40,11 @@ class PlunkerBuilder {
 
   _addPlunkerFiles(config, postData) {
     this._addReadme(config, postData);
-    if (config.basePath.indexOf('/ts') > -1) {
+    // if (config.basePath.indexOf('/ts') > -1) {
       // uses systemjs.config.js so add plunker version
       this.options.addField(postData, 'systemjs.config.js', this.systemjsConfig);
       this.options.addField(postData, 'tsconfig.json', this.tsconfig);
-    }
+    // }
   }
 
   _addReadme(config, postData) {
