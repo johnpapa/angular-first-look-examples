@@ -564,7 +564,7 @@ Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license
 */"><input type="hidden" name="files[app/dashboard/dashboard.component.ts]" value="import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs/observable';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import { Subscription } from 'rxjs/subscription';
 
@@ -1594,6 +1594,120 @@ bootstrap(AppComponent, [
 ])
   .then(success => console.log(`Bootstrap success`))
   .catch(error => console.log(error));
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license
+*/"><input type="hidden" name="files[system-config.ts]" value="/**
+ * PLUNKER VERSION (based on systemjs.config.js in angular.io)
+ * System configuration for Angular 2 samples
+ * Adjust as necessary for your application needs.
+ */
+
+let ngVer = '@2.0.0-rc.4'; // lock in the angular package version; do not let it float to current!
+let routerVer = '@3.0.0-beta.1'; // lock router version
+let formsVer = '@0.2.0'; // lock forms version
+let routerDeprecatedVer = '@2.0.0-rc.2'; // temporarily until we update all the guides
+
+  //map tells the System loader where to look for things
+const map = {
+  'app':                        'app',
+  'main':                       'main.js',
+
+  '@angular':                   'https://npmcdn.com/@angular', // sufficient if we didn't pin the version
+  '@angular/router':            'https://npmcdn.com/@angular/router' + routerVer,
+  '@angular/forms':             'https://npmcdn.com/@angular/forms' + formsVer,
+  '@angular/router-deprecated': 'https://npmcdn.com/@angular/router-deprecated' + routerDeprecatedVer,
+  'angular2-in-memory-web-api': 'https://npmcdn.com/angular2-in-memory-web-api', // get latest
+  'rxjs':                       'https://npmcdn.com/rxjs@5.0.0-beta.6',
+  'ts':                         'https://npmcdn.com/plugin-typescript@4.0.10/lib/plugin.js',
+  'typescript':                 'https://npmcdn.com/typescript@1.9.0-dev.20160409/lib/typescript.js',
+ };
+
+  //packages tells the System loader how to load when no filename and/or no extension
+const packages = {
+  'app':                        { main: 'main.ts',  defaultExtension: 'ts' },
+  'api':                        { defaultExtension: 'js' },
+  'rxjs':                       { defaultExtension: 'js' },
+  'angular2-in-memory-web-api': { main: 'index.js', defaultExtension: 'js' },
+};
+
+const barrels: any = [
+// App specific barrels.
+  'app',
+  'app/characters',
+  'app/characters/character',
+  'app/characters/character-list',
+  'app/characters/shared',
+  'app/dashboard',
+  'app/vehicles',
+  'app/vehicles/vehicle',
+  'app/vehicles/vehicle-list',
+  'app/vehicles/shared',
+  'app/shared',
+  'app/shared/character-services',
+  'app/shared/filter-text',
+  'app/shared/modal',
+  'app/shared/spinner',
+  'app/shared/toast',
+];
+
+barrels.forEach((barrelName: string) => {
+  packages[barrelName] = { main: 'index' };
+});
+
+let ngPackageNames = [
+  'common',
+  'compiler',
+  'core',
+  'http',
+  'platform-browser',
+  'platform-browser-dynamic',
+  'upgrade',
+];
+
+// Add map entries for each angular package
+// only because we're pinning the version with `ngVer`.
+ngPackageNames.forEach(function(pkgName) {
+  map['@angular/'+pkgName] = 'https://npmcdn.com/@angular/' + pkgName + ngVer;
+});
+
+// Add package entries for angular packages
+ngPackageNames.forEach(function(pkgName) {
+
+  // Bundled (~40 requests):
+  packages['@angular/'+pkgName] = { main: '/bundles/' + pkgName + '.umd.js', defaultExtension: 'js' };
+
+  // Individual files (~300 requests):
+  //packages['@angular/'+pkgName] = { main: 'index.js', defaultExtension: 'js' };
+});
+
+// No umd for router yet
+packages['@angular/router'] = { main: 'index.js', defaultExtension: 'js' };
+
+// Forms not on rc yet
+packages['@angular/forms'] = { main: 'index.js', defaultExtension: 'js' };
+
+// Temporarily until we update the guides
+packages['@angular/router-deprecated'] = { main: '/bundles/router-deprecated' + '.umd.js', defaultExtension: 'js' };
+
+const config = {
+  // DEMO ONLY! REAL CODE SHOULD NOT TRANSPILE IN THE BROWSER
+  transpiler: 'ts',
+  typescriptOptions: {
+    tsconfig: true
+  },
+  meta: {
+    'typescript': {
+      &quot;exports&quot;: &quot;ts&quot;
+    }
+  },
+  map: map,
+  packages: packages
+};
+
+System.config(config);
 
 
 /*
@@ -12632,7 +12746,7 @@ Use of this source code is governed by an MIT-style license
   <link rel=&quot;stylesheet&quot; href=&quot;assets/app.css&quot;>
 
   <!-- Polyfill(s) for older browsers -->
-  <script src=&quot;node_modules/core-js/client/shim.min.js&quot;></script>
+  <script src=&quot;https://npmcdn.com/core-js/client/shim.min.js&quot;></script>
 
   <script src=&quot;https://npmcdn.com/zone.js@0.6.12?main=browser&quot;></script>
   <script src=&quot;https://npmcdn.com/reflect-metadata@0.1.3&quot;></script>
@@ -12805,151 +12919,1062 @@ Use of this source code is governed by an MIT-style license
       &quot;type&quot;: &quot;land&quot;
     }
   ]
-}"><input type="hidden" name="files[app/ps-icon.base64.png]" value="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"><input type="hidden" name="files[assets/sprite-av-white.base64.png]" value="iVBORw0KGgoAAAANSUhEUgAAARwAAAEcCAMAAAAiKvvSAAAC91BMVEUAAAD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8Y3nl4AAAA/HRSTlMAAQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyAhIiMkJSYnKCkqKywtLi8wMTIzNDU2Nzg5Ojs8PT4/QEFCQ0RFRkdISUpLTE1OT1BRUlNUVVZX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"><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="tutorial"><input type="hidden" name="private" value="true"><input type="hidden" name="description" value="Angular 2 Example - Storyline Tracker"><input type="hidden" name="files[system-config.ts]" value="/**
- * PLUNKER VERSION (based on system-config.ts in angular.io)
- * System configuration for Angular 2 samples
- * Adjust as necessary for your application needs.
- */
+}"><input type="hidden" name="files[app/ps-icon.base64.png]" value="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"><input type="hidden" name="files[assets/sprite-av-white.base64.png]" value="iVBORw0KGgoAAAANSUhEUgAAARwAAAEcCAMAAAAiKvvSAAAC91BMVEUAAAD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8Y3nl4AAAA/HRSTlMAAQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyAhIiMkJSYnKCkqKywtLi8wMTIzNDU2Nzg5Ojs8PT4/QEFCQ0RFRkdISUpLTE1OT1BRUlNUVVZX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"><input type="hidden" name="files[assets/material.min.js]" value="/**
+ * material-design-lite - Material Design Components in CSS, JS and HTML
+ * @version v1.0.6
+ * @license Apache-2.0
+ * @copyright 2015 Google, Inc.
+ * @link https://github.com/google/material-design-lite
+ */! function() {
+    &quot;use strict&quot;;
 
-
-/***********************************************************************************************
- * User Configuration.
- **********************************************************************************************/
-let ngVer = '@2.0.0-rc.4'; // lock in the angular package version; do not let it float to current!
-
-/** Map relative paths to URLs. */
-const map: any = {
-  'app' : 'app',
-
-  'main': 'main.js',
-  '@angular' : 'node_modules/@angular',
-  '@angular': 'https://npmcdn.com/@angular',
-  'angular2-in-memory-web-api' : 'https://npmcdn.com/angular2-in-memory-web-api',
-  'rxjs': 'https://npmcdn.com/rxjs@5.0.0-beta.6',
-  'ts': 'https://npmcdn.com/plugin-typescript@4.0.10/lib/plugin.js',
-  'typescript': 'https://npmcdn.com/typescript@1.8.10/lib/typescript.js',
-};
-
-// packages tells the System loader how to load when no filename and/or no
-// extension
-const packages: any = {
-  'app' : {main : 'main.js', defaultExtension : 'js'},
-  'api' : {defaultExtension : 'js'},
-  'rxjs' : {defaultExtension : 'js'},
-  'angular2-in-memory-web-api' : {defaultExtension : 'js'},
-};
-
-const barrels: any = [
-  // App specific barrels.
-    'app',
-    'app/characters',
-    'app/characters/character',
-    'app/characters/character-list',
-    'app/characters/shared',
-    'app/dashboard',
-    'app/vehicles',
-    'app/vehicles/vehicle',
-    'app/vehicles/vehicle-list',
-    'app/vehicles/shared',
-    'app/shared',
-    'app/shared/character-services',
-    'app/shared/filter-text',
-    'app/shared/modal',
-    'app/shared/spinner',
-    'app/shared/toast',
-];
-
-barrels.forEach((barrelName: string) => {
-  packages[barrelName] = { main: 'index' };
-});
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-/***********************************************************************************************
- * Everything underneath this line is managed by the CLI.
- **********************************************************************************************/
-
-const ngPackageNames: string[] = [
-  'common',
-  'compiler',
-  'core',
-  'forms',
-  'http',
-  'platform-browser',
-  'platform-browser-dynamic',
-  'router',
-  'router-deprecated',
-  'upgrade',
-];
-
-// Individual files (~300 requests):
-function packIndex(pkgName) {
-  packages['@angular/' + pkgName] = {
-    main : 'index.js',
-    defaultExtension : 'js'
-  };
-}
-
-// Bundled (~40 requests):
-function packUmd(pkgName) {
-  packages['@angular/' + pkgName] = {
-    main : '/bundles/' + pkgName + '.umd.js',
-    defaultExtension : 'js'
-  };
-}
-
-declare var System: any;
-
-// Most environments should use UMD; some (Karma) need the individual index
-// files
-var setPackageConfig = System.packageWithIndex ? packIndex : packUmd;
-
-// Add map entries for each angular package
-// only because we're pinning the version with `ngVer`.
-ngPackageNames.forEach(function(pkgName) {
-  map['@angular/'+pkgName] = 'https://npmcdn.com/@angular/' + pkgName + ngVer;
-});
-
-// Add package entries for angular packages
-ngPackageNames.forEach(setPackageConfig);
-
-// No umd for router yet
-packages['@angular/router'] = {
-  main : 'index.js',
-  defaultExtension : 'js'
-};
-
-var config = {
-  // DEMO ONLY! REAL CODE SHOULD NOT TRANSPILE IN THE BROWSER
-  transpiler: 'ts',
-  typescriptOptions: {
-    tsconfig: true
-  },
-  meta: {
-    'typescript': {
-      &quot;exports&quot;: &quot;ts&quot;
+    function e(e, t) {
+        if (e) {
+            if (t.element_.classList.contains(t.CssClasses_.MDL_JS_RIPPLE_EFFECT)) {
+                var s = document.createElement(&quot;span&quot;);
+                s.classList.add(t.CssClasses_.MDL_RIPPLE_CONTAINER), s.classList.add(t.CssClasses_.MDL_JS_RIPPLE_EFFECT);
+                var i = document.createElement(&quot;span&quot;);
+                i.classList.add(t.CssClasses_.MDL_RIPPLE), s.appendChild(i), e.appendChild(s)
+            }
+            e.addEventListener(&quot;click&quot;, function(s) {
+                s.preventDefault();
+                var i = e.href.split(&quot;#&quot;)[1],
+                    n = t.element_.querySelector(&quot;#&quot; + i);
+                t.resetTabState_(), t.resetPanelState_(), e.classList.add(t.CssClasses_.ACTIVE_CLASS), n.classList.add(t.CssClasses_.ACTIVE_CLASS)
+            })
+        }
     }
-  },
-  map: map,
-  packages: packages
-}
-
-System.config(config);
-
-// // Add package entries for angular packages
-// ngPackageNames.forEach(function(pkgName) {
-
-//   // Bundled (~40 requests):
-//   packages['@angular/'+pkgName] = { main: pkgName + '.umd.js', defaultExtension: 'js' };
-
-//   // Individual files (~300 requests):
-//   //packages['@angular/'+pkgName] = { main: 'index.js', defaultExtension: 'js' };
-// });
-
+    function t(e, t, s, i) {
+        if (i.tabBar_.classList.contains(i.CssClasses_.JS_RIPPLE_EFFECT)) {
+            var n = document.createElement(&quot;span&quot;);
+            n.classList.add(i.CssClasses_.RIPPLE_CONTAINER), n.classList.add(i.CssClasses_.JS_RIPPLE_EFFECT);
+            var a = document.createElement(&quot;span&quot;);
+            a.classList.add(i.CssClasses_.RIPPLE), n.appendChild(a), e.appendChild(n)
+        }
+        e.addEventListener(&quot;click&quot;, function(n) {
+            n.preventDefault();
+            var a = e.href.split(&quot;#&quot;)[1],
+                l = i.content_.querySelector(&quot;#&quot; + a);
+            i.resetTabState_(t), i.resetPanelState_(s), e.classList.add(i.CssClasses_.IS_ACTIVE), l.classList.add(i.CssClasses_.IS_ACTIVE)
+        })
+    }
+    var s = {
+        upgradeDom: function(e, t) {},
+        upgradeElement: function(e, t) {},
+        upgradeElements: function(e) {},
+        upgradeAllRegistered: function() {},
+        registerUpgradedCallback: function(e, t) {},
+        register: function(e) {},
+        downgradeElements: function(e) {}
+    };
+    s = function() {
+        function e(e, t) {
+            for (var s = 0; s < p.length; s++) if (p[s].className === e) return &quot;undefined&quot; != typeof t &amp;&amp; (p[s] = t), p[s];
+            return !1
+        }
+        function t(e) {
+            var t = e.getAttribute(&quot;data-upgraded&quot;);
+            return null === t ? [&quot;&quot;] : t.split(&quot;,&quot;)
+        }
+        function s(e, s) {
+            var i = t(e);
+            return -1 !== i.indexOf(s)
+        }
+        function i(t, s) {
+            if (&quot;undefined&quot; == typeof t &amp;&amp; &quot;undefined&quot; == typeof s) for (var a = 0; a < p.length; a++) i(p[a].className, p[a].cssClass);
+            else {
+                var l = t;
+                if (&quot;undefined&quot; == typeof s) {
+                    var o = e(l);
+                    o &amp;&amp; (s = o.cssClass)
+                }
+                for (var r = document.querySelectorAll(&quot;.&quot; + s), d = 0; d < r.length; d++) n(r[d], l)
+            }
+        }
+        function n(i, n) {
+            if (!(&quot;object&quot; == typeof i &amp;&amp; i instanceof Element)) throw new Error(&quot;Invalid argument provided to upgrade MDL element.&quot;);
+            var a = t(i),
+                l = [];
+            if (n) s(i, n) || l.push(e(n));
+            else {
+                var o = i.classList;
+                p.forEach(function(e) {
+                    o.contains(e.cssClass) &amp;&amp; -1 === l.indexOf(e) &amp;&amp; !s(i, e.className) &amp;&amp; l.push(e)
+                })
+            }
+            for (var r, d = 0, _ = l.length; _ > d; d++) {
+                if (r = l[d], !r) throw new Error(&quot;Unable to find a registered component for the given class.&quot;);
+                a.push(r.className), i.setAttribute(&quot;data-upgraded&quot;, a.join(&quot;,&quot;));
+                var h = new r.classConstructor(i);
+                h[C] = r, c.push(h);
+                for (var u = 0, m = r.callbacks.length; m > u; u++) r.callbacks[u](i);
+                r.widget &amp;&amp; (i[r.className] = h);
+                var E = document.createEvent(&quot;Events&quot;);
+                E.initEvent(&quot;mdl-componentupgraded&quot;, !0, !0), i.dispatchEvent(E)
+            }
+        }
+        function a(e) {
+            Array.isArray(e) || (e = &quot;function&quot; == typeof e.item ? Array.prototype.slice.call(e) : [e]);
+            for (var t, s = 0, i = e.length; i > s; s++) t = e[s], t instanceof HTMLElement &amp;&amp; (n(t), t.children.length > 0 &amp;&amp; a(t.children))
+        }
+        function l(t) {
+            var s = &quot;undefined&quot; == typeof t.widget &amp;&amp; &quot;undefined&quot; == typeof t.widget,
+                i = !0;
+            s || (i = t.widget || t.widget);
+            var n = {
+                classConstructor: t.constructor || t.constructor,
+                className: t.classAsString || t.classAsString,
+                cssClass: t.cssClass || t.cssClass,
+                widget: i,
+                callbacks: []
+            };
+            if (p.forEach(function(e) {
+                if (e.cssClass === n.cssClass) throw new Error(&quot;The provided cssClass has already been registered: &quot; + e.cssClass);
+                if (e.className === n.className) throw new Error(&quot;The provided className has already been registered&quot;)
+            }), t.constructor.prototype.hasOwnProperty(C)) throw new Error(&quot;MDL component classes must not have &quot; + C + &quot; defined as a property.&quot;);
+            var a = e(t.classAsString, n);
+            a || p.push(n)
+        }
+        function o(t, s) {
+            var i = e(t);
+            i &amp;&amp; i.callbacks.push(s)
+        }
+        function r() {
+            for (var e = 0; e < p.length; e++) i(p[e].className)
+        }
+        function d(e) {
+            for (var t = 0; t < c.length; t++) {
+                var s = c[t];
+                if (s.element_ === e) return s
+            }
+        }
+        function _(e) {
+            if (e &amp;&amp; e[C].classConstructor.prototype.hasOwnProperty(u)) {
+                e[u]();
+                var t = c.indexOf(e);
+                c.splice(t, 1);
+                var s = e.element_.getAttribute(&quot;data-upgraded&quot;).split(&quot;,&quot;),
+                    i = s.indexOf(e[C].classAsString);
+                s.splice(i, 1), e.element_.setAttribute(&quot;data-upgraded&quot;, s.join(&quot;,&quot;));
+                var n = document.createEvent(&quot;Events&quot;);
+                n.initEvent(&quot;mdl-componentdowngraded&quot;, !0, !0), e.element_.dispatchEvent(n)
+            }
+        }
+        function h(e) {
+            var t = function(e) {
+                _(d(e))
+            };
+            if (e instanceof Array || e instanceof NodeList) for (var s = 0; s < e.length; s++) t(e[s]);
+            else {
+                if (!(e instanceof Node)) throw new Error(&quot;Invalid argument provided to downgrade MDL nodes.&quot;);
+                t(e)
+            }
+        }
+        var p = [],
+            c = [],
+            u = &quot;mdlDowngrade&quot;,
+            C = &quot;mdlComponentConfigInternal_&quot;;
+        return {
+            upgradeDom: i,
+            upgradeElement: n,
+            upgradeElements: a,
+            upgradeAllRegistered: r,
+            registerUpgradedCallback: o,
+            register: l,
+            downgradeElements: h
+        }
+    }(), s.ComponentConfigPublic, s.ComponentConfig, s.Component, s.upgradeDom = s.upgradeDom, s.upgradeElement = s.upgradeElement, s.upgradeElements = s.upgradeElements, s.upgradeAllRegistered = s.upgradeAllRegistered, s.registerUpgradedCallback = s.registerUpgradedCallback, s.register = s.register, s.downgradeElements = s.downgradeElements, window.componentHandler = s, window.componentHandler = s, window.addEventListener(&quot;load&quot;, function() {
+        &quot;classList&quot; in document.createElement(&quot;div&quot;) &amp;&amp; &quot;querySelector&quot; in document &amp;&amp; &quot;addEventListener&quot; in window &amp;&amp; Array.prototype.forEach ? (document.documentElement.classList.add(&quot;mdl-js&quot;), s.upgradeAllRegistered()) : (s.upgradeElement = function() {}, s.register = function() {})
+    }), Date.now || (Date.now = function() {
+        return (new Date).getTime()
+    }, Date.now = Date.now);
+    for (var i = [&quot;webkit&quot;, &quot;moz&quot;], n = 0; n < i.length &amp;&amp; !window.requestAnimationFrame; ++n) {
+        var a = i[n];
+        window.requestAnimationFrame = window[a + &quot;RequestAnimationFrame&quot;], window.cancelAnimationFrame = window[a + &quot;CancelAnimationFrame&quot;] || window[a + &quot;CancelRequestAnimationFrame&quot;], window.requestAnimationFrame = window.requestAnimationFrame, window.cancelAnimationFrame = window.cancelAnimationFrame
+    }
+    if (/iP(ad|hone|od).*OS 6/.test(window.navigator.userAgent) || !window.requestAnimationFrame || !window.cancelAnimationFrame) {
+        var l = 0;
+        window.requestAnimationFrame = function(e) {
+            var t = Date.now(),
+                s = Math.max(l + 16, t);
+            return setTimeout(function() {
+                e(l = s)
+            }, s - t)
+        }, window.cancelAnimationFrame = clearTimeout, window.requestAnimationFrame = window.requestAnimationFrame, window.cancelAnimationFrame = window.cancelAnimationFrame
+    }
+    var o = function(e) {
+        this.element_ = e, this.init()
+    };
+    window.MaterialButton = o, o.prototype.Constant_ = {}, o.prototype.CssClasses_ = {
+        RIPPLE_EFFECT: &quot;mdl-js-ripple-effect&quot;,
+        RIPPLE_CONTAINER: &quot;mdl-button__ripple-container&quot;,
+        RIPPLE: &quot;mdl-ripple&quot;
+    }, o.prototype.blurHandler_ = function(e) {
+        e &amp;&amp; this.element_.blur()
+    }, o.prototype.disable = function() {
+        this.element_.disabled = !0
+    }, o.prototype.disable = o.prototype.disable, o.prototype.enable = function() {
+        this.element_.disabled = !1
+    }, o.prototype.enable = o.prototype.enable, o.prototype.init = function() {
+        if (this.element_) {
+            if (this.element_.classList.contains(this.CssClasses_.RIPPLE_EFFECT)) {
+                var e = document.createElement(&quot;span&quot;);
+                e.classList.add(this.CssClasses_.RIPPLE_CONTAINER), this.rippleElement_ = document.createElement(&quot;span&quot;), this.rippleElement_.classList.add(this.CssClasses_.RIPPLE), e.appendChild(this.rippleElement_), this.boundRippleBlurHandler = this.blurHandler_.bind(this), this.rippleElement_.addEventListener(&quot;mouseup&quot;, this.boundRippleBlurHandler), this.element_.appendChild(e)
+            }
+            this.boundButtonBlurHandler = this.blurHandler_.bind(this), this.element_.addEventListener(&quot;mouseup&quot;, this.boundButtonBlurHandler), this.element_.addEventListener(&quot;mouseleave&quot;, this.boundButtonBlurHandler)
+        }
+    }, o.prototype.mdlDowngrade_ = function() {
+        this.rippleElement_ &amp;&amp; this.rippleElement_.removeEventListener(&quot;mouseup&quot;, this.boundRippleBlurHandler), this.element_.removeEventListener(&quot;mouseup&quot;, this.boundButtonBlurHandler), this.element_.removeEventListener(&quot;mouseleave&quot;, this.boundButtonBlurHandler)
+    }, o.prototype.mdlDowngrade = o.prototype.mdlDowngrade_, o.prototype.mdlDowngrade = o.prototype.mdlDowngrade, s.register({
+        constructor: o,
+        classAsString: &quot;MaterialButton&quot;,
+        cssClass: &quot;mdl-js-button&quot;,
+        widget: !0
+    });
+    var r = function(e) {
+        this.element_ = e, this.init()
+    };
+    window.MaterialCheckbox = r, r.prototype.Constant_ = {
+        TINY_TIMEOUT: .001
+    }, r.prototype.CssClasses_ = {
+        INPUT: &quot;mdl-checkbox__input&quot;,
+        BOX_OUTLINE: &quot;mdl-checkbox__box-outline&quot;,
+        FOCUS_HELPER: &quot;mdl-checkbox__focus-helper&quot;,
+        TICK_OUTLINE: &quot;mdl-checkbox__tick-outline&quot;,
+        RIPPLE_EFFECT: &quot;mdl-js-ripple-effect&quot;,
+        RIPPLE_IGNORE_EVENTS: &quot;mdl-js-ripple-effect--ignore-events&quot;,
+        RIPPLE_CONTAINER: &quot;mdl-checkbox__ripple-container&quot;,
+        RIPPLE_CENTER: &quot;mdl-ripple--center&quot;,
+        RIPPLE: &quot;mdl-ripple&quot;,
+        IS_FOCUSED: &quot;is-focused&quot;,
+        IS_DISABLED: &quot;is-disabled&quot;,
+        IS_CHECKED: &quot;is-checked&quot;,
+        IS_UPGRADED: &quot;is-upgraded&quot;
+    }, r.prototype.onChange_ = function(e) {
+        this.updateClasses_()
+    }, r.prototype.onFocus_ = function(e) {
+        this.element_.classList.add(this.CssClasses_.IS_FOCUSED)
+    }, r.prototype.onBlur_ = function(e) {
+        this.element_.classList.remove(this.CssClasses_.IS_FOCUSED)
+    }, r.prototype.onMouseUp_ = function(e) {
+        this.blur_()
+    }, r.prototype.updateClasses_ = function() {
+        this.checkDisabled(), this.checkToggleState()
+    }, r.prototype.blur_ = function() {
+        window.setTimeout(function() {
+            this.inputElement_.blur()
+        }.bind(this), this.Constant_.TINY_TIMEOUT)
+    }, r.prototype.checkToggleState = function() {
+        this.inputElement_.checked ? this.element_.classList.add(this.CssClasses_.IS_CHECKED) : this.element_.classList.remove(this.CssClasses_.IS_CHECKED)
+    }, r.prototype.checkToggleState = r.prototype.checkToggleState, r.prototype.checkDisabled = function() {
+        this.inputElement_.disabled ? this.element_.classList.add(this.CssClasses_.IS_DISABLED) : this.element_.classList.remove(this.CssClasses_.IS_DISABLED)
+    }, r.prototype.checkDisabled = r.prototype.checkDisabled, r.prototype.disable = function() {
+        this.inputElement_.disabled = !0, this.updateClasses_()
+    }, r.prototype.disable = r.prototype.disable, r.prototype.enable = function() {
+        this.inputElement_.disabled = !1, this.updateClasses_()
+    }, r.prototype.enable = r.prototype.enable, r.prototype.check = function() {
+        this.inputElement_.checked = !0, this.updateClasses_()
+    }, r.prototype.check = r.prototype.check, r.prototype.uncheck = function() {
+        this.inputElement_.checked = !1, this.updateClasses_()
+    }, r.prototype.uncheck = r.prototype.uncheck, r.prototype.init = function() {
+        if (this.element_) {
+            this.inputElement_ = this.element_.querySelector(&quot;.&quot; + this.CssClasses_.INPUT);
+            var e = document.createElement(&quot;span&quot;);
+            e.classList.add(this.CssClasses_.BOX_OUTLINE);
+            var t = document.createElement(&quot;span&quot;);
+            t.classList.add(this.CssClasses_.FOCUS_HELPER);
+            var s = document.createElement(&quot;span&quot;);
+            if (s.classList.add(this.CssClasses_.TICK_OUTLINE), e.appendChild(s), this.element_.appendChild(t), this.element_.appendChild(e), this.element_.classList.contains(this.CssClasses_.RIPPLE_EFFECT)) {
+                this.element_.classList.add(this.CssClasses_.RIPPLE_IGNORE_EVENTS), this.rippleContainerElement_ = document.createElement(&quot;span&quot;), this.rippleContainerElement_.classList.add(this.CssClasses_.RIPPLE_CONTAINER), this.rippleContainerElement_.classList.add(this.CssClasses_.RIPPLE_EFFECT), this.rippleContainerElement_.classList.add(this.CssClasses_.RIPPLE_CENTER), this.boundRippleMouseUp = this.onMouseUp_.bind(this), this.rippleContainerElement_.addEventListener(&quot;mouseup&quot;, this.boundRippleMouseUp);
+                var i = document.createElement(&quot;span&quot;);
+                i.classList.add(this.CssClasses_.RIPPLE), this.rippleContainerElement_.appendChild(i), this.element_.appendChild(this.rippleContainerElement_)
+            }
+            this.boundInputOnChange = this.onChange_.bind(this), this.boundInputOnFocus = this.onFocus_.bind(this), this.boundInputOnBlur = this.onBlur_.bind(this), this.boundElementMouseUp = this.onMouseUp_.bind(this), this.inputElement_.addEventListener(&quot;change&quot;, this.boundInputOnChange), this.inputElement_.addEventListener(&quot;focus&quot;, this.boundInputOnFocus), this.inputElement_.addEventListener(&quot;blur&quot;, this.boundInputOnBlur), this.element_.addEventListener(&quot;mouseup&quot;, this.boundElementMouseUp), this.updateClasses_(), this.element_.classList.add(this.CssClasses_.IS_UPGRADED)
+        }
+    }, r.prototype.mdlDowngrade_ = function() {
+        this.rippleContainerElement_ &amp;&amp; this.rippleContainerElement_.removeEventListener(&quot;mouseup&quot;, this.boundRippleMouseUp), this.inputElement_.removeEventListener(&quot;change&quot;, this.boundInputOnChange), this.inputElement_.removeEventListener(&quot;focus&quot;, this.boundInputOnFocus), this.inputElement_.removeEventListener(&quot;blur&quot;, this.boundInputOnBlur), this.element_.removeEventListener(&quot;mouseup&quot;, this.boundElementMouseUp)
+    }, r.prototype.mdlDowngrade = r.prototype.mdlDowngrade_, r.prototype.mdlDowngrade = r.prototype.mdlDowngrade, s.register({
+        constructor: r,
+        classAsString: &quot;MaterialCheckbox&quot;,
+        cssClass: &quot;mdl-js-checkbox&quot;,
+        widget: !0
+    });
+    var d = function(e) {
+        this.element_ = e, this.init()
+    };
+    window.MaterialIconToggle = d, d.prototype.Constant_ = {
+        TINY_TIMEOUT: .001
+    }, d.prototype.CssClasses_ = {
+        INPUT: &quot;mdl-icon-toggle__input&quot;,
+        JS_RIPPLE_EFFECT: &quot;mdl-js-ripple-effect&quot;,
+        RIPPLE_IGNORE_EVENTS: &quot;mdl-js-ripple-effect--ignore-events&quot;,
+        RIPPLE_CONTAINER: &quot;mdl-icon-toggle__ripple-container&quot;,
+        RIPPLE_CENTER: &quot;mdl-ripple--center&quot;,
+        RIPPLE: &quot;mdl-ripple&quot;,
+        IS_FOCUSED: &quot;is-focused&quot;,
+        IS_DISABLED: &quot;is-disabled&quot;,
+        IS_CHECKED: &quot;is-checked&quot;
+    }, d.prototype.onChange_ = function(e) {
+        this.updateClasses_()
+    }, d.prototype.onFocus_ = function(e) {
+        this.element_.classList.add(this.CssClasses_.IS_FOCUSED)
+    }, d.prototype.onBlur_ = function(e) {
+        this.element_.classList.remove(this.CssClasses_.IS_FOCUSED)
+    }, d.prototype.onMouseUp_ = function(e) {
+        this.blur_()
+    }, d.prototype.updateClasses_ = function() {
+        this.checkDisabled(), this.checkToggleState()
+    }, d.prototype.blur_ = function() {
+        window.setTimeout(function() {
+            this.inputElement_.blur()
+        }.bind(this), this.Constant_.TINY_TIMEOUT)
+    }, d.prototype.checkToggleState = function() {
+        this.inputElement_.checked ? this.element_.classList.add(this.CssClasses_.IS_CHECKED) : this.element_.classList.remove(this.CssClasses_.IS_CHECKED)
+    }, d.prototype.checkToggleState = d.prototype.checkToggleState, d.prototype.checkDisabled = function() {
+        this.inputElement_.disabled ? this.element_.classList.add(this.CssClasses_.IS_DISABLED) : this.element_.classList.remove(this.CssClasses_.IS_DISABLED)
+    }, d.prototype.checkDisabled = d.prototype.checkDisabled, d.prototype.disable = function() {
+        this.inputElement_.disabled = !0, this.updateClasses_()
+    }, d.prototype.disable = d.prototype.disable, d.prototype.enable = function() {
+        this.inputElement_.disabled = !1, this.updateClasses_()
+    }, d.prototype.enable = d.prototype.enable, d.prototype.check = function() {
+        this.inputElement_.checked = !0, this.updateClasses_()
+    }, d.prototype.check = d.prototype.check, d.prototype.uncheck = function() {
+        this.inputElement_.checked = !1, this.updateClasses_()
+    }, d.prototype.uncheck = d.prototype.uncheck, d.prototype.init = function() {
+        if (this.element_) {
+            if (this.inputElement_ = this.element_.querySelector(&quot;.&quot; + this.CssClasses_.INPUT), this.element_.classList.contains(this.CssClasses_.JS_RIPPLE_EFFECT)) {
+                this.element_.classList.add(this.CssClasses_.RIPPLE_IGNORE_EVENTS), this.rippleContainerElement_ = document.createElement(&quot;span&quot;), this.rippleContainerElement_.classList.add(this.CssClasses_.RIPPLE_CONTAINER), this.rippleContainerElement_.classList.add(this.CssClasses_.JS_RIPPLE_EFFECT), this.rippleContainerElement_.classList.add(this.CssClasses_.RIPPLE_CENTER), this.boundRippleMouseUp = this.onMouseUp_.bind(this), this.rippleContainerElement_.addEventListener(&quot;mouseup&quot;, this.boundRippleMouseUp);
+                var e = document.createElement(&quot;span&quot;);
+                e.classList.add(this.CssClasses_.RIPPLE), this.rippleContainerElement_.appendChild(e), this.element_.appendChild(this.rippleContainerElement_)
+            }
+            this.boundInputOnChange = this.onChange_.bind(this), this.boundInputOnFocus = this.onFocus_.bind(this), this.boundInputOnBlur = this.onBlur_.bind(this), this.boundElementOnMouseUp = this.onMouseUp_.bind(this), this.inputElement_.addEventListener(&quot;change&quot;, this.boundInputOnChange), this.inputElement_.addEventListener(&quot;focus&quot;, this.boundInputOnFocus), this.inputElement_.addEventListener(&quot;blur&quot;, this.boundInputOnBlur), this.element_.addEventListener(&quot;mouseup&quot;, this.boundElementOnMouseUp), this.updateClasses_(), this.element_.classList.add(&quot;is-upgraded&quot;)
+        }
+    }, d.prototype.mdlDowngrade_ = function() {
+        this.rippleContainerElement_ &amp;&amp; this.rippleContainerElement_.removeEventListener(&quot;mouseup&quot;, this.boundRippleMouseUp), this.inputElement_.removeEventListener(&quot;change&quot;, this.boundInputOnChange), this.inputElement_.removeEventListener(&quot;focus&quot;, this.boundInputOnFocus), this.inputElement_.removeEventListener(&quot;blur&quot;, this.boundInputOnBlur), this.element_.removeEventListener(&quot;mouseup&quot;, this.boundElementOnMouseUp)
+    }, d.prototype.mdlDowngrade = d.prototype.mdlDowngrade_, d.prototype.mdlDowngrade = d.prototype.mdlDowngrade, s.register({
+        constructor: d,
+        classAsString: &quot;MaterialIconToggle&quot;,
+        cssClass: &quot;mdl-js-icon-toggle&quot;,
+        widget: !0
+    });
+    var _ = function(e) {
+        this.element_ = e, this.init()
+    };
+    window.MaterialMenu = _, _.prototype.Constant_ = {
+        TRANSITION_DURATION_SECONDS: .3,
+        TRANSITION_DURATION_FRACTION: .8,
+        CLOSE_TIMEOUT: 150
+    }, _.prototype.Keycodes_ = {
+        ENTER: 13,
+        ESCAPE: 27,
+        SPACE: 32,
+        UP_ARROW: 38,
+        DOWN_ARROW: 40
+    }, _.prototype.CssClasses_ = {
+        CONTAINER: &quot;mdl-menu__container&quot;,
+        OUTLINE: &quot;mdl-menu__outline&quot;,
+        ITEM: &quot;mdl-menu__item&quot;,
+        ITEM_RIPPLE_CONTAINER: &quot;mdl-menu__item-ripple-container&quot;,
+        RIPPLE_EFFECT: &quot;mdl-js-ripple-effect&quot;,
+        RIPPLE_IGNORE_EVENTS: &quot;mdl-js-ripple-effect--ignore-events&quot;,
+        RIPPLE: &quot;mdl-ripple&quot;,
+        IS_UPGRADED: &quot;is-upgraded&quot;,
+        IS_VISIBLE: &quot;is-visible&quot;,
+        IS_ANIMATING: &quot;is-animating&quot;,
+        BOTTOM_LEFT: &quot;mdl-menu--bottom-left&quot;,
+        BOTTOM_RIGHT: &quot;mdl-menu--bottom-right&quot;,
+        TOP_LEFT: &quot;mdl-menu--top-left&quot;,
+        TOP_RIGHT: &quot;mdl-menu--top-right&quot;,
+        UNALIGNED: &quot;mdl-menu--unaligned&quot;
+    }, _.prototype.init = function() {
+        if (this.element_) {
+            var e = document.createElement(&quot;div&quot;);
+            e.classList.add(this.CssClasses_.CONTAINER), this.element_.parentElement.insertBefore(e, this.element_), this.element_.parentElement.removeChild(this.element_), e.appendChild(this.element_), this.container_ = e;
+            var t = document.createElement(&quot;div&quot;);
+            t.classList.add(this.CssClasses_.OUTLINE), this.outline_ = t, e.insertBefore(t, this.element_);
+            var s = this.element_.getAttribute(&quot;for&quot;),
+                i = null;
+            s &amp;&amp; (i = document.getElementById(s), i &amp;&amp; (this.forElement_ = i, i.addEventListener(&quot;click&quot;, this.handleForClick_.bind(this)), i.addEventListener(&quot;keydown&quot;, this.handleForKeyboardEvent_.bind(this))));
+            var n = this.element_.querySelectorAll(&quot;.&quot; + this.CssClasses_.ITEM);
+            this.boundItemKeydown_ = this.handleItemKeyboardEvent_.bind(this), this.boundItemClick_ = this.handleItemClick_.bind(this);
+            for (var a = 0; a < n.length; a++) n[a].addEventListener(&quot;click&quot;, this.boundItemClick_), n[a].tabIndex = &quot;-1&quot;, n[a].addEventListener(&quot;keydown&quot;, this.boundItemKeydown_);
+            if (this.element_.classList.contains(this.CssClasses_.RIPPLE_EFFECT)) for (this.element_.classList.add(this.CssClasses_.RIPPLE_IGNORE_EVENTS), a = 0; a < n.length; a++) {
+                var l = n[a],
+                    o = document.createElement(&quot;span&quot;);
+                o.classList.add(this.CssClasses_.ITEM_RIPPLE_CONTAINER);
+                var r = document.createElement(&quot;span&quot;);
+                r.classList.add(this.CssClasses_.RIPPLE), o.appendChild(r), l.appendChild(o), l.classList.add(this.CssClasses_.RIPPLE_EFFECT)
+            }
+            this.element_.classList.contains(this.CssClasses_.BOTTOM_LEFT) &amp;&amp; this.outline_.classList.add(this.CssClasses_.BOTTOM_LEFT), this.element_.classList.contains(this.CssClasses_.BOTTOM_RIGHT) &amp;&amp; this.outline_.classList.add(this.CssClasses_.BOTTOM_RIGHT), this.element_.classList.contains(this.CssClasses_.TOP_LEFT) &amp;&amp; this.outline_.classList.add(this.CssClasses_.TOP_LEFT), this.element_.classList.contains(this.CssClasses_.TOP_RIGHT) &amp;&amp; this.outline_.classList.add(this.CssClasses_.TOP_RIGHT), this.element_.classList.contains(this.CssClasses_.UNALIGNED) &amp;&amp; this.outline_.classList.add(this.CssClasses_.UNALIGNED), e.classList.add(this.CssClasses_.IS_UPGRADED)
+        }
+    }, _.prototype.handleForClick_ = function(e) {
+        if (this.element_ &amp;&amp; this.forElement_) {
+            var t = this.forElement_.getBoundingClientRect(),
+                s = this.forElement_.parentElement.getBoundingClientRect();
+            this.element_.classList.contains(this.CssClasses_.UNALIGNED) || (this.element_.classList.contains(this.CssClasses_.BOTTOM_RIGHT) ? (this.container_.style.right = s.right - t.right + &quot;px&quot;, this.container_.style.top = this.forElement_.offsetTop + this.forElement_.offsetHeight + &quot;px&quot;) : this.element_.classList.contains(this.CssClasses_.TOP_LEFT) ? (this.container_.style.left = this.forElement_.offsetLeft + &quot;px&quot;, this.container_.style.bottom = s.bottom - t.top + &quot;px&quot;) : this.element_.classList.contains(this.CssClasses_.TOP_RIGHT) ? (this.container_.style.right = s.right - t.right + &quot;px&quot;, this.container_.style.bottom = s.bottom - t.top + &quot;px&quot;) : (this.container_.style.left = this.forElement_.offsetLeft + &quot;px&quot;, this.container_.style.top = this.forElement_.offsetTop + this.forElement_.offsetHeight + &quot;px&quot;))
+        }
+        this.toggle(e)
+    }, _.prototype.handleForKeyboardEvent_ = function(e) {
+        if (this.element_ &amp;&amp; this.container_ &amp;&amp; this.forElement_) {
+            var t = this.element_.querySelectorAll(&quot;.&quot; + this.CssClasses_.ITEM + &quot;:not([disabled])&quot;);
+            t &amp;&amp; t.length > 0 &amp;&amp; this.container_.classList.contains(this.CssClasses_.IS_VISIBLE) &amp;&amp; (e.keyCode === this.Keycodes_.UP_ARROW ? (e.preventDefault(), t[t.length - 1].focus()) : e.keyCode === this.Keycodes_.DOWN_ARROW &amp;&amp; (e.preventDefault(), t[0].focus()))
+        }
+    }, _.prototype.handleItemKeyboardEvent_ = function(e) {
+        if (this.element_ &amp;&amp; this.container_) {
+            var t = this.element_.querySelectorAll(&quot;.&quot; + this.CssClasses_.ITEM + &quot;:not([disabled])&quot;);
+            if (t &amp;&amp; t.length > 0 &amp;&amp; this.container_.classList.contains(this.CssClasses_.IS_VISIBLE)) {
+                var s = Array.prototype.slice.call(t).indexOf(e.target);
+                if (e.keyCode === this.Keycodes_.UP_ARROW) e.preventDefault(), s > 0 ? t[s - 1].focus() : t[t.length - 1].focus();
+                else if (e.keyCode === this.Keycodes_.DOWN_ARROW) e.preventDefault(), t.length > s + 1 ? t[s + 1].focus() : t[0].focus();
+                else if (e.keyCode === this.Keycodes_.SPACE || e.keyCode === this.Keycodes_.ENTER) {
+                    e.preventDefault();
+                    var i = new MouseEvent(&quot;mousedown&quot;);
+                    e.target.dispatchEvent(i), i = new MouseEvent(&quot;mouseup&quot;), e.target.dispatchEvent(i), e.target.click()
+                } else e.keyCode === this.Keycodes_.ESCAPE &amp;&amp; (e.preventDefault(), this.hide())
+            }
+        }
+    }, _.prototype.handleItemClick_ = function(e) {
+        e.target.hasAttribute(&quot;disabled&quot;) ? e.stopPropagation() : (this.closing_ = !0, window.setTimeout(function(e) {
+            this.hide(), this.closing_ = !1
+        }.bind(this), this.Constant_.CLOSE_TIMEOUT))
+    }, _.prototype.applyClip_ = function(e, t) {
+        this.element_.classList.contains(this.CssClasses_.UNALIGNED) ? this.element_.style.clip = &quot;&quot; : this.element_.classList.contains(this.CssClasses_.BOTTOM_RIGHT) ? this.element_.style.clip = &quot;rect(0 &quot; + t + &quot;px 0 &quot; + t + &quot;px)&quot; : this.element_.classList.contains(this.CssClasses_.TOP_LEFT) ? this.element_.style.clip = &quot;rect(&quot; + e + &quot;px 0 &quot; + e + &quot;px 0)&quot; : this.element_.classList.contains(this.CssClasses_.TOP_RIGHT) ? this.element_.style.clip = &quot;rect(&quot; + e + &quot;px &quot; + t + &quot;px &quot; + e + &quot;px &quot; + t + &quot;px)&quot; : this.element_.style.clip = &quot;&quot;
+    }, _.prototype.addAnimationEndListener_ = function() {
+        var e = function() {
+            this.element_.removeEventListener(&quot;transitionend&quot;, e), this.element_.removeEventListener(&quot;webkitTransitionEnd&quot;, e), this.element_.classList.remove(this.CssClasses_.IS_ANIMATING)
+        }.bind(this);
+        this.element_.addEventListener(&quot;transitionend&quot;, e), this.element_.addEventListener(&quot;webkitTransitionEnd&quot;, e)
+    }, _.prototype.show = function(e) {
+        if (this.element_ &amp;&amp; this.container_ &amp;&amp; this.outline_) {
+            var t = this.element_.getBoundingClientRect().height,
+                s = this.element_.getBoundingClientRect().width;
+            this.container_.style.width = s + &quot;px&quot;, this.container_.style.height = t + &quot;px&quot;, this.outline_.style.width = s + &quot;px&quot;, this.outline_.style.height = t + &quot;px&quot;;
+            for (var i = this.Constant_.TRANSITION_DURATION_SECONDS * this.Constant_.TRANSITION_DURATION_FRACTION, n = this.element_.querySelectorAll(&quot;.&quot; + this.CssClasses_.ITEM), a = 0; a < n.length; a++) {
+                var l = null;
+                l = this.element_.classList.contains(this.CssClasses_.TOP_LEFT) || this.element_.classList.contains(this.CssClasses_.TOP_RIGHT) ? (t - n[a].offsetTop - n[a].offsetHeight) / t * i + &quot;s&quot; : n[a].offsetTop / t * i + &quot;s&quot;, n[a].style.transitionDelay = l
+            }
+            this.applyClip_(t, s), window.requestAnimationFrame(function() {
+                this.element_.classList.add(this.CssClasses_.IS_ANIMATING), this.element_.style.clip = &quot;rect(0 &quot; + s + &quot;px &quot; + t + &quot;px 0)&quot;, this.container_.classList.add(this.CssClasses_.IS_VISIBLE)
+            }.bind(this)), this.addAnimationEndListener_();
+            var o = function(t) {
+                t === e || this.closing_ || t.target.parentNode === this.element_ || (document.removeEventListener(&quot;click&quot;, o), this.hide())
+            }.bind(this);
+            document.addEventListener(&quot;click&quot;, o)
+        }
+    }, _.prototype.show = _.prototype.show, _.prototype.hide = function() {
+        if (this.element_ &amp;&amp; this.container_ &amp;&amp; this.outline_) {
+            for (var e = this.element_.querySelectorAll(&quot;.&quot; + this.CssClasses_.ITEM), t = 0; t < e.length; t++) e[t].style.transitionDelay = null;
+            var s = this.element_.getBoundingClientRect(),
+                i = s.height,
+                n = s.width;
+            this.element_.classList.add(this.CssClasses_.IS_ANIMATING), this.applyClip_(i, n), this.container_.classList.remove(this.CssClasses_.IS_VISIBLE), this.addAnimationEndListener_()
+        }
+    }, _.prototype.hide = _.prototype.hide, _.prototype.toggle = function(e) {
+        this.container_.classList.contains(this.CssClasses_.IS_VISIBLE) ? this.hide() : this.show(e)
+    }, _.prototype.toggle = _.prototype.toggle, _.prototype.mdlDowngrade_ = function() {
+        for (var e = this.element_.querySelectorAll(&quot;.&quot; + this.CssClasses_.ITEM), t = 0; t < e.length; t++) e[t].removeEventListener(&quot;click&quot;, this.boundItemClick_), e[t].removeEventListener(&quot;keydown&quot;, this.boundItemKeydown_)
+    }, _.prototype.mdlDowngrade = _.prototype.mdlDowngrade_, _.prototype.mdlDowngrade = _.prototype.mdlDowngrade, s.register({
+        constructor: _,
+        classAsString: &quot;MaterialMenu&quot;,
+        cssClass: &quot;mdl-js-menu&quot;,
+        widget: !0
+    });
+    var h = function(e) {
+        this.element_ = e, this.init()
+    };
+    window.MaterialProgress = h, h.prototype.Constant_ = {}, h.prototype.CssClasses_ = {
+        INDETERMINATE_CLASS: &quot;mdl-progress__indeterminate&quot;
+    }, h.prototype.setProgress = function(e) {
+        this.element_.classList.contains(this.CssClasses_.INDETERMINATE_CLASS) || (this.progressbar_.style.width = e + &quot;%&quot;)
+    }, h.prototype.setProgress = h.prototype.setProgress, h.prototype.setBuffer = function(e) {
+        this.bufferbar_.style.width = e + &quot;%&quot;, this.auxbar_.style.width = 100 - e + &quot;%&quot;
+    }, h.prototype.setBuffer = h.prototype.setBuffer, h.prototype.init = function() {
+        if (this.element_) {
+            var e = document.createElement(&quot;div&quot;);
+            e.className = &quot;progressbar bar bar1&quot;, this.element_.appendChild(e), this.progressbar_ = e, e = document.createElement(&quot;div&quot;), e.className = &quot;bufferbar bar bar2&quot;, this.element_.appendChild(e), this.bufferbar_ = e, e = document.createElement(&quot;div&quot;), e.className = &quot;auxbar bar bar3&quot;, this.element_.appendChild(e), this.auxbar_ = e, this.progressbar_.style.width = &quot;0%&quot;, this.bufferbar_.style.width = &quot;100%&quot;, this.auxbar_.style.width = &quot;0%&quot;, this.element_.classList.add(&quot;is-upgraded&quot;)
+        }
+    }, h.prototype.mdlDowngrade_ = function() {
+        for (; this.element_.firstChild;) this.element_.removeChild(this.element_.firstChild)
+    }, h.prototype.mdlDowngrade = h.prototype.mdlDowngrade_, h.prototype.mdlDowngrade = h.prototype.mdlDowngrade, s.register({
+        constructor: h,
+        classAsString: &quot;MaterialProgress&quot;,
+        cssClass: &quot;mdl-js-progress&quot;,
+        widget: !0
+    });
+    var p = function(e) {
+        this.element_ = e, this.init()
+    };
+    window.MaterialRadio = p, p.prototype.Constant_ = {
+        TINY_TIMEOUT: .001
+    }, p.prototype.CssClasses_ = {
+        IS_FOCUSED: &quot;is-focused&quot;,
+        IS_DISABLED: &quot;is-disabled&quot;,
+        IS_CHECKED: &quot;is-checked&quot;,
+        IS_UPGRADED: &quot;is-upgraded&quot;,
+        JS_RADIO: &quot;mdl-js-radio&quot;,
+        RADIO_BTN: &quot;mdl-radio__button&quot;,
+        RADIO_OUTER_CIRCLE: &quot;mdl-radio__outer-circle&quot;,
+        RADIO_INNER_CIRCLE: &quot;mdl-radio__inner-circle&quot;,
+        RIPPLE_EFFECT: &quot;mdl-js-ripple-effect&quot;,
+        RIPPLE_IGNORE_EVENTS: &quot;mdl-js-ripple-effect--ignore-events&quot;,
+        RIPPLE_CONTAINER: &quot;mdl-radio__ripple-container&quot;,
+        RIPPLE_CENTER: &quot;mdl-ripple--center&quot;,
+        RIPPLE: &quot;mdl-ripple&quot;
+    }, p.prototype.onChange_ = function(e) {
+        for (var t = document.getElementsByClassName(this.CssClasses_.JS_RADIO), s = 0; s < t.length; s++) {
+            var i = t[s].querySelector(&quot;.&quot; + this.CssClasses_.RADIO_BTN);
+            i.getAttribute(&quot;name&quot;) === this.btnElement_.getAttribute(&quot;name&quot;) &amp;&amp; t[s].MaterialRadio.updateClasses_()
+        }
+    }, p.prototype.onFocus_ = function(e) {
+        this.element_.classList.add(this.CssClasses_.IS_FOCUSED)
+    }, p.prototype.onBlur_ = function(e) {
+        this.element_.classList.remove(this.CssClasses_.IS_FOCUSED)
+    }, p.prototype.onMouseup_ = function(e) {
+        this.blur_()
+    }, p.prototype.updateClasses_ = function() {
+        this.checkDisabled(), this.checkToggleState()
+    }, p.prototype.blur_ = function() {
+        window.setTimeout(function() {
+            this.btnElement_.blur()
+        }.bind(this), this.Constant_.TINY_TIMEOUT)
+    }, p.prototype.checkDisabled = function() {
+        this.btnElement_.disabled ? this.element_.classList.add(this.CssClasses_.IS_DISABLED) : this.element_.classList.remove(this.CssClasses_.IS_DISABLED)
+    }, p.prototype.checkDisabled = p.prototype.checkDisabled, p.prototype.checkToggleState = function() {
+        this.btnElement_.checked ? this.element_.classList.add(this.CssClasses_.IS_CHECKED) : this.element_.classList.remove(this.CssClasses_.IS_CHECKED)
+    }, p.prototype.checkToggleState = p.prototype.checkToggleState, p.prototype.disable = function() {
+        this.btnElement_.disabled = !0, this.updateClasses_()
+    }, p.prototype.disable = p.prototype.disable, p.prototype.enable = function() {
+        this.btnElement_.disabled = !1, this.updateClasses_()
+    }, p.prototype.enable = p.prototype.enable, p.prototype.check = function() {
+        this.btnElement_.checked = !0, this.updateClasses_()
+    }, p.prototype.check = p.prototype.check, p.prototype.uncheck = function() {
+        this.btnElement_.checked = !1, this.updateClasses_()
+    }, p.prototype.uncheck = p.prototype.uncheck, p.prototype.init = function() {
+        if (this.element_) {
+            this.btnElement_ = this.element_.querySelector(&quot;.&quot; + this.CssClasses_.RADIO_BTN), this.boundChangeHandler_ = this.onChange_.bind(this), this.boundFocusHandler_ = this.onChange_.bind(this), this.boundBlurHandler_ = this.onBlur_.bind(this), this.boundMouseUpHandler_ = this.onMouseup_.bind(this);
+            var e = document.createElement(&quot;span&quot;);
+            e.classList.add(this.CssClasses_.RADIO_OUTER_CIRCLE);
+            var t = document.createElement(&quot;span&quot;);
+            t.classList.add(this.CssClasses_.RADIO_INNER_CIRCLE), this.element_.appendChild(e), this.element_.appendChild(t);
+            var s;
+            if (this.element_.classList.contains(this.CssClasses_.RIPPLE_EFFECT)) {
+                this.element_.classList.add(this.CssClasses_.RIPPLE_IGNORE_EVENTS), s = document.createElement(&quot;span&quot;), s.classList.add(this.CssClasses_.RIPPLE_CONTAINER), s.classList.add(this.CssClasses_.RIPPLE_EFFECT), s.classList.add(this.CssClasses_.RIPPLE_CENTER), s.addEventListener(&quot;mouseup&quot;, this.boundMouseUpHandler_);
+                var i = document.createElement(&quot;span&quot;);
+                i.classList.add(this.CssClasses_.RIPPLE), s.appendChild(i), this.element_.appendChild(s)
+            }
+            this.btnElement_.addEventListener(&quot;change&quot;, this.boundChangeHandler_), this.btnElement_.addEventListener(&quot;focus&quot;, this.boundFocusHandler_), this.btnElement_.addEventListener(&quot;blur&quot;, this.boundBlurHandler_), this.element_.addEventListener(&quot;mouseup&quot;, this.boundMouseUpHandler_), this.updateClasses_(), this.element_.classList.add(this.CssClasses_.IS_UPGRADED)
+        }
+    }, p.prototype.mdlDowngrade_ = function() {
+        var e = this.element_.querySelector(&quot;.&quot; + this.CssClasses_.RIPPLE_CONTAINER);
+        this.btnElement_.removeEventListener(&quot;change&quot;, this.boundChangeHandler_), this.btnElement_.removeEventListener(&quot;focus&quot;, this.boundFocusHandler_), this.btnElement_.removeEventListener(&quot;blur&quot;, this.boundBlurHandler_), this.element_.removeEventListener(&quot;mouseup&quot;, this.boundMouseUpHandler_), e &amp;&amp; (e.removeEventListener(&quot;mouseup&quot;, this.boundMouseUpHandler_), this.element_.removeChild(e))
+    }, p.prototype.mdlDowngrade = p.prototype.mdlDowngrade_, p.prototype.mdlDowngrade = p.prototype.mdlDowngrade, s.register({
+        constructor: p,
+        classAsString: &quot;MaterialRadio&quot;,
+        cssClass: &quot;mdl-js-radio&quot;,
+        widget: !0
+    });
+    var c = function(e) {
+        this.element_ = e, this.isIE_ = window.navigator.msPointerEnabled, this.init()
+    };
+    window.MaterialSlider = c, c.prototype.Constant_ = {}, c.prototype.CssClasses_ = {
+        IE_CONTAINER: &quot;mdl-slider__ie-container&quot;,
+        SLIDER_CONTAINER: &quot;mdl-slider__container&quot;,
+        BACKGROUND_FLEX: &quot;mdl-slider__background-flex&quot;,
+        BACKGROUND_LOWER: &quot;mdl-slider__background-lower&quot;,
+        BACKGROUND_UPPER: &quot;mdl-slider__background-upper&quot;,
+        IS_LOWEST_VALUE: &quot;is-lowest-value&quot;,
+        IS_UPGRADED: &quot;is-upgraded&quot;
+    }, c.prototype.onInput_ = function(e) {
+        this.updateValueStyles_()
+    }, c.prototype.onChange_ = function(e) {
+        this.updateValueStyles_()
+    }, c.prototype.onMouseUp_ = function(e) {
+        e.target.blur()
+    }, c.prototype.onContainerMouseDown_ = function(e) {
+        if (e.target === this.element_.parentElement) {
+            e.preventDefault();
+            var t = new MouseEvent(&quot;mousedown&quot;, {
+                target: e.target,
+                buttons: e.buttons,
+                clientX: e.clientX,
+                clientY: this.element_.getBoundingClientRect().y
+            });
+            this.element_.dispatchEvent(t)
+        }
+    }, c.prototype.updateValueStyles_ = function() {
+        var e = (this.element_.value - this.element_.min) / (this.element_.max - this.element_.min);
+        0 === e ? this.element_.classList.add(this.CssClasses_.IS_LOWEST_VALUE) : this.element_.classList.remove(this.CssClasses_.IS_LOWEST_VALUE), this.isIE_ || (this.backgroundLower_.style.flex = e, this.backgroundLower_.style.webkitFlex = e, this.backgroundUpper_.style.flex = 1 - e, this.backgroundUpper_.style.webkitFlex = 1 - e)
+    }, c.prototype.disable = function() {
+        this.element_.disabled = !0
+    }, c.prototype.disable = c.prototype.disable, c.prototype.enable = function() {
+        this.element_.disabled = !1
+    }, c.prototype.enable = c.prototype.enable, c.prototype.change = function(e) {
+        &quot;undefined&quot; != typeof e &amp;&amp; (this.element_.value = e), this.updateValueStyles_()
+    }, c.prototype.change = c.prototype.change, c.prototype.init = function() {
+        if (this.element_) {
+            if (this.isIE_) {
+                var e = document.createElement(&quot;div&quot;);
+                e.classList.add(this.CssClasses_.IE_CONTAINER),
+                this.element_.parentElement.insertBefore(e, this.element_), this.element_.parentElement.removeChild(this.element_), e.appendChild(this.element_)
+            } else {
+                var t = document.createElement(&quot;div&quot;);
+                t.classList.add(this.CssClasses_.SLIDER_CONTAINER), this.element_.parentElement.insertBefore(t, this.element_), this.element_.parentElement.removeChild(this.element_), t.appendChild(this.element_);
+                var s = document.createElement(&quot;div&quot;);
+                s.classList.add(this.CssClasses_.BACKGROUND_FLEX), t.appendChild(s), this.backgroundLower_ = document.createElement(&quot;div&quot;), this.backgroundLower_.classList.add(this.CssClasses_.BACKGROUND_LOWER), s.appendChild(this.backgroundLower_), this.backgroundUpper_ = document.createElement(&quot;div&quot;), this.backgroundUpper_.classList.add(this.CssClasses_.BACKGROUND_UPPER), s.appendChild(this.backgroundUpper_)
+            }
+            this.boundInputHandler = this.onInput_.bind(this), this.boundChangeHandler = this.onChange_.bind(this), this.boundMouseUpHandler = this.onMouseUp_.bind(this), this.boundContainerMouseDownHandler = this.onContainerMouseDown_.bind(this), this.element_.addEventListener(&quot;input&quot;, this.boundInputHandler), this.element_.addEventListener(&quot;change&quot;, this.boundChangeHandler), this.element_.addEventListener(&quot;mouseup&quot;, this.boundMouseUpHandler), this.element_.parentElement.addEventListener(&quot;mousedown&quot;, this.boundContainerMouseDownHandler), this.updateValueStyles_(), this.element_.classList.add(this.CssClasses_.IS_UPGRADED)
+        }
+    }, c.prototype.mdlDowngrade_ = function() {
+        this.element_.removeEventListener(&quot;input&quot;, this.boundInputHandler), this.element_.removeEventListener(&quot;change&quot;, this.boundChangeHandler), this.element_.removeEventListener(&quot;mouseup&quot;, this.boundMouseUpHandler), this.element_.parentElement.removeEventListener(&quot;mousedown&quot;, this.boundContainerMouseDownHandler)
+    }, c.prototype.mdlDowngrade = c.prototype.mdlDowngrade_, c.prototype.mdlDowngrade = c.prototype.mdlDowngrade, s.register({
+        constructor: c,
+        classAsString: &quot;MaterialSlider&quot;,
+        cssClass: &quot;mdl-js-slider&quot;,
+        widget: !0
+    });
+    var u = function(e) {
+        this.element_ = e, this.init()
+    };
+    window.MaterialSpinner = u, u.prototype.Constant_ = {
+        MDL_SPINNER_LAYER_COUNT: 4
+    }, u.prototype.CssClasses_ = {
+        MDL_SPINNER_LAYER: &quot;mdl-spinner__layer&quot;,
+        MDL_SPINNER_CIRCLE_CLIPPER: &quot;mdl-spinner__circle-clipper&quot;,
+        MDL_SPINNER_CIRCLE: &quot;mdl-spinner__circle&quot;,
+        MDL_SPINNER_GAP_PATCH: &quot;mdl-spinner__gap-patch&quot;,
+        MDL_SPINNER_LEFT: &quot;mdl-spinner__left&quot;,
+        MDL_SPINNER_RIGHT: &quot;mdl-spinner__right&quot;
+    }, u.prototype.createLayer = function(e) {
+        var t = document.createElement(&quot;div&quot;);
+        t.classList.add(this.CssClasses_.MDL_SPINNER_LAYER), t.classList.add(this.CssClasses_.MDL_SPINNER_LAYER + &quot;-&quot; + e);
+        var s = document.createElement(&quot;div&quot;);
+        s.classList.add(this.CssClasses_.MDL_SPINNER_CIRCLE_CLIPPER), s.classList.add(this.CssClasses_.MDL_SPINNER_LEFT);
+        var i = document.createElement(&quot;div&quot;);
+        i.classList.add(this.CssClasses_.MDL_SPINNER_GAP_PATCH);
+        var n = document.createElement(&quot;div&quot;);
+        n.classList.add(this.CssClasses_.MDL_SPINNER_CIRCLE_CLIPPER), n.classList.add(this.CssClasses_.MDL_SPINNER_RIGHT);
+        for (var a = [s, i, n], l = 0; l < a.length; l++) {
+            var o = document.createElement(&quot;div&quot;);
+            o.classList.add(this.CssClasses_.MDL_SPINNER_CIRCLE), a[l].appendChild(o)
+        }
+        t.appendChild(s), t.appendChild(i), t.appendChild(n), this.element_.appendChild(t)
+    }, u.prototype.createLayer = u.prototype.createLayer, u.prototype.stop = function() {
+        this.element_.classList.remove(&quot;is-active&quot;)
+    }, u.prototype.stop = u.prototype.stop, u.prototype.start = function() {
+        this.element_.classList.add(&quot;is-active&quot;)
+    }, u.prototype.start = u.prototype.start, u.prototype.init = function() {
+        if (this.element_) {
+            for (var e = 1; e <= this.Constant_.MDL_SPINNER_LAYER_COUNT; e++) this.createLayer(e);
+            this.element_.classList.add(&quot;is-upgraded&quot;)
+        }
+    }, s.register({
+        constructor: u,
+        classAsString: &quot;MaterialSpinner&quot;,
+        cssClass: &quot;mdl-js-spinner&quot;,
+        widget: !0
+    });
+    var C = function(e) {
+        this.element_ = e, this.init()
+    };
+    window.MaterialSwitch = C, C.prototype.Constant_ = {
+        TINY_TIMEOUT: .001
+    }, C.prototype.CssClasses_ = {
+        INPUT: &quot;mdl-switch__input&quot;,
+        TRACK: &quot;mdl-switch__track&quot;,
+        THUMB: &quot;mdl-switch__thumb&quot;,
+        FOCUS_HELPER: &quot;mdl-switch__focus-helper&quot;,
+        RIPPLE_EFFECT: &quot;mdl-js-ripple-effect&quot;,
+        RIPPLE_IGNORE_EVENTS: &quot;mdl-js-ripple-effect--ignore-events&quot;,
+        RIPPLE_CONTAINER: &quot;mdl-switch__ripple-container&quot;,
+        RIPPLE_CENTER: &quot;mdl-ripple--center&quot;,
+        RIPPLE: &quot;mdl-ripple&quot;,
+        IS_FOCUSED: &quot;is-focused&quot;,
+        IS_DISABLED: &quot;is-disabled&quot;,
+        IS_CHECKED: &quot;is-checked&quot;
+    }, C.prototype.onChange_ = function(e) {
+        this.updateClasses_()
+    }, C.prototype.onFocus_ = function(e) {
+        this.element_.classList.add(this.CssClasses_.IS_FOCUSED)
+    }, C.prototype.onBlur_ = function(e) {
+        this.element_.classList.remove(this.CssClasses_.IS_FOCUSED)
+    }, C.prototype.onMouseUp_ = function(e) {
+        this.blur_()
+    }, C.prototype.updateClasses_ = function() {
+        this.checkDisabled(), this.checkToggleState()
+    }, C.prototype.blur_ = function() {
+        window.setTimeout(function() {
+            this.inputElement_.blur()
+        }.bind(this), this.Constant_.TINY_TIMEOUT)
+    }, C.prototype.checkDisabled = function() {
+        this.inputElement_.disabled ? this.element_.classList.add(this.CssClasses_.IS_DISABLED) : this.element_.classList.remove(this.CssClasses_.IS_DISABLED)
+    }, C.prototype.checkDisabled = C.prototype.checkDisabled, C.prototype.checkToggleState = function() {
+        this.inputElement_.checked ? this.element_.classList.add(this.CssClasses_.IS_CHECKED) : this.element_.classList.remove(this.CssClasses_.IS_CHECKED)
+    }, C.prototype.checkToggleState = C.prototype.checkToggleState, C.prototype.disable = function() {
+        this.inputElement_.disabled = !0, this.updateClasses_()
+    }, C.prototype.disable = C.prototype.disable, C.prototype.enable = function() {
+        this.inputElement_.disabled = !1, this.updateClasses_()
+    }, C.prototype.enable = C.prototype.enable, C.prototype.on = function() {
+        this.inputElement_.checked = !0, this.updateClasses_()
+    }, C.prototype.on = C.prototype.on, C.prototype.off = function() {
+        this.inputElement_.checked = !1, this.updateClasses_()
+    }, C.prototype.off = C.prototype.off, C.prototype.init = function() {
+        if (this.element_) {
+            this.inputElement_ = this.element_.querySelector(&quot;.&quot; + this.CssClasses_.INPUT);
+            var e = document.createElement(&quot;div&quot;);
+            e.classList.add(this.CssClasses_.TRACK);
+            var t = document.createElement(&quot;div&quot;);
+            t.classList.add(this.CssClasses_.THUMB);
+            var s = document.createElement(&quot;span&quot;);
+            if (s.classList.add(this.CssClasses_.FOCUS_HELPER), t.appendChild(s), this.element_.appendChild(e), this.element_.appendChild(t), this.boundMouseUpHandler = this.onMouseUp_.bind(this), this.element_.classList.contains(this.CssClasses_.RIPPLE_EFFECT)) {
+                this.element_.classList.add(this.CssClasses_.RIPPLE_IGNORE_EVENTS), this.rippleContainerElement_ = document.createElement(&quot;span&quot;), this.rippleContainerElement_.classList.add(this.CssClasses_.RIPPLE_CONTAINER), this.rippleContainerElement_.classList.add(this.CssClasses_.RIPPLE_EFFECT), this.rippleContainerElement_.classList.add(this.CssClasses_.RIPPLE_CENTER), this.rippleContainerElement_.addEventListener(&quot;mouseup&quot;, this.boundMouseUpHandler);
+                var i = document.createElement(&quot;span&quot;);
+                i.classList.add(this.CssClasses_.RIPPLE), this.rippleContainerElement_.appendChild(i), this.element_.appendChild(this.rippleContainerElement_)
+            }
+            this.boundChangeHandler = this.onChange_.bind(this), this.boundFocusHandler = this.onFocus_.bind(this), this.boundBlurHandler = this.onBlur_.bind(this), this.inputElement_.addEventListener(&quot;change&quot;, this.boundChangeHandler), this.inputElement_.addEventListener(&quot;focus&quot;, this.boundFocusHandler), this.inputElement_.addEventListener(&quot;blur&quot;, this.boundBlurHandler), this.element_.addEventListener(&quot;mouseup&quot;, this.boundMouseUpHandler), this.updateClasses_(), this.element_.classList.add(&quot;is-upgraded&quot;)
+        }
+    }, C.prototype.mdlDowngrade_ = function() {
+        this.rippleContainerElement_ &amp;&amp; this.rippleContainerElement_.removeEventListener(&quot;mouseup&quot;, this.boundMouseUpHandler), this.inputElement_.removeEventListener(&quot;change&quot;, this.boundChangeHandler), this.inputElement_.removeEventListener(&quot;focus&quot;, this.boundFocusHandler), this.inputElement_.removeEventListener(&quot;blur&quot;, this.boundBlurHandler), this.element_.removeEventListener(&quot;mouseup&quot;, this.boundMouseUpHandler)
+    }, C.prototype.mdlDowngrade = C.prototype.mdlDowngrade_, C.prototype.mdlDowngrade = C.prototype.mdlDowngrade, s.register({
+        constructor: C,
+        classAsString: &quot;MaterialSwitch&quot;,
+        cssClass: &quot;mdl-js-switch&quot;,
+        widget: !0
+    });
+    var m = function(e) {
+        this.element_ = e, this.init()
+    };
+    window.MaterialTabs = m, m.prototype.Constant_ = {}, m.prototype.CssClasses_ = {
+        TAB_CLASS: &quot;mdl-tabs__tab&quot;,
+        PANEL_CLASS: &quot;mdl-tabs__panel&quot;,
+        ACTIVE_CLASS: &quot;is-active&quot;,
+        UPGRADED_CLASS: &quot;is-upgraded&quot;,
+        MDL_JS_RIPPLE_EFFECT: &quot;mdl-js-ripple-effect&quot;,
+        MDL_RIPPLE_CONTAINER: &quot;mdl-tabs__ripple-container&quot;,
+        MDL_RIPPLE: &quot;mdl-ripple&quot;,
+        MDL_JS_RIPPLE_EFFECT_IGNORE_EVENTS: &quot;mdl-js-ripple-effect--ignore-events&quot;
+    }, m.prototype.initTabs_ = function() {
+        this.element_.classList.contains(this.CssClasses_.MDL_JS_RIPPLE_EFFECT) &amp;&amp; this.element_.classList.add(this.CssClasses_.MDL_JS_RIPPLE_EFFECT_IGNORE_EVENTS), this.tabs_ = this.element_.querySelectorAll(&quot;.&quot; + this.CssClasses_.TAB_CLASS), this.panels_ = this.element_.querySelectorAll(&quot;.&quot; + this.CssClasses_.PANEL_CLASS);
+        for (var t = 0; t < this.tabs_.length; t++) new e(this.tabs_[t], this);
+        this.element_.classList.add(this.CssClasses_.UPGRADED_CLASS)
+    }, m.prototype.resetTabState_ = function() {
+        for (var e = 0; e < this.tabs_.length; e++) this.tabs_[e].classList.remove(this.CssClasses_.ACTIVE_CLASS)
+    }, m.prototype.resetPanelState_ = function() {
+        for (var e = 0; e < this.panels_.length; e++) this.panels_[e].classList.remove(this.CssClasses_.ACTIVE_CLASS)
+    }, m.prototype.init = function() {
+        this.element_ &amp;&amp; this.initTabs_()
+    }, s.register({
+        constructor: m,
+        classAsString: &quot;MaterialTabs&quot;,
+        cssClass: &quot;mdl-js-tabs&quot;
+    });
+    var E = function(e) {
+        this.element_ = e, this.maxRows = this.Constant_.NO_MAX_ROWS, this.init()
+    };
+    window.MaterialTextfield = E, E.prototype.Constant_ = {
+        NO_MAX_ROWS: -1,
+        MAX_ROWS_ATTRIBUTE: &quot;maxrows&quot;
+    }, E.prototype.CssClasses_ = {
+        LABEL: &quot;mdl-textfield__label&quot;,
+        INPUT: &quot;mdl-textfield__input&quot;,
+        IS_DIRTY: &quot;is-dirty&quot;,
+        IS_FOCUSED: &quot;is-focused&quot;,
+        IS_DISABLED: &quot;is-disabled&quot;,
+        IS_INVALID: &quot;is-invalid&quot;,
+        IS_UPGRADED: &quot;is-upgraded&quot;
+    }, E.prototype.onKeyDown_ = function(e) {
+        var t = e.target.value.split(&quot;\n&quot;).length;
+        13 === e.keyCode &amp;&amp; t >= this.maxRows &amp;&amp; e.preventDefault()
+    }, E.prototype.onFocus_ = function(e) {
+        this.element_.classList.add(this.CssClasses_.IS_FOCUSED)
+    }, E.prototype.onBlur_ = function(e) {
+        this.element_.classList.remove(this.CssClasses_.IS_FOCUSED)
+    }, E.prototype.updateClasses_ = function() {
+        this.checkDisabled(), this.checkValidity(), this.checkDirty()
+    }, E.prototype.checkDisabled = function() {
+        this.input_.disabled ? this.element_.classList.add(this.CssClasses_.IS_DISABLED) : this.element_.classList.remove(this.CssClasses_.IS_DISABLED)
+    }, E.prototype.checkDisabled = E.prototype.checkDisabled, E.prototype.checkValidity = function() {
+        this.input_.validity &amp;&amp; (this.input_.validity.valid ? this.element_.classList.remove(this.CssClasses_.IS_INVALID) : this.element_.classList.add(this.CssClasses_.IS_INVALID))
+    }, E.prototype.checkValidity = E.prototype.checkValidity, E.prototype.checkDirty = function() {
+        this.input_.value &amp;&amp; this.input_.value.length > 0 ? this.element_.classList.add(this.CssClasses_.IS_DIRTY) : this.element_.classList.remove(this.CssClasses_.IS_DIRTY)
+    }, E.prototype.checkDirty = E.prototype.checkDirty, E.prototype.disable = function() {
+        this.input_.disabled = !0, this.updateClasses_()
+    }, E.prototype.disable = E.prototype.disable, E.prototype.enable = function() {
+        this.input_.disabled = !1, this.updateClasses_()
+    }, E.prototype.enable = E.prototype.enable, E.prototype.change = function(e) {
+        this.input_.value = e || &quot;&quot;, this.updateClasses_()
+    }, E.prototype.change = E.prototype.change, E.prototype.init = function() {
+        if (this.element_ &amp;&amp; (this.label_ = this.element_.querySelector(&quot;.&quot; + this.CssClasses_.LABEL), this.input_ = this.element_.querySelector(&quot;.&quot; + this.CssClasses_.INPUT), this.input_)) {
+            this.input_.hasAttribute(this.Constant_.MAX_ROWS_ATTRIBUTE) &amp;&amp; (this.maxRows = parseInt(this.input_.getAttribute(this.Constant_.MAX_ROWS_ATTRIBUTE), 10), isNaN(this.maxRows) &amp;&amp; (this.maxRows = this.Constant_.NO_MAX_ROWS)), this.boundUpdateClassesHandler = this.updateClasses_.bind(this), this.boundFocusHandler = this.onFocus_.bind(this), this.boundBlurHandler = this.onBlur_.bind(this), this.input_.addEventListener(&quot;input&quot;, this.boundUpdateClassesHandler), this.input_.addEventListener(&quot;focus&quot;, this.boundFocusHandler), this.input_.addEventListener(&quot;blur&quot;, this.boundBlurHandler), this.maxRows !== this.Constant_.NO_MAX_ROWS &amp;&amp; (this.boundKeyDownHandler = this.onKeyDown_.bind(this), this.input_.addEventListener(&quot;keydown&quot;, this.boundKeyDownHandler));
+            var e = this.element_.classList.contains(this.CssClasses_.IS_INVALID);
+            this.updateClasses_(), this.element_.classList.add(this.CssClasses_.IS_UPGRADED), e &amp;&amp; this.element_.classList.add(this.CssClasses_.IS_INVALID)
+        }
+    }, E.prototype.mdlDowngrade_ = function() {
+        this.input_.removeEventListener(&quot;input&quot;, this.boundUpdateClassesHandler), this.input_.removeEventListener(&quot;focus&quot;, this.boundFocusHandler), this.input_.removeEventListener(&quot;blur&quot;, this.boundBlurHandler), this.boundKeyDownHandler &amp;&amp; this.input_.removeEventListener(&quot;keydown&quot;, this.boundKeyDownHandler)
+    }, E.prototype.mdlDowngrade = E.prototype.mdlDowngrade_, E.prototype.mdlDowngrade = E.prototype.mdlDowngrade, s.register({
+        constructor: E,
+        classAsString: &quot;MaterialTextfield&quot;,
+        cssClass: &quot;mdl-js-textfield&quot;,
+        widget: !0
+    });
+    var L = function(e) {
+        this.element_ = e, this.init()
+    };
+    window.MaterialTooltip = L, L.prototype.Constant_ = {}, L.prototype.CssClasses_ = {
+        IS_ACTIVE: &quot;is-active&quot;
+    }, L.prototype.handleMouseEnter_ = function(e) {
+        e.stopPropagation();
+        var t = e.target.getBoundingClientRect(),
+            s = t.left + t.width / 2,
+            i = -1 * (this.element_.offsetWidth / 2);
+        0 > s + i ? (this.element_.style.left = 0, this.element_.style.marginLeft = 0) : (this.element_.style.left = s + &quot;px&quot;, this.element_.style.marginLeft = i + &quot;px&quot;), this.element_.style.top = t.top + t.height + 10 + &quot;px&quot;, this.element_.classList.add(this.CssClasses_.IS_ACTIVE), window.addEventListener(&quot;scroll&quot;, this.boundMouseLeaveHandler, !1), window.addEventListener(&quot;touchmove&quot;, this.boundMouseLeaveHandler, !1)
+    }, L.prototype.handleMouseLeave_ = function(e) {
+        e.stopPropagation(), this.element_.classList.remove(this.CssClasses_.IS_ACTIVE), window.removeEventListener(&quot;scroll&quot;, this.boundMouseLeaveHandler), window.removeEventListener(&quot;touchmove&quot;, this.boundMouseLeaveHandler, !1)
+    }, L.prototype.init = function() {
+        if (this.element_) {
+            var e = this.element_.getAttribute(&quot;for&quot;);
+            e &amp;&amp; (this.forElement_ = document.getElementById(e)), this.forElement_ &amp;&amp; (this.forElement_.hasAttribute(&quot;tabindex&quot;) || this.forElement_.setAttribute(&quot;tabindex&quot;, &quot;0&quot;), this.boundMouseEnterHandler = this.handleMouseEnter_.bind(this), this.boundMouseLeaveHandler = this.handleMouseLeave_.bind(this), this.forElement_.addEventListener(&quot;mouseenter&quot;, this.boundMouseEnterHandler, !1), this.forElement_.addEventListener(&quot;click&quot;, this.boundMouseEnterHandler, !1), this.forElement_.addEventListener(&quot;blur&quot;, this.boundMouseLeaveHandler), this.forElement_.addEventListener(&quot;touchstart&quot;, this.boundMouseEnterHandler, !1), this.forElement_.addEventListener(&quot;mouseleave&quot;, this.boundMouseLeaveHandler))
+        }
+    }, L.prototype.mdlDowngrade_ = function() {
+        this.forElement_ &amp;&amp; (this.forElement_.removeEventListener(&quot;mouseenter&quot;, this.boundMouseEnterHandler, !1), this.forElement_.removeEventListener(&quot;click&quot;, this.boundMouseEnterHandler, !1), this.forElement_.removeEventListener(&quot;touchstart&quot;, this.boundMouseEnterHandler, !1), this.forElement_.removeEventListener(&quot;mouseleave&quot;, this.boundMouseLeaveHandler))
+    }, L.prototype.mdlDowngrade = L.prototype.mdlDowngrade_, L.prototype.mdlDowngrade = L.prototype.mdlDowngrade, s.register({
+        constructor: L,
+        classAsString: &quot;MaterialTooltip&quot;,
+        cssClass: &quot;mdl-tooltip&quot;
+    });
+    var I = function(e) {
+        this.element_ = e, this.init()
+    };
+    window.MaterialLayout = I, I.prototype.Constant_ = {
+        MAX_WIDTH: &quot;(max-width: 1024px)&quot;,
+        TAB_SCROLL_PIXELS: 100,
+        MENU_ICON: &quot;menu&quot;,
+        CHEVRON_LEFT: &quot;chevron_left&quot;,
+        CHEVRON_RIGHT: &quot;chevron_right&quot;
+    }, I.prototype.Mode_ = {
+        STANDARD: 0,
+        SEAMED: 1,
+        WATERFALL: 2,
+        SCROLL: 3
+    }, I.prototype.CssClasses_ = {
+        CONTAINER: &quot;mdl-layout__container&quot;,
+        HEADER: &quot;mdl-layout__header&quot;,
+        DRAWER: &quot;mdl-layout__drawer&quot;,
+        CONTENT: &quot;mdl-layout__content&quot;,
+        DRAWER_BTN: &quot;mdl-layout__drawer-button&quot;,
+        ICON: &quot;material-icons&quot;,
+        JS_RIPPLE_EFFECT: &quot;mdl-js-ripple-effect&quot;,
+        RIPPLE_CONTAINER: &quot;mdl-layout__tab-ripple-container&quot;,
+        RIPPLE: &quot;mdl-ripple&quot;,
+        RIPPLE_IGNORE_EVENTS: &quot;mdl-js-ripple-effect--ignore-events&quot;,
+        HEADER_SEAMED: &quot;mdl-layout__header--seamed&quot;,
+        HEADER_WATERFALL: &quot;mdl-layout__header--waterfall&quot;,
+        HEADER_SCROLL: &quot;mdl-layout__header--scroll&quot;,
+        FIXED_HEADER: &quot;mdl-layout--fixed-header&quot;,
+        OBFUSCATOR: &quot;mdl-layout__obfuscator&quot;,
+        TAB_BAR: &quot;mdl-layout__tab-bar&quot;,
+        TAB_CONTAINER: &quot;mdl-layout__tab-bar-container&quot;,
+        TAB: &quot;mdl-layout__tab&quot;,
+        TAB_BAR_BUTTON: &quot;mdl-layout__tab-bar-button&quot;,
+        TAB_BAR_LEFT_BUTTON: &quot;mdl-layout__tab-bar-left-button&quot;,
+        TAB_BAR_RIGHT_BUTTON: &quot;mdl-layout__tab-bar-right-button&quot;,
+        PANEL: &quot;mdl-layout__tab-panel&quot;,
+        HAS_DRAWER: &quot;has-drawer&quot;,
+        HAS_TABS: &quot;has-tabs&quot;,
+        HAS_SCROLLING_HEADER: &quot;has-scrolling-header&quot;,
+        CASTING_SHADOW: &quot;is-casting-shadow&quot;,
+        IS_COMPACT: &quot;is-compact&quot;,
+        IS_SMALL_SCREEN: &quot;is-small-screen&quot;,
+        IS_DRAWER_OPEN: &quot;is-visible&quot;,
+        IS_ACTIVE: &quot;is-active&quot;,
+        IS_UPGRADED: &quot;is-upgraded&quot;,
+        IS_ANIMATING: &quot;is-animating&quot;,
+        ON_LARGE_SCREEN: &quot;mdl-layout--large-screen-only&quot;,
+        ON_SMALL_SCREEN: &quot;mdl-layout--small-screen-only&quot;
+    }, I.prototype.contentScrollHandler_ = function() {
+        this.header_.classList.contains(this.CssClasses_.IS_ANIMATING) || (this.content_.scrollTop > 0 &amp;&amp; !this.header_.classList.contains(this.CssClasses_.IS_COMPACT) ? (this.header_.classList.add(this.CssClasses_.CASTING_SHADOW), this.header_.classList.add(this.CssClasses_.IS_COMPACT), this.header_.classList.add(this.CssClasses_.IS_ANIMATING)) : this.content_.scrollTop <= 0 &amp;&amp; this.header_.classList.contains(this.CssClasses_.IS_COMPACT) &amp;&amp; (this.header_.classList.remove(this.CssClasses_.CASTING_SHADOW), this.header_.classList.remove(this.CssClasses_.IS_COMPACT), this.header_.classList.add(this.CssClasses_.IS_ANIMATING)))
+    }, I.prototype.screenSizeHandler_ = function() {
+        this.screenSizeMediaQuery_.matches ? this.element_.classList.add(this.CssClasses_.IS_SMALL_SCREEN) : (this.element_.classList.remove(this.CssClasses_.IS_SMALL_SCREEN), this.drawer_ &amp;&amp; (this.drawer_.classList.remove(this.CssClasses_.IS_DRAWER_OPEN), this.obfuscator_.classList.remove(this.CssClasses_.IS_DRAWER_OPEN)))
+    }, I.prototype.drawerToggleHandler_ = function() {
+        this.drawer_.classList.toggle(this.CssClasses_.IS_DRAWER_OPEN), this.obfuscator_.classList.toggle(this.CssClasses_.IS_DRAWER_OPEN)
+    }, I.prototype.headerTransitionEndHandler_ = function() {
+        this.header_.classList.remove(this.CssClasses_.IS_ANIMATING)
+    }, I.prototype.headerClickHandler_ = function() {
+        this.header_.classList.contains(this.CssClasses_.IS_COMPACT) &amp;&amp; (this.header_.classList.remove(this.CssClasses_.IS_COMPACT), this.header_.classList.add(this.CssClasses_.IS_ANIMATING))
+    }, I.prototype.resetTabState_ = function(e) {
+        for (var t = 0; t < e.length; t++) e[t].classList.remove(this.CssClasses_.IS_ACTIVE)
+    }, I.prototype.resetPanelState_ = function(e) {
+        for (var t = 0; t < e.length; t++) e[t].classList.remove(this.CssClasses_.IS_ACTIVE)
+    }, I.prototype.init = function() {
+        if (this.element_) {
+            var e = document.createElement(&quot;div&quot;);
+            e.classList.add(this.CssClasses_.CONTAINER), this.element_.parentElement.insertBefore(e, this.element_), this.element_.parentElement.removeChild(this.element_), e.appendChild(this.element_);
+            for (var s = this.element_.childNodes, i = s.length, n = 0; i > n; n++) {
+                var a = s[n];
+                a.classList &amp;&amp; a.classList.contains(this.CssClasses_.HEADER) &amp;&amp; (this.header_ = a), a.classList &amp;&amp; a.classList.contains(this.CssClasses_.DRAWER) &amp;&amp; (this.drawer_ = a), a.classList &amp;&amp; a.classList.contains(this.CssClasses_.CONTENT) &amp;&amp; (this.content_ = a)
+            }
+            this.header_ &amp;&amp; (this.tabBar_ = this.header_.querySelector(&quot;.&quot; + this.CssClasses_.TAB_BAR));
+            var l = this.Mode_.STANDARD;
+            if (this.header_ &amp;&amp; (this.header_.classList.contains(this.CssClasses_.HEADER_SEAMED) ? l = this.Mode_.SEAMED : this.header_.classList.contains(this.CssClasses_.HEADER_WATERFALL) ? (l = this.Mode_.WATERFALL, this.header_.addEventListener(&quot;transitionend&quot;, this.headerTransitionEndHandler_.bind(this)), this.header_.addEventListener(&quot;click&quot;, this.headerClickHandler_.bind(this))) : this.header_.classList.contains(this.CssClasses_.HEADER_SCROLL) &amp;&amp; (l = this.Mode_.SCROLL, e.classList.add(this.CssClasses_.HAS_SCROLLING_HEADER)), l === this.Mode_.STANDARD ? (this.header_.classList.add(this.CssClasses_.CASTING_SHADOW), this.tabBar_ &amp;&amp; this.tabBar_.classList.add(this.CssClasses_.CASTING_SHADOW)) : l === this.Mode_.SEAMED || l === this.Mode_.SCROLL ? (this.header_.classList.remove(this.CssClasses_.CASTING_SHADOW), this.tabBar_ &amp;&amp; this.tabBar_.classList.remove(this.CssClasses_.CASTING_SHADOW)) : l === this.Mode_.WATERFALL &amp;&amp; (this.content_.addEventListener(&quot;scroll&quot;, this.contentScrollHandler_.bind(this)), this.contentScrollHandler_())), this.drawer_) {
+                var o = this.element_.querySelector(&quot;.&quot; + this.CssClasses_.DRAWER_BTN);
+                if (!o) {
+                    o = document.createElement(&quot;div&quot;), o.classList.add(this.CssClasses_.DRAWER_BTN);
+                    var r = document.createElement(&quot;i&quot;);
+                    r.classList.add(this.CssClasses_.ICON), r.textContent = this.Constant_.MENU_ICON, o.appendChild(r)
+                }
+                this.drawer_.classList.contains(this.CssClasses_.ON_LARGE_SCREEN) ? o.classList.add(this.CssClasses_.ON_LARGE_SCREEN) : this.drawer_.classList.contains(this.CssClasses_.ON_SMALL_SCREEN) &amp;&amp; o.classList.add(this.CssClasses_.ON_SMALL_SCREEN), o.addEventListener(&quot;click&quot;, this.drawerToggleHandler_.bind(this)), this.element_.classList.add(this.CssClasses_.HAS_DRAWER), this.element_.classList.contains(this.CssClasses_.FIXED_HEADER) ? this.header_.insertBefore(o, this.header_.firstChild) : this.element_.insertBefore(o, this.content_);
+                var d = document.createElement(&quot;div&quot;);
+                d.classList.add(this.CssClasses_.OBFUSCATOR), this.element_.appendChild(d), d.addEventListener(&quot;click&quot;, this.drawerToggleHandler_.bind(this)), this.obfuscator_ = d
+            }
+            if (this.screenSizeMediaQuery_ = window.matchMedia(this.Constant_.MAX_WIDTH), this.screenSizeMediaQuery_.addListener(this.screenSizeHandler_.bind(this)), this.screenSizeHandler_(), this.header_ &amp;&amp; this.tabBar_) {
+                this.element_.classList.add(this.CssClasses_.HAS_TABS);
+                var _ = document.createElement(&quot;div&quot;);
+                _.classList.add(this.CssClasses_.TAB_CONTAINER), this.header_.insertBefore(_, this.tabBar_), this.header_.removeChild(this.tabBar_);
+                var h = document.createElement(&quot;div&quot;);
+                h.classList.add(this.CssClasses_.TAB_BAR_BUTTON), h.classList.add(this.CssClasses_.TAB_BAR_LEFT_BUTTON);
+                var p = document.createElement(&quot;i&quot;);
+                p.classList.add(this.CssClasses_.ICON), p.textContent = this.Constant_.CHEVRON_LEFT, h.appendChild(p), h.addEventListener(&quot;click&quot;, function() {
+                    this.tabBar_.scrollLeft -= this.Constant_.TAB_SCROLL_PIXELS
+                }.bind(this));
+                var c = document.createElement(&quot;div&quot;);
+                c.classList.add(this.CssClasses_.TAB_BAR_BUTTON), c.classList.add(this.CssClasses_.TAB_BAR_RIGHT_BUTTON);
+                var u = document.createElement(&quot;i&quot;);
+                u.classList.add(this.CssClasses_.ICON), u.textContent = this.Constant_.CHEVRON_RIGHT, c.appendChild(u), c.addEventListener(&quot;click&quot;, function() {
+                    this.tabBar_.scrollLeft += this.Constant_.TAB_SCROLL_PIXELS
+                }.bind(this)), _.appendChild(h), _.appendChild(this.tabBar_), _.appendChild(c);
+                var C = function() {
+                    this.tabBar_.scrollLeft > 0 ? h.classList.add(this.CssClasses_.IS_ACTIVE) : h.classList.remove(this.CssClasses_.IS_ACTIVE), this.tabBar_.scrollLeft < this.tabBar_.scrollWidth - this.tabBar_.offsetWidth ? c.classList.add(this.CssClasses_.IS_ACTIVE) : c.classList.remove(this.CssClasses_.IS_ACTIVE)
+                }.bind(this);
+                this.tabBar_.addEventListener(&quot;scroll&quot;, C), C(), this.tabBar_.classList.contains(this.CssClasses_.JS_RIPPLE_EFFECT) &amp;&amp; this.tabBar_.classList.add(this.CssClasses_.RIPPLE_IGNORE_EVENTS);
+                for (var m = this.tabBar_.querySelectorAll(&quot;.&quot; + this.CssClasses_.TAB), E = this.content_.querySelectorAll(&quot;.&quot; + this.CssClasses_.PANEL), L = 0; L < m.length; L++) new t(m[L], m, E, this)
+            }
+            this.element_.classList.add(this.CssClasses_.IS_UPGRADED)
+        }
+    }, s.register({
+        constructor: I,
+        classAsString: &quot;MaterialLayout&quot;,
+        cssClass: &quot;mdl-js-layout&quot;
+    });
+    var f = function(e) {
+        this.element_ = e, this.init()
+    };
+    window.MaterialDataTable = f, f.prototype.Constant_ = {}, f.prototype.CssClasses_ = {
+        DATA_TABLE: &quot;mdl-data-table&quot;,
+        SELECTABLE: &quot;mdl-data-table--selectable&quot;,
+        SELECT_ELEMENT: &quot;mdl-data-table__select&quot;,
+        IS_SELECTED: &quot;is-selected&quot;,
+        IS_UPGRADED: &quot;is-upgraded&quot;
+    }, f.prototype.selectRow_ = function(e, t, s) {
+        return t ? function() {
+            e.checked ? t.classList.add(this.CssClasses_.IS_SELECTED) : t.classList.remove(this.CssClasses_.IS_SELECTED)
+        }.bind(this) : s ? function() {
+            var t, i;
+            if (e.checked) for (t = 0; t < s.length; t++) i = s[t].querySelector(&quot;td&quot;).querySelector(&quot;.mdl-checkbox&quot;), i.MaterialCheckbox.check(), s[t].classList.add(this.CssClasses_.IS_SELECTED);
+            else for (t = 0; t < s.length; t++) i = s[t].querySelector(&quot;td&quot;).querySelector(&quot;.mdl-checkbox&quot;), i.MaterialCheckbox.uncheck(), s[t].classList.remove(this.CssClasses_.IS_SELECTED)
+        }.bind(this) : void 0
+    }, f.prototype.createCheckbox_ = function(e, t) {
+        var i = document.createElement(&quot;label&quot;),
+            n = [&quot;mdl-checkbox&quot;, &quot;mdl-js-checkbox&quot;, &quot;mdl-js-ripple-effect&quot;, this.CssClasses_.SELECT_ELEMENT];
+        i.className = n.join(&quot; &quot;);
+        var a = document.createElement(&quot;input&quot;);
+        return a.type = &quot;checkbox&quot;, a.classList.add(&quot;mdl-checkbox__input&quot;), a.addEventListener(&quot;change&quot;, this.selectRow_(a, e, t)), i.appendChild(a), s.upgradeElement(i, &quot;MaterialCheckbox&quot;), i
+    }, f.prototype.init = function() {
+        if (this.element_) {
+            var e = this.element_.querySelector(&quot;th&quot;),
+                t = this.element_.querySelector(&quot;tbody&quot;).querySelectorAll(&quot;tr&quot;);
+            if (this.element_.classList.contains(this.CssClasses_.SELECTABLE)) {
+                var s = document.createElement(&quot;th&quot;),
+                    i = this.createCheckbox_(null, t);
+                s.appendChild(i), e.parentElement.insertBefore(s, e);
+                for (var n = 0; n < t.length; n++) {
+                    var a = t[n].querySelector(&quot;td&quot;);
+                    if (a) {
+                        var l = document.createElement(&quot;td&quot;),
+                            o = this.createCheckbox_(t[n]);
+                        l.appendChild(o), t[n].insertBefore(l, a)
+                    }
+                }
+            }
+            this.element_.classList.add(this.CssClasses_.IS_UPGRADED)
+        }
+    }, s.register({
+        constructor: f,
+        classAsString: &quot;MaterialDataTable&quot;,
+        cssClass: &quot;mdl-js-data-table&quot;
+    });
+    var b = function(e) {
+        this.element_ = e, this.init()
+    };
+    window.MaterialRipple = b, b.prototype.Constant_ = {
+        INITIAL_SCALE: &quot;scale(0.0001, 0.0001)&quot;,
+        INITIAL_SIZE: &quot;1px&quot;,
+        INITIAL_OPACITY: &quot;0.4&quot;,
+        FINAL_OPACITY: &quot;0&quot;,
+        FINAL_SCALE: &quot;&quot;
+    }, b.prototype.CssClasses_ = {
+        RIPPLE_CENTER: &quot;mdl-ripple--center&quot;,
+        RIPPLE_EFFECT_IGNORE_EVENTS: &quot;mdl-js-ripple-effect--ignore-events&quot;,
+        RIPPLE: &quot;mdl-ripple&quot;,
+        IS_ANIMATING: &quot;is-animating&quot;,
+        IS_VISIBLE: &quot;is-visible&quot;
+    }, b.prototype.downHandler_ = function(e) {
+        if (!this.rippleElement_.style.width &amp;&amp; !this.rippleElement_.style.height) {
+            var t = this.element_.getBoundingClientRect();
+            this.boundHeight = t.height, this.boundWidth = t.width, this.rippleSize_ = 2 * Math.sqrt(t.width * t.width + t.height * t.height) + 2, this.rippleElement_.style.width = this.rippleSize_ + &quot;px&quot;, this.rippleElement_.style.height = this.rippleSize_ + &quot;px&quot;
+        }
+        if (this.rippleElement_.classList.add(this.CssClasses_.IS_VISIBLE), &quot;mousedown&quot; === e.type &amp;&amp; this.ignoringMouseDown_) this.ignoringMouseDown_ = !1;
+        else {
+            &quot;touchstart&quot; === e.type &amp;&amp; (this.ignoringMouseDown_ = !0);
+            var s = this.getFrameCount();
+            if (s > 0) return;
+            this.setFrameCount(1);
+            var i, n, a = e.currentTarget.getBoundingClientRect();
+            if (0 === e.clientX &amp;&amp; 0 === e.clientY) i = Math.round(a.width / 2), n = Math.round(a.height / 2);
+            else {
+                var l = e.clientX ? e.clientX : e.touches[0].clientX,
+                    o = e.clientY ? e.clientY : e.touches[0].clientY;
+                i = Math.round(l - a.left), n = Math.round(o - a.top)
+            }
+            this.setRippleXY(i, n), this.setRippleStyles(!0), window.requestAnimationFrame(this.animFrameHandler.bind(this))
+        }
+    }, b.prototype.upHandler_ = function(e) {
+        e &amp;&amp; 2 !== e.detail &amp;&amp; this.rippleElement_.classList.remove(this.CssClasses_.IS_VISIBLE), window.setTimeout(function() {
+            this.rippleElement_.classList.remove(this.CssClasses_.IS_VISIBLE)
+        }.bind(this), 0)
+    }, b.prototype.init = function() {
+        if (this.element_) {
+            var e = this.element_.classList.contains(this.CssClasses_.RIPPLE_CENTER);
+            this.element_.classList.contains(this.CssClasses_.RIPPLE_EFFECT_IGNORE_EVENTS) || (this.rippleElement_ = this.element_.querySelector(&quot;.&quot; + this.CssClasses_.RIPPLE), this.frameCount_ = 0, this.rippleSize_ = 0, this.x_ = 0, this.y_ = 0, this.ignoringMouseDown_ = !1, this.boundDownHandler = this.downHandler_.bind(this), this.element_.addEventListener(&quot;mousedown&quot;, this.boundDownHandler), this.element_.addEventListener(&quot;touchstart&quot;, this.boundDownHandler), this.boundUpHandler = this.upHandler_.bind(this), this.element_.addEventListener(&quot;mouseup&quot;, this.boundUpHandler), this.element_.addEventListener(&quot;mouseleave&quot;, this.boundUpHandler), this.element_.addEventListener(&quot;touchend&quot;, this.boundUpHandler), this.element_.addEventListener(&quot;blur&quot;, this.boundUpHandler), this.getFrameCount = function() {
+                return this.frameCount_
+            }, this.setFrameCount = function(e) {
+                this.frameCount_ = e
+            }, this.getRippleElement = function() {
+                return this.rippleElement_
+            }, this.setRippleXY = function(e, t) {
+                this.x_ = e, this.y_ = t
+            }, this.setRippleStyles = function(t) {
+                if (null !== this.rippleElement_) {
+                    var s, i, n, a = &quot;translate(&quot; + this.x_ + &quot;px, &quot; + this.y_ + &quot;px)&quot;;
+                    t ? (i = this.Constant_.INITIAL_SCALE, n = this.Constant_.INITIAL_SIZE) : (i = this.Constant_.FINAL_SCALE, n = this.rippleSize_ + &quot;px&quot;, e &amp;&amp; (a = &quot;translate(&quot; + this.boundWidth / 2 + &quot;px, &quot; + this.boundHeight / 2 + &quot;px)&quot;)), s = &quot;translate(-50%, -50%) &quot; + a + i, this.rippleElement_.style.webkitTransform = s, this.rippleElement_.style.msTransform = s, this.rippleElement_.style.transform = s, t ? this.rippleElement_.classList.remove(this.CssClasses_.IS_ANIMATING) : this.rippleElement_.classList.add(this.CssClasses_.IS_ANIMATING)
+                }
+            }, this.animFrameHandler = function() {
+                this.frameCount_-- > 0 ? window.requestAnimationFrame(this.animFrameHandler.bind(this)) : this.setRippleStyles(!1)
+            })
+        }
+    }, b.prototype.mdlDowngrade_ = function() {
+        this.element_.removeEventListener(&quot;mousedown&quot;, this.boundDownHandler), this.element_.removeEventListener(&quot;touchstart&quot;, this.boundDownHandler), this.element_.removeEventListener(&quot;mouseup&quot;, this.boundUpHandler), this.element_.removeEventListener(&quot;mouseleave&quot;, this.boundUpHandler), this.element_.removeEventListener(&quot;touchend&quot;, this.boundUpHandler), this.element_.removeEventListener(&quot;blur&quot;, this.boundUpHandler)
+    }, b.prototype.mdlDowngrade = b.prototype.mdlDowngrade_, b.prototype.mdlDowngrade = b.prototype.mdlDowngrade, s.register({
+        constructor: b,
+        classAsString: &quot;MaterialRipple&quot;,
+        cssClass: &quot;mdl-js-ripple-effect&quot;,
+        widget: !1
+    })
+}();
+//# sourceMappingURL=material.min.js.map
 
 /*
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license
-*/"><input type="hidden" name="files[tsconfig.json]" value="{
+*/"><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="tutorial"><input type="hidden" name="private" value="true"><input type="hidden" name="description" value="Angular 2 Example - Storyline Tracker"><input type="hidden" name="files[tsconfig.json]" value="{
   &quot;compilerOptions&quot;: {
     &quot;emitDecoratorMetadata&quot;: true,
     &quot;experimentalDecorators&quot;: true,
