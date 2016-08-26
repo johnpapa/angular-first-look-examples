@@ -20,6 +20,8 @@ class PlunkerBuilder {
     this.copyrights = {};
 
     this._buildCopyrightStrings();
+
+    console.log(basePath, destPath);
   }
 
   buildPlunkers() {
@@ -57,7 +59,7 @@ class PlunkerBuilder {
   }
 
   _buildCopyrightStrings() {
-    var copyright = 'Copyright 201611 JohnPapa.net, LLC. All Rights Reserved.\n'
+    var copyright = 'Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.\n'
       + 'Use of this source code is governed by an MIT-style license that\n'
       + 'can be found in the LICENSE file at http://angular.io/license';
     var pad = '\n\n';

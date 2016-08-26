@@ -609,7 +609,8 @@ gulp.task('build-dart-api-docs', ['_shred-api-examples', 'dartdoc'], function() 
   return buildApiDocsForDart();
 });
 
-gulp.task('build-plunkers', ['_copy-example-boilerplate'], function() {
+// gulp.task('build-plunkers', ['_copy-example-boilerplate'], function() {
+gulp.task('build-plunkers', [], function() {
   regularPlunker.buildPlunkers(EXAMPLES_PATH, LIVE_EXAMPLES_PATH, { errFn: gutil.log, build: argv.build });
   return embeddedPlunker.buildPlunkers(EXAMPLES_PATH, LIVE_EXAMPLES_PATH, { errFn: gutil.log, build: argv.build });
 });
