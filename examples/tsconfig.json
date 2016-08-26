@@ -8,10 +8,5 @@
     "sourceMap": true,
     "target": "es5",
     "suppressImplicitAnyIndexErrors": true
-  },
-  "files": [
-    "main.ts",
-    "system-config.ts",
-    "typings.d.ts"
-  ]
+  }
 }

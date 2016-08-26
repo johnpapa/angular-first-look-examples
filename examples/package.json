@@ -1,6 +1,6 @@
 {
   "name": "a2-first-look",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "scripts": {
     "start": "npm run tsc && concurrently \"npm run tsc:w\" \"npm run lite\" ",
     "lint": "tslint ./app/**/*.ts -t verbose",
