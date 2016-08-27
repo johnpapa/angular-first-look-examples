@@ -7,6 +7,7 @@ import './rxjs-extensions';
 import { AppComponent } from './app.component';
 import { VehicleListComponent } from './vehicle-list.component';
 import { VehicleComponent } from './vehicle.component';
+import { VehicleService } from './vehicle.service';
 
 @NgModule({
   imports: [BrowserModule, FormsModule, HttpModule],
@@ -15,6 +16,7 @@ import { VehicleComponent } from './vehicle.component';
     VehicleComponent,
     VehicleListComponent
   ],
-  bootstrap: [AppComponent],
+  providers: [VehicleService],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -4,6 +4,7 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { VehicleListComponent } from './vehicle-list.component';
+import { VehicleService } from './vehicle.service';
 
 @NgModule({
   imports: [BrowserModule, HttpModule],
@@ -11,6 +12,7 @@ import { VehicleListComponent } from './vehicle-list.component';
     AppComponent,
     VehicleListComponent
   ],
-  bootstrap: [AppComponent],
+  providers: [VehicleService],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

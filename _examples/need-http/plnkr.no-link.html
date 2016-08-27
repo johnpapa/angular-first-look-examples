@@ -1,20 +1,9 @@
 <html lang="en"><head></head><body><form id="mainForm" method="post" action="http://plnkr.co/edit/?p=preview" target="_self"><input type="hidden" name="files[app/app.component.ts]" value="import { Component } from '@angular/core';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/finally';
-import 'rxjs/add/operator/map';
-
-import { VehicleService } from './vehicle.service';
-import { VehicleListComponent } from './vehicle-list.component';
 
 @Component({
   moduleId: module.id,
   selector: 'my-app',
   template: '<my-vehicle-list></my-vehicle-list>',
-  directives: [VehicleListComponent],
-  providers: [
-    VehicleService
-  ]
 })
 export class AppComponent {}
 
@@ -28,10 +17,18 @@ import { BrowserModule  } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
+import { VehicleComponent } from './vehicle.component';
+import { VehicleListComponent } from './vehicle-list.component';
+import { VehicleService } from './vehicle.service';
 
 @NgModule({
   imports: [BrowserModule, FormsModule],
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent,
+    VehicleComponent,
+    VehicleListComponent
+  ],
+  providers: [VehicleService],
   bootstrap: [AppComponent],
 })
 export class AppModule { }
@@ -42,15 +39,14 @@ Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/vehicle-list.component.ts]" value="import { Component } from '@angular/core';
+
 import { Vehicle, VehicleService } from './vehicle.service';
-import { VehicleComponent } from './vehicle.component';
 
 @Component({
   moduleId: module.id,
   selector: 'my-vehicle-list',
   templateUrl: 'vehicle-list.component.html',
-  styles: ['li {cursor: pointer;} .error {color:red;}'],
-  directives: [VehicleComponent]
+  styles: ['li {cursor: pointer;} .error {color:red;}']
 })
 export class VehicleListComponent {
   errorMessage: string;
@@ -76,6 +72,7 @@ Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/vehicle.component.ts]" value="import { Component, Input } from '@angular/core';
+
 import { Vehicle } from './vehicle.service';
 
 @Component({

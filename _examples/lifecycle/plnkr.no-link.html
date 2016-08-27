@@ -1,12 +1,9 @@
 <html lang="en"><head></head><body><form id="mainForm" method="post" action="http://plnkr.co/edit/?p=preview" target="_self"><input type="hidden" name="files[app/app.component.ts]" value="import { Component } from '@angular/core';
 
-import { CharacterService } from './character.service';
-
 @Component({
   moduleId: module.id,
   selector: 'my-app',
   template: '<my-character-list></my-character-list>',
-  providers: [CharacterService]
 })
 export class AppComponent {}
 
@@ -22,6 +19,7 @@ import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { CharacterComponent } from './character.component';
 import { CharacterListComponent } from './character-list.component';
+import { CharacterService } from './character.service';
 
 @NgModule({
   imports: [BrowserModule, FormsModule],
@@ -30,7 +28,8 @@ import { CharacterListComponent } from './character-list.component';
     CharacterComponent,
     CharacterListComponent
   ],
-  bootstrap: [AppComponent],
+  providers: [CharacterService],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }
 

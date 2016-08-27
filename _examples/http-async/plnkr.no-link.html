@@ -1,12 +1,9 @@
 <html lang="en"><head></head><body><form id="mainForm" method="post" action="http://plnkr.co/edit/?p=preview" target="_self"><input type="hidden" name="files[app/app.component.ts]" value="import { Component } from '@angular/core';
 
-import { VehicleService } from './vehicle.service';
-
 @Component({
   moduleId: module.id,
   selector: 'my-app',
   template: '<my-vehicle-list></my-vehicle-list>',
-  providers: [VehicleService]
 })
 export class AppComponent {}
 
@@ -24,6 +21,7 @@ import './rxjs-extensions';
 import { AppComponent } from './app.component';
 import { VehicleListComponent } from './vehicle-list.component';
 import { VehicleComponent } from './vehicle.component';
+import { VehicleService } from './vehicle.service';
 
 @NgModule({
   imports: [BrowserModule, FormsModule, HttpModule],
@@ -32,7 +30,8 @@ import { VehicleComponent } from './vehicle.component';
     VehicleComponent,
     VehicleListComponent
   ],
-  bootstrap: [AppComponent],
+  providers: [VehicleService],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }
 
