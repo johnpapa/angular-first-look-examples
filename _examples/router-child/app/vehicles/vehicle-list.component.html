@@ -3,7 +3,7 @@
 
   <ul class="vehicles">
     <li *ngFor="let vehicle of vehicles">
-      <a href="" [routerLink]="['Vehicle', {id: vehicle.id}]">
+      <a href="" [routerLink]="[vehicle.id]">
        {{vehicle.id}}. {{vehicle.name}}
       </a>
     </li>

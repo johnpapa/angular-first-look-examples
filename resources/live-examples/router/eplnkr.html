@@ -20,7 +20,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 import { BrowserModule  } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-// import { RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import './rxjs-extensions';
 
 import { AppComponent } from './app.component';
@@ -33,17 +33,11 @@ import { routing, routableComponents } from './app.routing';
     BrowserModule,
     FormsModule,
     HttpModule,
-    // RouterModule,
+    RouterModule,
     routing
   ],
-  declarations: [
-    AppComponent,
-    ...routableComponents
-  ],
-  providers: [
-    CharacterService,
-    VehicleService
-  ],
+  declarations: [AppComponent, ...routableComponents],
+  providers: [CharacterService, VehicleService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
@@ -218,7 +212,6 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 
 @Component({
   moduleId: module.id,
-  selector: 'ev-404',
   template: `
     <article class=&quot;template animated slideInRight&quot;>
       <h4>Inconceivable!</h4>

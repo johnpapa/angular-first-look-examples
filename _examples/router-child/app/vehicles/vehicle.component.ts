@@ -1,32 +1,43 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { RouteParams, Router, ROUTER_DIRECTIVES } from '@angular/router-deprecated';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { Vehicle, VehicleService } from './vehicle.service';
 
 @Component({
   moduleId: module.id,
   selector: 'story-vehicle',
-  templateUrl: 'vehicle.component.html',
-  directives: [ROUTER_DIRECTIVES]
+  templateUrl: 'vehicle.component.html'
 })
 export class VehicleComponent implements OnInit {
   @Input() vehicle: Vehicle;
 
+  private id: any;
+
   constructor(
-    private routeParams: RouteParams,
+    private route: ActivatedRoute,
     private router: Router,
     private vehicleService: VehicleService) { }
 
   ngOnInit() {
     if (!this.vehicle) {
-      let id = +this.routeParams.get('id');
-      this.vehicleService.getVehicle(id)
-        .subscribe((vehicle: Vehicle) => this.setEditVehicle(vehicle));
+      // Could use a snapshot here, as long as the parameters do not change.
+      // This may happen when a component is re-used.
+      // this.id = +this.route.snapshot.params['id'];
+      this.route
+        .params
+        .map(params => params['id'])
+        .do(id => this.id = +id)
+        .subscribe(id => this.getVehicle());
     }
   }
 
+  private getVehicle() {
+    this.vehicleService.getVehicle(this.id)
+      .subscribe((vehicle: Vehicle) => this.setEditVehicle(vehicle));
+  }
+
   private gotoVehicles() {
-    let route = ['Vehicles', { id: this.vehicle ? this.vehicle.id : null }];
+    let route = ['/vehicles'];
     this.router.navigate(route);
   }
 

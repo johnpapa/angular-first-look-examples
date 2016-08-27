@@ -3,7 +3,7 @@
 
   <ul class="characters">
     <li *ngFor="let character of characters | async">
-      <a href="" [routerLink]="['Character', {id: character.id}]">
+      <a href="" [routerLink]="[character.id]">
        {{character.id}}. {{character.name}}
       </a>
     </li>

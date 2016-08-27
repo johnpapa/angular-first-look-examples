@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ROUTER_DIRECTIVES } from '@angular/router-deprecated';
 import { Observable } from 'rxjs/Observable';
 
 import { Character, CharacterService } from './character.service';
@@ -11,8 +10,7 @@ import { Character, CharacterService } from './character.service';
   styles: [`
     .characters {list-style-type: none;}
     *.characters li {padding: 4px;cursor: pointer;}
-  `],
-  directives: [ROUTER_DIRECTIVES]
+  `]
 })
 export class CharacterListComponent implements OnInit {
   characters: Observable<Character[]>;

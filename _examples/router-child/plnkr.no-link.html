@@ -1,14 +1,4 @@
 <html lang="en"><head></head><body><form id="mainForm" method="post" action="http://plnkr.co/edit/?p=preview" target="_self"><input type="hidden" name="files[app/app.component.ts]" value="import { Component } from '@angular/core';
-import { HTTP_PROVIDERS } from '@angular/http';
-import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/router-deprecated';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/finally';
-import 'rxjs/add/operator/map';
-
-import { CharactersComponent } from './characters/characters.component';
-import { CharacterService } from './characters/character.service';
-import { VehiclesComponent } from './vehicles/vehicles.component';
 
 @Component({
   moduleId: module.id,
@@ -17,18 +7,8 @@ import { VehiclesComponent } from './vehicles/vehicles.component';
   styles: [`
     nav ul {list-style-type: none;}
     nav ul li {padding: 4px;cursor: pointer;display:inline-block}
-  `],
-  directives: [ROUTER_DIRECTIVES],
-  providers: [
-    HTTP_PROVIDERS,
-    ROUTER_PROVIDERS,
-    CharacterService
-  ]
+  `]
 })
-@RouteConfig([
-  { path: '/characters/...', name: 'Characters', component: CharactersComponent, useAsDefault: true },
-  { path: '/vehicles/...', name: 'Vehicles', component: VehiclesComponent }
-])
 export class AppComponent { }
 
 
@@ -39,13 +19,27 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/app.module.ts]" value="import { NgModule } from '@angular/core';
 import { BrowserModule  } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
+import { RouterModule } from '@angular/router';
+import './rxjs-extensions';
 
 import { AppComponent } from './app.component';
+import { CharactersModule } from './characters/characters.module';
+import { VehiclesModule } from './vehicles/vehicles.module';
+import { routing, routableComponents } from './app.routing';
 
 @NgModule({
-  imports: [BrowserModule, FormsModule],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
+  imports: [
+    BrowserModule,
+    CharactersModule,
+    FormsModule,
+    HttpModule,
+    RouterModule,
+    VehiclesModule,
+    routing
+  ],
+  declarations: [AppComponent, ...routableComponents],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }
 
@@ -54,8 +48,25 @@ export class AppModule { }
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="files[app/app.routing.ts]" value="import { Routes, RouterModule } from '@angular/router';
+
+import { PageNotFoundComponent } from './page-not-found.component';
+
+export const routes: Routes = [
+  { path: '', pathMatch: 'full', redirectTo: '/characters' },
+  { path: '**', pathMatch: 'full', component: PageNotFoundComponent },
+];
+
+export const routing = RouterModule.forRoot(routes);
+
+export const routableComponents = [PageNotFoundComponent];
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/characters/character-list.component.ts]" value="import { Component, OnInit } from '@angular/core';
-import { ROUTER_DIRECTIVES } from '@angular/router-deprecated';
 import { Observable } from 'rxjs/Observable';
 
 import { Character, CharacterService } from './character.service';
@@ -67,8 +78,7 @@ import { Character, CharacterService } from './character.service';
   styles: [`
     .characters {list-style-type: none;}
     *.characters li {padding: 4px;cursor: pointer;}
-  `],
-  directives: [ROUTER_DIRECTIVES]
+  `]
 })
 export class CharacterListComponent implements OnInit {
   characters: Observable<Character[]>;
@@ -86,34 +96,42 @@ Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/characters/character.component.ts]" value="import { Component, Input, OnInit } from '@angular/core';
-import { RouteParams, Router, ROUTER_DIRECTIVES } from '@angular/router-deprecated';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import { Character, CharacterService } from './character.service';
+import { Character, CharacterService } from '../characters/character.service';
 
 @Component({
   moduleId: module.id,
   selector: 'story-character',
-  templateUrl: 'character.component.html',
-  directives: [ROUTER_DIRECTIVES]
+  templateUrl: 'character.component.html'
 })
 export class CharacterComponent implements OnInit {
   @Input() character: Character;
 
+  private id: any;
+
   constructor(
     private characterService: CharacterService,
-    private routeParams: RouteParams,
+    private route: ActivatedRoute,
     private router: Router) { }
 
   ngOnInit() {
     if (!this.character) {
-      let id = +this.routeParams.get('id');
-      this.characterService.getCharacter(id)
-        .subscribe(character => this.setEditCharacter(character));
+      this.route
+        .params
+        .map(params => params['id'])
+        .do(id => this.id = +id)
+        .subscribe(id => this.getCharacter());
     }
   }
 
+  private getCharacter() {
+    this.characterService.getCharacter(this.id)
+      .subscribe(character => this.setEditCharacter(character));
+  }
+
   private gotoCharacters() {
-    let route = ['Characters', { id: this.character ? this.character.id : null }];
+    let route = ['/characters'];
     this.router.navigate(route);
   }
 
@@ -166,24 +184,66 @@ Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/characters/characters.component.ts]" value="import { Component } from '@angular/core';
-import { RouteConfig, ROUTER_DIRECTIVES } from '@angular/router-deprecated';
-
-import { CharacterComponent } from './character.component';
-import { CharacterListComponent } from './character-list.component';
 
 @Component({
   moduleId: module.id,
   selector: 'story-characters-root',
   template: `
     <router-outlet></router-outlet>
-  `,
-  directives: [ROUTER_DIRECTIVES]
+  `
 })
-@RouteConfig([
-  { path: '/', name: 'Characters', component: CharacterListComponent, useAsDefault: true },
-  { path: '/:id', name: 'Character', component: CharacterComponent }
-])
 export class CharactersComponent { }
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="files[app/characters/characters.module.ts]" value="import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+
+import { CharacterService } from './character.service';
+import { routing, routedComponents } from './characters.routing';
+
+@NgModule({
+  imports: [CommonModule, FormsModule, routing],
+  exports: [],
+  declarations: [routedComponents],
+  providers: [CharacterService],
+})
+export class CharactersModule { }
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="files[app/characters/characters.routing.ts]" value="import { Routes, RouterModule } from '@angular/router';
+
+import { CharacterComponent } from './character.component';
+import { CharactersComponent } from './characters.component';
+import { CharacterListComponent } from './character-list.component';
+
+export const routes: Routes = [
+  // { path: '', pathMatch: 'full', redirectTo: '/characters' },
+  {
+    path: 'characters',
+    component: CharactersComponent,
+    children: [
+      { path: '', component: CharacterListComponent },
+      { path: ':id', component: CharacterComponent },
+    ]
+  }
+];
+
+export const routing = RouterModule.forRoot(routes);
+
+export const routedComponents = [
+  CharactersComponent,
+  CharacterListComponent,
+  CharacterComponent
+];
 
 
 /*
@@ -196,6 +256,24 @@ can be found in the LICENSE file at http://bit.ly/l1cense
     vehicles: 'api/vehicles.json'
   }
 };
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="files[app/page-not-found.component.ts]" value="import { Component } from '@angular/core';
+
+@Component({
+  moduleId: module.id,
+  template: `
+    <article class=&quot;template animated slideInRight&quot;>
+      <h4>Inconceivable!</h4>
+      <div>I do not think this page is where you think it is.</div>
+    </article>
+  `
+})
+export class PageNotFoundComponent { }
 
 
 /*
@@ -217,7 +295,6 @@ Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/vehicles/vehicle-list.component.ts]" value="import { Component, OnInit } from '@angular/core';
-import { ROUTER_DIRECTIVES } from '@angular/router-deprecated';
 
 import { Vehicle, VehicleService } from './vehicle.service';
 
@@ -228,8 +305,7 @@ import { Vehicle, VehicleService } from './vehicle.service';
   styles: [`
     .vehicles {list-style-type: none;}
     *.vehicles li {padding: 4px;cursor: pointer;}
-  `],
-  directives: [ROUTER_DIRECTIVES]
+  `]
 })
 export class VehicleListComponent implements OnInit {
   vehicles: Vehicle[];
@@ -249,34 +325,45 @@ Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/vehicles/vehicle.component.ts]" value="import { Component, Input, OnInit } from '@angular/core';
-import { RouteParams, Router, ROUTER_DIRECTIVES } from '@angular/router-deprecated';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { Vehicle, VehicleService } from './vehicle.service';
 
 @Component({
   moduleId: module.id,
   selector: 'story-vehicle',
-  templateUrl: 'vehicle.component.html',
-  directives: [ROUTER_DIRECTIVES]
+  templateUrl: 'vehicle.component.html'
 })
 export class VehicleComponent implements OnInit {
   @Input() vehicle: Vehicle;
 
+  private id: any;
+
   constructor(
-    private routeParams: RouteParams,
+    private route: ActivatedRoute,
     private router: Router,
     private vehicleService: VehicleService) { }
 
   ngOnInit() {
     if (!this.vehicle) {
-      let id = +this.routeParams.get('id');
-      this.vehicleService.getVehicle(id)
-        .subscribe((vehicle: Vehicle) => this.setEditVehicle(vehicle));
+      // Could use a snapshot here, as long as the parameters do not change.
+      // This may happen when a component is re-used.
+      // this.id = +this.route.snapshot.params['id'];
+      this.route
+        .params
+        .map(params => params['id'])
+        .do(id => this.id = +id)
+        .subscribe(id => this.getVehicle());
     }
   }
 
+  private getVehicle() {
+    this.vehicleService.getVehicle(this.id)
+      .subscribe((vehicle: Vehicle) => this.setEditVehicle(vehicle));
+  }
+
   private gotoVehicles() {
-    let route = ['Vehicles', { id: this.vehicle ? this.vehicle.id : null }];
+    let route = ['/vehicles'];
     this.router.navigate(route);
   }
 
@@ -349,6 +436,57 @@ import { VehicleService } from './vehicle.service';
   { path: '/:id', name: 'Vehicle', component: VehicleComponent }
 ])
 export class VehiclesComponent { }
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="files[app/vehicles/vehicles.module.ts]" value="import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+
+import { VehicleService } from './vehicle.service';
+import { routing, routedComponents } from './vehicles.routing';
+
+@NgModule({
+  imports: [CommonModule, FormsModule, routing],
+  exports: [],
+  declarations: [routedComponents],
+  providers: [VehicleService],
+})
+export class VehiclesModule { }
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="files[app/vehicles/vehicles.routing.ts]" value="import { Routes, RouterModule } from '@angular/router';
+
+import { VehicleComponent } from './vehicle.component';
+import { VehiclesComponent } from './vehicles.component';
+import { VehicleListComponent } from './vehicle-list.component';
+
+export const routes: Routes = [
+  // { path: '', pathMatch: 'full', redirectTo: '/vehicles' },
+  {
+    path: 'vehicles',
+    component: VehiclesComponent,
+    children: [
+      { path: '', component: VehicleListComponent },
+      { path: ':id', component: VehicleComponent },
+    ]
+  }
+];
+
+export const routing = RouterModule.forRoot(routes);
+
+export const routedComponents = [
+  VehiclesComponent,
+  VehicleListComponent,
+  VehicleComponent
+];
 
 
 /*
@@ -4523,8 +4661,8 @@ can be found in the LICENSE file at http://bit.ly/l1cense
     <h3>Hierarchical Router Demo</h3>
     <nav>
       <ul>
-        <li><a [routerLink]=&quot;['Characters']&quot; href=&quot;&quot;>Characters</a></li>
-        <li><a [routerLink]=&quot;['Vehicles']&quot; href=&quot;&quot;>Vehicles</a></li>
+        <li><a [routerLink]=&quot;['/characters']&quot; href=&quot;&quot;>Characters</a></li>
+        <li><a [routerLink]=&quot;['/vehicles']&quot; href=&quot;&quot;>Vehicles</a></li>
       </ul>
     </nav>
   </header>
@@ -4535,6 +4673,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
   </main>
 </div>
 
+
 <!-- 
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
@@ -4544,12 +4683,13 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 
   <ul class=&quot;characters&quot;>
     <li *ngFor=&quot;let character of characters | async&quot;>
-      <a href=&quot;&quot; [routerLink]=&quot;['Character', {id: character.id}]&quot;>
+      <a href=&quot;&quot; [routerLink]=&quot;[character.id]&quot;>
        {{character.id}}. {{character.name}}
       </a>
     </li>
   </ul>
 </article>
+
 
 <!-- 
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
@@ -4580,12 +4720,13 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 
   <ul class=&quot;vehicles&quot;>
     <li *ngFor=&quot;let vehicle of vehicles&quot;>
-      <a href=&quot;&quot; [routerLink]=&quot;['Vehicle', {id: vehicle.id}]&quot;>
+      <a href=&quot;&quot; [routerLink]=&quot;[vehicle.id]&quot;>
        {{vehicle.id}}. {{vehicle.name}}
       </a>
     </li>
   </ul>
 </article>
+
 
 <!-- 
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
