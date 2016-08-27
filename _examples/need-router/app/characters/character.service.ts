@@ -21,8 +21,7 @@ export class CharacterService {
   }
 
   getCharacters() {
-    return this.http.
-      get(charactersUrl)
+    return this.http.get(charactersUrl)
       .map((response: Response) => <Character[]>response.json().data);
   }
 }

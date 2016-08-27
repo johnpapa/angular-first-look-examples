@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { RouteParams, Router } from '@angular/router-deprecated';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { Character, CharacterService } from '../characters/character.service';
 
@@ -11,21 +11,30 @@ import { Character, CharacterService } from '../characters/character.service';
 export class CharacterComponent implements OnInit {
   @Input() character: Character;
 
+  private id: any;
+
   constructor(
     private characterService: CharacterService,
-    private routeParams: RouteParams,
+    private route: ActivatedRoute,
     private router: Router) { }
 
   ngOnInit() {
     if (!this.character) {
-      let id = +this.routeParams.get('id');
-      this.characterService.getCharacter(id)
-        .subscribe(character => this.setEditCharacter(character));
+      this.route
+        .params
+        .map(params => params['id'])
+        .do(id => this.id = +id)
+        .subscribe(id => this.getCharacter());
     }
   }
 
+  private getCharacter() {
+    this.characterService.getCharacter(this.id)
+      .subscribe(character => this.setEditCharacter(character));
+  }
+
   private gotoCharacters() {
-    let route = ['Characters', { id: this.character ? this.character.id : null }];
+    let route = ['/characters'];
     this.router.navigate(route);
   }
 
