@@ -9,7 +9,6 @@
   <li *ngFor="let msg of messages">{{msg}}</li>
 </ul>
 
-
 <my-character *ngIf="selectedCharacter"
   (onLifecycleHookFire)="log($event)"
   [character]="selectedCharacter"
