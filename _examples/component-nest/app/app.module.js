@@ -9,23 +9,26 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var character_1 = require('./character');
-var CharacterComponent = (function () {
-    function CharacterComponent() {
+var platform_browser_1 = require('@angular/platform-browser');
+var character_component_1 = require('./character.component');
+var character_list_component_1 = require('./character-list.component');
+var AppModule = (function () {
+    function AppModule() {
     }
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', character_1.Character)
-    ], CharacterComponent.prototype, "character", void 0);
-    CharacterComponent = __decorate([
-        core_1.Component({
-            moduleId: module.id,
-            selector: 'my-character',
-            templateUrl: 'character.component.html'
+    AppModule = __decorate([
+        core_1.NgModule({
+            imports: [
+                platform_browser_1.BrowserModule
+            ],
+            declarations: [
+                character_component_1.CharacterComponent,
+                character_list_component_1.CharacterListComponent
+            ],
+            bootstrap: [character_list_component_1.CharacterListComponent],
         }), 
         __metadata('design:paramtypes', [])
-    ], CharacterComponent);
-    return CharacterComponent;
+    ], AppModule);
+    return AppModule;
 }());
-exports.CharacterComponent = CharacterComponent;
-//# sourceMappingURL=character.component.js.map
+exports.AppModule = AppModule;
+//# sourceMappingURL=app.module.js.map

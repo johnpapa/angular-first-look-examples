@@ -38,6 +38,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 import { AppModule }              from './app/app.module';
 
 platformBrowserDynamic().bootstrapModule(AppModule)
+  .then(success => console.log(`Bootstrap success`))
   .catch(err => console.error(err));
 
 

@@ -1,12 +1,10 @@
 import { Component } from '@angular/core';
 import { Character } from './character';
-import { CharacterComponent } from './character.component';
 
 @Component({
   moduleId: module.id,
   selector: 'my-character-list',
-  templateUrl: 'character-list.component.html',
-  directives: [CharacterComponent]
+  templateUrl: 'character-list.component.html'
 })
 export class CharacterListComponent {
   characters = [
