@@ -1,8 +1,4 @@
 <html lang="en"><head></head><body><form id="mainForm" method="post" action="http://plnkr.co/edit/?p=preview" target="_self"><input type="hidden" name="files[app/app.component.ts]" value="import { Component } from '@angular/core';
-import { HTTP_PROVIDERS } from '@angular/http';
-
-import { CharacterComponent } from './character.component';
-import { CharacterSolvedComponent } from './solution/character-solved.component';
 
 @Component({
   moduleId: module.id,
@@ -18,7 +14,7 @@ import { CharacterSolvedComponent } from './solution/character-solved.component'
     </div>
 
     <span [ngSwitch]=&quot;showSolution&quot;>
-      <template [ngSwitchWhen]=&quot;true&quot;>
+      <template [ngSwitchCase]=&quot;true&quot;>
         <story-character-solved></story-character-solved>
       </template>
       <template ngSwitchDefault>
@@ -26,9 +22,7 @@ import { CharacterSolvedComponent } from './solution/character-solved.component'
       </template>
     </span>
   </div>
-  `,
-  directives: [CharacterComponent, CharacterSolvedComponent],
-  providers: [HTTP_PROVIDERS]
+  `
 })
 export class AppComponent {
   buttonText = 'Switch to Solution';
@@ -39,6 +33,31 @@ export class AppComponent {
     this.buttonText = this.showSolution ? 'Switch to  Starter' : 'Switch to Solution';
   }
 }
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="files[app/app.module.ts]" value="import { NgModule } from '@angular/core';
+import { BrowserModule  } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
+
+import { AppComponent } from './app.component';
+import { CharacterComponent } from './character.component';
+import { CharacterSolvedComponent } from './solution/character-solved.component';
+
+@NgModule({
+  imports: [BrowserModule, FormsModule, HttpModule],
+  declarations: [
+    AppComponent,
+    CharacterComponent,
+    CharacterSolvedComponent
+  ],
+  bootstrap: [AppComponent],
+})
+export class AppModule { }
 
 
 /*

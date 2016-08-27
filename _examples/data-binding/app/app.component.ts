@@ -1,8 +1,4 @@
 import { Component } from '@angular/core';
-import { HTTP_PROVIDERS } from '@angular/http';
-
-import { CharacterComponent } from './character.component';
-import { CharacterSolvedComponent } from './solution/character-solved.component';
 
 @Component({
   moduleId: module.id,
@@ -18,7 +14,7 @@ import { CharacterSolvedComponent } from './solution/character-solved.component'
     </div>
 
     <span [ngSwitch]="showSolution">
-      <template [ngSwitchWhen]="true">
+      <template [ngSwitchCase]="true">
         <story-character-solved></story-character-solved>
       </template>
       <template ngSwitchDefault>
@@ -26,9 +22,7 @@ import { CharacterSolvedComponent } from './solution/character-solved.component'
       </template>
     </span>
   </div>
-  `,
-  directives: [CharacterComponent, CharacterSolvedComponent],
-  providers: [HTTP_PROVIDERS]
+  `
 })
 export class AppComponent {
   buttonText = 'Switch to Solution';
