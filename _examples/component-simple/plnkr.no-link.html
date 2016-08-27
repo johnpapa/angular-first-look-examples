@@ -1,13 +1,10 @@
 <html lang="en"><head></head><body><form id="mainForm" method="post" action="http://plnkr.co/edit/?p=preview" target="_self"><input type="hidden" name="files[app/app.module.ts]" value="import { NgModule } from '@angular/core';
 import { BrowserModule  } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
 
 import { CharacterComponent } from './character.component';
 
 @NgModule({
-  imports: [
-    BrowserModule
-  ],
+  imports: [BrowserModule],
   declarations: [CharacterComponent],
   bootstrap: [CharacterComponent],
 })
@@ -35,7 +32,7 @@ Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[main.ts]" value="import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { AppModule }              from './app/app.module';
+import { AppModule } from './app/app.module';
 
 platformBrowserDynamic().bootstrapModule(AppModule)
   .then(success => console.log(`Bootstrap success`))

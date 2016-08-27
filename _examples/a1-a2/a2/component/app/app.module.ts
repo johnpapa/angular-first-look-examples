@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule  } from '@angular/platform-browser';
 
-import { CharacterComponent } from './character.component';
+import { StoryComponent } from './story.component';
 
 @NgModule({
   imports: [BrowserModule],
-  declarations: [CharacterComponent],
-  bootstrap: [CharacterComponent],
+  declarations: [StoryComponent],
+  bootstrap: [StoryComponent],
 })
 export class AppModule { }
