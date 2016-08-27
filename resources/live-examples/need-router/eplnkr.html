@@ -33,7 +33,25 @@ export class AppComponent { }
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/app.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/character-list.component.ts][content]" value="import { Component, OnInit } from '@angular/core';
+*/"><input type="hidden" name="entries[app/app.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/app.module.ts][content]" value="import { NgModule } from '@angular/core';
+import { BrowserModule  } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
+
+import { AppComponent } from './app.component';
+
+@NgModule({
+  imports: [BrowserModule, FormsModule],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
+})
+export class AppModule { }
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/app.module.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/character-list.component.ts][content]" value="import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { Character, CharacterService } from './character.service';

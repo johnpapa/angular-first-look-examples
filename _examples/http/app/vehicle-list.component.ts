@@ -1,13 +1,12 @@
 import { Component } from '@angular/core';
 import { Vehicle, VehicleService } from './vehicle.service';
-import { VehicleComponent } from './vehicle.component';
 
 @Component({
   moduleId: module.id,
   selector: 'my-vehicle-list',
   templateUrl: 'vehicle-list.component.html',
   styles: ['li {cursor: pointer;} .error {color:red;}'],
-  directives: [VehicleComponent]
+  providers: [VehicleService]
 })
 export class VehicleListComponent {
   errorMessage: string;
