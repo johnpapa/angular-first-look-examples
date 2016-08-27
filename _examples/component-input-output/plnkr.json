@@ -2,7 +2,8 @@
   "description": "Component with Input and Output",
   "files":[
     "!**/*.d.ts",
-    "!**/*.js"
+    "!**/*.js",
+    "**/assets/*.js"
   ],
   "tags": ["first look", "angular 2"]
 }

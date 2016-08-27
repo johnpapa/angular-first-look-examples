@@ -3,6 +3,7 @@
   "files":[
     "!**/*.d.ts",
     "!**/*.js",
+    "**/assets/*.js",
     "**/assets/*.js"
   ],
   "tags": ["tutorial"]

@@ -2,7 +2,8 @@
   "description": "Services and DI",
   "files":[
     "!**/*.d.ts",
-    "!**/*.js"
+    "!**/*.js",     
+    "**/assets/*.js"
   ],
   "tags": ["first look", "angular 2"]
 }

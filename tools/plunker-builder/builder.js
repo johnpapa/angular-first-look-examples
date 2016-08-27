@@ -83,6 +83,10 @@ class PlunkerBuilder {
     }
     try {
       var config = this._initConfigAndCollectFileNames(configFileName);
+      // DEBUGGING
+      // if (config.description == "Data Binding") {
+      //   console.log(config);
+      // }
       var postData = this._createPostData(config);
       this._addPlunkerFiles(config, postData);
       var html = this._createPlunkerHtml(postData, altFileName);
@@ -241,7 +245,6 @@ class PlunkerBuilder {
     } catch (e) {
       throw new Error(`Plunker config - unable to parse json file: ${configFileName}\n${e}`);
     }
-
     var defaultIncludes = ['**/*.ts', '**/*.js', '**/*.css', '**/*.html', '**/*.md', '**/*.json', '**/*.png'];
     if (config.files) {
       if (config.files.length > 0) {
