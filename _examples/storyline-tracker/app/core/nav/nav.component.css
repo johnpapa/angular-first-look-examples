@@ -25,10 +25,12 @@
     left: 0;
     position: inherit;
     background: rgb(83,109,254);
+    background: rgb(255,64,129);
 }
 
 .md-title-icon > i {
-  background-image: url("assets/ng.png");
+  /*background-image: url("assets/ng.png");*/
+  background-image: url("assets/ps-icon.png");
   background-repeat: no-repeat;
   background-position: center center;
   padding: 1em 2em;
