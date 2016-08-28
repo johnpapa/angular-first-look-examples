@@ -1,4 +1,4 @@
-export class InMemoryStoryService {
+export class InMemoryStoreService {
   /**
   * Creates fresh copy of data each time.
   * Safe for consuming service to morph arrays and objects.

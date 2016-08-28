@@ -51,10 +51,9 @@ var DashboardComponent = (function () {
             templateUrl: 'dashboard.component.html',
             styleUrls: ['dashboard.component.css']
         }), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof models_1.CharacterService !== 'undefined' && models_1.CharacterService) === 'function' && _a) || Object, router_1.Router, core_2.ToastService])
+        __metadata('design:paramtypes', [models_1.CharacterService, router_1.Router, core_2.ToastService])
     ], DashboardComponent);
     return DashboardComponent;
-    var _a;
 }());
 exports.DashboardComponent = DashboardComponent;
 //# sourceMappingURL=dashboard.component.js.map

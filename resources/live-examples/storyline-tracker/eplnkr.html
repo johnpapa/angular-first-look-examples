@@ -1,4 +1,4 @@
-<html lang="en"><head></head><body><form id="mainForm" method="post" action="https://embed.plnkr.co?show=preview" target="eplnkr"><input type="hidden" name="entries[api/in-memory-story.service.ts][content]" value="export class InMemoryStoryService {
+<html lang="en"><head></head><body><form id="mainForm" method="post" action="https://embed.plnkr.co?show=preview" target="eplnkr"><input type="hidden" name="entries[api/in-memory-store.service.ts][content]" value="export class InMemoryStoreService {
   /**
   * Creates fresh copy of data each time.
   * Safe for consuming service to morph arrays and objects.
@@ -149,15 +149,16 @@
   }
 }
 
+
 /*
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[api/in-memory-story.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/app.component.ts][content]" value="import { Component } from '@angular/core';
+*/"><input type="hidden" name="entries[api/in-memory-store.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/app.component.ts][content]" value="import { Component } from '@angular/core';
 
 @Component({
   moduleId: module.id,
-  selector: 'event-view-app',
+  selector: 'story-app',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.css']
 })
@@ -170,8 +171,8 @@ Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="entries[app/app.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/app.module.ts][content]" value="import { NgModule } from '@angular/core';
 import { BrowserModule  } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
-import { HttpModule, XHRBackend } from '@angular/http';
+// import { FormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 
@@ -264,72 +265,7 @@ export class CharacterListComponent implements OnDestroy, OnInit {
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/characters/character-list/character-list.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/character.component.ts][content]" value="import { Component } from '@angular/core';
-
-@Component({
-  template: `<router-outlet></router-outlet>`,
-})
-export class CharactersComponent { }
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/characters/character.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/character.module.ts][content]" value="import { NgModule } from '@angular/core';
-
-import { CharacterButtonComponent } from './shared/character-button/character-button.component';
-import { SortCharactersPipe } from './shared/sort-characters.pipe';
-import { routing, routedComponents } from './characters.routing';
-import { SharedModule } from '../shared/shared.module';
-
-@NgModule({
-  imports: [routing, SharedModule],
-  declarations: [CharacterButtonComponent, SortCharactersPipe, routedComponents]
-})
-export class CharactersModule { }
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/characters/character.module.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/character.routing.ts][content]" value="import { Routes, RouterModule } from '@angular/router';
-
-import { CharacterListComponent } from './character-list/character-list.component';
-import { CharacterComponent } from './character/character.component';
-import { CharactersComponent } from './characters.component';
-import { CanDeactivateGuard, CanActivateAuthGuard } from '../routing';
-
-const routes: Routes = [
-  {
-    path: '',
-    component: CharactersComponent,
-    children: [
-      {
-        path: '',
-        component: CharacterListComponent,
-      },
-      {
-        path: ':id',
-        component: CharacterComponent,
-        canDeactivate: [CanDeactivateGuard]
-      },
-    ]
-  },
-]; RouterModule
-
-
-export const routing = RouterModule.forChild(routes);
-
-export const routedComponents = [CharactersComponent, CharacterListComponent, CharacterComponent]
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/characters/character.routing.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/character/character.component.ts][content]" value="import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+*/"><input type="hidden" name="entries[app/characters/character-list/character-list.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/character/character.component.ts][content]" value="import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -465,7 +401,72 @@ export class CharacterComponent implements OnDestroy, OnInit, CanComponentDeacti
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/characters/character/character.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/shared/character-button/character-button.component.ts][content]" value="import { Component, Input, OnInit } from '@angular/core';
+*/"><input type="hidden" name="entries[app/characters/character/character.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/characters.component.ts][content]" value="import { Component } from '@angular/core';
+
+@Component({
+  template: `<router-outlet></router-outlet>`,
+})
+export class CharactersComponent { }
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/characters/characters.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/characters.module.ts][content]" value="import { NgModule } from '@angular/core';
+
+import { CharacterButtonComponent } from './shared/character-button/character-button.component';
+import { SortCharactersPipe } from './shared/sort-characters.pipe';
+import { routing, routedComponents } from './characters.routing';
+import { SharedModule } from '../shared/shared.module';
+
+@NgModule({
+  imports: [routing, SharedModule],
+  declarations: [CharacterButtonComponent, SortCharactersPipe, routedComponents]
+})
+export class CharactersModule { }
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/characters/characters.module.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/characters.routing.ts][content]" value="import { Routes, RouterModule } from '@angular/router';
+
+import { CharacterListComponent } from './character-list/character-list.component';
+import { CharacterComponent } from './character/character.component';
+import { CharactersComponent } from './characters.component';
+import { CanDeactivateGuard, CanActivateAuthGuard } from '../routing';
+
+const routes: Routes = [
+  {
+    path: '',
+    component: CharactersComponent,
+    children: [
+      {
+        path: '',
+        component: CharacterListComponent,
+      },
+      {
+        path: ':id',
+        component: CharacterComponent,
+        canDeactivate: [CanDeactivateGuard]
+      },
+    ]
+  },
+]; RouterModule
+
+
+export const routing = RouterModule.forChild(routes);
+
+export const routedComponents = [CharactersComponent, CharacterListComponent, CharacterComponent]
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/characters/characters.routing.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/shared/character-button/character-button.component.ts][content]" value="import { Component, Input, OnInit } from '@angular/core';
 
 import { Character } from '../../../../app/models';
 
@@ -1350,15 +1351,7 @@ export class LoginService {
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/login/login.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/models/index.ts][content]" value="export * from './character.model';
-export * from './character.service';
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/models/index.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/models/speaker.model.ts][content]" value="export class Character {
+*/"><input type="hidden" name="entries[app/login/login.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/models/character.model.ts][content]" value="export class Character {
   id: number;
   name: string;
   twitter: string;
@@ -1369,7 +1362,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/models/speaker.model.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/models/speaker.service.ts][content]" value="import { Injectable } from '@angular/core';
+*/"><input type="hidden" name="entries[app/models/character.model.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/models/character.service.ts][content]" value="import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
@@ -1449,7 +1442,15 @@ export class CharacterService {
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/models/speaker.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/page-not-found.component.ts][content]" value="import { Component } from '@angular/core';
+*/"><input type="hidden" name="entries[app/models/character.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/models/index.ts][content]" value="export * from './character.model';
+export * from './character.service';
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/models/index.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/page-not-found.component.ts][content]" value="import { Component } from '@angular/core';
 
 @Component({
   moduleId: module.id,
@@ -1915,84 +1916,7 @@ export class VehicleListComponent implements OnDestroy, OnInit {
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/vehicles/vehicle-list/vehicle-list.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicle.component.ts][content]" value="import { Component } from '@angular/core';
-
-import { VehicleService } from './shared/vehicle.service';
-
-@Component({
-  // selector: 'story-vehicles',
-  template: `<router-outlet></router-outlet>`,
-  providers: [VehicleService]
-})
-export class VehiclesComponent  {}
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/vehicles/vehicle.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicle.module.ts][content]" value="import { NgModule } from '@angular/core';
-
-import { VehicleButtonComponent } from './shared/vehicle-button/Vehicle-button.component';
-
-// routing = routingModuleWithProvidersAndRouteConfiguration
-import { routing, routedComponents } from './vehicles.routing';
-
-import { SharedModule } from '../shared/shared.module';
-import { VehicleService } from './shared/vehicle.service';  // TODO: Remove this when bug is fixed in A2 RC5
-
-@NgModule({
-  imports: [routing, SharedModule],
-  declarations: [VehicleButtonComponent, routedComponents],
-
-  // TODO: Remove this when bug is fixed in A2 RC5.
-  // We can put this in the component when it is fixed ... or we can do it in the module.
-  // In the module, everyone gets it everywhere tho.
-  providers: [VehicleService]
-})
-export class VehiclesModule { }
-// avoids having to lazy load with loadChildren: &quot;app/vehicles/vehicle.module#VehicleModule&quot;
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/vehicles/vehicle.module.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicle.routing.ts][content]" value="import { Routes, RouterModule } from '@angular/router';
-
-import { VehicleListComponent } from './vehicle-list/vehicle-list.component';
-import { VehicleComponent } from './vehicle/vehicle.component';
-import { VehiclesComponent } from './vehicles.component';
-import { CanDeactivateGuard, CanActivateAuthGuard } from '../routing';
-
-const routes: Routes = [
-  {
-    path: '',
-    component: VehiclesComponent,
-    children: [
-      {
-        path: '',
-        component: VehicleListComponent,
-      },
-      {
-        path: ':id',
-        component: VehicleComponent,
-        canDeactivate: [CanDeactivateGuard]
-      },
-    ]
-  },
-];
-
-export const routing = RouterModule.forChild(routes);
-
-export const routedComponents = [VehiclesComponent, VehicleListComponent, VehicleComponent]
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/vehicles/vehicle.routing.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicle/vehicle.component.ts][content]" value="import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+*/"><input type="hidden" name="entries[app/vehicles/vehicle-list/vehicle-list.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicle/vehicle.component.ts][content]" value="import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -2129,7 +2053,84 @@ export class VehicleComponent implements OnDestroy, OnInit, CanComponentDeactiva
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/vehicles/vehicle/vehicle.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[main.ts][content]" value="import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+*/"><input type="hidden" name="entries[app/vehicles/vehicle/vehicle.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicles.component.ts][content]" value="import { Component } from '@angular/core';
+
+import { VehicleService } from './shared/vehicle.service';
+
+@Component({
+  // selector: 'story-vehicles',
+  template: `<router-outlet></router-outlet>`,
+  providers: [VehicleService]
+})
+export class VehiclesComponent  {}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/vehicles/vehicles.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicles.module.ts][content]" value="import { NgModule } from '@angular/core';
+
+import { VehicleButtonComponent } from './shared/vehicle-button/Vehicle-button.component';
+
+// routing = routingModuleWithProvidersAndRouteConfiguration
+import { routing, routedComponents } from './vehicles.routing';
+
+import { SharedModule } from '../shared/shared.module';
+import { VehicleService } from './shared/vehicle.service';  // TODO: Remove this when bug is fixed in A2 RC5
+
+@NgModule({
+  imports: [routing, SharedModule],
+  declarations: [VehicleButtonComponent, routedComponents],
+
+  // TODO: Remove this when bug is fixed in A2 RC5.
+  // We can put this in the component when it is fixed ... or we can do it in the module.
+  // In the module, everyone gets it everywhere tho.
+  providers: [VehicleService]
+})
+export class VehiclesModule { }
+// avoids having to lazy load with loadChildren: &quot;app/vehicles/vehicle.module#VehicleModule&quot;
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/vehicles/vehicles.module.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicles.routing.ts][content]" value="import { Routes, RouterModule } from '@angular/router';
+
+import { VehicleListComponent } from './vehicle-list/vehicle-list.component';
+import { VehicleComponent } from './vehicle/vehicle.component';
+import { VehiclesComponent } from './vehicles.component';
+import { CanDeactivateGuard, CanActivateAuthGuard } from '../routing';
+
+const routes: Routes = [
+  {
+    path: '',
+    component: VehiclesComponent,
+    children: [
+      {
+        path: '',
+        component: VehicleListComponent,
+      },
+      {
+        path: ':id',
+        component: VehicleComponent,
+        canDeactivate: [CanDeactivateGuard]
+      },
+    ]
+  },
+];
+
+export const routing = RouterModule.forChild(routes);
+
+export const routedComponents = [VehiclesComponent, VehicleListComponent, VehicleComponent]
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/vehicles/vehicles.routing.ts][encoding]" value="utf8"><input type="hidden" name="entries[main.ts][content]" value="import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module';
 
 platformBrowserDynamic().bootstrapModule(AppModule)
@@ -6144,20 +6145,7 @@ button.btn[disabled]:focus {
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[a2docs.css][encoding]" value="utf8"><input type="hidden" name="entries[app/app.component 2.css][content]" value=".mdl-layout__content {
-  margin-top: 68px;
-}
-
-.page-content {
-  margin: 2em;
-}
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/app.component 2.css][encoding]" value="utf8"><input type="hidden" name="entries[app/app.component.css][content]" value=".mdl-layout__header {
+*/"><input type="hidden" name="entries[a2docs.css][encoding]" value="utf8"><input type="hidden" name="entries[app/app.component.css][content]" value=".mdl-layout__header {
   position: fixed;
   background-color: #222;
 }
@@ -18841,7 +18829,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
     &quot;emitDecoratorMetadata&quot;: true,
     &quot;experimentalDecorators&quot;: true,
     &quot;removeComments&quot;: false,
-    &quot;noImplicitAny&quot;: true,
+    &quot;noImplicitAny&quot;: false,
     &quot;suppressImplicitAnyIndexErrors&quot;: true
   }
 }
