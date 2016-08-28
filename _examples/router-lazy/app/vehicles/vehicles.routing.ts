@@ -4,7 +4,7 @@ import { VehicleComponent } from './vehicle.component';
 import { VehiclesComponent } from './vehicles.component';
 import { VehicleListComponent } from './vehicle-list.component';
 
-export const routes: Routes = [
+const routes: Routes = [
   {
     path: '',
     component: VehiclesComponent,
