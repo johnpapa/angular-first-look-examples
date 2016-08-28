@@ -392,7 +392,9 @@ export class Vehicle {
 
 @Injectable()
 export class VehicleService {
-  constructor(private http: Http) { }
+  constructor(private http: Http) {
+    console.log('created vehicle service');
+  }
 
   getVehicle(id: number) {
     return this.getVehicles()

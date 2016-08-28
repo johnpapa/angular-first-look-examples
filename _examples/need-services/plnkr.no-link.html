@@ -1,11 +1,11 @@
 <html lang="en"><head></head><body><form id="mainForm" method="post" action="http://plnkr.co/edit/?p=preview" target="_self"><input type="hidden" name="files[app/app.component.ts]" value="import { Component } from '@angular/core';
+
 import { CharacterListComponent } from './character-list.component';
 
 @Component({
   moduleId: module.id,
   selector: 'my-app',
-  template: '<my-character-list></my-character-list>',
-  directives: [CharacterListComponent]
+  template: '<my-character-list></my-character-list>'
 })
 export class AppComponent {}
 
@@ -19,10 +19,16 @@ import { BrowserModule  } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
+import { CharacterComponent } from './character.component';
+import { CharacterListComponent } from './character-list.component';
 
 @NgModule({
   imports: [BrowserModule, FormsModule],
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent,
+    CharacterComponent,
+    CharacterListComponent
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule { }
@@ -33,15 +39,14 @@ Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/character-list.component.ts]" value="import { Component } from '@angular/core';
+
 import { Character } from './character';
-import { CharacterComponent } from './character.component';
 
 @Component({
   moduleId: module.id,
   selector: 'my-character-list',
   templateUrl: 'character-list.component.html',
   styles: ['li {cursor: pointer;}'],
-  directives: [CharacterComponent]
 })
 export class CharacterListComponent {
   characters = [
@@ -65,6 +70,7 @@ Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/character.component.ts]" value="import { Component, Input } from '@angular/core';
+
 import { Character } from './character';
 
 @Component({
