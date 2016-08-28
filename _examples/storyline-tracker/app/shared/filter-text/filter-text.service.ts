@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
 
 @Injectable()
-export class FilterService {
+export class FilterTextService {
+  constructor() {
+    console.log('Created an instance of FilterTextService');
+  }
+
   filter(data: string, props: Array<string>, originalList: Array<any>) {
     let filteredList: any[];
     if (data && props && originalList) {
@@ -17,8 +21,7 @@ export class FilterService {
         return match;
       });
       filteredList = filtered;
-    }
-    else {
+    } else {
       filteredList = originalList;
     }
     return filteredList;

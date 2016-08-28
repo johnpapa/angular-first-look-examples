@@ -3,14 +3,9 @@
   <div>
     <div class="mdl-grid">
       <div class="mdl-cell mdl-cell--3-col"
-        *ngFor="let character of characters | async"
+        *ngFor="let character of characters | async;trackBy:trackByCharacters"
         (click)="gotoDetail(character)">
-
-        <button class="dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect
-      mdl-button--accent">
-          {{character.name}}
-        </button>
-
+        <story-dashboard-button [character]="character"></story-dashboard-button>
       </div>
     </div>
   </div>

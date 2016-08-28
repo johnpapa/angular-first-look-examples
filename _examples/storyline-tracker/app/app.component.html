@@ -1,15 +1,5 @@
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-  <header class="mdl-layout__header">
-    <div class="mdl-layout__header-row">
-      <a class="md-title-icon" href="http://pluralsight.com" target="_blank"><i></i></a>
-      <span class="mdl-layout-title">Storyline Tracker</span>
-      <button id="reset-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent mdl-button--raised" (click)="resetDb()">Reset Data</button>
-    </div>
-    <div class="mdl-navigation">
-      <a *ngFor="let item of menuItems" [routerLink]="item.link"
-      class="nav-link" routerLinkActive="router-link-active" href="">{{item.caption}}</a>
-    </div>
-  </header>
+  <story-nav></story-nav>
   <main class="mdl-layout__content">
     <section>
       <div class="page-content">
@@ -17,8 +7,7 @@
       </div>
     </section>
   </main>
-
   <story-spinner></story-spinner>
-  <toast></toast>
-  <modal-confirm></modal-confirm>
+  <story-toast></story-toast>
+  <story-modal></story-modal>
 </div>

@@ -2,7 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   moduleId: module.id,
-  selector: 'filter-text',
+  selector: 'story-filter-text',
   templateUrl: 'filter-text.component.html'
 })
 export class FilterTextComponent {

@@ -12,7 +12,7 @@ var core_1 = require('@angular/core');
 var InitCapsPipe = (function () {
     function InitCapsPipe() {
     }
-    InitCapsPipe.prototype.transform = function (value, args) {
+    InitCapsPipe.prototype.transform = function (value) {
         return value
             .toLowerCase()
             .replace(/(?:^|\s)[a-z]/g, function (m) {

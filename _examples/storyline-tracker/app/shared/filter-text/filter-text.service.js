@@ -9,10 +9,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var FilterService = (function () {
-    function FilterService() {
+var FilterTextService = (function () {
+    function FilterTextService() {
+        console.log('Created an instance of FilterTextService');
     }
-    FilterService.prototype.filter = function (data, props, originalList) {
+    FilterTextService.prototype.filter = function (data, props, originalList) {
         var filteredList;
         if (data && props && originalList) {
             data = data.toLowerCase();
@@ -35,11 +36,11 @@ var FilterService = (function () {
         }
         return filteredList;
     };
-    FilterService = __decorate([
+    FilterTextService = __decorate([
         core_1.Injectable(), 
         __metadata('design:paramtypes', [])
-    ], FilterService);
-    return FilterService;
+    ], FilterTextService);
+    return FilterTextService;
 }());
-exports.FilterService = FilterService;
+exports.FilterTextService = FilterTextService;
 //# sourceMappingURL=filter-text.service.js.map

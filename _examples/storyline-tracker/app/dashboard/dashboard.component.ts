@@ -1,14 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
 import { Subscription } from 'rxjs/Subscription';
 
-import { Character, CharacterService, ToastService } from '../../app/shared';
+import { Character, CharacterService } from '../../app/models';
+import { ToastService } from '../../app/core';
 
 @Component({
   moduleId: module.id,
-  selector: 'my-dashboard',
+  selector: 'story-dashboard',
   templateUrl: 'dashboard.component.html',
   styleUrls: ['dashboard.component.css']
 })
@@ -23,17 +23,16 @@ export class DashboardComponent implements OnDestroy, OnInit {
     private toastService: ToastService) { }
 
   getCharacters() {
-    // this._spinnerService.show();
     this.characters = this.characterService.getCharacters()
-      .catch((e: any) => {
+      .do(() => this.toastService.activate('Got characters for the dashboard'))
+      .catch(e => {
         this.toastService.activate(`${e}`);
         return Observable.of([]);
       });
-      // .finally(() => { this._spinnerService.hide(); })
   }
 
   gotoDetail(character: Character) {
-    let link = ['/characters', character.id ];
+    let link = ['/characters', character.id];
     this.router.navigate(link);
   }
 
@@ -45,5 +44,9 @@ export class DashboardComponent implements OnDestroy, OnInit {
     this.getCharacters();
     this.dbResetSubscription = this.characterService.onDbReset
       .subscribe(() => this.getCharacters());
+  }
+
+  trackByCharacters(index: number, character: Character) {
+    return character.id;
   }
 }

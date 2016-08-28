@@ -10,27 +10,26 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
-var observable_1 = require('rxjs/observable');
-require('rxjs/add/observable/of');
-var shared_1 = require('../../app/shared');
+var Observable_1 = require('rxjs/Observable');
+var models_1 = require('../../app/models');
+var core_2 = require('../../app/core');
 var DashboardComponent = (function () {
-    function DashboardComponent(characterService, router, toastService) {
-        this.characterService = characterService;
+    function DashboardComponent(speakerService, router, toastService) {
+        this.speakerService = speakerService;
         this.router = router;
         this.toastService = toastService;
     }
-    DashboardComponent.prototype.getCharacters = function () {
+    DashboardComponent.prototype.getSpeakers = function () {
         var _this = this;
-        // this._spinnerService.show();
-        this.characters = this.characterService.getCharacters()
+        this.speakers = this.speakerService.getSpeakers()
+            .do(function () { return _this.toastService.activate('Got speakers for the dashboard'); })
             .catch(function (e) {
             _this.toastService.activate("" + e);
-            return observable_1.Observable.of([]);
+            return Observable_1.Observable.of([]);
         });
-        // .finally(() => { this._spinnerService.hide(); })
     };
-    DashboardComponent.prototype.gotoDetail = function (character) {
-        var link = ['/characters', character.id];
+    DashboardComponent.prototype.gotoDetail = function (speaker) {
+        var link = ['/speakers', speaker.id];
         this.router.navigate(link);
     };
     DashboardComponent.prototype.ngOnDestroy = function () {
@@ -38,18 +37,21 @@ var DashboardComponent = (function () {
     };
     DashboardComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.getCharacters();
-        this.dbResetSubscription = this.characterService.onDbReset
-            .subscribe(function () { return _this.getCharacters(); });
+        this.getSpeakers();
+        this.dbResetSubscription = this.speakerService.onDbReset
+            .subscribe(function () { return _this.getSpeakers(); });
+    };
+    DashboardComponent.prototype.trackBySpeakers = function (index, speaker) {
+        return speaker.id;
     };
     DashboardComponent = __decorate([
         core_1.Component({
             moduleId: module.id,
-            selector: 'my-dashboard',
+            selector: 'ev-dashboard',
             templateUrl: 'dashboard.component.html',
             styleUrls: ['dashboard.component.css']
         }), 
-        __metadata('design:paramtypes', [shared_1.CharacterService, router_1.Router, shared_1.ToastService])
+        __metadata('design:paramtypes', [models_1.SpeakerService, router_1.Router, core_2.ToastService])
     ], DashboardComponent);
     return DashboardComponent;
 }());
