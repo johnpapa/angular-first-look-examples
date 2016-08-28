@@ -29,7 +29,7 @@ var FilterTextComponent = (function () {
     FilterTextComponent = __decorate([
         core_1.Component({
             moduleId: module.id,
-            selector: 'ev-filter-text',
+            selector: 'story-filter-text',
             templateUrl: 'filter-text.component.html'
         }), 
         __metadata('design:paramtypes', [])

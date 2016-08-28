@@ -14,22 +14,22 @@ var Observable_1 = require('rxjs/Observable');
 var models_1 = require('../../app/models');
 var core_2 = require('../../app/core');
 var DashboardComponent = (function () {
-    function DashboardComponent(speakerService, router, toastService) {
-        this.speakerService = speakerService;
+    function DashboardComponent(characterService, router, toastService) {
+        this.characterService = characterService;
         this.router = router;
         this.toastService = toastService;
     }
-    DashboardComponent.prototype.getSpeakers = function () {
+    DashboardComponent.prototype.getCharacters = function () {
         var _this = this;
-        this.speakers = this.speakerService.getSpeakers()
-            .do(function () { return _this.toastService.activate('Got speakers for the dashboard'); })
+        this.characters = this.characterService.getCharacters()
+            .do(function () { return _this.toastService.activate('Got characters for the dashboard'); })
             .catch(function (e) {
             _this.toastService.activate("" + e);
             return Observable_1.Observable.of([]);
         });
     };
-    DashboardComponent.prototype.gotoDetail = function (speaker) {
-        var link = ['/speakers', speaker.id];
+    DashboardComponent.prototype.gotoDetail = function (character) {
+        var link = ['/characters', character.id];
         this.router.navigate(link);
     };
     DashboardComponent.prototype.ngOnDestroy = function () {
@@ -37,23 +37,24 @@ var DashboardComponent = (function () {
     };
     DashboardComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.getSpeakers();
-        this.dbResetSubscription = this.speakerService.onDbReset
-            .subscribe(function () { return _this.getSpeakers(); });
+        this.getCharacters();
+        this.dbResetSubscription = this.characterService.onDbReset
+            .subscribe(function () { return _this.getCharacters(); });
     };
-    DashboardComponent.prototype.trackBySpeakers = function (index, speaker) {
-        return speaker.id;
+    DashboardComponent.prototype.trackByCharacters = function (index, character) {
+        return character.id;
     };
     DashboardComponent = __decorate([
         core_1.Component({
             moduleId: module.id,
-            selector: 'ev-dashboard',
+            selector: 'story-dashboard',
             templateUrl: 'dashboard.component.html',
             styleUrls: ['dashboard.component.css']
         }), 
-        __metadata('design:paramtypes', [models_1.SpeakerService, router_1.Router, core_2.ToastService])
+        __metadata('design:paramtypes', [(typeof (_a = typeof models_1.CharacterService !== 'undefined' && models_1.CharacterService) === 'function' && _a) || Object, router_1.Router, core_2.ToastService])
     ], DashboardComponent);
     return DashboardComponent;
+    var _a;
 }());
 exports.DashboardComponent = DashboardComponent;
 //# sourceMappingURL=dashboard.component.js.map

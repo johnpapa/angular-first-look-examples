@@ -153,112 +153,50 @@
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[api/in-memory-story.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/app.component.ts][content]" value="import { Component, provide } from '@angular/core';
-import { HTTP_PROVIDERS, XHRBackend } from '@angular/http';
-import { ROUTER_DIRECTIVES } from '@angular/router';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/finally';
-import 'rxjs/add/operator/map';
-
-import {
-  InMemoryBackendConfig,
-  InMemoryBackendService,
-  SEED_DATA
-} from 'angular2-in-memory-web-api';
-import { InMemoryStoryService } from '../api/in-memory-story.service';
-import { CharactersComponent } from './characters';
-import { DashboardComponent } from './dashboard';
-import { VehiclesComponent } from './vehicles';
-import {
-  CharacterService,
-  EntityService,
-  ExceptionService,
-  GuardService,
-  MessageService,
-  ModalComponent,
-  ModalService,
-  SpinnerComponent,
-  SpinnerService,
-  ToastComponent,
-  ToastService
-} from './shared';
+*/"><input type="hidden" name="entries[api/in-memory-story.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/app.component.ts][content]" value="import { Component } from '@angular/core';
 
 @Component({
   moduleId: module.id,
-  selector: 'story-app',
+  selector: 'event-view-app',
   templateUrl: 'app.component.html',
-  styleUrls: ['app.component.css'],
-  directives: [ROUTER_DIRECTIVES, ModalComponent, SpinnerComponent, ToastComponent],
-  providers: [
-    HTTP_PROVIDERS,
-    provide(XHRBackend, { useClass: InMemoryBackendService }),
-    provide(SEED_DATA, { useClass: InMemoryStoryService }),
-    provide(InMemoryBackendConfig, { useValue: { delay: 600 } }),
-    CharacterService,
-    EntityService,
-    ExceptionService,
-    GuardService,
-    MessageService,
-    ModalService,
-    SpinnerService,
-    ToastService
-  ]
+  styleUrls: ['app.component.css']
 })
-export class AppComponent {
-  public menuItems = [
-    { caption: 'Dashboard', link: ['/dashboard'] },
-    { caption: 'Characters', link: ['/characters'] },
-    { caption: 'Vehicles', link: ['/vehicles'] }
-  ];
-
-  constructor(
-    private messageService: MessageService,
-    private modalService: ModalService) {
-  }
-
-  resetDb() {
-    let msg = 'Are you sure you want to reset the database?';
-    this.modalService.activate(msg).then(responseOK => {
-      if (responseOK) {
-        this.messageService.resetDb();
-      }
-    });
-  }
-}
+export class AppComponent { }
 
 
 /*
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/app.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/app.interfaces.ts][content]" value="import { CanDeactivate } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
-
-export interface CanComponentDeactivate {
- canDeactivate: () => boolean | Observable<boolean>;
-}
-
-export class CanDeactivateGuard implements CanDeactivate<CanComponentDeactivate> {
-  canDeactivate(component: CanComponentDeactivate): Observable<boolean> | boolean {
-    return component.canDeactivate ? component.canDeactivate() : true;
-  }
-}
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/app.interfaces.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/app.module.ts][content]" value="import { NgModule } from '@angular/core';
+*/"><input type="hidden" name="entries[app/app.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/app.module.ts][content]" value="import { NgModule } from '@angular/core';
 import { BrowserModule  } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
+import { HttpModule, XHRBackend } from '@angular/http';
 
 import { AppComponent } from './app.component';
 
+import './core/rxjs-extensions';
+import { InMemoryWebApiModule } from 'angular2-in-memory-web-api';
+import { InMemoryStoreService } from '../api/in-memory-store.service';
+import { routing } from './routing/app.routing';
+import { CharacterService } from './models';
+import { PageNotFoundComponent } from './page-not-found.component';
+
+/* Feature Modules */
+import { CoreModule } from './core/core.module';
+import { LoginModule } from './login/login.module';
+
 @NgModule({
-  imports: [BrowserModule, FormsModule],
-  declarations: [AppComponent],
+  imports: [
+    BrowserModule,
+    HttpModule,
+    InMemoryWebApiModule.forRoot(InMemoryStoreService, { delay: 600 }),
+    LoginModule,
+    routing,
+    CoreModule,
+  ],
+  declarations: [AppComponent, PageNotFoundComponent],
+  providers: [CharacterService],
   bootstrap: [AppComponent],
 })
 export class AppModule { }
@@ -268,57 +206,31 @@ export class AppModule { }
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/app.module.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/app.routes.ts][content]" value="import { provideRouter, RouterConfig } from '@angular/router';
+*/"><input type="hidden" name="entries[app/app.module.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/character-list/character-list.component.ts][content]" value="import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Subscription } from 'rxjs/subscription';
 
-import { DashboardRoutes } from './dashboard';
-import { CharactersRoutes } from './characters';
-import { VehiclesRoutes } from './vehicles';
-import { CanDeactivateGuard } from './app.interfaces';
-
-export const routes: RouterConfig = [
-  ...DashboardRoutes,
-  ...CharactersRoutes,
-  ...VehiclesRoutes,
-];
-
-export const APP_ROUTER_PROVIDERS = [
-  provideRouter(routes),
-  CanDeactivateGuard
-];
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/app.routes.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/character-list/character-list.component.ts][content]" value="import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ROUTER_DIRECTIVES } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
-
-import { SortCharactersPipe } from '../shared';
-import { Character, CharacterService, FilterService, FilterTextComponent } from '../../../app/shared';
+import { Character, CharacterService } from '../../../app/models';
+import { FilterTextComponent } from '../../../app/shared/filter-text/filter-text.component';
+import { FilterTextService } from '../../../app/shared/filter-text/filter-text.service';
 
 @Component({
   moduleId: module.id,
-  selector: 'story-characters',
+  selector: 'story-character-list',
   templateUrl: 'character-list.component.html',
-  directives: [FilterTextComponent, ROUTER_DIRECTIVES],
   styleUrls: ['character-list.component.css'],
-  pipes: [SortCharactersPipe],
-  providers: [FilterService]
 })
 export class CharacterListComponent implements OnDestroy, OnInit {
   private dbResetSubscription: Subscription;
 
-  characters: Character[];
+  characters: Character[] = [];
   filteredCharacters = this.characters;
   @ViewChild(FilterTextComponent) filterComponent: FilterTextComponent;
 
   constructor(private characterService: CharacterService,
-    private filterService: FilterService) { }
+    private filterService: FilterTextService) { }
 
   filterChanged(searchText: string) {
-    this.filteredCharacters = this.filterService.filter(searchText, ['id', 'name', 'side'], this.characters);
+    this.filteredCharacters = this.filterService.filter(searchText, ['id', 'name', 'twitter'], this.characters);
   }
 
   getCharacters() {
@@ -327,7 +239,7 @@ export class CharacterListComponent implements OnDestroy, OnInit {
     this.characterService.getCharacters()
       .subscribe(characters => {
         this.characters = this.filteredCharacters = characters;
-        this.filterComponent.clear();
+        // this.filterComponent.clear();
       });
   }
 
@@ -341,6 +253,10 @@ export class CharacterListComponent implements OnDestroy, OnInit {
     this.dbResetSubscription = this.characterService.onDbReset
       .subscribe(() => this.getCharacters());
   }
+
+  trackByCharacters(index: number, character: Character) {
+    return character.id;
+  }
 }
 
 
@@ -348,41 +264,99 @@ export class CharacterListComponent implements OnDestroy, OnInit {
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/characters/character-list/character-list.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/character-list/index.ts][content]" value="export * from './character-list.component';
+*/"><input type="hidden" name="entries[app/characters/character-list/character-list.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/character.component.ts][content]" value="import { Component } from '@angular/core';
+
+@Component({
+  template: `<router-outlet></router-outlet>`,
+})
+export class CharactersComponent { }
 
 
 /*
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/characters/character-list/index.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/character/character.component.ts][content]" value="import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+*/"><input type="hidden" name="entries[app/characters/character.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/character.module.ts][content]" value="import { NgModule } from '@angular/core';
+
+import { CharacterButtonComponent } from './shared/character-button/character-button.component';
+import { SortCharactersPipe } from './shared/sort-characters.pipe';
+import { routing, routedComponents } from './characters.routing';
+import { SharedModule } from '../shared/shared.module';
+
+@NgModule({
+  imports: [routing, SharedModule],
+  declarations: [CharacterButtonComponent, SortCharactersPipe, routedComponents]
+})
+export class CharactersModule { }
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/characters/character.module.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/character.routing.ts][content]" value="import { Routes, RouterModule } from '@angular/router';
+
+import { CharacterListComponent } from './character-list/character-list.component';
+import { CharacterComponent } from './character/character.component';
+import { CharactersComponent } from './characters.component';
+import { CanDeactivateGuard, CanActivateAuthGuard } from '../routing';
+
+const routes: Routes = [
+  {
+    path: '',
+    component: CharactersComponent,
+    children: [
+      {
+        path: '',
+        component: CharacterListComponent,
+      },
+      {
+        path: ':id',
+        component: CharacterComponent,
+        canDeactivate: [CanDeactivateGuard]
+      },
+    ]
+  },
+]; RouterModule
+
+
+export const routing = RouterModule.forChild(routes);
+
+export const routedComponents = [CharactersComponent, CharacterListComponent, CharacterComponent]
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/characters/character.routing.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/character/character.component.ts][content]" value="import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
-import { Character, CharacterService, EntityService, GuardService, ModalService, ToastService } from '../../../app/shared';
+import { CanComponentDeactivate } from '../../routing';
+
+import { Character, CharacterService } from '../../../app/models';
+import { EntityService, ModalService, ToastService } from '../../../app/core';
 
 @Component({
   moduleId: module.id,
   selector: 'story-character',
   templateUrl: 'character.component.html',
-  styles: ['.mdl-textfield__label {top: 0;}']
+  styleUrls: ['character.component.css']
 })
-export class CharacterComponent implements OnDestroy, OnInit {
+export class CharacterComponent implements OnDestroy, OnInit, CanComponentDeactivate {
   @Input() character: Character;
-
   editCharacter: Character = <Character>{};
 
   private dbResetSubscription: Subscription;
   private id: any;
-  private routerSub: any;
 
   constructor(
-    private characterService: CharacterService,
     private entityService: EntityService,
-    private guardService: GuardService,
     private modalService: ModalService,
     private route: ActivatedRoute,
     private router: Router,
+    private characterService: CharacterService,
     private toastService: ToastService) { }
 
   cancel(showToast = true) {
@@ -393,10 +367,9 @@ export class CharacterComponent implements OnDestroy, OnInit {
   }
 
   canDeactivate() {
-    let deactivate = !this.character ||
+    return !this.character ||
       !this.isDirty() ||
       this.modalService.activate();
-    return this.guardService.canDeactivate(deactivate);
   }
 
   delete() {
@@ -422,29 +395,30 @@ export class CharacterComponent implements OnDestroy, OnInit {
 
   ngOnDestroy() {
     this.dbResetSubscription.unsubscribe();
-    if (this.routerSub) {
-      this.routerSub.unsubscribe();
-    }
   }
 
   ngOnInit() {
     componentHandler.upgradeDom();
-    this.dbResetSubscription =
-      this.characterService.onDbReset.subscribe(() => this.getCharacter());
+    this.dbResetSubscription = this.characterService.onDbReset
+      .subscribe(() => this.getCharacter());
 
-    this.routerSub = this.route.params.subscribe(params => {
-      this.id = +params['id'];
-      this.getCharacter();
-    });
+    // Could use a snapshot here, as long as the parameters do not change.
+    // This may happen when a component is re-used.
+    // this.id = +this.route.snapshot.params['id'];
+    this.route
+      .params
+      .map(params => params['id'])
+      .do(id => this.id = +id)
+      .subscribe(id => this.getCharacter());
   }
 
   save() {
     let character = this.character = this.entityService.merge(this.character, this.editCharacter);
     if (character.id == null) {
       this.characterService.addCharacter(character)
-        .subscribe(char => {
-          this.setEditCharacter(char);
-          this.toastService.activate(`Successfully added ${char.name}`);
+        .subscribe(s => {
+          this.setEditCharacter(s);
+          this.toastService.activate(`Successfully added ${s.name}`);
           this.gotoCharacters();
         });
       return;
@@ -454,11 +428,9 @@ export class CharacterComponent implements OnDestroy, OnInit {
   }
 
   private getCharacter() {
-    if (this.id === 0) {
-      return;
-    }
+    if (this.id === 0) { return; };
     if (this.isAddMode()) {
-      this.character = <Character>{ name: '', side: 'dark' };
+      this.character = <Character>{ name: '', twitter: '' };
       this.editCharacter = this.entityService.clone(this.character);
       return;
     }
@@ -493,91 +465,38 @@ export class CharacterComponent implements OnDestroy, OnInit {
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/characters/character/character.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/character/index.ts][content]" value="export * from './character.component';
+*/"><input type="hidden" name="entries[app/characters/character/character.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/shared/character-button/character-button.component.ts][content]" value="import { Component, Input, OnInit } from '@angular/core';
 
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/characters/character/index.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/characters.component.ts][content]" value="import { Component } from '@angular/core';
-import { ROUTER_DIRECTIVES } from '@angular/router';
-
-import { CharacterComponent } from './character';
-import { CharacterListComponent } from './character-list';
+import { Character } from '../../../../app/models';
 
 @Component({
   moduleId: module.id,
-  selector: 'story-characters-root',
-  template: `
-    <router-outlet></router-outlet>
-  `,
-  directives: [ROUTER_DIRECTIVES]
+  selector: 'story-character-button',
+  templateUrl: 'character-button.component.html',
+  styleUrls: ['character-button.component.css'],
 })
-export class CharactersComponent { }
+export class CharacterButtonComponent implements OnInit {
+  @Input() character: Character;
+
+  constructor() {}
+
+  ngOnInit() {
+  }
+
+}
 
 
 /*
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/characters/characters.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/characters.routes.ts][content]" value="import { RouterConfig }          from '@angular/router';
+*/"><input type="hidden" name="entries[app/characters/shared/character-button/character-button.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/shared/sort-characters.pipe.ts][content]" value="import { Pipe, PipeTransform } from '@angular/core';
 
-import { CharacterListComponent } from './character-list';
-import { CharacterComponent } from './character';
-import { CharactersComponent } from './characters.component';
-
-import { CanDeactivateGuard } from '../app.interfaces';
-
-export const CharactersRoutes: RouterConfig = [
-  {
-    path: 'characters',
-    component: CharactersComponent,
-    children: [
-      {
-        path: '',
-        component: CharacterListComponent
-      },
-      {
-        path: ':id',
-        component: CharacterComponent,
-        canDeactivate: [CanDeactivateGuard]
-      },
-    ]
-  },
-];
-
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/characters/characters.routes.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/index.ts][content]" value="export * from './character';
-export * from './character-list';
-export * from './characters.component';
-export * from './characters.routes';
-export * from './shared';
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/characters/index.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/shared/index.ts][content]" value="export * from './sort-characters.pipe';
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/characters/shared/index.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/shared/sort-characters.pipe.ts][content]" value="import { Pipe, PipeTransform } from '@angular/core';
-
-import { Character } from '../../../app/shared';
+import { Character } from '../../../app/models';
 
 @Pipe({ name: 'sortCharacters' })
 export class SortCharactersPipe implements PipeTransform {
-  transform(value: Character[], args: any[]) {
+  transform(value: Character[], args?: any[]) {
     if (!value || !value.sort) { return value; }
 
     return value.sort((a: Character, b: Character) => {
@@ -593,198 +512,7 @@ export class SortCharactersPipe implements PipeTransform {
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/characters/shared/sort-characters.pipe.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/dashboard/dashboard.component.ts][content]" value="import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
-import { Subscription } from 'rxjs/Subscription';
-
-import { Character, CharacterService, ToastService } from '../../app/shared';
-
-@Component({
-  moduleId: module.id,
-  selector: 'my-dashboard',
-  templateUrl: 'dashboard.component.html',
-  styleUrls: ['dashboard.component.css']
-})
-export class DashboardComponent implements OnDestroy, OnInit {
-  private dbResetSubscription: Subscription;
-
-  characters: Observable<Character[]>;
-
-  constructor(
-    private characterService: CharacterService,
-    private router: Router,
-    private toastService: ToastService) { }
-
-  getCharacters() {
-    // this._spinnerService.show();
-    this.characters = this.characterService.getCharacters()
-      .catch((e: any) => {
-        this.toastService.activate(`${e}`);
-        return Observable.of([]);
-      });
-      // .finally(() => { this._spinnerService.hide(); })
-  }
-
-  gotoDetail(character: Character) {
-    let link = ['/characters', character.id ];
-    this.router.navigate(link);
-  }
-
-  ngOnDestroy() {
-    this.dbResetSubscription.unsubscribe();
-  }
-
-  ngOnInit() {
-    this.getCharacters();
-    this.dbResetSubscription = this.characterService.onDbReset
-      .subscribe(() => this.getCharacters());
-  }
-}
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/dashboard/dashboard.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/dashboard/dashboard.routes.ts][content]" value="import { RouterConfig }          from '@angular/router';
-import { DashboardComponent }     from './dashboard.component';
-
-export const DashboardRoutes: RouterConfig = [
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-  { path: 'dashboard',  component: DashboardComponent },
-];
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/dashboard/dashboard.routes.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/dashboard/index.ts][content]" value="export * from './dashboard.component';
-export * from './dashboard.routes';
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/dashboard/index.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/environment.ts][content]" value="// The file for the current environment will overwrite this one during build
-// Different environments can be found in config/environment.{dev|prod}.ts
-// The build system defaults to the dev environment
-
-export const environment = {
-  production: false
-};
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/environment.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/index.ts][content]" value="export * from './app.component';
-export * from './environment';
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/index.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/shared/character-services/character.model.ts][content]" value="export class Character {
-  id: number;
-  name: string;
-  side: string;
-}
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/shared/character-services/character.model.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/shared/character-services/character.service.ts][content]" value="import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-
-import { Character } from './character.model';
-import { CONFIG } from '../config';
-import { ExceptionService } from '../exception.service';
-import { MessageService } from '../message.service';
-import { SpinnerService } from '../spinner';
-
-let charactersUrl = CONFIG.baseUrls.characters;
-
-@Injectable()
-export class CharacterService {
-  onDbReset = this.messageService.state;
-
-  constructor(private http: Http,
-    private exceptionService: ExceptionService,
-    private messageService: MessageService,
-    private spinnerService: SpinnerService) {
-    this.messageService.state.subscribe(state => this.getCharacters());
-  }
-
-  addCharacter(character: Character) {
-    let body = JSON.stringify(character);
-    this.spinnerService.show();
-    return <Observable<Character>>this.http
-      .post(`${charactersUrl}`, body)
-      .map((res: Response) => res.json().data)
-      .catch(this.exceptionService.catchBadResponse)
-      .finally(() => this.spinnerService.hide());
-  }
-
-  deleteCharacter(character: Character) {
-    this.spinnerService.show();
-    return <Observable<Character>>this.http
-      .delete(`${charactersUrl}/${character.id}`)
-      .catch(this.exceptionService.catchBadResponse)
-      .finally(() => this.spinnerService.hide());
-  }
-
-  getCharacters() {
-    this.spinnerService.show();
-    return <Observable<Character[]>>this.http
-      .get(charactersUrl)
-      .map(res => <Character[]>res.json().data)
-      .catch(this.exceptionService.catchBadResponse)
-      .finally(() => this.spinnerService.hide());
-  }
-
-  getCharacter(id: number) {
-    this.spinnerService.show();
-    return <Observable<Character>>this.http
-      .get(`${charactersUrl}/${id}`)
-      .map((response: Response) => response.json().data)
-      .catch(this.exceptionService.catchBadResponse)
-      .finally(() => this.spinnerService.hide());
-  }
-
-  updateCharacter(character: Character) {
-    let body = JSON.stringify(character);
-    this.spinnerService.show();
-
-    return <Observable<Character>>this.http
-      .put(`${charactersUrl}/${character.id}`, body)
-      .catch(this.exceptionService.catchBadResponse)
-      .finally(() => this.spinnerService.hide());
-  }
-}
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/shared/character-services/character.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/shared/character-services/index.ts][content]" value="export * from './character.model';
-export * from './character.service';
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/shared/character-services/index.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/shared/config.ts][content]" value="export let CONFIG = {
+*/"><input type="hidden" name="entries[app/characters/shared/sort-characters.pipe.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/core/config.ts][content]" value="export let CONFIG = {
   baseUrls: {
     config: 'commands/config',
     resetDb: 'commands/resetDb',
@@ -798,7 +526,53 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/shared/config.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/shared/entity.service.ts][content]" value="import { Injectable } from '@angular/core';
+*/"><input type="hidden" name="entries[app/core/config.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/core/core.module.ts][content]" value="import { NgModule, Optional, SkipSelf } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+
+import { EntityService } from './entity.service';
+import { ExceptionService } from './exception.service';
+import { MessageService } from './message.service';
+import { NavComponent } from './nav/nav.component';
+
+import { throwIfAlreadyLoaded } from './module-import-guard';
+import { ModalModule } from './modal/modal.module';
+import { SpinnerModule } from './spinner/spinner.module';
+import { ToastModule } from './toast/toast.module';
+
+// imports: imports the module's exports. which is usually declarables and providers
+// in our case the spinner has no providers.
+//
+// exports: exports modules AND components/directives/pipes that other modules may want to use
+@NgModule({
+  imports: [
+    CommonModule, FormsModule, RouterModule,
+    ModalModule, SpinnerModule, ToastModule
+  ],
+ &nbsp;exports: [
+    CommonModule, FormsModule, RouterModule,
+    ModalModule, SpinnerModule, ToastModule, [NavComponent]
+  ],
+ &nbsp;declarations: [NavComponent],
+  providers: [
+    EntityService,
+    ExceptionService,
+    MessageService,
+  ]
+})
+export class CoreModule {
+  constructor( @Optional() @SkipSelf() parentModule: CoreModule) {
+    throwIfAlreadyLoaded(parentModule, 'CoreModule');
+  }
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/core/core.module.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/core/entity.service.ts][content]" value="import { Injectable } from '@angular/core';
 
 @Injectable()
 export class EntityService {
@@ -814,15 +588,14 @@ export class EntityService {
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/shared/entity.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/shared/exception.service.ts][content]" value="import { Injectable } from '@angular/core';
+*/"><input type="hidden" name="entries[app/core/entity.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/core/exception.service.ts][content]" value="import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
-import { ToastService } from './toast';
+import { ToastService } from './toast/toast.service';
 
 @Injectable()
 export class ExceptionService {
-
   constructor(private toastService: ToastService) { }
 
   catchBadResponse: (errorResponse: any) => Observable<any> = (errorResponse: any) => {
@@ -834,7 +607,7 @@ export class ExceptionService {
     this.toastService.activate(`Error - Bad Response - ${emsg}`);
     // return Observable.throw(emsg); // TODO: We should NOT swallow error here.
     return Observable.of();
-  }
+  };
 }
 
 
@@ -842,140 +615,27 @@ export class ExceptionService {
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/shared/exception.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/shared/filter-text/filter-text.component.ts][content]" value="import { Component, EventEmitter, Output } from '@angular/core';
-
-@Component({
-  moduleId: module.id,
-  selector: 'filter-text',
-  templateUrl: 'filter-text.component.html'
-})
-export class FilterTextComponent {
-  @Output() changed: EventEmitter<string>;
-
-  filter: string;
-
-  constructor() {
-    this.changed = new EventEmitter<string>();
-
-    componentHandler.upgradeDom();
-  }
-
-  clear() {
-    this.filter = '';
-  }
-
-  filterChanged(event: any) {
-    event.preventDefault();
-    console.log(`Filter Changed: ${this.filter}`);
-    this.changed.emit(this.filter);
-  }
-}
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/shared/filter-text/filter-text.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/shared/filter-text/filter-text.service.ts][content]" value="import { Injectable } from '@angular/core';
-
-@Injectable()
-export class FilterService {
-  filter(data: string, props: Array<string>, originalList: Array<any>) {
-    let filteredList: any[];
-    if (data &amp;&amp; props &amp;&amp; originalList) {
-      data = data.toLowerCase();
-      let filtered = originalList.filter(item => {
-        let match = false;
-        for (let prop of props) {
-          if (item[prop].toString().toLowerCase().indexOf(data) > -1) {
-            match = true;
-            break;
-          }
-        };
-        return match;
-      });
-      filteredList = filtered;
-    }
-    else {
-      filteredList = originalList;
-    }
-    return filteredList;
-  }
-}
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/shared/filter-text/filter-text.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/shared/filter-text/index.ts][content]" value="export * from './filter-text.component';
-export * from './filter-text.service';
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/shared/filter-text/index.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/shared/guard.service.ts][content]" value="import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/fromPromise';
-
-@Injectable()
-export class GuardService {
-  canDeactivate(deactivate: Promise<boolean> | boolean ): Observable<boolean> | boolean {
-    let p = Promise.resolve(deactivate);
-    let o = Observable.fromPromise(p);
-    return o;
-  }
-}
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/shared/guard.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/shared/index.ts][content]" value="export * from './character-services';
-export * from './config';
-export * from './message.service';
+*/"><input type="hidden" name="entries[app/core/exception.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/core/index.ts][content]" value="export * from './config';
 export * from './entity.service';
 export * from './exception.service';
-export * from './filter-text';
-export * from './guard.service';
-export * from './init-caps.pipe';
-export * from './modal';
-export * from './spinner';
-export * from './toast';
+export * from './message.service';
+export * from './modal/modal.service';
+export * from './rxjs-extensions';
+export * from './spinner/spinner.service';
+export * from './toast/toast.service';
+export * from './user-profile.service';
 
 
 /*
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/shared/index.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/shared/init-caps.pipe.ts][content]" value="import { Pipe, PipeTransform } from '@angular/core';
-
-@Pipe({ name: 'initCaps' })
-export class InitCapsPipe implements PipeTransform {
-  transform(value: string, args: any[]) {
-    return value
-      .toLowerCase()
-      .replace(/(?:^|\s)[a-z]/g, function(m) {
-        return m.toUpperCase();
-      });
-  }
-}
-
-
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/shared/init-caps.pipe.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/shared/message.service.ts][content]" value="import { Injectable } from '@angular/core';
+*/"><input type="hidden" name="entries[app/core/index.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/core/message.service.ts][content]" value="import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Subject } from 'rxjs/Subject';
 
 import { CONFIG } from './config';
-import { ToastService } from './toast';
+import { ToastService } from './toast/toast.service';
 
 export interface ResetMessage {
   message: string;
@@ -1004,15 +664,7 @@ export class MessageService {
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/shared/message.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/shared/modal/index.ts][content]" value="export * from './modal.component';
-export * from './modal.service';
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/shared/modal/index.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/shared/modal/modal.component.ts][content]" value="import { Component, OnInit } from '@angular/core';
+*/"><input type="hidden" name="entries[app/core/message.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/core/modal/modal.component.ts][content]" value="import { Component, OnInit } from '@angular/core';
 
 import { ModalService } from './modal.service';
 
@@ -1020,7 +672,7 @@ const KEY_ESC = 27;
 
 @Component({
   moduleId: module.id,
-  selector: 'modal-confirm',
+  selector: 'story-modal',
   templateUrl: 'modal.component.html',
   styleUrls: ['modal.component.css']
 })
@@ -1067,12 +719,6 @@ export class ModalComponent implements OnInit {
     this.okButton = document.getElementById('okButton');
   }
 
-  private hideDialog() {
-    document.onkeyup = null;
-    this.modalElement.style.opacity = 0;
-    window.setTimeout(() => this.modalElement.style.zIndex = 0, 400);
-  }
-
   private show() {
     document.onkeyup = null;
 
@@ -1111,6 +757,12 @@ export class ModalComponent implements OnInit {
 
     this.modalElement.style.opacity = 1;
   }
+
+  private hideDialog() {
+    document.onkeyup = null;
+    this.modalElement.style.opacity = 0;
+    window.setTimeout(() => this.modalElement.style.zIndex = 0, 400);
+  }
 }
 
 
@@ -1118,7 +770,31 @@ export class ModalComponent implements OnInit {
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/shared/modal/modal.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/shared/modal/modal.service.ts][content]" value="import { Injectable } from '@angular/core';
+*/"><input type="hidden" name="entries[app/core/modal/modal.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/core/modal/modal.module.ts][content]" value="import { NgModule, Optional, SkipSelf } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import { throwIfAlreadyLoaded } from '../module-import-guard';
+import { ModalComponent }   from './modal.component';
+import { ModalService } from './modal.service';
+
+@NgModule({
+  imports: [CommonModule],
+  exports: [ModalComponent],
+  declarations: [ModalComponent],
+  providers: [ModalService],
+})
+export class ModalModule {
+  constructor( @Optional() @SkipSelf() parentModule: ModalModule) {
+    throwIfAlreadyLoaded(parentModule, 'ModalModule')
+  }
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/core/modal/modal.module.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/core/modal/modal.service.ts][content]" value="import { Injectable } from '@angular/core';
 
 @Injectable()
 export class ModalService {
@@ -1130,15 +806,86 @@ export class ModalService {
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/shared/modal/modal.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/shared/spinner/index.ts][content]" value="export * from './spinner.component';
-export * from './spinner.service';
+*/"><input type="hidden" name="entries[app/core/modal/modal.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/core/module-import-guard.ts][content]" value="import { BaseException } from '@angular/core';
+
+export function throwIfAlreadyLoaded(parentModule: any, moduleName: string) {
+  if (parentModule) {
+    throw new ModuleImportGuardException(moduleName);
+  }
+}
+
+class ModuleImportGuardException extends BaseException {
+  constructor(name: string) {
+    super(`${name} has already been loaded. Import Core modules in the AppModule only.`);
+  }
+}
 
 
 /*
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/shared/spinner/index.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/shared/spinner/spinner.component.ts][content]" value="import {Component, OnDestroy, OnInit} from '@angular/core';
+*/"><input type="hidden" name="entries[app/core/module-import-guard.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/core/nav/nav.component.ts][content]" value="import { Component, OnInit } from '@angular/core';
+
+import { MessageService, ModalService } from '../';
+
+class MenuItem {
+  constructor(public caption: string, public link: any[]) { }
+}
+
+@Component({
+  moduleId: module.id,
+  selector: 'story-nav',
+  templateUrl: 'nav.component.html',
+  styleUrls: ['nav.component.css'],
+})
+export class NavComponent implements OnInit {
+  menuItems: MenuItem[];
+
+  ngOnInit() {
+    this.menuItems = [
+      { caption: 'Dashboard', link: ['/dashboard'] },
+      { caption: 'Characters', link: ['/characters'] },
+      { caption: 'Vehicles', link: ['/vehicles'] },
+      { caption: 'Login', link: ['/login'] },
+    ];
+  }
+
+  constructor(
+    private messageService: MessageService,
+    private modalService: ModalService) {
+  }
+
+  resetDb() {
+    let msg = 'Are you sure you want to reset the database?';
+    this.modalService.activate(msg).then(responseOK => {
+      if (responseOK) {
+        this.messageService.resetDb();
+      }
+    });
+  }
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/core/nav/nav.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/core/rxjs-extensions.ts][content]" value="import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/delay';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/finally';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/toPromise';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/fromPromise';
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/core/rxjs-extensions.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/core/spinner/spinner.component.ts][content]" value="import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
 import { SpinnerState, SpinnerService } from './spinner.service';
@@ -1146,14 +893,9 @@ import { SpinnerState, SpinnerService } from './spinner.service';
 @Component({
   moduleId: module.id,
   selector: 'story-spinner',
-  template: `
-    <div
-      class=&quot;spinner mdl-spinner mdl-js-spinner mdl-spinner--single-color&quot;
-      [class.is-active]=&quot;visible&quot;></div>
-  `,
-  styles: [`.spinner {position: absolute;left: 46%;top: 12%`]
+  templateUrl: 'spinner.component.html',
+  styleUrls: ['spinner.component.css']
 })
-
 export class SpinnerComponent implements OnDestroy, OnInit {
   visible = false;
 
@@ -1177,7 +919,31 @@ export class SpinnerComponent implements OnDestroy, OnInit {
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/shared/spinner/spinner.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/shared/spinner/spinner.service.ts][content]" value="import { Injectable } from '@angular/core';
+*/"><input type="hidden" name="entries[app/core/spinner/spinner.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/core/spinner/spinner.module.ts][content]" value="import { NgModule, Optional, SkipSelf } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import { throwIfAlreadyLoaded } from '../module-import-guard';
+import { SpinnerComponent }   from './spinner.component';
+import { SpinnerService }   from './spinner.service';
+
+@NgModule({
+  imports: [CommonModule],
+  exports: [SpinnerComponent],
+  declarations: [SpinnerComponent],
+  providers: [SpinnerService]
+})
+export class SpinnerModule {
+  constructor( @Optional() @SkipSelf() parentModule: SpinnerModule) {
+    throwIfAlreadyLoaded(parentModule, 'SpinnerModule')
+  }
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/core/spinner/spinner.module.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/core/spinner/spinner.service.ts][content]" value="import { Injectable, Optional, SkipSelf } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 
 export interface SpinnerState {
@@ -1188,7 +954,12 @@ export interface SpinnerState {
 export class SpinnerService {
   private spinnerSubject = new Subject<SpinnerState>();
 
-  spinnerState = this.spinnerSubject;
+  spinnerState = this.spinnerSubject.asObservable();
+
+  constructor(@Optional() @SkipSelf() prior: SpinnerService) {
+    if (prior) { return prior; }
+    console.log(&quot;created spinner service&quot;)
+  }
 
   show() {
     this.spinnerSubject.next(<SpinnerState>{ show: true });
@@ -1204,36 +975,33 @@ export class SpinnerService {
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/shared/spinner/spinner.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/shared/toast/index.ts][content]" value="export * from './toast.component';
-export * from './toast.service';
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/shared/toast/index.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/shared/toast/toast.component.ts][content]" value="import { Component, OnInit } from '@angular/core';
-
+*/"><input type="hidden" name="entries[app/core/spinner/spinner.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/core/toast/toast.component.ts][content]" value="import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ToastService } from './toast.service';
+
+import { Subscription } from 'rxjs/Subscription'
 
 @Component({
   moduleId: module.id,
-  selector: 'toast',
+  selector: 'story-toast',
   templateUrl: 'toast.component.html',
   styleUrls: ['toast.component.css']
 })
-export class ToastComponent implements OnInit {
-  title: string;
-  message: string;
-
+export class ToastComponent implements OnDestroy, OnInit {
   private defaults = {
     title: '',
     message: 'May the Force be with You'
   };
   private toastElement: any;
+  private toastSubscription: Subscription;
 
-  constructor(toastService: ToastService) {
-    toastService.activate = this.activate.bind(this);
+  title: string;
+  message: string;
+
+  constructor(private toastService: ToastService) {
+    this.toastSubscription = this.toastService.toastState.subscribe((toastMessage) => {
+      console.log(`activiting toast: ${toastMessage.message}`)
+      this.activate(toastMessage.message);
+    });
   }
 
   activate(message = this.defaults.message, title = this.defaults.title) {
@@ -1246,9 +1014,8 @@ export class ToastComponent implements OnInit {
     this.toastElement = document.getElementById('toast');
   }
 
-  private hide() {
-    this.toastElement.style.opacity = 0;
-    window.setTimeout(() => this.toastElement.style.zIndex = 0, 400);
+  ngOnDestroy() {
+    this.toastSubscription.unsubscribe();
   }
 
   private show() {
@@ -1258,6 +1025,11 @@ export class ToastComponent implements OnInit {
 
     window.setTimeout(() => this.hide(), 2500);
   }
+
+  private hide() {
+    this.toastElement.style.opacity = 0;
+    window.setTimeout(() => this.toastElement.style.zIndex = 0, 400);
+  }
 }
 
 
@@ -1265,11 +1037,55 @@ export class ToastComponent implements OnInit {
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/shared/toast/toast.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/shared/toast/toast.service.ts][content]" value="import { Injectable } from '@angular/core';
+*/"><input type="hidden" name="entries[app/core/toast/toast.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/core/toast/toast.module.ts][content]" value="import { NgModule, Optional, SkipSelf } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import { throwIfAlreadyLoaded } from '../module-import-guard';
+import { ToastComponent } from './toast.component';
+import { ToastService } from './toast.service';
+
+@NgModule({
+  imports: [CommonModule],
+  exports: [ToastComponent],
+  declarations: [ToastComponent],
+  providers: [ToastService]
+})
+export class ToastModule {
+  constructor(@Optional() @SkipSelf() parentModule: ToastModule) {
+    throwIfAlreadyLoaded(parentModule, 'ToastModule')
+  }
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/core/toast/toast.module.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/core/toast/toast.service.ts][content]" value="import { Injectable, Optional, SkipSelf } from '@angular/core';
+import { Subject } from 'rxjs/Subject';
+
+export interface ToastMessage {
+  message:string
+}
 
 @Injectable()
 export class ToastService {
-  activate: (message?: string, title?: string) => void;
+  private toastSubject = new Subject<ToastMessage>();
+
+  toastState = this.toastSubject.asObservable();
+
+  constructor(@Optional() @SkipSelf() prior: ToastService) {
+    if (prior) {
+      console.log('toast service already exists');
+      return prior;
+    } else {
+      console.log('created toast service')
+    }
+  }
+
+  activate(message?: string) {
+    this.toastSubject.next(<ToastMessage>{ message: message });
+  }
 }
 
 
@@ -1277,31 +1093,676 @@ export class ToastService {
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/shared/toast/toast.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/index.ts][content]" value="export * from './shared';
-export * from './vehicles.component';
-export * from './vehicle';
-export * from './vehicle-list';
-export * from './vehicles.routes';
+*/"><input type="hidden" name="entries[app/core/toast/toast.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/core/user-profile.service.ts][content]" value="import { Injectable } from '@angular/core';
+
+@Injectable()
+export class UserProfileService {
+  isLoggedIn: boolean = false;
+}
 
 
 /*
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/vehicles/index.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/shared/index.ts][content]" value="export * from './vehicle.model';
-export * from './vehicle.service';
+*/"><input type="hidden" name="entries[app/core/user-profile.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/dashboard/dashboard.component.ts][content]" value="import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
+
+import { Character, CharacterService } from '../../app/models';
+import { ToastService } from '../../app/core';
+
+@Component({
+  moduleId: module.id,
+  selector: 'story-dashboard',
+  templateUrl: 'dashboard.component.html',
+  styleUrls: ['dashboard.component.css']
+})
+export class DashboardComponent implements OnDestroy, OnInit {
+  private dbResetSubscription: Subscription;
+
+  characters: Observable<Character[]>;
+
+  constructor(
+    private characterService: CharacterService,
+    private router: Router,
+    private toastService: ToastService) { }
+
+  getCharacters() {
+    this.characters = this.characterService.getCharacters()
+      .do(() => this.toastService.activate('Got characters for the dashboard'))
+      .catch(e => {
+        this.toastService.activate(`${e}`);
+        return Observable.of([]);
+      });
+  }
+
+  gotoDetail(character: Character) {
+    let link = ['/characters', character.id];
+    this.router.navigate(link);
+  }
+
+  ngOnDestroy() {
+    this.dbResetSubscription.unsubscribe();
+  }
+
+  ngOnInit() {
+    this.getCharacters();
+    this.dbResetSubscription = this.characterService.onDbReset
+      .subscribe(() => this.getCharacters());
+  }
+
+  trackByCharacters(index: number, character: Character) {
+    return character.id;
+  }
+}
 
 
 /*
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/vehicles/shared/index.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/shared/vehicle.model.ts][content]" value="export class Vehicle {
+*/"><input type="hidden" name="entries[app/dashboard/dashboard.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/dashboard/dashboard.module.ts][content]" value="import { NgModule } from '@angular/core';
+
+import { DashboardButtonComponent } from './shared/dashboard-button/dashboard-button.component';
+import { routing, routedComponents } from './dashboard.routing';
+import { SharedModule } from '../shared/shared.module';
+
+@NgModule({
+  imports: [routing, SharedModule],
+  declarations: [DashboardButtonComponent, routedComponents]
+})
+export class DashboardModule { }
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/dashboard/dashboard.module.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/dashboard/dashboard.routing.ts][content]" value="import { Routes, RouterModule } from '@angular/router';
+
+import { DashboardComponent } from './dashboard.component';
+
+const routes: Routes = [
+  { path: '', component: DashboardComponent },
+];
+
+export const routing = RouterModule.forChild(routes);
+
+export const routedComponents = routes.filter(r => r.component != undefined).map(r => r.component)
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/dashboard/dashboard.routing.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/dashboard/shared/dashboard-button/dashboard-button.component.ts][content]" value="import { Component, Input, OnInit } from '@angular/core';
+
+import { Character } from '../../../../app/models';
+
+@Component({
+  moduleId: module.id,
+  selector: 'story-dashboard-button',
+  templateUrl: 'dashboard-button.component.html',
+  styleUrls: ['dashboard-button.component.css']
+})
+export class DashboardButtonComponent implements OnInit {
+  @Input() character: Character;
+
+  constructor() {}
+
+  ngOnInit() {
+  }
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/dashboard/shared/dashboard-button/dashboard-button.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/login/login.component.ts][content]" value="import { Component, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
+
+import { LoginService } from './login.service';
+import { ToastService, UserProfileService } from '../../app/core';
+
+@Component({
+  moduleId: module.id,
+  templateUrl: 'login.component.html',
+  providers: [LoginService]
+})
+export class LoginComponent implements OnDestroy {
+  private redirectTo: any[];
+  private loginSub: Subscription;
+
+  constructor(
+    private loginService: LoginService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private toastService: ToastService,
+    private userProfileService: UserProfileService) {
+  }
+
+  public get isLoggedIn() : boolean {
+    return this.userProfileService.isLoggedIn;
+  }
+
+  login() {
+    this.loginSub = this.loginService
+      .login()
+      .mergeMap(loginResult => this.route.queryParams)
+      .map(qp => qp['redirectTo'])
+      .subscribe(redirectTo => {
+        this.toastService.activate(`Successfully logged in`);
+        if (this.userProfileService.isLoggedIn) {
+          let url = redirectTo ? [redirectTo] : [ '/dashboard' ];
+          this.router.navigate(url);
+        }
+      });
+  }
+
+  logout() {
+    this.loginService.logout();
+    this.toastService.activate(`Successfully logged out`);
+  }
+
+  ngOnDestroy() {
+    if (this.loginSub) {
+      this.loginSub.unsubscribe();
+    }
+  }
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/login/login.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/login/login.module.ts][content]" value="import { NgModule } from '@angular/core';
+
+import { routing, routedComponents } from './login.routing';
+import { SharedModule } from '../shared/shared.module';
+
+@NgModule({
+  imports: [SharedModule, routing],
+ &nbsp;declarations: [routedComponents],
+})
+export class LoginModule { }
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/login/login.module.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/login/login.routing.ts][content]" value="import { Routes, RouterModule } from '@angular/router';
+
+import { LoginComponent }     from './login.component';
+
+const routes: Routes = [
+  { path: 'login', component: LoginComponent }
+];
+
+export const routing = RouterModule.forChild(routes);
+
+export const routedComponents = routes.filter(r => r.component != undefined).map(r => r.component)
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/login/login.routing.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/login/login.service.ts][content]" value="import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+
+import { SpinnerService, UserProfileService } from '../../app/core';
+
+@Injectable()
+export class LoginService {
+  constructor(
+    private spinnerService: SpinnerService,
+    private userProfileService: UserProfileService) { }
+
+  login() {
+    return Observable.of(true)
+        .do(_ => this.spinnerService.show())
+        .delay(1000)
+        .do(this.toggleLogState.bind(this));
+        // .do((val: boolean) => {
+        //   this.isLoggedIn = true;
+        //   console.log(this.isLoggedIn);
+        // });
+  }
+
+  logout() {
+    this.toggleLogState(false);
+  }
+
+  private toggleLogState(val: boolean) {
+    this.userProfileService.isLoggedIn = val;
+    this.spinnerService.hide();
+  }
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/login/login.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/models/index.ts][content]" value="export * from './character.model';
+export * from './character.service';
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/models/index.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/models/speaker.model.ts][content]" value="export class Character {
   id: number;
   name: string;
-  type: string;
+  twitter: string;
 }
 
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/models/speaker.model.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/models/speaker.service.ts][content]" value="import { Injectable } from '@angular/core';
+import { Http, Response } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
+
+import { Character } from './character.model';
+import { CONFIG, ExceptionService, MessageService, SpinnerService } from '../core';
+
+let charactersUrl = CONFIG.baseUrls.characters;
+
+@Injectable()
+export class CharacterService {
+  onDbReset = this.messageService.state;
+
+  constructor(private http: Http,
+    private exceptionService: ExceptionService,
+    private messageService: MessageService,
+    private spinnerService: SpinnerService) {
+    this.messageService.state.subscribe(state => this.getCharacters());
+  }
+
+  addCharacter(character: Character) {
+    let body = JSON.stringify(character);
+    this.spinnerService.show();
+    return <Observable<Character>>this.http
+      .post(`${charactersUrl}`, body)
+      .map(res => res.json().data)
+      .catch(this.exceptionService.catchBadResponse)
+      .finally(() => this.spinnerService.hide());
+  }
+
+  deleteCharacter(character: Character) {
+    this.spinnerService.show();
+    return <Observable<Character>>this.http
+      .delete(`${charactersUrl}/${character.id}`)
+      .catch(this.exceptionService.catchBadResponse)
+      .finally(() => this.spinnerService.hide());
+  }
+
+  getCharacters() {
+    this.spinnerService.show();
+    return <Observable<Character[]>>this.http
+      .get(charactersUrl)
+      .map(res => this.extractData<Character[]>(res))
+      .catch(this.exceptionService.catchBadResponse)
+      .finally(() => this.spinnerService.hide());
+  }
+
+  getCharacter(id: number) {
+    this.spinnerService.show();
+    return <Observable<Character>>this.http
+      .get(`${charactersUrl}/${id}`)
+      .map(res => this.extractData<Character>(res))
+      .catch(this.exceptionService.catchBadResponse)
+      .finally(() => this.spinnerService.hide());
+  }
+
+  updateCharacter(character: Character) {
+    let body = JSON.stringify(character);
+    this.spinnerService.show();
+
+    return <Observable<Character>>this.http
+      .put(`${charactersUrl}/${character.id}`, body)
+      .catch(this.exceptionService.catchBadResponse)
+      .finally(() => this.spinnerService.hide());
+  }
+
+  private extractData<T>(res: Response) {
+    if (res.status < 200 || res.status >= 300) {
+      throw new Error('Bad response status: ' + res.status);
+    }
+    let body = res.json();
+    return <T>(body.data || {});
+  }
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/models/speaker.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/page-not-found.component.ts][content]" value="import { Component } from '@angular/core';
+
+@Component({
+  moduleId: module.id,
+  selector: 'story-404',
+  template: `
+    <article class=&quot;template animated slideInRight&quot;>
+      <h4>Inconceivable!</h4>
+      <div>I do not think this page is where you think it is.</div>
+    </article>
+  `
+})
+export class PageNotFoundComponent { }
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/page-not-found.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/routing/app.routing.ts][content]" value="import { Routes, RouterModule } from '@angular/router';
+
+import { CanActivateAuthGuard } from './can-activate-auth.service';
+import { CanDeactivateGuard } from './can-deactivate.service';
+import { UserProfileService } from '../core';
+import { PageNotFoundComponent } from '../page-not-found.component';
+
+export const routes: Routes = [
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'dashboard',
+  },
+  {
+    path: 'dashboard',
+    loadChildren: 'app/dashboard/dashboard.module#DashboardModule'
+  },
+  {
+    path: 'characters',
+    loadChildren: 'app/characters/characters.module#CharactersModule',
+    canActivate: [CanActivateAuthGuard],
+    // canLoad: [CanActivateAuthGuard],
+  },
+  {
+    path: 'vehicles',
+    loadChildren: 'app/vehicles/vehicles.module#VehiclesModule',
+    canActivate: [CanActivateAuthGuard],
+    // canLoad: [CanActivateAuthGuard],
+  },
+  {
+    path: '**',
+    pathMatch: 'full',
+    component: PageNotFoundComponent
+  },
+];
+
+export const routing = RouterModule.forRoot(routes);
+
+routing.providers.push([
+  CanActivateAuthGuard,
+ &nbsp;CanDeactivateGuard,
+ &nbsp;UserProfileService
+]);
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/routing/app.routing.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/routing/can-activate-auth.service.ts][content]" value="import { Injectable } from '@angular/core';
+import {
+  CanActivate,
+  CanLoad,
+  Route,
+  Router,
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot
+} from '@angular/router';
+
+import { UserProfileService } from '../core';
+
+@Injectable()
+export class CanActivateAuthGuard implements CanActivate, CanLoad {
+  constructor(private userProfileService: UserProfileService, private router: Router) { }
+
+  canLoad(route: Route) {
+    return this.userProfileService.isLoggedIn;
+  }
+
+  canActivate(
+    next: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ) {
+    if (this.userProfileService.isLoggedIn) {
+      return true;
+    }
+    this.router.navigate(['/login'], { queryParams: { redirectTo: state.url }});
+
+    return false;
+  }
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/routing/can-activate-auth.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/routing/can-deactivate.service.ts][content]" value="import { CanDeactivate } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+
+export interface CanComponentDeactivate {
+  canDeactivate: () => any; // boolean|Promise<boolean>|Observable<boolean>;
+}
+
+export class CanDeactivateGuard implements CanDeactivate<CanComponentDeactivate> {
+  canDeactivate(component: CanComponentDeactivate): Observable<boolean> | boolean {
+    // run the function for canDeactivate and if its a promise or a boolean we handle it either way
+
+    // return true;
+
+    // if (component.canDeactivate) {
+    //   let deactivate = component.canDeactivate();
+    //   return this.toObservable(deactivate);
+    // } else {
+    //   return true;
+    // }
+
+    return component.canDeactivate ?
+      this.toObservable(component.canDeactivate()) : true;
+  }
+
+  private toObservable(deactivate: Promise<boolean> | boolean ): Observable<boolean> | boolean {
+    let p = Promise.resolve(deactivate);
+    let o = Observable.fromPromise(p);
+    return o;
+  }
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/routing/can-deactivate.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/routing/index.ts][content]" value="export * from './can-activate-auth.service';
+export * from './can-deactivate.service';
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/routing/index.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/shared/filter-text/filter-text.component.ts][content]" value="import { Component, EventEmitter, Output } from '@angular/core';
+
+@Component({
+  moduleId: module.id,
+  selector: 'story-filter-text',
+  templateUrl: 'filter-text.component.html'
+})
+export class FilterTextComponent {
+  @Output() changed: EventEmitter<string>;
+
+  filter: string;
+
+  constructor() {
+    this.changed = new EventEmitter<string>();
+
+    componentHandler.upgradeDom();
+  }
+
+  clear() {
+    this.filter = '';
+  }
+
+  filterChanged(event: any) {
+    event.preventDefault();
+    console.log(`Filter Changed: ${this.filter}`);
+    this.changed.emit(this.filter);
+  }
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/shared/filter-text/filter-text.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/shared/filter-text/filter-text.module.ts][content]" value="import { NgModule, ModuleWithProviders } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+
+import { FilterTextComponent } from './filter-text.component';
+import { FilterTextService } from './filter-text.service';
+
+@NgModule({
+  imports: [CommonModule, FormsModule],
+  exports: [FilterTextComponent],
+  declarations: [FilterTextComponent],
+  providers: [FilterTextService]
+})
+export class FilterTextModule { }
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/shared/filter-text/filter-text.module.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/shared/filter-text/filter-text.service.ts][content]" value="import { Injectable } from '@angular/core';
+
+@Injectable()
+export class FilterTextService {
+  constructor() {
+    console.log('Created an instance of FilterTextService');
+  }
+
+  filter(data: string, props: Array<string>, originalList: Array<any>) {
+    let filteredList: any[];
+    if (data &amp;&amp; props &amp;&amp; originalList) {
+      data = data.toLowerCase();
+      let filtered = originalList.filter(item => {
+        let match = false;
+        for (let prop of props) {
+          if (item[prop].toString().toLowerCase().indexOf(data) > -1) {
+            match = true;
+            break;
+          }
+        };
+        return match;
+      });
+      filteredList = filtered;
+    } else {
+      filteredList = originalList;
+    }
+    return filteredList;
+  }
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/shared/filter-text/filter-text.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/shared/init-caps.pipe.ts][content]" value="import { Pipe, PipeTransform } from '@angular/core';
+
+@Pipe({ name: 'initCaps' })
+export class InitCapsPipe implements PipeTransform {
+  transform(value: string) { // , args?: any[]) {
+    return value
+      .toLowerCase()
+      .replace(/(?:^|\s)[a-z]/g, function(m) {
+        return m.toUpperCase();
+      });
+  }
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/shared/init-caps.pipe.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/shared/shared.module.ts][content]" value="import { NgModule, ModuleWithProviders } &nbsp;from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+
+import { FilterTextModule } from './filter-text/filter-text.module'
+
+import { InitCapsPipe } from './init-caps.pipe';
+
+// imports: imports the module's exports. which are usually
+// declarables(components / directives / pipes) and providers.
+// in our case the FilterTextModule has a provider.
+//
+// exports: exports modules AND declarables (components/directives/pipes) that other modules may want to use
+// SharedModule does not use CommonModule, but does use FormsModule.
+// Even so, we import/export both of these because most other modules will import SharedModule and will need them.
+@NgModule({
+  imports: [CommonModule, FilterTextModule, FormsModule],
+ &nbsp;exports: [CommonModule, FilterTextModule, FormsModule, InitCapsPipe],
+ &nbsp;declarations: [InitCapsPipe],
+})
+export class SharedModule { }
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/shared/shared.module.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/shared/vehicle-button/vehicle-button.component.ts][content]" value="import { Component, Input, OnInit } from '@angular/core';
+
+import { Vehicle } from '../vehicle.model';
+
+@Component({
+  moduleId: module.id,
+  selector: 'story-vehicle-button',
+  templateUrl: 'vehicle-button.component.html',
+  styleUrls: ['vehicle-button.component.css'],
+})
+export class VehicleButtonComponent implements OnInit {
+  @Input() vehicle: Vehicle;
+
+  constructor() {}
+
+  ngOnInit() {
+  }
+
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/vehicles/shared/vehicle-button/vehicle-button.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/shared/vehicle.model.ts][content]" value="export class Vehicle {
+  id: number;
+  name: string;
+  level: string;
+}
 
 
 /*
@@ -1313,7 +1774,7 @@ import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
 import { Vehicle } from './vehicle.model';
-import { CONFIG, ExceptionService, MessageService, SpinnerService } from '../../../app/shared';
+import { CONFIG, ExceptionService, MessageService, SpinnerService } from '../../../app/core';
 
 let vehiclesUrl = CONFIG.baseUrls.vehicles;
 
@@ -1333,7 +1794,7 @@ export class VehicleService {
     this.spinnerService.show();
     return <Observable<Vehicle>>this.http
       .post(`${vehiclesUrl}`, body)
-      .map((res: Response) => res.json().data)
+      .map(res => <Vehicle>res.json().data)
       .catch(this.exceptionService.catchBadResponse)
       .finally(() => this.spinnerService.hide());
   }
@@ -1350,16 +1811,24 @@ export class VehicleService {
     this.spinnerService.show();
     return <Observable<Vehicle[]>>this.http
       .get(vehiclesUrl)
-      .map((response: Response) => <Vehicle[]>response.json().data)
+      .map(res => this.extractData<Vehicle[]>(res))
       .catch(this.exceptionService.catchBadResponse)
       .finally(() => this.spinnerService.hide());
+  }
+
+  private extractData<T>(res: Response) {
+    if (res.status < 200 || res.status >= 300) {
+      throw new Error('Bad response status: ' + res.status);
+    }
+    let body = res.json();
+    return <T>(body.data || {});
   }
 
   getVehicle(id: number) {
     this.spinnerService.show();
     return <Observable<Vehicle>>this.http
       .get(`${vehiclesUrl}/${id}`)
-      .map((response: Response) => response.json().data)
+      .map(res => this.extractData<Vehicle>(res))
       .catch(this.exceptionService.catchBadResponse)
       .finally(() => this.spinnerService.hide());
   }
@@ -1380,28 +1849,19 @@ export class VehicleService {
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/vehicles/shared/vehicle.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicle-list/index.ts][content]" value="export * from './vehicle-list.component';
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/vehicles/vehicle-list/index.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicle-list/vehicle-list.component.ts][content]" value="import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ROUTER_DIRECTIVES } from '@angular/router';
+*/"><input type="hidden" name="entries[app/vehicles/shared/vehicle.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicle-list/vehicle-list.component.ts][content]" value="import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
-import { FilterTextComponent, FilterService, InitCapsPipe } from '../../../app/shared';
-import { Vehicle, VehicleService } from '../shared';
+import { FilterTextComponent } from '../../../app/shared/filter-text/filter-text.component';
+import { FilterTextService } from '../../../app/shared/filter-text/filter-text.service';
+import { Vehicle } from '../shared/vehicle.model';
+import { VehicleService } from '../shared/vehicle.service';
 
 @Component({
   moduleId: module.id,
-  selector: 'story-vehicles',
+  selector: 'story-vehicle-list',
   templateUrl: 'vehicle-list.component.html',
-  directives: [FilterTextComponent, ROUTER_DIRECTIVES],
-  styleUrls: ['vehicle-list.component.css'],
-  pipes: [InitCapsPipe],
-  providers: [FilterService]
+  styleUrls: ['vehicle-list.component.css']
 })
 export class VehicleListComponent implements OnDestroy, OnInit {
   private dbResetSubscription: Subscription;
@@ -1411,11 +1871,11 @@ export class VehicleListComponent implements OnDestroy, OnInit {
   @ViewChild(FilterTextComponent) filterComponent: FilterTextComponent;
 
   constructor(
-    private filterService: FilterService,
+    private filterService: FilterTextService,
     private vehicleService: VehicleService) { }
 
   filterChanged(searchText: string) {
-    this.filteredVehicles = this.filterService.filter(searchText, ['id', 'name', 'type'], this.vehicles);
+    this.filteredVehicles = this.filterService.filter(searchText, ['id', 'name', 'level'], this.vehicles);
   }
 
   getVehicles() {
@@ -1424,6 +1884,13 @@ export class VehicleListComponent implements OnDestroy, OnInit {
       .subscribe(vehicles => {
         this.vehicles = this.filteredVehicles = vehicles;
         this.filterComponent.clear();
+      },
+      error => {
+        console.log('error occurred here');
+        console.log(error);
+      },
+       () => {
+        console.log('vehicle retrieval completed');
       });
   }
 
@@ -1437,6 +1904,10 @@ export class VehicleListComponent implements OnDestroy, OnInit {
     this.dbResetSubscription = this.vehicleService.onDbReset
       .subscribe(() => this.getVehicles());
   }
+
+  trackByVehicles(index: number, vehicle: Vehicle) {
+    return vehicle.id;
+  }
 }
 
 
@@ -1444,43 +1915,111 @@ export class VehicleListComponent implements OnDestroy, OnInit {
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/vehicles/vehicle-list/vehicle-list.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicle/index.ts][content]" value="export * from './vehicle.component';
+*/"><input type="hidden" name="entries[app/vehicles/vehicle-list/vehicle-list.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicle.component.ts][content]" value="import { Component } from '@angular/core';
+
+import { VehicleService } from './shared/vehicle.service';
+
+@Component({
+  // selector: 'story-vehicles',
+  template: `<router-outlet></router-outlet>`,
+  providers: [VehicleService]
+})
+export class VehiclesComponent  {}
 
 
 /*
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/vehicles/vehicle/index.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicle/vehicle.component.ts][content]" value="import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+*/"><input type="hidden" name="entries[app/vehicles/vehicle.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicle.module.ts][content]" value="import { NgModule } from '@angular/core';
+
+import { VehicleButtonComponent } from './shared/vehicle-button/Vehicle-button.component';
+
+// routing = routingModuleWithProvidersAndRouteConfiguration
+import { routing, routedComponents } from './vehicles.routing';
+
+import { SharedModule } from '../shared/shared.module';
+import { VehicleService } from './shared/vehicle.service';  // TODO: Remove this when bug is fixed in A2 RC5
+
+@NgModule({
+  imports: [routing, SharedModule],
+  declarations: [VehicleButtonComponent, routedComponents],
+
+  // TODO: Remove this when bug is fixed in A2 RC5.
+  // We can put this in the component when it is fixed ... or we can do it in the module.
+  // In the module, everyone gets it everywhere tho.
+  providers: [VehicleService]
+})
+export class VehiclesModule { }
+// avoids having to lazy load with loadChildren: &quot;app/vehicles/vehicle.module#VehicleModule&quot;
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/vehicles/vehicle.module.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicle.routing.ts][content]" value="import { Routes, RouterModule } from '@angular/router';
+
+import { VehicleListComponent } from './vehicle-list/vehicle-list.component';
+import { VehicleComponent } from './vehicle/vehicle.component';
+import { VehiclesComponent } from './vehicles.component';
+import { CanDeactivateGuard, CanActivateAuthGuard } from '../routing';
+
+const routes: Routes = [
+  {
+    path: '',
+    component: VehiclesComponent,
+    children: [
+      {
+        path: '',
+        component: VehicleListComponent,
+      },
+      {
+        path: ':id',
+        component: VehicleComponent,
+        canDeactivate: [CanDeactivateGuard]
+      },
+    ]
+  },
+];
+
+export const routing = RouterModule.forChild(routes);
+
+export const routedComponents = [VehiclesComponent, VehicleListComponent, VehicleComponent]
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/vehicles/vehicle.routing.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicle/vehicle.component.ts][content]" value="import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
-import { EntityService, GuardService, ModalService, ToastService } from '../../../app/shared';
-import { Vehicle, VehicleService } from '../shared';
+import { CanComponentDeactivate } from '../../routing';
+import { EntityService, ModalService, ToastService } from '../../../app/core';
+import { Vehicle } from '../shared/vehicle.model';
+import { VehicleService } from '../shared/vehicle.service';
 
 @Component({
-  moduleId: module.id,
-  selector: 'story-vehicle',
-  templateUrl: 'vehicle.component.html',
-  styles: ['.mdl-textfield__label {top: 0;}']
+  moduleId : module.id,
+  selector : 'story-vehicle',
+  templateUrl : 'vehicle.component.html',
+  styleUrls : [ 'vehicle.component.css' ]
 })
-export class VehicleComponent implements OnDestroy, OnInit {
+export class VehicleComponent implements OnDestroy, OnInit, CanComponentDeactivate {
   @Input() vehicle: Vehicle;
-
   editVehicle: Vehicle = <Vehicle>{};
 
   private dbResetSubscription: Subscription;
   private id: any;
-  private routerSub: any;
 
-  constructor(
-    private entityService: EntityService,
+  constructor(private entityService: EntityService,
     private modalService: ModalService,
-    private guardService: GuardService,
     private route: ActivatedRoute,
     private router: Router,
-    private toastService: ToastService,
-    private vehicleService: VehicleService) { }
+    private vehicleService: VehicleService,
+    private toastService: ToastService) { }
 
   cancel(showToast = true) {
     this.editVehicle = this.entityService.clone(this.vehicle);
@@ -1490,79 +2029,77 @@ export class VehicleComponent implements OnDestroy, OnInit {
   }
 
   canDeactivate() {
-    let deactivate = !this.vehicle ||
+    return !this.vehicle ||
       !this.isDirty() ||
       this.modalService.activate();
-    return this.guardService.canDeactivate(deactivate);
   }
 
-  delete() {
+  delete () {
     let msg = `Do you want to delete the ${this.vehicle.name}?`;
     this.modalService.activate(msg).then((responseOK) => {
       if (responseOK) {
         this.cancel(false);
         this.vehicleService.deleteVehicle(this.vehicle)
-          .subscribe(() => { // Success path
-            this.toastService.activate(`Deleted ${this.vehicle.name}`);
-            this.gotoVehicles();
-          },
-          (err) => this.handleServiceError('Delete', err), // Failure path
-          () => console.log('Delete Completed') // Completed actions
-          );
+            .subscribe(
+                () => { // Success path
+                  this.toastService.activate(`Deleted ${this.vehicle.name}`);
+                  this.gotoVehicles();
+                },
+                (err) => this.handleServiceError('Delete', err), // Failure path
+                () => console.log('Delete Completed') // Completed actions
+                );
       }
     });
   }
 
-  isAddMode() {
-    return isNaN(this.id);
-  }
+  isAddMode() { return isNaN(this.id); }
 
   ngOnDestroy() {
     this.dbResetSubscription.unsubscribe();
-    if (this.routerSub) {
-      this.routerSub.unsubscribe();
-    }
   }
 
   ngOnInit() {
     componentHandler.upgradeDom();
-    this.dbResetSubscription = this.vehicleService.onDbReset
-      .subscribe(() => {
-        this.getVehicle();
-      });
+    this.dbResetSubscription =
+        this.vehicleService.onDbReset.subscribe(() => this.getVehicle());
 
-    this.routerSub = this.route.params.subscribe(params => {
-      this.id = +params['id'];
-      this.getVehicle();
-    });
+    // Could use a snapshot here, as long as the parameters do not change.
+    // This may happen when a component is re-used.
+    // this.id = +this.route.snapshot.params['id'];
+    this.route
+      .params
+      .map(params => params['id'])
+      .do(id => this.id = +id)
+      .subscribe(id => this.getVehicle());
   }
 
   save() {
-    let vehicle = this.vehicle = this.entityService.merge(this.vehicle, this.editVehicle);
+    let vehicle = this.vehicle =
+        this.entityService.merge(this.vehicle, this.editVehicle);
     if (vehicle.id == null) {
-      this.vehicleService.addVehicle(vehicle)
-        .subscribe(v => {
-          this.setEditVehicle(v);
-          this.toastService.activate(`Successfully added ${v.name}`);
-          this.gotoVehicles();
-        });
+      this.vehicleService.addVehicle(vehicle).subscribe(s => {
+        this.setEditVehicle(s);
+        this.toastService.activate(`Successfully added ${s.name}`);
+        this.gotoVehicles();
+      });
       return;
     }
     this.vehicleService.updateVehicle(this.vehicle)
-      .subscribe(() => this.toastService.activate(`Successfully saved ${this.vehicle.name}`));
+        .subscribe(() => this.toastService.activate(
+                       `Successfully saved ${this.vehicle.name}`));
   }
 
   private getVehicle() {
     if (this.id === 0) {
       return;
-    }
+    };
     if (this.isAddMode()) {
-      this.vehicle = <Vehicle>{ name: '', type: '' };
+      this.vehicle = <Vehicle>{name : '', level : ''};
       this.editVehicle = this.entityService.clone(this.vehicle);
       return;
     }
-    this.vehicleService.getVehicle(this.id)
-      .subscribe((vehicle: Vehicle) => this.setEditVehicle(vehicle));
+    this.vehicleService.getVehicle(this.id).subscribe(
+        (vehicle: Vehicle) => this.setEditVehicle(vehicle));
   }
 
   private gotoVehicles() {
@@ -1592,61 +2129,7 @@ export class VehicleComponent implements OnDestroy, OnInit {
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/vehicles/vehicle/vehicle.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicles.component.ts][content]" value="import { Component } from '@angular/core';
-import { ROUTER_DIRECTIVES } from '@angular/router';
-
-import { VehicleListComponent } from './vehicle-list';
-import { VehicleComponent } from './vehicle';
-import { VehicleService } from './shared';
-
-@Component({
-  selector: 'story-vehicles',
-  template: `
-    <router-outlet></router-outlet>
-  `,
-  directives: [ROUTER_DIRECTIVES],
-  providers: [VehicleService]
-})
-export class VehiclesComponent { }
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/vehicles/vehicles.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicles.routes.ts][content]" value="import { RouterConfig }          from '@angular/router';
-
-import { VehicleListComponent } from './vehicle-list';
-import { VehicleComponent } from './vehicle';
-import { VehiclesComponent } from './vehicles.component';
-
-import { CanDeactivateGuard } from '../app.interfaces';
-
-export const VehiclesRoutes: RouterConfig = [
-  {
-    path: 'vehicles',
-    component: VehiclesComponent,
-    children: [
-      {
-        path: '',
-        component: VehicleListComponent
-      },
-      {
-        path: ':id',
-        component: VehicleComponent,
-        canDeactivate: [CanDeactivateGuard]
-      },
-    ]
-  },
-];
-
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/vehicles/vehicles.routes.ts][encoding]" value="utf8"><input type="hidden" name="entries[main.ts][content]" value="import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+*/"><input type="hidden" name="entries[app/vehicles/vehicle/vehicle.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[main.ts][content]" value="import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module';
 
 platformBrowserDynamic().bootstrapModule(AppModule)
@@ -5661,7 +6144,20 @@ button.btn[disabled]:focus {
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[a2docs.css][encoding]" value="utf8"><input type="hidden" name="entries[app/app.component.css][content]" value=".mdl-layout__header {
+*/"><input type="hidden" name="entries[a2docs.css][encoding]" value="utf8"><input type="hidden" name="entries[app/app.component 2.css][content]" value=".mdl-layout__content {
+  margin-top: 68px;
+}
+
+.page-content {
+  margin: 2em;
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/app.component 2.css][encoding]" value="utf8"><input type="hidden" name="entries[app/app.component.css][content]" value=".mdl-layout__header {
   position: fixed;
   background-color: #222;
 }
@@ -5774,40 +6270,22 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/characters/character-list/character-list.component.css][encoding]" value="utf8"><input type="hidden" name="entries[app/dashboard/dashboard.component.css][content]" value=".dashboard-button {
-  width: 200px;
-  height: 70px;
-}
-
-.mdl-cell--col-3 {
-  width: 25%;
-}
-
-@media (max-width: 1024px) {
-  .mdl-cell.mdl-cell--3-col > button {
-    width: 180px;
-    line-height: 18px;
-    font-size: 12px;
-  }
-}
-
-@media (max-width: 839px) and (min-width: 480px){
-  .mdl-cell.mdl-cell--3-col {
-    width: 25%;
-  }
-  .mdl-cell.mdl-cell--3-col > button {
-    width: 120px;
-    line-height: 18px;
-    font-size: 12px;
-  }
-}
+*/"><input type="hidden" name="entries[app/characters/character-list/character-list.component.css][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/character/character.component.css][content]" value=".mdl-textfield__label {top: 0;}
 
 
 /*
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/dashboard/dashboard.component.css][encoding]" value="utf8"><input type="hidden" name="entries[app/shared/modal/modal.component.css][content]" value=".dialog-container,
+*/"><input type="hidden" name="entries[app/characters/character/character.component.css][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/shared/character-button/character-button.component.css][content]" value="    .mdl-card__title-text {font-size: 16px;}
+    .mdl-card {min-height: 60px;}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/characters/shared/character-button/character-button.component.css][encoding]" value="utf8"><input type="hidden" name="entries[app/core/modal/modal.component.css][content]" value=".dialog-container,
 .loading-container {
     position: absolute;
     top: 0;
@@ -5855,11 +6333,84 @@ can be found in the LICENSE file at http://bit.ly/l1cense
   margin: 0 0 0 1em;
 }
 
+
 /*
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/shared/modal/modal.component.css][encoding]" value="utf8"><input type="hidden" name="entries[app/shared/toast/toast.component.css][content]" value=".toast-container {
+*/"><input type="hidden" name="entries[app/core/modal/modal.component.css][encoding]" value="utf8"><input type="hidden" name="entries[app/core/nav/nav.component.css][content]" value=".mdl-layout__header {
+  display: flex;
+  position: fixed;
+  background-color: #222;
+}
+
+.nav-link {
+  padding: 0 1em;
+  width: 100px;
+  color: rgba(255,255,255,.6);
+  text-align: center;
+  text-decoration: none;
+}
+
+.nav-link.router-link-active {
+  color: rgba(255,255,255, 1);
+}
+
+.nav-link.router-link-active::after {
+    height: 3px;
+    width: 100%;
+    display: block;
+    content: &quot; &quot;;
+    bottom: 0;
+    left: 0;
+    position: inherit;
+    background: rgb(83,109,254);
+}
+
+.md-title-icon > i {
+  background-image: url(&quot;assets/ng.png&quot;);
+  background-repeat: no-repeat;
+  background-position: center center;
+  padding: 1em 2em;
+}
+
+.mdl-layout__header-row {
+  height: 56px;
+  padding: 0 16px 0 72px;
+  padding-left: 8px;
+  background-color: #673AB7;
+  background: #0033FF;
+  background-color: #222;
+}
+
+#reset-button {
+  position: fixed;
+  right: 2em;
+  top: 1em;
+}
+
+@media (max-width: 480px) {
+  #reset-button {
+    display: none
+  }
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/core/nav/nav.component.css][encoding]" value="utf8"><input type="hidden" name="entries[app/core/spinner/spinner.component.css][content]" value=".spinner {
+  position: absolute;
+  left: 46%;top: 12%
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/core/spinner/spinner.component.css][encoding]" value="utf8"><input type="hidden" name="entries[app/core/toast/toast.component.css][content]" value=".toast-container {
   /*-webkit-transition-property: opacity, bottom, left, right, width, margin, border-radius;
   transition-property: opacity, bottom, left, right, width, margin, border-radius;
   -webkit-transition-duration: 1.0s;
@@ -5891,6 +6442,8 @@ can be found in the LICENSE file at http://bit.ly/l1cense
   position: relative;
   background-color: rgb(255,64,129);
   background-color: #f06292;
+  background-color: rgb(103,58,183);
+  background-color: rgb(83,109,254);
   text-align: center;
   color: white;
 }
@@ -5910,7 +6463,63 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/shared/toast/toast.component.css][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicle-list/vehicle-list.component.css][content]" value=".vehicles {
+*/"><input type="hidden" name="entries[app/core/toast/toast.component.css][encoding]" value="utf8"><input type="hidden" name="entries[app/dashboard/dashboard.component.css][content]" value=".mdl-cell--col-3 {
+  width: 25%;
+}
+
+@media (max-width: 839px) and (min-width: 480px){
+  .mdl-cell.mdl-cell--3-col {
+    width: 25%;
+  }
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/dashboard/dashboard.component.css][encoding]" value="utf8"><input type="hidden" name="entries[app/dashboard/shared/dashboard-button/dashboard-button.component.css][content]" value="button {
+  width: 200px;height: 70px;
+  border-bottom: rgb(83,109,254) 4px solid;
+  color: #111;
+}
+
+@media (max-width: 1024px) {
+  button {
+    width: 180px;
+    line-height: 18px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 839px) and (min-width: 480px){
+  button {
+    width: 120px;
+    line-height: 18px;
+    font-size: 12px;
+  }
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/dashboard/shared/dashboard-button/dashboard-button.component.css][encoding]" value="utf8"><input type="hidden" name="entries[app/shared/filter-text/filter-text.component.css][content]" value="
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/shared/filter-text/filter-text.component.css][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/shared/vehicle-button/vehicle-button.component.css][content]" value="    .mdl-card__title-text {font-size: 16px;}
+    .mdl-card {min-height: 60px;}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/vehicles/shared/vehicle-button/vehicle-button.component.css][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicle-list/vehicle-list.component.css][content]" value=".vehicles {
   list-style-type: none;
   padding: 0;
 }
@@ -5933,7 +6542,14 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/vehicles/vehicle-list/vehicle-list.component.css][encoding]" value="utf8"><input type="hidden" name="entries[assets/animate.css][content]" value="@charset &quot;UTF-8&quot;;
+*/"><input type="hidden" name="entries[app/vehicles/vehicle-list/vehicle-list.component.css][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicle/vehicle.component.css][content]" value=".mdl-textfield__label {top: 0;}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="entries[app/vehicles/vehicle/vehicle.component.css][encoding]" value="utf8"><input type="hidden" name="entries[assets/animate.css][content]" value="@charset &quot;UTF-8&quot;;
 
 /*!
  * animate.css -http://daneden.me/animate
@@ -16628,17 +17244,7 @@ Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="entries[styles.css][encoding]" value="utf8"><input type="hidden" name="entries[app/app.component.html][content]" value="<div class=&quot;mdl-layout mdl-js-layout mdl-layout--fixed-header&quot;>
-  <header class=&quot;mdl-layout__header&quot;>
-    <div class=&quot;mdl-layout__header-row&quot;>
-      <a class=&quot;md-title-icon&quot; href=&quot;http://pluralsight.com&quot; target=&quot;_blank&quot;><i></i></a>
-      <span class=&quot;mdl-layout-title&quot;>Storyline Tracker</span>
-      <button id=&quot;reset-button&quot; class=&quot;mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent mdl-button--raised&quot; (click)=&quot;resetDb()&quot;>Reset Data</button>
-    </div>
-    <div class=&quot;mdl-navigation&quot;>
-      <a *ngFor=&quot;let item of menuItems&quot; [routerLink]=&quot;item.link&quot;
-      class=&quot;nav-link&quot; routerLinkActive=&quot;router-link-active&quot; href=&quot;&quot;>{{item.caption}}</a>
-    </div>
-  </header>
+  <story-nav></story-nav>
   <main class=&quot;mdl-layout__content&quot;>
     <section>
       <div class=&quot;page-content&quot;>
@@ -16646,10 +17252,9 @@ can be found in the LICENSE file at http://bit.ly/l1cense
       </div>
     </section>
   </main>
-
   <story-spinner></story-spinner>
-  <toast></toast>
-  <modal-confirm></modal-confirm>
+  <story-toast></story-toast>
+  <story-modal></story-modal>
 </div>
 
 
@@ -16658,28 +17263,16 @@ Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
 -->"><input type="hidden" name="entries[app/app.component.html][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/character-list/character-list.component.html][content]" value="<article class=&quot;template animated slideInRight&quot;>
-  <h4>My Characters</h4>
+  <h4>Characters</h4>
 
-  <a href=&quot;&quot; [routerLink]=&quot;['Character', {id: 'new'}]&quot;><button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot;>Add</button></a>
+  <a href=&quot;&quot; [routerLink]=&quot;['/characters', 'new']&quot;><button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot;>Add</button></a>
 
-  <filter-text (changed)=&quot;filterChanged($event)&quot;></filter-text>
+  <story-filter-text (changed)=&quot;filterChanged($event)&quot;></story-filter-text>
 
   <ul class=&quot;characters&quot;>
-    <li *ngFor=&quot;let character of filteredCharacters | sortCharacters&quot;>
+    <li *ngFor=&quot;let character of filteredCharacters | sortCharacters;trackBy:trackByCharacters&quot;>
 
-      <div class=&quot;mdl-card mdl-shadow--2dp&quot;>
-        <div class=&quot;mdl-card__title&quot;>
-          <h2 class=&quot;mdl-card__title-text&quot;>{{character.id}}.
-{{character.name}}</h2>
-        </div>
-        <div class=&quot;mdl-card__menu&quot;>
-          <a href=&quot;&quot; [routerLink]=&quot;['Character', {id: character.id}]&quot;><button class=&quot;mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect&quot;>
-
-            <div class=&quot;icon mdl-color--accent icon-ic_play_circle_filled_white_24dp&quot;></div>
-
-          </button></a>
-        </div>
-      </div>
+      <story-character-button [character]=&quot;character&quot;></story-character-button>
 
     </li>
   </ul>
@@ -16700,8 +17293,8 @@ can be found in the LICENSE file at http://bit.ly/l1cense
     </div>
 
     <div class=&quot;mdl-textfield mdl-js-textfield mdl-textfield--floating-label&quot;>
-      <label class=&quot;mdl-textfield__label&quot; for=&quot;sidetext&quot;>Side</label>
-      <input type=&quot;text&quot; id=&quot;sidetext&quot; class=&quot;mdl-textfield__input&quot; [(ngModel)]=&quot;editCharacter.side&quot; />
+      <label class=&quot;mdl-textfield__label&quot; for=&quot;twittertext&quot;>Twitter</label>
+      <input type=&quot;text&quot; id=&quot;twittertext&quot; class=&quot;mdl-textfield__input&quot; [(ngModel)]=&quot;editCharacter.twitter&quot; />
     </div>
 
     <div>
@@ -16717,44 +17310,30 @@ can be found in the LICENSE file at http://bit.ly/l1cense
   </div>
 </article>
 
+
 <!-- 
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
--->"><input type="hidden" name="entries[app/characters/character/character.component.html][encoding]" value="utf8"><input type="hidden" name="entries[app/dashboard/dashboard.component.html][content]" value="<article class=&quot;template animated slideInRight&quot;>
-  <h4>Top Characters</h4>
-  <div>
-    <div class=&quot;mdl-grid&quot;>
-      <div class=&quot;mdl-cell mdl-cell--3-col&quot;
-        *ngFor=&quot;let character of characters | async&quot;
-        (click)=&quot;gotoDetail(character)&quot;>
-
-        <button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect
-      mdl-button--accent&quot;>
-          {{character.name}}
-        </button>
-
-      </div>
-    </div>
+-->"><input type="hidden" name="entries[app/characters/character/character.component.html][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/shared/character-button/character-button.component.html][content]" value="<div class=&quot;mdl-card mdl-shadow--2dp&quot;>
+  <div class=&quot;mdl-card__title&quot;>
+    <h2 class=&quot;mdl-card__title-text&quot;>{{character.id}}. {{character.name}}</h2>
   </div>
-</article>
+  <div class=&quot;mdl-card__menu&quot;>
+    <a href=&quot;&quot; [routerLink]=&quot;['/characters', character.id]&quot;><button class=&quot;mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect&quot;>
 
-<!-- 
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
--->"><input type="hidden" name="entries[app/dashboard/dashboard.component.html][encoding]" value="utf8"><input type="hidden" name="entries[app/shared/filter-text/filter-text.component.html][content]" value="<form>
-  <div class=&quot;mdl-textfield mdl-js-textfield mdl-textfield--floating-label&quot;>
-    <label class=&quot;mdl-textfield__label&quot; for=&quot;filterText&quot;>Filter...</label>
-    <input type=&quot;text&quot; id=&quot;filterText&quot; class=&quot;mdl-textfield__input&quot; [(ngModel)]=&quot;filter&quot; (keyup)=&quot;filterChanged($event)&quot; />
+      <div class=&quot;icon mdl-color--primary icon-ic_play_circle_filled_white_24dp&quot;></div>
+
+    </button></a>
   </div>
-</form>
+</div>
+
 
 <!-- 
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
--->"><input type="hidden" name="entries[app/shared/filter-text/filter-text.component.html][encoding]" value="utf8"><input type="hidden" name="entries[app/shared/modal/modal.component.html][content]" value="<div id=&quot;confirmationModal&quot; class=&quot;dialog-container&quot;>
+-->"><input type="hidden" name="entries[app/characters/shared/character-button/character-button.component.html][encoding]" value="utf8"><input type="hidden" name="entries[app/core/modal/modal.component.html][content]" value="<div id=&quot;confirmationModal&quot; class=&quot;dialog-container&quot;>
   <div class=&quot;mdl-card mdl-shadow--16dp&quot;>
     <h5>{{title}}</h5>
     <p>{{message}}</p>
@@ -16767,44 +17346,122 @@ can be found in the LICENSE file at http://bit.ly/l1cense
   </div>
 </div>
 
+
 <!-- 
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
--->"><input type="hidden" name="entries[app/shared/modal/modal.component.html][encoding]" value="utf8"><input type="hidden" name="entries[app/shared/toast/toast.component.html][content]" value="<div id=&quot;toast&quot; class=&quot;toast-container&quot;>
+-->"><input type="hidden" name="entries[app/core/modal/modal.component.html][encoding]" value="utf8"><input type="hidden" name="entries[app/core/nav/nav.component.html][content]" value="<header class=&quot;mdl-layout__header&quot;>
+  <div class=&quot;mdl-layout__header-row&quot;>
+    <a class=&quot;md-title-icon&quot; href=&quot;http://angular.io&quot; target=&quot;_blank&quot;><i></i></a>
+    <span class=&quot;mdl-layout-title&quot;>Event View</span>
+    <button id=&quot;reset-button&quot; class=&quot;mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent mdl-button--raised&quot; (click)=&quot;resetDb()&quot;>Reset Data</button>
+  </div>
+  <div class=&quot;mdl-navigation&quot;>
+    <a *ngFor=&quot;let item of menuItems&quot; [routerLink]=&quot;item.link&quot; class=&quot;nav-link&quot; routerLinkActive=&quot;router-link-active&quot; href=&quot;&quot;>{{item.caption}}</a>
+  </div>
+</header>
+
+
+<!-- 
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+-->"><input type="hidden" name="entries[app/core/nav/nav.component.html][encoding]" value="utf8"><input type="hidden" name="entries[app/core/spinner/spinner.component.html][content]" value="<div class=&quot;spinner mdl-spinner mdl-js-spinner mdl-spinner--single-color&quot; [class.is-active]=&quot;visible&quot;></div>
+
+
+<!-- 
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+-->"><input type="hidden" name="entries[app/core/spinner/spinner.component.html][encoding]" value="utf8"><input type="hidden" name="entries[app/core/toast/toast.component.html][content]" value="<div id=&quot;toast&quot; class=&quot;toast-container&quot;>
   <div class=&quot;toast-card mdl-shadow--16dp&quot;>
     <h5 class=&quot;toast-title&quot;>{{title}}</h5>
     <p class=&quot;toast-message&quot;>{{message}}</p>
   </div>
 </div>
 
+
 <!-- 
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
--->"><input type="hidden" name="entries[app/shared/toast/toast.component.html][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicle-list/vehicle-list.component.html][content]" value="<article class=&quot;template animated slideInRight&quot;>
-  <h4>My Vehicles</h4>
+-->"><input type="hidden" name="entries[app/core/toast/toast.component.html][encoding]" value="utf8"><input type="hidden" name="entries[app/dashboard/dashboard.component.html][content]" value="<article class=&quot;template animated slideInRight&quot;>
+  <h4>Top Characters</h4>
+  <div>
+    <div class=&quot;mdl-grid&quot;>
+      <div class=&quot;mdl-cell mdl-cell--3-col&quot;
+        *ngFor=&quot;let character of characters | async;trackBy:trackByCharacters&quot;
+        (click)=&quot;gotoDetail(character)&quot;>
+        <story-dashboard-button [character]=&quot;character&quot;></story-dashboard-button>
+      </div>
+    </div>
+  </div>
+</article>
 
-  <a href=&quot;&quot; [routerLink]=&quot;['Vehicle', {id: 'new'}]&quot;><button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot;>Add</button></a>
 
-  <filter-text (changed)=&quot;filterChanged($event)&quot;></filter-text>
+<!-- 
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+-->"><input type="hidden" name="entries[app/dashboard/dashboard.component.html][encoding]" value="utf8"><input type="hidden" name="entries[app/dashboard/shared/dashboard-button/dashboard-button.component.html][content]" value="<button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot;>{{character.name}}</button>
+
+<!-- 
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+-->"><input type="hidden" name="entries[app/dashboard/shared/dashboard-button/dashboard-button.component.html][encoding]" value="utf8"><input type="hidden" name="entries[app/login/login.component.html][content]" value="<h2>LOGIN</h2>
+<p>
+  <button class=&quot;mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent mdl-button--raised&quot; (click)=&quot;login()&quot; *ngIf=&quot;!isLoggedIn&quot;>Login</button>
+
+  <button class=&quot;mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent mdl-button--raised&quot; (click)=&quot;logout()&quot; *ngIf=&quot;isLoggedIn&quot;>Logout</button>
+</p>
+
+
+<!-- 
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+-->"><input type="hidden" name="entries[app/login/login.component.html][encoding]" value="utf8"><input type="hidden" name="entries[app/shared/filter-text/filter-text.component.html][content]" value="<div>
+  <div class=&quot;mdl-textfield mdl-js-textfield mdl-textfield--floating-label&quot;>
+    <label class=&quot;mdl-textfield__label&quot; for=&quot;filterText&quot;>Filter...</label>
+    <input type=&quot;text&quot; id=&quot;filterText&quot; class=&quot;mdl-textfield__input&quot; [(ngModel)]=&quot;filter&quot; (keyup)=&quot;filterChanged($event)&quot; />
+  </div>
+</div>
+
+
+<!-- 
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+-->"><input type="hidden" name="entries[app/shared/filter-text/filter-text.component.html][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/shared/vehicle-button/vehicle-button.component.html][content]" value="<div class=&quot;mdl-card mdl-shadow--2dp&quot;>
+  <div class=&quot;mdl-card__title&quot;>
+    <h2 class=&quot;mdl-card__title-text&quot;>{{vehicle.id}}. {{vehicle.name | initCaps}}</h2>
+  </div>
+  <div class=&quot;mdl-card__menu&quot;>
+    <a href=&quot;&quot; [routerLink]=&quot;['/vehicles', vehicle.id]&quot;><button class=&quot;mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect&quot;>
+
+      <div class=&quot;icon mdl-color--primary icon-ic_play_circle_filled_white_24dp&quot;></div>
+
+    </button></a>
+  </div>
+</div>
+
+
+<!-- 
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+-->"><input type="hidden" name="entries[app/vehicles/shared/vehicle-button/vehicle-button.component.html][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicle-list/vehicle-list.component.html][content]" value="<article class=&quot;template animated slideInRight&quot;>
+  <h4>Vehicles</h4>
+
+  <a href=&quot;&quot; [routerLink]=&quot;['/vehicles', 'new']&quot;><button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot;>Add</button></a>
+
+  <story-filter-text (changed)=&quot;filterChanged($event)&quot;></story-filter-text>
 
   <ul class=&quot;vehicles&quot;>
-    <li *ngFor=&quot;let vehicle of filteredVehicles&quot;>
-
-      <div class=&quot;mdl-card mdl-shadow--2dp&quot;>
-        <div class=&quot;mdl-card__title&quot;>
-          <h2 class=&quot;mdl-card__title-text&quot;>{{vehicle.id}}. {{vehicle.name | initCaps}}</h2>
-        </div>
-        <div class=&quot;mdl-card__menu&quot;>
-          <a href=&quot;&quot; [routerLink]=&quot;['Vehicle', {id: vehicle.id} ]&quot;><button class=&quot;mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect&quot;>
-
-            <div class=&quot;icon mdl-color--primary icon-ic_play_circle_filled_white_24dp&quot;></div>
-
-          </button></a>
-        </div>
-      </div>
-
+    <li *ngFor=&quot;let vehicle of filteredVehicles;trackBy:trackByVehicles&quot;>
+      <story-vehicle-button [vehicle]=&quot;vehicle&quot;></story-vehicle-button>
     </li>
   </ul>
 </article>
@@ -16824,8 +17481,8 @@ can be found in the LICENSE file at http://bit.ly/l1cense
     </div>
 
     <div class=&quot;mdl-textfield mdl-js-textfield mdl-textfield--floating-label&quot;>
-      <label class=&quot;mdl-textfield__label&quot; for=&quot;typetext&quot;>Type</label>
-      <input type=&quot;text&quot; id=&quot;typetext&quot; class=&quot;mdl-textfield__input&quot; [(ngModel)]=&quot;editVehicle.type&quot; />
+      <label class=&quot;mdl-textfield__label&quot; for=&quot;levelText&quot;>Level</label>
+      <input type=&quot;text&quot; id=&quot;levelText&quot; class=&quot;mdl-textfield__input&quot; [(ngModel)]=&quot;editVehicle.level&quot; />
     </div>
 
     <div>
@@ -16839,6 +17496,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 
   </div>
 </article>
+
 
 <!-- 
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
