@@ -25,7 +25,6 @@ import './rxjs-extensions';
 
 import { AppComponent } from './app.component';
 import { CharactersModule } from './characters/characters.module';
-import { VehiclesModule } from './vehicles/vehicles.module';
 import { routing, routableComponents } from './app.routing';
 
 @NgModule({
@@ -35,7 +34,6 @@ import { routing, routableComponents } from './app.routing';
     FormsModule,
     HttpModule,
     RouterModule,
-    VehiclesModule,
     routing
   ],
   declarations: [AppComponent, ...routableComponents],
@@ -54,6 +52,7 @@ import { PageNotFoundComponent } from './page-not-found.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/characters' },
+  { path: 'vehicles', loadChildren: 'app/vehicles/vehicles.module#VehiclesModule' },
   { path: '**', pathMatch: 'full', component: PageNotFoundComponent },
 ];
 
@@ -346,9 +345,6 @@ export class VehicleComponent implements OnInit {
 
   ngOnInit() {
     if (!this.vehicle) {
-      // Could use a snapshot here, as long as the parameters do not change.
-      // This may happen when a component is re-used.
-      // this.id = +this.route.snapshot.params['id'];
       this.route
         .params
         .map(params => params['id'])
@@ -458,7 +454,7 @@ import { VehicleListComponent } from './vehicle-list.component';
 
 export const routes: Routes = [
   {
-    path: 'vehicles',
+    path: '',
     component: VehiclesComponent,
     children: [
       { path: '', component: VehicleListComponent },
@@ -4645,7 +4641,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="entries[styles.css][encoding]" value="utf8"><input type="hidden" name="entries[app/app.component.html][content]" value="<div>
   <header>
     <h1>Storyline Tracker</h1>
-    <h3>Hierarchical Router Demo</h3>
+    <h3>Lazily Loaded Router Demo</h3>
     <nav>
       <ul>
         <li><a [routerLink]=&quot;['/characters']&quot; href=&quot;&quot;>Characters</a></li>
@@ -4911,9 +4907,9 @@ can be found in the LICENSE file at http://bit.ly/l1cense
       &quot;type&quot;: &quot;land&quot;
     }
   ]
-}"><input type="hidden" name="entries[api/vehicles.json][encoding]" value="utf8"><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="first look"><input type="hidden" name="tags[3]" value="angular 2"><input type="hidden" name="title" value="Angular 2 Example - Angular 2 - Eager Loaded Modules via Routes"><input type="hidden" name="source[type]" value="Angular 2 - Eager Loaded Modules via Routes"><input type="hidden" name="source[url]" value="https://angular.io"><input type="hidden" name="entries[README.md][content]" value="### Angular 2 First Look Example 
+}"><input type="hidden" name="entries[api/vehicles.json][encoding]" value="utf8"><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="first look"><input type="hidden" name="tags[3]" value="angular 2"><input type="hidden" name="title" value="Angular 2 Example - Angular 2 - Lazily Loaded Modules via Routes"><input type="hidden" name="source[type]" value="Angular 2 - Lazily Loaded Modules via Routes"><input type="hidden" name="source[url]" value="https://angular.io"><input type="hidden" name="entries[README.md][content]" value="### Angular 2 First Look Example 
 
-Angular 2 - Eager Loaded Modules via Routes"><input type="hidden" name="entries[README.md][encoding]" value="utf8"><input type="hidden" name="entries[systemjs.config.js][content]" value="/**
+Angular 2 - Lazily Loaded Modules via Routes"><input type="hidden" name="entries[README.md][encoding]" value="utf8"><input type="hidden" name="entries[systemjs.config.js][content]" value="/**
  * PLUNKER VERSION (based on systemjs.config.js in angular.io)
  * System configuration for Angular 2 samples
  * Adjust as necessary for your application needs.

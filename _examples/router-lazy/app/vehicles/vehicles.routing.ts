@@ -6,7 +6,7 @@ import { VehicleListComponent } from './vehicle-list.component';
 
 export const routes: Routes = [
   {
-    path: 'vehicles',
+    path: '',
     component: VehiclesComponent,
     children: [
       { path: '', component: VehicleListComponent },

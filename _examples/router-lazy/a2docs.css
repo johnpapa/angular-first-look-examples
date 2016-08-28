@@ -1,498 +1,4 @@
-<html lang="en"><head></head><body><form id="mainForm" method="post" action="https://embed.plnkr.co?show=preview" target="eplnkr"><input type="hidden" name="entries[app/app.component.ts][content]" value="import { Component } from '@angular/core';
-
-@Component({
-  moduleId: module.id,
-  selector: 'story-app',
-  templateUrl: 'app.component.html',
-  styles: [`
-    nav ul {list-style-type: none;}
-    nav ul li {padding: 4px;cursor: pointer;display:inline-block}
-  `]
-})
-export class AppComponent { }
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/app.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/app.module.ts][content]" value="import { NgModule } from '@angular/core';
-import { BrowserModule  } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
-import { RouterModule } from '@angular/router';
-import './rxjs-extensions';
-
-import { AppComponent } from './app.component';
-import { CharactersModule } from './characters/characters.module';
-import { VehiclesModule } from './vehicles/vehicles.module';
-import { routing, routableComponents } from './app.routing';
-
-@NgModule({
-  imports: [
-    BrowserModule,
-    CharactersModule,
-    FormsModule,
-    HttpModule,
-    RouterModule,
-    VehiclesModule,
-    routing
-  ],
-  declarations: [AppComponent, ...routableComponents],
-  bootstrap: [AppComponent]
-})
-export class AppModule { }
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/app.module.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/app.routing.ts][content]" value="import { Routes, RouterModule } from '@angular/router';
-
-import { PageNotFoundComponent } from './page-not-found.component';
-
-export const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: '/characters' },
-  { path: '**', pathMatch: 'full', component: PageNotFoundComponent },
-];
-
-export const routing = RouterModule.forRoot(routes);
-
-export const routableComponents = [PageNotFoundComponent];
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/app.routing.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/character-list.component.ts][content]" value="import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-
-import { Character, CharacterService } from './character.service';
-
-@Component({
-  moduleId: module.id,
-  selector: 'story-characters',
-  templateUrl: 'character-list.component.html',
-  styles: [`
-    .characters {list-style-type: none;}
-    *.characters li {padding: 4px;cursor: pointer;}
-  `]
-})
-export class CharacterListComponent implements OnInit {
-  characters: Observable<Character[]>;
-
-  constructor(private characterService: CharacterService) { }
-
-  ngOnInit() {
-    this.characters = this.characterService.getCharacters();
-  }
-}
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/characters/character-list.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/character.component.ts][content]" value="import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-
-import { Character, CharacterService } from '../characters/character.service';
-
-@Component({
-  moduleId: module.id,
-  selector: 'story-character',
-  templateUrl: 'character.component.html'
-})
-export class CharacterComponent implements OnInit {
-  @Input() character: Character;
-
-  private id: any;
-
-  constructor(
-    private characterService: CharacterService,
-    private route: ActivatedRoute,
-    private router: Router) { }
-
-  ngOnInit() {
-    if (!this.character) {
-      this.route
-        .params
-        .map(params => params['id'])
-        .do(id => this.id = +id)
-        .subscribe(id => this.getCharacter());
-    }
-  }
-
-  private getCharacter() {
-    this.characterService.getCharacter(this.id)
-      .subscribe(character => this.setEditCharacter(character));
-  }
-
-  private gotoCharacters() {
-    let route = ['/characters'];
-    this.router.navigate(route);
-  }
-
-  private setEditCharacter(character: Character) {
-    if (character) {
-      this.character = character;
-    } else {
-      this.gotoCharacters();
-    }
-  }
-}
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/characters/character.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/character.service.ts][content]" value="import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
-
-import { CONFIG } from '../config';
-
-let charactersUrl = CONFIG.baseUrls.characters;
-
-export class Character {
-  id: number;
-  name: string;
-  side: string;
-}
-
-@Injectable()
-export class CharacterService {
-  constructor(private http: Http) { }
-
-  getCharacter(id: number) {
-    return this.getCharacters()
-      .map(characters => characters.find(character => character.id === id));
-  }
-
-  getCharacters() {
-    return this.http
-      .get(charactersUrl)
-      .map((response: Response) => <Character[]>response.json().data);
-  }
-}
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/characters/character.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/characters.component.ts][content]" value="import { Component } from '@angular/core';
-
-@Component({
-  moduleId: module.id,
-  selector: 'story-characters-root',
-  template: `
-    <router-outlet></router-outlet>
-  `
-})
-export class CharactersComponent { }
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/characters/characters.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/characters.module.ts][content]" value="import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-
-import { CharacterService } from './character.service';
-import { routing, routedComponents } from './characters.routing';
-
-@NgModule({
-  imports: [CommonModule, FormsModule, routing],
-  exports: [],
-  declarations: [routedComponents],
-  providers: [CharacterService],
-})
-export class CharactersModule { }
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/characters/characters.module.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/characters.routing.ts][content]" value="import { Routes, RouterModule } from '@angular/router';
-
-import { CharacterComponent } from './character.component';
-import { CharactersComponent } from './characters.component';
-import { CharacterListComponent } from './character-list.component';
-
-export const routes: Routes = [
-  // { path: '', pathMatch: 'full', redirectTo: '/characters' },
-  {
-    path: 'characters',
-    component: CharactersComponent,
-    children: [
-      { path: '', component: CharacterListComponent },
-      { path: ':id', component: CharacterComponent },
-    ]
-  }
-];
-
-export const routing = RouterModule.forChild(routes);
-
-export const routedComponents = [
-  CharactersComponent,
-  CharacterListComponent,
-  CharacterComponent
-];
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/characters/characters.routing.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/config.ts][content]" value="export let CONFIG = {
-  baseUrls: {
-    characters: 'api/characters.json',
-    vehicles: 'api/vehicles.json'
-  }
-};
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/config.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/page-not-found.component.ts][content]" value="import { Component } from '@angular/core';
-
-@Component({
-  moduleId: module.id,
-  template: `
-    <article class=&quot;template animated slideInRight&quot;>
-      <h4>Inconceivable!</h4>
-      <div>I do not think this page is where you think it is.</div>
-    </article>
-  `
-})
-export class PageNotFoundComponent { }
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/page-not-found.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/rxjs-extensions.ts][content]" value="import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/delay';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/finally';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/toPromise';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/observable/fromPromise';
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/rxjs-extensions.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicle-list.component.ts][content]" value="import { Component, OnInit } from '@angular/core';
-
-import { Vehicle, VehicleService } from './vehicle.service';
-
-@Component({
-  moduleId: module.id,
-  selector: 'story-vehicles',
-  templateUrl: 'vehicle-list.component.html',
-  styles: [`
-    .vehicles {list-style-type: none;}
-    *.vehicles li {padding: 4px;cursor: pointer;}
-  `]
-})
-export class VehicleListComponent implements OnInit {
-  vehicles: Vehicle[];
-
-  constructor(private vehicleService: VehicleService) { }
-
-  ngOnInit() {
-    this.vehicles = [];
-    this.vehicleService.getVehicles()
-      .subscribe(vehicles => this.vehicles = vehicles);
-  }
-}
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/vehicles/vehicle-list.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicle.component.ts][content]" value="import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-
-import { Vehicle, VehicleService } from './vehicle.service';
-
-@Component({
-  moduleId: module.id,
-  selector: 'story-vehicle',
-  templateUrl: 'vehicle.component.html'
-})
-export class VehicleComponent implements OnInit {
-  @Input() vehicle: Vehicle;
-
-  private id: any;
-
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private vehicleService: VehicleService) { }
-
-  ngOnInit() {
-    if (!this.vehicle) {
-      // Could use a snapshot here, as long as the parameters do not change.
-      // This may happen when a component is re-used.
-      // this.id = +this.route.snapshot.params['id'];
-      this.route
-        .params
-        .map(params => params['id'])
-        .do(id => this.id = +id)
-        .subscribe(id => this.getVehicle());
-    }
-  }
-
-  private getVehicle() {
-    this.vehicleService.getVehicle(this.id)
-      .subscribe((vehicle: Vehicle) => this.setEditVehicle(vehicle));
-  }
-
-  private gotoVehicles() {
-    let route = ['/vehicles'];
-    this.router.navigate(route);
-  }
-
-  private setEditVehicle(vehicle: Vehicle) {
-    if (vehicle) {
-      this.vehicle = vehicle;
-    } else {
-      this.gotoVehicles();
-    }
-  }
-}
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/vehicles/vehicle.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicle.service.ts][content]" value="import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
-
-import { CONFIG } from '../config';
-
-let vehiclesUrl = CONFIG.baseUrls.vehicles;
-
-export class Vehicle {
-  id: number;
-  name: string;
-  type: string;
-}
-
-@Injectable()
-export class VehicleService {
-  constructor(private http: Http) { }
-
-  getVehicle(id: number) {
-    return this.getVehicles()
-      .map(vehicles => vehicles.find(vehicle => vehicle.id === id));
-  }
-
-  getVehicles() {
-    return this.http
-      .get(vehiclesUrl)
-      .map((response: Response) => <Vehicle[]>response.json().data);
-  }
-}
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/vehicles/vehicle.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicles.component.ts][content]" value="import { Component } from '@angular/core';
-
-@Component({
-  moduleId: module.id,
-  selector: 'story-vehicles-root',
-  template: `
-    <router-outlet></router-outlet>
-  `
-})
-export class VehiclesComponent { }
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/vehicles/vehicles.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicles.module.ts][content]" value="import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-
-import { VehicleService } from './vehicle.service';
-import { routing, routedComponents } from './vehicles.routing';
-
-@NgModule({
-  imports: [CommonModule, FormsModule, routing],
-  declarations: [routedComponents],
-  providers: [VehicleService],
-})
-export class VehiclesModule { }
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/vehicles/vehicles.module.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicles.routing.ts][content]" value="import { Routes, RouterModule } from '@angular/router';
-
-import { VehicleComponent } from './vehicle.component';
-import { VehiclesComponent } from './vehicles.component';
-import { VehicleListComponent } from './vehicle-list.component';
-
-export const routes: Routes = [
-  {
-    path: 'vehicles',
-    component: VehiclesComponent,
-    children: [
-      { path: '', component: VehicleListComponent },
-      { path: ':id', component: VehicleComponent },
-    ]
-  }
-];
-
-export const routing = RouterModule.forChild(routes);
-
-export const routedComponents = [
-  VehiclesComponent,
-  VehicleListComponent,
-  VehicleComponent
-];
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/vehicles/vehicles.routing.ts][encoding]" value="utf8"><input type="hidden" name="entries[main.ts][content]" value="import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { AppModule } from './app/app.module';
-
-platformBrowserDynamic().bootstrapModule(AppModule)
-  .then(success => console.log(`Bootstrap success`))
-  .catch(err => console.error(err));
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[main.ts][encoding]" value="utf8"><input type="hidden" name="entries[a2docs.css][content]" value="* {
+* {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -508,7 +14,7 @@ html {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 body {
-  font-family: &quot;Roboto&quot;, Helvetica, Sans-Serif;
+  font-family: "Roboto", Helvetica, Sans-Serif;
   font-size: 14px;
   line-height: 1.42857143;
   color: #212121;
@@ -591,7 +97,7 @@ hr {
   overflow: visible;
   clip: auto;
 }
-[role=&quot;button&quot;] {
+[role="button"] {
   cursor: pointer;
 }
 .container {
@@ -1277,7 +783,7 @@ hr {
 .btn-toolbar:after,
 .btn-group-vertical > .btn-group:before,
 .btn-group-vertical > .btn-group:after {
-  content: &quot; &quot;;
+  content: " ";
   display: table;
 }
 .clearfix:after,
@@ -1912,21 +1418,21 @@ label {
   margin-bottom: 5px;
   font-weight: bold;
 }
-input[type=&quot;search&quot;] {
+input[type="search"] {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-input[type=&quot;radio&quot;],
-input[type=&quot;checkbox&quot;] {
+input[type="radio"],
+input[type="checkbox"] {
   margin: 4px 0 0;
   margin-top: 1px \9;
   line-height: normal;
 }
-input[type=&quot;file&quot;] {
+input[type="file"] {
   display: block;
 }
-input[type=&quot;range&quot;] {
+input[type="range"] {
   display: block;
   width: 100%;
 }
@@ -1934,9 +1440,9 @@ select[multiple],
 select[size] {
   height: auto;
 }
-input[type=&quot;file&quot;]:focus,
-input[type=&quot;radio&quot;]:focus,
-input[type=&quot;checkbox&quot;]:focus {
+input[type="file"]:focus,
+input[type="radio"]:focus,
+input[type="checkbox"]:focus {
   outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
@@ -1999,34 +1505,34 @@ fieldset[disabled] .form-control {
 textarea.form-control {
   height: auto;
 }
-input[type=&quot;search&quot;] {
+input[type="search"] {
   -webkit-appearance: none;
 }
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
-  input[type=&quot;date&quot;].form-control,
-  input[type=&quot;time&quot;].form-control,
-  input[type=&quot;datetime-local&quot;].form-control,
-  input[type=&quot;month&quot;].form-control {
+  input[type="date"].form-control,
+  input[type="time"].form-control,
+  input[type="datetime-local"].form-control,
+  input[type="month"].form-control {
     line-height: 34px;
   }
-  input[type=&quot;date&quot;].input-sm,
-  input[type=&quot;time&quot;].input-sm,
-  input[type=&quot;datetime-local&quot;].input-sm,
-  input[type=&quot;month&quot;].input-sm,
-  .input-group-sm input[type=&quot;date&quot;],
-  .input-group-sm input[type=&quot;time&quot;],
-  .input-group-sm input[type=&quot;datetime-local&quot;],
-  .input-group-sm input[type=&quot;month&quot;] {
+  input[type="date"].input-sm,
+  input[type="time"].input-sm,
+  input[type="datetime-local"].input-sm,
+  input[type="month"].input-sm,
+  .input-group-sm input[type="date"],
+  .input-group-sm input[type="time"],
+  .input-group-sm input[type="datetime-local"],
+  .input-group-sm input[type="month"] {
     line-height: 30px;
   }
-  input[type=&quot;date&quot;].input-lg,
-  input[type=&quot;time&quot;].input-lg,
-  input[type=&quot;datetime-local&quot;].input-lg,
-  input[type=&quot;month&quot;].input-lg,
-  .input-group-lg input[type=&quot;date&quot;],
-  .input-group-lg input[type=&quot;time&quot;],
-  .input-group-lg input[type=&quot;datetime-local&quot;],
-  .input-group-lg input[type=&quot;month&quot;] {
+  input[type="date"].input-lg,
+  input[type="time"].input-lg,
+  input[type="datetime-local"].input-lg,
+  input[type="month"].input-lg,
+  .input-group-lg input[type="date"],
+  .input-group-lg input[type="time"],
+  .input-group-lg input[type="datetime-local"],
+  .input-group-lg input[type="month"] {
     line-height: 46px;
   }
 }
@@ -2048,10 +1554,10 @@ input[type=&quot;search&quot;] {
   font-weight: normal;
   cursor: pointer;
 }
-.radio input[type=&quot;radio&quot;],
-.radio-inline input[type=&quot;radio&quot;],
-.checkbox input[type=&quot;checkbox&quot;],
-.checkbox-inline input[type=&quot;checkbox&quot;] {
+.radio input[type="radio"],
+.radio-inline input[type="radio"],
+.checkbox input[type="checkbox"],
+.checkbox-inline input[type="checkbox"] {
   position: absolute;
   margin-left: -20px;
   margin-top: 4px \9;
@@ -2075,12 +1581,12 @@ input[type=&quot;search&quot;] {
   margin-top: 0;
   margin-left: 10px;
 }
-input[type=&quot;radio&quot;][disabled],
-input[type=&quot;checkbox&quot;][disabled],
-input[type=&quot;radio&quot;].disabled,
-input[type=&quot;checkbox&quot;].disabled,
-fieldset[disabled] input[type=&quot;radio&quot;],
-fieldset[disabled] input[type=&quot;checkbox&quot;] {
+input[type="radio"][disabled],
+input[type="checkbox"][disabled],
+input[type="radio"].disabled,
+input[type="checkbox"].disabled,
+fieldset[disabled] input[type="radio"],
+fieldset[disabled] input[type="checkbox"] {
   cursor: not-allowed;
 }
 .radio-inline.disabled,
@@ -2355,8 +1861,8 @@ select[multiple].input-lg {
   .form-inline .checkbox label {
     padding-left: 0;
   }
-  .form-inline .radio input[type=&quot;radio&quot;],
-  .form-inline .checkbox input[type=&quot;checkbox&quot;] {
+  .form-inline .radio input[type="radio"],
+  .form-inline .checkbox input[type="checkbox"] {
     position: relative;
     margin-left: 0;
   }
@@ -2861,9 +2367,9 @@ fieldset[disabled] .btn-link:focus {
 .btn-block + .btn-block {
   margin-top: 5px;
 }
-input[type=&quot;submit&quot;].btn-block,
-input[type=&quot;reset&quot;].btn-block,
-input[type=&quot;button&quot;].btn-block {
+input[type="submit"].btn-block,
+input[type="reset"].btn-block,
+input[type="button"].btn-block {
   width: 100%;
 }
 .btn-group,
@@ -3029,10 +2535,10 @@ input[type=&quot;button&quot;].btn-block {
 .btn-group-justified > .btn-group .dropdown-menu {
   left: auto;
 }
-[data-toggle=&quot;buttons&quot;] > .btn input[type=&quot;radio&quot;],
-[data-toggle=&quot;buttons&quot;] > .btn-group > .btn input[type=&quot;radio&quot;],
-[data-toggle=&quot;buttons&quot;] > .btn input[type=&quot;checkbox&quot;],
-[data-toggle=&quot;buttons&quot;] > .btn-group > .btn input[type=&quot;checkbox&quot;] {
+[data-toggle="buttons"] > .btn input[type="radio"],
+[data-toggle="buttons"] > .btn-group > .btn input[type="radio"],
+[data-toggle="buttons"] > .btn input[type="checkbox"],
+[data-toggle="buttons"] > .btn-group > .btn input[type="checkbox"] {
   position: absolute;
   clip: rect(0, 0, 0, 0);
   pointer-events: none;
@@ -3042,7 +2548,7 @@ input[type=&quot;button&quot;].btn-block {
   display: table;
   border-collapse: separate;
 }
-.input-group[class*=&quot;col-&quot;] {
+.input-group[class*="col-"] {
   float: none;
   padding-left: 0;
   padding-right: 0;
@@ -3140,8 +2646,8 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   font-size: 18px;
   border-radius: 6px;
 }
-.input-group-addon input[type=&quot;radio&quot;],
-.input-group-addon input[type=&quot;checkbox&quot;] {
+.input-group-addon input[type="radio"],
+.input-group-addon input[type="checkbox"] {
   margin-top: 0;
 }
 .input-group .form-control:first-child,
@@ -3270,13 +2776,13 @@ th {
 .table-hover > tbody > tr:hover {
   background-color: #f5f5f5;
 }
-table col[class*=&quot;col-&quot;] {
+table col[class*="col-"] {
   position: static;
   float: none;
   display: table-column;
 }
-table td[class*=&quot;col-&quot;],
-table th[class*=&quot;col-&quot;] {
+table td[class*="col-"],
+table th[class*="col-"] {
   position: static;
   float: none;
   display: table-cell;
@@ -3452,791 +2958,791 @@ table th[class*=&quot;col-&quot;] {
   -moz-osx-font-smoothing: grayscale;
 }
 .glyphicon-asterisk:before {
-  content: &quot;\002a&quot;;
+  content: "\002a";
 }
 .glyphicon-plus:before {
-  content: &quot;\002b&quot;;
+  content: "\002b";
 }
 .glyphicon-euro:before,
 .glyphicon-eur:before {
-  content: &quot;\20ac&quot;;
+  content: "\20ac";
 }
 .glyphicon-minus:before {
-  content: &quot;\2212&quot;;
+  content: "\2212";
 }
 .glyphicon-cloud:before {
-  content: &quot;\2601&quot;;
+  content: "\2601";
 }
 .glyphicon-envelope:before {
-  content: &quot;\2709&quot;;
+  content: "\2709";
 }
 .glyphicon-pencil:before {
-  content: &quot;\270f&quot;;
+  content: "\270f";
 }
 .glyphicon-glass:before {
-  content: &quot;\e001&quot;;
+  content: "\e001";
 }
 .glyphicon-music:before {
-  content: &quot;\e002&quot;;
+  content: "\e002";
 }
 .glyphicon-search:before {
-  content: &quot;\e003&quot;;
+  content: "\e003";
 }
 .glyphicon-heart:before {
-  content: &quot;\e005&quot;;
+  content: "\e005";
 }
 .glyphicon-star:before {
-  content: &quot;\e006&quot;;
+  content: "\e006";
 }
 .glyphicon-star-empty:before {
-  content: &quot;\e007&quot;;
+  content: "\e007";
 }
 .glyphicon-user:before {
-  content: &quot;\e008&quot;;
+  content: "\e008";
 }
 .glyphicon-film:before {
-  content: &quot;\e009&quot;;
+  content: "\e009";
 }
 .glyphicon-th-large:before {
-  content: &quot;\e010&quot;;
+  content: "\e010";
 }
 .glyphicon-th:before {
-  content: &quot;\e011&quot;;
+  content: "\e011";
 }
 .glyphicon-th-list:before {
-  content: &quot;\e012&quot;;
+  content: "\e012";
 }
 .glyphicon-ok:before {
-  content: &quot;\e013&quot;;
+  content: "\e013";
 }
 .glyphicon-remove:before {
-  content: &quot;\e014&quot;;
+  content: "\e014";
 }
 .glyphicon-zoom-in:before {
-  content: &quot;\e015&quot;;
+  content: "\e015";
 }
 .glyphicon-zoom-out:before {
-  content: &quot;\e016&quot;;
+  content: "\e016";
 }
 .glyphicon-off:before {
-  content: &quot;\e017&quot;;
+  content: "\e017";
 }
 .glyphicon-signal:before {
-  content: &quot;\e018&quot;;
+  content: "\e018";
 }
 .glyphicon-cog:before {
-  content: &quot;\e019&quot;;
+  content: "\e019";
 }
 .glyphicon-trash:before {
-  content: &quot;\e020&quot;;
+  content: "\e020";
 }
 .glyphicon-home:before {
-  content: &quot;\e021&quot;;
+  content: "\e021";
 }
 .glyphicon-file:before {
-  content: &quot;\e022&quot;;
+  content: "\e022";
 }
 .glyphicon-time:before {
-  content: &quot;\e023&quot;;
+  content: "\e023";
 }
 .glyphicon-road:before {
-  content: &quot;\e024&quot;;
+  content: "\e024";
 }
 .glyphicon-download-alt:before {
-  content: &quot;\e025&quot;;
+  content: "\e025";
 }
 .glyphicon-download:before {
-  content: &quot;\e026&quot;;
+  content: "\e026";
 }
 .glyphicon-upload:before {
-  content: &quot;\e027&quot;;
+  content: "\e027";
 }
 .glyphicon-inbox:before {
-  content: &quot;\e028&quot;;
+  content: "\e028";
 }
 .glyphicon-play-circle:before {
-  content: &quot;\e029&quot;;
+  content: "\e029";
 }
 .glyphicon-repeat:before {
-  content: &quot;\e030&quot;;
+  content: "\e030";
 }
 .glyphicon-refresh:before {
-  content: &quot;\e031&quot;;
+  content: "\e031";
 }
 .glyphicon-list-alt:before {
-  content: &quot;\e032&quot;;
+  content: "\e032";
 }
 .glyphicon-lock:before {
-  content: &quot;\e033&quot;;
+  content: "\e033";
 }
 .glyphicon-flag:before {
-  content: &quot;\e034&quot;;
+  content: "\e034";
 }
 .glyphicon-headphones:before {
-  content: &quot;\e035&quot;;
+  content: "\e035";
 }
 .glyphicon-volume-off:before {
-  content: &quot;\e036&quot;;
+  content: "\e036";
 }
 .glyphicon-volume-down:before {
-  content: &quot;\e037&quot;;
+  content: "\e037";
 }
 .glyphicon-volume-up:before {
-  content: &quot;\e038&quot;;
+  content: "\e038";
 }
 .glyphicon-qrcode:before {
-  content: &quot;\e039&quot;;
+  content: "\e039";
 }
 .glyphicon-barcode:before {
-  content: &quot;\e040&quot;;
+  content: "\e040";
 }
 .glyphicon-tag:before {
-  content: &quot;\e041&quot;;
+  content: "\e041";
 }
 .glyphicon-tags:before {
-  content: &quot;\e042&quot;;
+  content: "\e042";
 }
 .glyphicon-book:before {
-  content: &quot;\e043&quot;;
+  content: "\e043";
 }
 .glyphicon-bookmark:before {
-  content: &quot;\e044&quot;;
+  content: "\e044";
 }
 .glyphicon-print:before {
-  content: &quot;\e045&quot;;
+  content: "\e045";
 }
 .glyphicon-camera:before {
-  content: &quot;\e046&quot;;
+  content: "\e046";
 }
 .glyphicon-font:before {
-  content: &quot;\e047&quot;;
+  content: "\e047";
 }
 .glyphicon-bold:before {
-  content: &quot;\e048&quot;;
+  content: "\e048";
 }
 .glyphicon-italic:before {
-  content: &quot;\e049&quot;;
+  content: "\e049";
 }
 .glyphicon-text-height:before {
-  content: &quot;\e050&quot;;
+  content: "\e050";
 }
 .glyphicon-text-width:before {
-  content: &quot;\e051&quot;;
+  content: "\e051";
 }
 .glyphicon-align-left:before {
-  content: &quot;\e052&quot;;
+  content: "\e052";
 }
 .glyphicon-align-center:before {
-  content: &quot;\e053&quot;;
+  content: "\e053";
 }
 .glyphicon-align-right:before {
-  content: &quot;\e054&quot;;
+  content: "\e054";
 }
 .glyphicon-align-justify:before {
-  content: &quot;\e055&quot;;
+  content: "\e055";
 }
 .glyphicon-list:before {
-  content: &quot;\e056&quot;;
+  content: "\e056";
 }
 .glyphicon-indent-left:before {
-  content: &quot;\e057&quot;;
+  content: "\e057";
 }
 .glyphicon-indent-right:before {
-  content: &quot;\e058&quot;;
+  content: "\e058";
 }
 .glyphicon-facetime-video:before {
-  content: &quot;\e059&quot;;
+  content: "\e059";
 }
 .glyphicon-picture:before {
-  content: &quot;\e060&quot;;
+  content: "\e060";
 }
 .glyphicon-map-marker:before {
-  content: &quot;\e062&quot;;
+  content: "\e062";
 }
 .glyphicon-adjust:before {
-  content: &quot;\e063&quot;;
+  content: "\e063";
 }
 .glyphicon-tint:before {
-  content: &quot;\e064&quot;;
+  content: "\e064";
 }
 .glyphicon-edit:before {
-  content: &quot;\e065&quot;;
+  content: "\e065";
 }
 .glyphicon-share:before {
-  content: &quot;\e066&quot;;
+  content: "\e066";
 }
 .glyphicon-check:before {
-  content: &quot;\e067&quot;;
+  content: "\e067";
 }
 .glyphicon-move:before {
-  content: &quot;\e068&quot;;
+  content: "\e068";
 }
 .glyphicon-step-backward:before {
-  content: &quot;\e069&quot;;
+  content: "\e069";
 }
 .glyphicon-fast-backward:before {
-  content: &quot;\e070&quot;;
+  content: "\e070";
 }
 .glyphicon-backward:before {
-  content: &quot;\e071&quot;;
+  content: "\e071";
 }
 .glyphicon-play:before {
-  content: &quot;\e072&quot;;
+  content: "\e072";
 }
 .glyphicon-pause:before {
-  content: &quot;\e073&quot;;
+  content: "\e073";
 }
 .glyphicon-stop:before {
-  content: &quot;\e074&quot;;
+  content: "\e074";
 }
 .glyphicon-forward:before {
-  content: &quot;\e075&quot;;
+  content: "\e075";
 }
 .glyphicon-fast-forward:before {
-  content: &quot;\e076&quot;;
+  content: "\e076";
 }
 .glyphicon-step-forward:before {
-  content: &quot;\e077&quot;;
+  content: "\e077";
 }
 .glyphicon-eject:before {
-  content: &quot;\e078&quot;;
+  content: "\e078";
 }
 .glyphicon-chevron-left:before {
-  content: &quot;\e079&quot;;
+  content: "\e079";
 }
 .glyphicon-chevron-right:before {
-  content: &quot;\e080&quot;;
+  content: "\e080";
 }
 .glyphicon-plus-sign:before {
-  content: &quot;\e081&quot;;
+  content: "\e081";
 }
 .glyphicon-minus-sign:before {
-  content: &quot;\e082&quot;;
+  content: "\e082";
 }
 .glyphicon-remove-sign:before {
-  content: &quot;\e083&quot;;
+  content: "\e083";
 }
 .glyphicon-ok-sign:before {
-  content: &quot;\e084&quot;;
+  content: "\e084";
 }
 .glyphicon-question-sign:before {
-  content: &quot;\e085&quot;;
+  content: "\e085";
 }
 .glyphicon-info-sign:before {
-  content: &quot;\e086&quot;;
+  content: "\e086";
 }
 .glyphicon-screenshot:before {
-  content: &quot;\e087&quot;;
+  content: "\e087";
 }
 .glyphicon-remove-circle:before {
-  content: &quot;\e088&quot;;
+  content: "\e088";
 }
 .glyphicon-ok-circle:before {
-  content: &quot;\e089&quot;;
+  content: "\e089";
 }
 .glyphicon-ban-circle:before {
-  content: &quot;\e090&quot;;
+  content: "\e090";
 }
 .glyphicon-arrow-left:before {
-  content: &quot;\e091&quot;;
+  content: "\e091";
 }
 .glyphicon-arrow-right:before {
-  content: &quot;\e092&quot;;
+  content: "\e092";
 }
 .glyphicon-arrow-up:before {
-  content: &quot;\e093&quot;;
+  content: "\e093";
 }
 .glyphicon-arrow-down:before {
-  content: &quot;\e094&quot;;
+  content: "\e094";
 }
 .glyphicon-share-alt:before {
-  content: &quot;\e095&quot;;
+  content: "\e095";
 }
 .glyphicon-resize-full:before {
-  content: &quot;\e096&quot;;
+  content: "\e096";
 }
 .glyphicon-resize-small:before {
-  content: &quot;\e097&quot;;
+  content: "\e097";
 }
 .glyphicon-exclamation-sign:before {
-  content: &quot;\e101&quot;;
+  content: "\e101";
 }
 .glyphicon-gift:before {
-  content: &quot;\e102&quot;;
+  content: "\e102";
 }
 .glyphicon-leaf:before {
-  content: &quot;\e103&quot;;
+  content: "\e103";
 }
 .glyphicon-fire:before {
-  content: &quot;\e104&quot;;
+  content: "\e104";
 }
 .glyphicon-eye-open:before {
-  content: &quot;\e105&quot;;
+  content: "\e105";
 }
 .glyphicon-eye-close:before {
-  content: &quot;\e106&quot;;
+  content: "\e106";
 }
 .glyphicon-warning-sign:before {
-  content: &quot;\e107&quot;;
+  content: "\e107";
 }
 .glyphicon-plane:before {
-  content: &quot;\e108&quot;;
+  content: "\e108";
 }
 .glyphicon-calendar:before {
-  content: &quot;\e109&quot;;
+  content: "\e109";
 }
 .glyphicon-random:before {
-  content: &quot;\e110&quot;;
+  content: "\e110";
 }
 .glyphicon-comment:before {
-  content: &quot;\e111&quot;;
+  content: "\e111";
 }
 .glyphicon-magnet:before {
-  content: &quot;\e112&quot;;
+  content: "\e112";
 }
 .glyphicon-chevron-up:before {
-  content: &quot;\e113&quot;;
+  content: "\e113";
 }
 .glyphicon-chevron-down:before {
-  content: &quot;\e114&quot;;
+  content: "\e114";
 }
 .glyphicon-retweet:before {
-  content: &quot;\e115&quot;;
+  content: "\e115";
 }
 .glyphicon-shopping-cart:before {
-  content: &quot;\e116&quot;;
+  content: "\e116";
 }
 .glyphicon-folder-close:before {
-  content: &quot;\e117&quot;;
+  content: "\e117";
 }
 .glyphicon-folder-open:before {
-  content: &quot;\e118&quot;;
+  content: "\e118";
 }
 .glyphicon-resize-vertical:before {
-  content: &quot;\e119&quot;;
+  content: "\e119";
 }
 .glyphicon-resize-horizontal:before {
-  content: &quot;\e120&quot;;
+  content: "\e120";
 }
 .glyphicon-hdd:before {
-  content: &quot;\e121&quot;;
+  content: "\e121";
 }
 .glyphicon-bullhorn:before {
-  content: &quot;\e122&quot;;
+  content: "\e122";
 }
 .glyphicon-bell:before {
-  content: &quot;\e123&quot;;
+  content: "\e123";
 }
 .glyphicon-certificate:before {
-  content: &quot;\e124&quot;;
+  content: "\e124";
 }
 .glyphicon-thumbs-up:before {
-  content: &quot;\e125&quot;;
+  content: "\e125";
 }
 .glyphicon-thumbs-down:before {
-  content: &quot;\e126&quot;;
+  content: "\e126";
 }
 .glyphicon-hand-right:before {
-  content: &quot;\e127&quot;;
+  content: "\e127";
 }
 .glyphicon-hand-left:before {
-  content: &quot;\e128&quot;;
+  content: "\e128";
 }
 .glyphicon-hand-up:before {
-  content: &quot;\e129&quot;;
+  content: "\e129";
 }
 .glyphicon-hand-down:before {
-  content: &quot;\e130&quot;;
+  content: "\e130";
 }
 .glyphicon-circle-arrow-right:before {
-  content: &quot;\e131&quot;;
+  content: "\e131";
 }
 .glyphicon-circle-arrow-left:before {
-  content: &quot;\e132&quot;;
+  content: "\e132";
 }
 .glyphicon-circle-arrow-up:before {
-  content: &quot;\e133&quot;;
+  content: "\e133";
 }
 .glyphicon-circle-arrow-down:before {
-  content: &quot;\e134&quot;;
+  content: "\e134";
 }
 .glyphicon-globe:before {
-  content: &quot;\e135&quot;;
+  content: "\e135";
 }
 .glyphicon-wrench:before {
-  content: &quot;\e136&quot;;
+  content: "\e136";
 }
 .glyphicon-tasks:before {
-  content: &quot;\e137&quot;;
+  content: "\e137";
 }
 .glyphicon-filter:before {
-  content: &quot;\e138&quot;;
+  content: "\e138";
 }
 .glyphicon-briefcase:before {
-  content: &quot;\e139&quot;;
+  content: "\e139";
 }
 .glyphicon-fullscreen:before {
-  content: &quot;\e140&quot;;
+  content: "\e140";
 }
 .glyphicon-dashboard:before {
-  content: &quot;\e141&quot;;
+  content: "\e141";
 }
 .glyphicon-paperclip:before {
-  content: &quot;\e142&quot;;
+  content: "\e142";
 }
 .glyphicon-heart-empty:before {
-  content: &quot;\e143&quot;;
+  content: "\e143";
 }
 .glyphicon-link:before {
-  content: &quot;\e144&quot;;
+  content: "\e144";
 }
 .glyphicon-phone:before {
-  content: &quot;\e145&quot;;
+  content: "\e145";
 }
 .glyphicon-pushpin:before {
-  content: &quot;\e146&quot;;
+  content: "\e146";
 }
 .glyphicon-usd:before {
-  content: &quot;\e148&quot;;
+  content: "\e148";
 }
 .glyphicon-gbp:before {
-  content: &quot;\e149&quot;;
+  content: "\e149";
 }
 .glyphicon-sort:before {
-  content: &quot;\e150&quot;;
+  content: "\e150";
 }
 .glyphicon-sort-by-alphabet:before {
-  content: &quot;\e151&quot;;
+  content: "\e151";
 }
 .glyphicon-sort-by-alphabet-alt:before {
-  content: &quot;\e152&quot;;
+  content: "\e152";
 }
 .glyphicon-sort-by-order:before {
-  content: &quot;\e153&quot;;
+  content: "\e153";
 }
 .glyphicon-sort-by-order-alt:before {
-  content: &quot;\e154&quot;;
+  content: "\e154";
 }
 .glyphicon-sort-by-attributes:before {
-  content: &quot;\e155&quot;;
+  content: "\e155";
 }
 .glyphicon-sort-by-attributes-alt:before {
-  content: &quot;\e156&quot;;
+  content: "\e156";
 }
 .glyphicon-unchecked:before {
-  content: &quot;\e157&quot;;
+  content: "\e157";
 }
 .glyphicon-expand:before {
-  content: &quot;\e158&quot;;
+  content: "\e158";
 }
 .glyphicon-collapse-down:before {
-  content: &quot;\e159&quot;;
+  content: "\e159";
 }
 .glyphicon-collapse-up:before {
-  content: &quot;\e160&quot;;
+  content: "\e160";
 }
 .glyphicon-log-in:before {
-  content: &quot;\e161&quot;;
+  content: "\e161";
 }
 .glyphicon-flash:before {
-  content: &quot;\e162&quot;;
+  content: "\e162";
 }
 .glyphicon-log-out:before {
-  content: &quot;\e163&quot;;
+  content: "\e163";
 }
 .glyphicon-new-window:before {
-  content: &quot;\e164&quot;;
+  content: "\e164";
 }
 .glyphicon-record:before {
-  content: &quot;\e165&quot;;
+  content: "\e165";
 }
 .glyphicon-save:before {
-  content: &quot;\e166&quot;;
+  content: "\e166";
 }
 .glyphicon-open:before {
-  content: &quot;\e167&quot;;
+  content: "\e167";
 }
 .glyphicon-saved:before {
-  content: &quot;\e168&quot;;
+  content: "\e168";
 }
 .glyphicon-import:before {
-  content: &quot;\e169&quot;;
+  content: "\e169";
 }
 .glyphicon-export:before {
-  content: &quot;\e170&quot;;
+  content: "\e170";
 }
 .glyphicon-send:before {
-  content: &quot;\e171&quot;;
+  content: "\e171";
 }
 .glyphicon-floppy-disk:before {
-  content: &quot;\e172&quot;;
+  content: "\e172";
 }
 .glyphicon-floppy-saved:before {
-  content: &quot;\e173&quot;;
+  content: "\e173";
 }
 .glyphicon-floppy-remove:before {
-  content: &quot;\e174&quot;;
+  content: "\e174";
 }
 .glyphicon-floppy-save:before {
-  content: &quot;\e175&quot;;
+  content: "\e175";
 }
 .glyphicon-floppy-open:before {
-  content: &quot;\e176&quot;;
+  content: "\e176";
 }
 .glyphicon-credit-card:before {
-  content: &quot;\e177&quot;;
+  content: "\e177";
 }
 .glyphicon-transfer:before {
-  content: &quot;\e178&quot;;
+  content: "\e178";
 }
 .glyphicon-cutlery:before {
-  content: &quot;\e179&quot;;
+  content: "\e179";
 }
 .glyphicon-header:before {
-  content: &quot;\e180&quot;;
+  content: "\e180";
 }
 .glyphicon-compressed:before {
-  content: &quot;\e181&quot;;
+  content: "\e181";
 }
 .glyphicon-earphone:before {
-  content: &quot;\e182&quot;;
+  content: "\e182";
 }
 .glyphicon-phone-alt:before {
-  content: &quot;\e183&quot;;
+  content: "\e183";
 }
 .glyphicon-tower:before {
-  content: &quot;\e184&quot;;
+  content: "\e184";
 }
 .glyphicon-stats:before {
-  content: &quot;\e185&quot;;
+  content: "\e185";
 }
 .glyphicon-sd-video:before {
-  content: &quot;\e186&quot;;
+  content: "\e186";
 }
 .glyphicon-hd-video:before {
-  content: &quot;\e187&quot;;
+  content: "\e187";
 }
 .glyphicon-subtitles:before {
-  content: &quot;\e188&quot;;
+  content: "\e188";
 }
 .glyphicon-sound-stereo:before {
-  content: &quot;\e189&quot;;
+  content: "\e189";
 }
 .glyphicon-sound-dolby:before {
-  content: &quot;\e190&quot;;
+  content: "\e190";
 }
 .glyphicon-sound-5-1:before {
-  content: &quot;\e191&quot;;
+  content: "\e191";
 }
 .glyphicon-sound-6-1:before {
-  content: &quot;\e192&quot;;
+  content: "\e192";
 }
 .glyphicon-sound-7-1:before {
-  content: &quot;\e193&quot;;
+  content: "\e193";
 }
 .glyphicon-copyright-mark:before {
-  content: &quot;\e194&quot;;
+  content: "\e194";
 }
 .glyphicon-registration-mark:before {
-  content: &quot;\e195&quot;;
+  content: "\e195";
 }
 .glyphicon-cloud-download:before {
-  content: &quot;\e197&quot;;
+  content: "\e197";
 }
 .glyphicon-cloud-upload:before {
-  content: &quot;\e198&quot;;
+  content: "\e198";
 }
 .glyphicon-tree-conifer:before {
-  content: &quot;\e199&quot;;
+  content: "\e199";
 }
 .glyphicon-tree-deciduous:before {
-  content: &quot;\e200&quot;;
+  content: "\e200";
 }
 .glyphicon-cd:before {
-  content: &quot;\e201&quot;;
+  content: "\e201";
 }
 .glyphicon-save-file:before {
-  content: &quot;\e202&quot;;
+  content: "\e202";
 }
 .glyphicon-open-file:before {
-  content: &quot;\e203&quot;;
+  content: "\e203";
 }
 .glyphicon-level-up:before {
-  content: &quot;\e204&quot;;
+  content: "\e204";
 }
 .glyphicon-copy:before {
-  content: &quot;\e205&quot;;
+  content: "\e205";
 }
 .glyphicon-paste:before {
-  content: &quot;\e206&quot;;
+  content: "\e206";
 }
 .glyphicon-alert:before {
-  content: &quot;\e209&quot;;
+  content: "\e209";
 }
 .glyphicon-equalizer:before {
-  content: &quot;\e210&quot;;
+  content: "\e210";
 }
 .glyphicon-king:before {
-  content: &quot;\e211&quot;;
+  content: "\e211";
 }
 .glyphicon-queen:before {
-  content: &quot;\e212&quot;;
+  content: "\e212";
 }
 .glyphicon-pawn:before {
-  content: &quot;\e213&quot;;
+  content: "\e213";
 }
 .glyphicon-bishop:before {
-  content: &quot;\e214&quot;;
+  content: "\e214";
 }
 .glyphicon-knight:before {
-  content: &quot;\e215&quot;;
+  content: "\e215";
 }
 .glyphicon-baby-formula:before {
-  content: &quot;\e216&quot;;
+  content: "\e216";
 }
 .glyphicon-tent:before {
-  content: &quot;\26fa&quot;;
+  content: "\26fa";
 }
 .glyphicon-blackboard:before {
-  content: &quot;\e218&quot;;
+  content: "\e218";
 }
 .glyphicon-bed:before {
-  content: &quot;\e219&quot;;
+  content: "\e219";
 }
 .glyphicon-apple:before {
-  content: &quot;\f8ff&quot;;
+  content: "\f8ff";
 }
 .glyphicon-erase:before {
-  content: &quot;\e221&quot;;
+  content: "\e221";
 }
 .glyphicon-hourglass:before {
-  content: &quot;\231b&quot;;
+  content: "\231b";
 }
 .glyphicon-lamp:before {
-  content: &quot;\e223&quot;;
+  content: "\e223";
 }
 .glyphicon-duplicate:before {
-  content: &quot;\e224&quot;;
+  content: "\e224";
 }
 .glyphicon-piggy-bank:before {
-  content: &quot;\e225&quot;;
+  content: "\e225";
 }
 .glyphicon-scissors:before {
-  content: &quot;\e226&quot;;
+  content: "\e226";
 }
 .glyphicon-bitcoin:before {
-  content: &quot;\e227&quot;;
+  content: "\e227";
 }
 .glyphicon-btc:before {
-  content: &quot;\e227&quot;;
+  content: "\e227";
 }
 .glyphicon-xbt:before {
-  content: &quot;\e227&quot;;
+  content: "\e227";
 }
 .glyphicon-yen:before {
-  content: &quot;\00a5&quot;;
+  content: "\00a5";
 }
 .glyphicon-jpy:before {
-  content: &quot;\00a5&quot;;
+  content: "\00a5";
 }
 .glyphicon-ruble:before {
-  content: &quot;\20bd&quot;;
+  content: "\20bd";
 }
 .glyphicon-rub:before {
-  content: &quot;\20bd&quot;;
+  content: "\20bd";
 }
 .glyphicon-scale:before {
-  content: &quot;\e230&quot;;
+  content: "\e230";
 }
 .glyphicon-ice-lolly:before {
-  content: &quot;\e231&quot;;
+  content: "\e231";
 }
 .glyphicon-ice-lolly-tasted:before {
-  content: &quot;\e232&quot;;
+  content: "\e232";
 }
 .glyphicon-education:before {
-  content: &quot;\e233&quot;;
+  content: "\e233";
 }
 .glyphicon-option-horizontal:before {
-  content: &quot;\e234&quot;;
+  content: "\e234";
 }
 .glyphicon-option-vertical:before {
-  content: &quot;\e235&quot;;
+  content: "\e235";
 }
 .glyphicon-menu-hamburger:before {
-  content: &quot;\e236&quot;;
+  content: "\e236";
 }
 .glyphicon-modal-window:before {
-  content: &quot;\e237&quot;;
+  content: "\e237";
 }
 .glyphicon-oil:before {
-  content: &quot;\e238&quot;;
+  content: "\e238";
 }
 .glyphicon-grain:before {
-  content: &quot;\e239&quot;;
+  content: "\e239";
 }
 .glyphicon-sunglasses:before {
-  content: &quot;\e240&quot;;
+  content: "\e240";
 }
 .glyphicon-text-size:before {
-  content: &quot;\e241&quot;;
+  content: "\e241";
 }
 .glyphicon-text-color:before {
-  content: &quot;\e242&quot;;
+  content: "\e242";
 }
 .glyphicon-text-background:before {
-  content: &quot;\e243&quot;;
+  content: "\e243";
 }
 .glyphicon-object-align-top:before {
-  content: &quot;\e244&quot;;
+  content: "\e244";
 }
 .glyphicon-object-align-bottom:before {
-  content: &quot;\e245&quot;;
+  content: "\e245";
 }
 .glyphicon-object-align-horizontal:before {
-  content: &quot;\e246&quot;;
+  content: "\e246";
 }
 .glyphicon-object-align-left:before {
-  content: &quot;\e247&quot;;
+  content: "\e247";
 }
 .glyphicon-object-align-vertical:before {
-  content: &quot;\e248&quot;;
+  content: "\e248";
 }
 .glyphicon-object-align-right:before {
-  content: &quot;\e249&quot;;
+  content: "\e249";
 }
 .glyphicon-triangle-right:before {
-  content: &quot;\e250&quot;;
+  content: "\e250";
 }
 .glyphicon-triangle-left:before {
-  content: &quot;\e251&quot;;
+  content: "\e251";
 }
 .glyphicon-triangle-bottom:before {
-  content: &quot;\e252&quot;;
+  content: "\e252";
 }
 .glyphicon-triangle-top:before {
-  content: &quot;\e253&quot;;
+  content: "\e253";
 }
 .glyphicon-console:before {
-  content: &quot;\e254&quot;;
+  content: "\e254";
 }
 .glyphicon-superscript:before {
-  content: &quot;\e255&quot;;
+  content: "\e255";
 }
 .glyphicon-subscript:before {
-  content: &quot;\e256&quot;;
+  content: "\e256";
 }
 .glyphicon-menu-left:before {
-  content: &quot;\e257&quot;;
+  content: "\e257";
 }
 .glyphicon-menu-right:before {
-  content: &quot;\e258&quot;;
+  content: "\e258";
 }
 .glyphicon-menu-down:before {
-  content: &quot;\e259&quot;;
+  content: "\e259";
 }
 .glyphicon-menu-up:before {
-  content: &quot;\e260&quot;;
+  content: "\e260";
 }
 .alert {
   padding: 15px;
@@ -4489,525 +3995,3 @@ button.btn[disabled]:focus {
 .close:focus {
   opacity: 1;
 }
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[a2docs.css][encoding]" value="utf8"><input type="hidden" name="entries[styles.css][content]" value="/* Master Styles */
-h1 {
-  color: #369;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 250%;
-}
-h2, h3 {
-  color: #444;
-  font-family: Arial, Helvetica, sans-serif;
-  font-weight: lighter;
-}
-body {
-  margin: 2em;
-}
-body, input[text], button {
-  color: #888;
-  font-family: Cambria, Georgia;
-}
-a {
-  cursor: pointer;
-  cursor: hand;
-}
-button {
-  font-family: Arial;
-  background-color: #eee;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  cursor: hand;
-}
-button:hover {
-  background-color: #cfd8dc;
-}
-button:disabled {
-  background-color: #eee;
-  color: #aaa;
-  cursor: auto;
-}
-
-/* Navigation link styles */
-nav a {
-  padding: 5px 10px;
-  text-decoration: none;
-  margin-top: 10px;
-  display: inline-block;
-  background-color: #eee;
-  border-radius: 4px;
-}
-nav a:visited, a:link {
-  color: #607D8B;
-}
-nav a:hover {
-  color: #039be5;
-  background-color: #CFD8DC;
-}
-nav a.active {
-  color: #039be5;
-}
-
-/* items class */
-.items {
-  margin: 0 0 2em 0;
-  list-style-type: none;
-  padding: 0;
-  width: 24em;
-}
-.items li {
-  cursor: pointer;
-  position: relative;
-  left: 0;
-  background-color: #EEE;
-  margin: .5em;
-  padding: .3em 0;
-  height: 1.6em;
-  border-radius: 4px;
-}
-.items li:hover {
-  color: #607D8B;
-  background-color: #DDD;
-  left: .1em;
-}
-.items li.selected:hover {
-  background-color: #BBD8DC;
-  color: white;
-}
-.items .text {
-  position: relative;
-  top: -3px;
-}
-.items {
-  margin: 0 0 2em 0;
-  list-style-type: none;
-  padding: 0;
-  width: 24em;
-}
-.items li {
-  cursor: pointer;
-  position: relative;
-  left: 0;
-  background-color: #EEE;
-  margin: .5em;
-  padding: .3em 0;
-  height: 1.6em;
-  border-radius: 4px;
-}
-.items li:hover {
-  color: #607D8B;
-  background-color: #DDD;
-  left: .1em;
-}
-.items li.selected {
-  background-color: #CFD8DC;
-  color: white;
-}
-
-.items li.selected:hover {
-  background-color: #BBD8DC;
-}
-.items .text {
-  position: relative;
-  top: -3px;
-}
-.items .badge {
-  display: inline-block;
-  font-size: small;
-  color: white;
-  padding: 0.8em 0.7em 0 0.7em;
-  background-color: #607D8B;
-  line-height: 1em;
-  position: relative;
-  left: -1px;
-  top: -4px;
-  height: 1.8em;
-  margin-right: .8em;
-  border-radius: 4px 0 0 4px;
-}
-/* everywhere else */
-* {
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[styles.css][encoding]" value="utf8"><input type="hidden" name="entries[app/app.component.html][content]" value="<div>
-  <header>
-    <h1>Storyline Tracker</h1>
-    <h3>Hierarchical Router Demo</h3>
-    <nav>
-      <ul>
-        <li><a [routerLink]=&quot;['/characters']&quot; href=&quot;&quot;>Characters</a></li>
-        <li><a [routerLink]=&quot;['/vehicles']&quot; href=&quot;&quot;>Vehicles</a></li>
-      </ul>
-    </nav>
-  </header>
-  <main>
-    <section>
-      <router-outlet></router-outlet>
-    </section>
-  </main>
-</div>
-
-
-<!-- 
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
--->"><input type="hidden" name="entries[app/app.component.html][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/character-list.component.html][content]" value="<article>
-  <h4>My Characters</h4>
-
-  <ul class=&quot;characters&quot;>
-    <li *ngFor=&quot;let character of characters | async&quot;>
-      <a href=&quot;&quot; [routerLink]=&quot;[character.id]&quot;>
-       {{character.id}}. {{character.name}}
-      </a>
-    </li>
-  </ul>
-</article>
-
-
-<!-- 
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
--->"><input type="hidden" name="entries[app/characters/character-list.component.html][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/character.component.html][content]" value="<article>
-  <div *ngIf=&quot;character&quot;>
-    <h4>{{character.name}} details</h4>
-
-    <div>
-      <label for=&quot;nametext&quot;>Name</label>
-      <input type=&quot;text&quot; id=&quot;nametext&quot; [(ngModel)]=&quot;character.name&quot; />
-    </div>
-
-    <div>
-      <label for=&quot;typetext&quot;>Side</label>
-      <input type=&quot;text&quot; id=&quot;typetext&quot; [(ngModel)]=&quot;character.side&quot; />
-    </div>
-  </div>
-</article>
-
-<!-- 
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
--->"><input type="hidden" name="entries[app/characters/character.component.html][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicle-list.component.html][content]" value="<article>
-  <h4>My Vehicles</h4>
-
-  <ul class=&quot;vehicles&quot;>
-    <li *ngFor=&quot;let vehicle of vehicles&quot;>
-      <a href=&quot;&quot; [routerLink]=&quot;[vehicle.id]&quot;>
-       {{vehicle.id}}. {{vehicle.name}}
-      </a>
-    </li>
-  </ul>
-</article>
-
-
-<!-- 
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
--->"><input type="hidden" name="entries[app/vehicles/vehicle-list.component.html][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicle.component.html][content]" value="<article>
-  <div *ngIf=&quot;vehicle&quot;>
-    <h4>{{vehicle.name}} details</h4>
-
-    <div>
-      <label for=&quot;nametext&quot;>Name</label>
-      <input type=&quot;text&quot; id=&quot;nametext&quot; [(ngModel)]=&quot;vehicle.name&quot; />
-    </div>
-
-    <div>
-      <label for=&quot;typetext&quot;>Type</label>
-      <input type=&quot;text&quot; id=&quot;typetext&quot; [(ngModel)]=&quot;vehicle.type&quot; />
-    </div>
-  </div>
-</article>
-
-<!-- 
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
--->"><input type="hidden" name="entries[app/vehicles/vehicle.component.html][encoding]" value="utf8"><input type="hidden" name="entries[index.html][content]" value="<!DOCTYPE html>
-<html>
-
-<head>
-  <script>document.write('<base href=&quot;' + document.location + '&quot; />');</script>
-
-  <meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;>
-</head>
-
-<body>
-  <story-app>Loading Storyline Tracker ...</story-app>
-
-  <script src=&quot;https://npmcdn.com/core-js/client/shim.min.js&quot;></script>
-  <script src=&quot;https://npmcdn.com/zone.js@0.6.12?main=browser&quot;></script>
-  <script src=&quot;https://npmcdn.com/reflect-metadata@0.1.3&quot;></script>
-  <script src=&quot;https://npmcdn.com/systemjs@0.19.27/dist/system.src.js&quot;></script>
-
-  <script>
-    System.import('systemjs.config.js')
-      .then(function () { System.import('main') })
-      .catch(console.error.bind(console));
-  </script>
-</body>
-
-</html>
-
-
-<!-- 
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
--->"><input type="hidden" name="entries[index.html][encoding]" value="utf8"><input type="hidden" name="entries[api/characters.json][content]" value="{
-  &quot;data&quot;: [
-    {
-      &quot;id&quot;: 11,
-      &quot;name&quot;: &quot;Chewbacca&quot;,
-      &quot;side&quot;: &quot;light&quot;
-    },
-    {
-      &quot;id&quot;: 12,
-      &quot;name&quot;: &quot;Rey&quot;,
-      &quot;side&quot;: &quot;light&quot;
-    },
-    {
-      &quot;id&quot;: 13,
-      &quot;name&quot;: &quot;Finn (FN2187)&quot;,
-      &quot;side&quot;: &quot;light&quot;
-    },
-    {
-      &quot;id&quot;: 14,
-      &quot;name&quot;: &quot;Han Solo&quot;,
-      &quot;side&quot;: &quot;light&quot;
-    },
-    {
-      &quot;id&quot;: 15,
-      &quot;name&quot;: &quot;Leia Organa&quot;,
-      &quot;side&quot;: &quot;light&quot;
-    },
-    {
-      &quot;id&quot;: 16,
-      &quot;name&quot;: &quot;Luke Skywalker&quot;,
-      &quot;side&quot;: &quot;light&quot;
-    },
-    {
-      &quot;id&quot;: 17,
-      &quot;name&quot;: &quot;Poe Dameron&quot;,
-      &quot;side&quot;: &quot;light&quot;
-    },
-    {
-      &quot;id&quot;: 18,
-      &quot;name&quot;: &quot;Kylo Ren&quot;,
-      &quot;side&quot;: &quot;dark&quot;
-    },
-    {
-      &quot;id&quot;: 19,
-      &quot;name&quot;: &quot;Supreme Commander Snoke&quot;,
-      &quot;side&quot;: &quot;dark&quot;
-    },
-    {
-      &quot;id&quot;: 20,
-      &quot;name&quot;: &quot;R2-D2&quot;,
-      &quot;side&quot;: &quot;light&quot;
-    },
-    {
-      &quot;id&quot;: 21,
-      &quot;name&quot;: &quot;BB8&quot;,
-      &quot;side&quot;: &quot;light&quot;
-    },
-    {
-      &quot;id&quot;: 22,
-      &quot;name&quot;: &quot;C-3PO&quot;,
-      &quot;side&quot;: &quot;light&quot;
-    },
-    {
-      &quot;id&quot;: 23,
-      &quot;name&quot;: &quot;Maz Kanata&quot;,
-      &quot;side&quot;: &quot;light&quot;
-    },
-    {
-      &quot;id&quot;: 24,
-      &quot;name&quot;: &quot;Captain Phasma&quot;,
-      &quot;side&quot;: &quot;dark&quot;
-    },
-    {
-      &quot;id&quot;: 25,
-      &quot;name&quot;: &quot;General Hux&quot;,
-      &quot;side&quot;: &quot;dark&quot;
-    },
-    {
-      &quot;id&quot;: 26,
-      &quot;name&quot;: &quot;Lor San Tekka&quot;,
-      &quot;side&quot;: &quot;light&quot;
-    }
-  ]
-}"><input type="hidden" name="entries[api/characters.json][encoding]" value="utf8"><input type="hidden" name="entries[api/vehicles.json][content]" value="{
-  &quot;data&quot;: [
-    {
-      &quot;id&quot;: 30,
-      &quot;name&quot;: &quot;Millennium Falcon&quot;,
-      &quot;type&quot;: &quot;space&quot;
-    },
-    {
-      &quot;id&quot;: 31,
-      &quot;name&quot;: &quot;Y-Wing Fighter&quot;,
-      &quot;type&quot;: &quot;space&quot;
-    },
-    {
-      &quot;id&quot;: 32,
-      &quot;name&quot;: &quot;X-Wing Fighter&quot;,
-      &quot;type&quot;: &quot;space&quot;
-    },
-    {
-      &quot;id&quot;: 33,
-      &quot;name&quot;: &quot;Imperial Star Destroyer&quot;,
-      &quot;type&quot;: &quot;space&quot;
-    },
-    {
-      &quot;id&quot;: 34,
-      &quot;name&quot;: &quot;AT-AT Walker&quot;,
-      &quot;type&quot;: &quot;land&quot;
-    },
-    {
-      &quot;id&quot;: 35,
-      &quot;name&quot;: &quot;TIE Fighter&quot;,
-      &quot;type&quot;: &quot;space&quot;
-    },
-    {
-      &quot;id&quot;: 36,
-      &quot;name&quot;: &quot;B-Wing Fighter&quot;,
-      &quot;type&quot;: &quot;space&quot;
-    },
-    {
-      &quot;id&quot;: 37,
-      &quot;name&quot;: &quot;ETA-2 Jedi Starfighter&quot;,
-      &quot;type&quot;: &quot;space&quot;
-    },
-    {
-      &quot;id&quot;: 38,
-      &quot;name&quot;: &quot;TIE Interceptor&quot;,
-      &quot;type&quot;: &quot;space&quot;
-    },
-    {
-      &quot;id&quot;: 39,
-      &quot;name&quot;: &quot;X-34 Landspeeder&quot;,
-      &quot;type&quot;: &quot;land&quot;
-    },
-    {
-      &quot;id&quot;: 40,
-      &quot;name&quot;: &quot;Snow Speeder&quot;,
-      &quot;type&quot;: &quot;land&quot;
-    }
-  ]
-}"><input type="hidden" name="entries[api/vehicles.json][encoding]" value="utf8"><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="first look"><input type="hidden" name="tags[3]" value="angular 2"><input type="hidden" name="title" value="Angular 2 Example - Angular 2 - Eager Loaded Modules via Routes"><input type="hidden" name="source[type]" value="Angular 2 - Eager Loaded Modules via Routes"><input type="hidden" name="source[url]" value="https://angular.io"><input type="hidden" name="entries[README.md][content]" value="### Angular 2 First Look Example 
-
-Angular 2 - Eager Loaded Modules via Routes"><input type="hidden" name="entries[README.md][encoding]" value="utf8"><input type="hidden" name="entries[systemjs.config.js][content]" value="/**
- * PLUNKER VERSION (based on systemjs.config.js in angular.io)
- * System configuration for Angular 2 samples
- * Adjust as necessary for your application needs.
- */
-(function(global) {
-
-  var ngVer = '@2.0.0-rc.5'; // lock in the angular package version; do not let it float to current!
-  var routerVer = '@3.0.0-rc.1'; // lock router version
-  var formsVer = '@0.3.0'; // lock forms version
-  var routerDeprecatedVer = '@2.0.0-rc.2'; // temporarily until we update all the guides
-
-  //map tells the System loader where to look for things
-  var map = {
-    'app':                        'app',
-    'main':                       'main.js',
-
-    '@angular':                   'https://npmcdn.com/@angular', // sufficient if we didn't pin the version
-    '@angular/router':            'https://npmcdn.com/@angular/router' + routerVer,
-    '@angular/forms':             'https://npmcdn.com/@angular/forms' + formsVer,
-    '@angular/router-deprecated': 'https://npmcdn.com/@angular/router-deprecated' + routerDeprecatedVer,
-    'angular2-in-memory-web-api': 'https://npmcdn.com/angular2-in-memory-web-api', // get latest
-    'rxjs':                       'https://npmcdn.com/rxjs@5.0.0-beta.6',
-    'ts':                         'https://npmcdn.com/plugin-typescript@4.0.10/lib/plugin.js',
-    'typescript':                 'https://npmcdn.com/typescript@1.9.0-dev.20160409/lib/typescript.js',
- };
-
-  //packages tells the System loader how to load when no filename and/or no extension
-  var packages = {
-    'app':                        { main: 'main.ts',  defaultExtension: 'ts' },
-    'rxjs':                       { defaultExtension: 'js' },
-    'angular2-in-memory-web-api': { main: 'index.js', defaultExtension: 'js' },
-  };
-
-  var ngPackageNames = [
-    'common',
-    'compiler',
-    'core',
-    'http',
-    'platform-browser',
-    'platform-browser-dynamic',
-    'upgrade',
-  ];
-
-  // Add map entries for each angular package
-  // only because we're pinning the version with `ngVer`.
-  ngPackageNames.forEach(function(pkgName) {
-    map['@angular/'+pkgName] = 'https://npmcdn.com/@angular/' + pkgName + ngVer;
-  });
-
-  // Add package entries for angular packages
-  ngPackageNames.concat(['forms', 'router', 'router-deprecated']).forEach(function(pkgName) {
-
-    // Bundled (~40 requests):
-    packages['@angular/'+pkgName] = { main: '/bundles/' + pkgName + '.umd.js' };
-
-    // Individual files (~300 requests):
-    //packages['@angular/'+pkgName] = { main: 'index.js', defaultExtension: 'js' };
-  });
-
-  var config = {
-    // DEMO ONLY! REAL CODE SHOULD NOT TRANSPILE IN THE BROWSER
-    transpiler: 'ts',
-    typescriptOptions: {
-      tsconfig: true
-    },
-    meta: {
-      'typescript': {
-        &quot;exports&quot;: &quot;ts&quot;
-      }
-    },
-    map: map,
-    packages: packages
-  };
-
-  System.config(config);
-
-})(this);
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[systemjs.config.js][encoding]" value="utf8"><input type="hidden" name="entries[tsconfig.json][content]" value="{
-  &quot;compilerOptions&quot;: {
-    &quot;target&quot;: &quot;es5&quot;,
-    &quot;module&quot;: &quot;commonjs&quot;,
-    &quot;moduleResolution&quot;: &quot;node&quot;,
-    &quot;sourceMap&quot;: true,
-    &quot;emitDecoratorMetadata&quot;: true,
-    &quot;experimentalDecorators&quot;: true,
-    &quot;removeComments&quot;: false,
-    &quot;noImplicitAny&quot;: true,
-    &quot;suppressImplicitAnyIndexErrors&quot;: true
-  }
-}
-"><input type="hidden" name="entries[tsconfig.json][encoding]" value="utf8"></form><script>document.getElementById("mainForm").submit();</script></body></html>
