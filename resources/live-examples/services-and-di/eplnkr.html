@@ -1,13 +1,9 @@
 <html lang="en"><head></head><body><form id="mainForm" method="post" action="https://embed.plnkr.co?show=preview" target="eplnkr"><input type="hidden" name="entries[app/app.component.ts][content]" value="import { Component } from '@angular/core';
-import { CharacterService } from './character.service';
-import { CharacterListComponent } from './character-list.component';
 
 @Component({
   moduleId: module.id,
   selector: 'my-app',
-  template: '<my-character-list></my-character-list>',
-  directives: [CharacterListComponent],
-  providers: [CharacterService]
+  template: '<my-character-list></my-character-list>'
 })
 export class AppComponent {}
 
@@ -21,10 +17,18 @@ import { BrowserModule  } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
+import { CharacterComponent } from './character.component';
+import { CharacterListComponent } from './character-list.component';
+import { CharacterService } from './character.service';
 
 @NgModule({
   imports: [BrowserModule, FormsModule],
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent,
+    CharacterComponent,
+    CharacterListComponent
+  ],
+  providers: [CharacterService],
   bootstrap: [AppComponent],
 })
 export class AppModule { }
@@ -35,15 +39,14 @@ Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="entries[app/app.module.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/character-list.component.ts][content]" value="import { Component } from '@angular/core';
+
 import { Character, CharacterService } from './character.service';
-import { CharacterComponent } from './character.component';
 
 @Component({
   moduleId: module.id,
   selector: 'my-character-list',
   templateUrl: 'character-list.component.html',
-  styles: ['li {cursor: pointer;}'],
-  directives: [CharacterComponent]
+  styles: ['li {cursor: pointer;}']
 })
 export class CharacterListComponent {
   characters: Character[];
@@ -66,6 +69,7 @@ Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="entries[app/character-list.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/character.component.ts][content]" value="import { Component, Input } from '@angular/core';
+
 import { Character } from './character.service';
 
 @Component({
