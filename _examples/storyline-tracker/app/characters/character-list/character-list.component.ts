@@ -22,7 +22,7 @@ export class CharacterListComponent implements OnDestroy, OnInit {
     private filterService: FilterTextService) { }
 
   filterChanged(searchText: string) {
-    this.filteredCharacters = this.filterService.filter(searchText, ['id', 'name', 'twitter'], this.characters);
+    this.filteredCharacters = this.filterService.filter(searchText, ['id', 'name', 'side'], this.characters);
   }
 
   getCharacters() {

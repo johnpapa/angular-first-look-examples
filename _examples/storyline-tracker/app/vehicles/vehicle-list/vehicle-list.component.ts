@@ -24,7 +24,7 @@ export class VehicleListComponent implements OnDestroy, OnInit {
     private vehicleService: VehicleService) { }
 
   filterChanged(searchText: string) {
-    this.filteredVehicles = this.filterService.filter(searchText, ['id', 'name', 'level'], this.vehicles);
+    this.filteredVehicles = this.filterService.filter(searchText, ['id', 'name', 'type'], this.vehicles);
   }
 
   getVehicles() {

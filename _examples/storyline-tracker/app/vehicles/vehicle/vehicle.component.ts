@@ -100,7 +100,7 @@ export class VehicleComponent implements OnDestroy, OnInit, CanComponentDeactiva
       return;
     };
     if (this.isAddMode()) {
-      this.vehicle = <Vehicle>{name : '', level : ''};
+      this.vehicle = <Vehicle>{name : '', type : ''};
       this.editVehicle = this.entityService.clone(this.vehicle);
       return;
     }

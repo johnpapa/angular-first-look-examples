@@ -99,7 +99,7 @@ export class CharacterComponent implements OnDestroy, OnInit, CanComponentDeacti
   private getCharacter() {
     if (this.id === 0) { return; };
     if (this.isAddMode()) {
-      this.character = <Character>{ name: '', twitter: '' };
+      this.character = <Character>{ name: '', side: '' };
       this.editCharacter = this.entityService.clone(this.character);
       return;
     }

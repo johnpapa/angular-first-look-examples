@@ -231,7 +231,7 @@ export class CharacterListComponent implements OnDestroy, OnInit {
     private filterService: FilterTextService) { }
 
   filterChanged(searchText: string) {
-    this.filteredCharacters = this.filterService.filter(searchText, ['id', 'name', 'twitter'], this.characters);
+    this.filteredCharacters = this.filterService.filter(searchText, ['id', 'name', 'side'], this.characters);
   }
 
   getCharacters() {
@@ -366,7 +366,7 @@ export class CharacterComponent implements OnDestroy, OnInit, CanComponentDeacti
   private getCharacter() {
     if (this.id === 0) { return; };
     if (this.isAddMode()) {
-      this.character = <Character>{ name: '', twitter: '' };
+      this.character = <Character>{ name: '', side: '' };
       this.editCharacter = this.entityService.clone(this.character);
       return;
     }
@@ -1354,7 +1354,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/models/character.model.ts]" value="export class Character {
   id: number;
   name: string;
-  twitter: string;
+  side: string;
 }
 
 
@@ -1762,7 +1762,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/vehicles/shared/vehicle.model.ts]" value="export class Vehicle {
   id: number;
   name: string;
-  level: string;
+  type: string;
 }
 
 
@@ -1876,7 +1876,7 @@ export class VehicleListComponent implements OnDestroy, OnInit {
     private vehicleService: VehicleService) { }
 
   filterChanged(searchText: string) {
-    this.filteredVehicles = this.filterService.filter(searchText, ['id', 'name', 'level'], this.vehicles);
+    this.filteredVehicles = this.filterService.filter(searchText, ['id', 'name', 'type'], this.vehicles);
   }
 
   getVehicles() {
@@ -2018,7 +2018,7 @@ export class VehicleComponent implements OnDestroy, OnInit, CanComponentDeactiva
       return;
     };
     if (this.isAddMode()) {
-      this.vehicle = <Vehicle>{name : '', level : ''};
+      this.vehicle = <Vehicle>{name : '', type : ''};
       this.editVehicle = this.entityService.clone(this.vehicle);
       return;
     }
@@ -17281,8 +17281,8 @@ can be found in the LICENSE file at http://bit.ly/l1cense
     </div>
 
     <div class=&quot;mdl-textfield mdl-js-textfield mdl-textfield--floating-label&quot;>
-      <label class=&quot;mdl-textfield__label&quot; for=&quot;twittertext&quot;>Twitter</label>
-      <input type=&quot;text&quot; id=&quot;twittertext&quot; class=&quot;mdl-textfield__input&quot; [(ngModel)]=&quot;editCharacter.twitter&quot; />
+      <label class=&quot;mdl-textfield__label&quot; for=&quot;sidetext&quot;>Side</label>
+      <input type=&quot;text&quot; id=&quot;sidetext&quot; class=&quot;mdl-textfield__input&quot; [(ngModel)]=&quot;editCharacter.side&quot; />
     </div>
 
     <div>
@@ -17469,8 +17469,8 @@ can be found in the LICENSE file at http://bit.ly/l1cense
     </div>
 
     <div class=&quot;mdl-textfield mdl-js-textfield mdl-textfield--floating-label&quot;>
-      <label class=&quot;mdl-textfield__label&quot; for=&quot;levelText&quot;>Level</label>
-      <input type=&quot;text&quot; id=&quot;levelText&quot; class=&quot;mdl-textfield__input&quot; [(ngModel)]=&quot;editVehicle.level&quot; />
+      <label class=&quot;mdl-textfield__label&quot; for=&quot;typeText&quot;>Type</label>
+      <input type=&quot;text&quot; id=&quot;typeText&quot; class=&quot;mdl-textfield__input&quot; [(ngModel)]=&quot;editVehicle.type&quot; />
     </div>
 
     <div>
