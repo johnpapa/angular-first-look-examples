@@ -6,7 +6,7 @@ import { PageNotFoundComponent } from './page-not-found.component';
 import { VehicleListComponent } from './vehicles/vehicle-list.component';
 import { VehicleComponent } from './vehicles/vehicle.component';
 
-export const routes: Routes = [
+const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'characters', },
   { path: 'characters', component: CharacterListComponent },
   { path: 'character/:id', component: CharacterComponent },

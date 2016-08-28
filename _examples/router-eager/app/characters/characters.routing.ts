@@ -4,7 +4,7 @@ import { CharacterComponent } from './character.component';
 import { CharactersComponent } from './characters.component';
 import { CharacterListComponent } from './character-list.component';
 
-export const routes: Routes = [
+const routes: Routes = [
   // { path: '', pathMatch: 'full', redirectTo: '/characters' },
   {
     path: 'characters',
