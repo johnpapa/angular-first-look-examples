@@ -253,8 +253,8 @@ export const routing = RouterModule.forRoot(routes);
 
 routing.providers.push([
   CanActivateAuthGuard,
- &nbsp;CanDeactivateGuard,
- &nbsp;UserProfileService
+  CanDeactivateGuard,
+  UserProfileService
 ]);
 
 
@@ -677,11 +677,11 @@ import { ToastModule } from './toast/toast.module';
     CommonModule, FormsModule, RouterModule,
     ModalModule, SpinnerModule, ToastModule
   ],
- &nbsp;exports: [
+  exports: [
     CommonModule, FormsModule, RouterModule,
     ModalModule, SpinnerModule, ToastModule, [NavComponent]
   ],
- &nbsp;declarations: [NavComponent],
+  declarations: [NavComponent],
   providers: [
     EntityService,
     ExceptionService,
@@ -1416,7 +1416,7 @@ import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [SharedModule, routing],
- &nbsp;declarations: [routedComponents],
+  declarations: [routedComponents],
 })
 export class LoginModule { }
 
@@ -1704,7 +1704,7 @@ export class InitCapsPipe implements PipeTransform {
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="files[app/shared/shared.module.ts]" value="import { NgModule, ModuleWithProviders } &nbsp;from '@angular/core';
+*/"><input type="hidden" name="files[app/shared/shared.module.ts]" value="import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -1721,8 +1721,8 @@ import { InitCapsPipe } from './init-caps.pipe';
 // Even so, we import/export both of these because most other modules will import SharedModule and will need them.
 @NgModule({
   imports: [CommonModule, FilterTextModule, FormsModule],
- &nbsp;exports: [CommonModule, FilterTextModule, FormsModule, InitCapsPipe],
- &nbsp;declarations: [InitCapsPipe],
+  exports: [CommonModule, FilterTextModule, FormsModule, InitCapsPipe],
+  declarations: [InitCapsPipe],
 })
 export class SharedModule { }
 
@@ -6493,12 +6493,6 @@ can be found in the LICENSE file at http://bit.ly/l1cense
   }
 }
 
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="files[app/shared/filter-text/filter-text.component.css]" value="
 
 /*
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.

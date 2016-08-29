@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 
-import { VehicleButtonComponent } from './shared/vehicle-button/Vehicle-button.component';
+import { VehicleButtonComponent } from './shared/vehicle-button/vehicle-button.component';
 
 // routing = routingModuleWithProvidersAndRouteConfiguration
 import { routing, routedComponents } from './vehicles.routing';

@@ -5,6 +5,6 @@ import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [SharedModule, routing],
-  declarations: [routedComponents],
+  declarations: [routedComponents],
 })
 export class LoginModule { }

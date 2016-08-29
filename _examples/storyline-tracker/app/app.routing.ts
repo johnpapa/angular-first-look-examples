@@ -45,6 +45,6 @@ export const routing = RouterModule.forRoot(routes);
 
 routing.providers.push([
   CanActivateAuthGuard,
-  CanDeactivateGuard,
-  UserProfileService
+  CanDeactivateGuard,
+  UserProfileService
 ]);

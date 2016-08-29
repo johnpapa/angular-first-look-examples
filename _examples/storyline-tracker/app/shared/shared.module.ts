@@ -1,4 +1,4 @@
-import { NgModule, ModuleWithProviders }  from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -15,7 +15,7 @@ import { InitCapsPipe } from './init-caps.pipe';
 // Even so, we import/export both of these because most other modules will import SharedModule and will need them.
 @NgModule({
   imports: [CommonModule, FilterTextModule, FormsModule],
-  exports: [CommonModule, FilterTextModule, FormsModule, InitCapsPipe],
-  declarations: [InitCapsPipe],
+  exports: [CommonModule, FilterTextModule, FormsModule, InitCapsPipe],
+  declarations: [InitCapsPipe],
 })
 export class SharedModule { }

@@ -22,11 +22,11 @@ import { ToastModule } from './toast/toast.module';
     CommonModule, FormsModule, RouterModule,
     ModalModule, SpinnerModule, ToastModule
   ],
-  exports: [
+  exports: [
     CommonModule, FormsModule, RouterModule,
     ModalModule, SpinnerModule, ToastModule, [NavComponent]
   ],
-  declarations: [NavComponent],
+  declarations: [NavComponent],
   providers: [
     EntityService,
     ExceptionService,
