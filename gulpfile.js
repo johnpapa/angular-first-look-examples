@@ -476,9 +476,9 @@ function copyExampleBoilerplate() {
   var sourceFiles = _exampleBoilerplateFiles.map(function(fn) {
     return path.join(EXAMPLES_PATH, fn);
   });
-  console.log(`sourceFiles=${sourceFiles.toString()}`)
+  // console.log(`sourceFiles=${sourceFiles.toString()}`)
   var examplePaths = excludeDartPaths(getExamplePaths(EXAMPLES_PATH));
-  console.log(`examplePaths=${examplePaths}`)
+  // console.log(`examplePaths=${examplePaths}`)
 
   // var dartWebSourceFiles = _exampleDartWebBoilerPlateFiles.map(function(fn){
   //   return path.join(EXAMPLES_PATH, fn);

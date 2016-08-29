@@ -21,7 +21,7 @@ class PlunkerBuilder {
 
     this._buildCopyrightStrings();
 
-    console.log(basePath, destPath);
+    // console.log(basePath, destPath);
   }
 
   buildPlunkers() {
