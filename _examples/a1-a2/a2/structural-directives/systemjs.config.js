@@ -26,7 +26,6 @@
     // App specific barrels.
     'app/core',
     'app/models',
-    'app/routing',
   ];
 
   barrels.forEach((barrelName) => {

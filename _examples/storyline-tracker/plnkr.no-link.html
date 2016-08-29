@@ -171,15 +171,13 @@ Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/app.module.ts]" value="import { NgModule } from '@angular/core';
 import { BrowserModule  } from '@angular/platform-browser';
-// import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-
 import { AppComponent } from './app.component';
 
 import './core/rxjs-extensions';
 import { InMemoryWebApiModule } from 'angular2-in-memory-web-api';
 import { InMemoryStoreService } from '../api/in-memory-store.service';
-import { routing } from './routing/app.routing';
+import { routing } from './app.routing';
 import { CharacterService } from './models';
 import { PageNotFoundComponent } from './page-not-found.component';
 
@@ -191,10 +189,11 @@ import { LoginModule } from './login/login.module';
   imports: [
     BrowserModule,
     HttpModule,
+
+    CoreModule,
     InMemoryWebApiModule.forRoot(InMemoryStoreService, { delay: 600 }),
     LoginModule,
     routing,
-    CoreModule,
   ],
   declarations: [AppComponent, PageNotFoundComponent],
   providers: [CharacterService],
@@ -207,12 +206,68 @@ export class AppModule { }
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="files[app/app.routing.ts]" value="import { Routes, RouterModule } from '@angular/router';
+
+import { CanActivateAuthGuard, CanDeactivateGuard, UserProfileService } from './core';
+import { PageNotFoundComponent } from './page-not-found.component';
+
+/***************************************************************
+* Lazy Loading to Eager Loading
+*
+* 1. Remove the module and NgModule imports in `app.module.ts`
+*
+* 2. Remove the lazy load route from `app.routing.ts`
+*
+* 3. Change the module's default route path from '' to 'pathname'
+*****************************************************************/
+const routes: Routes = [
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'dashboard',
+  },
+  {
+    path: 'dashboard',
+    loadChildren: 'app/dashboard/dashboard.module#DashboardModule'
+  },
+  {
+    path: 'characters',
+    loadChildren: 'app/characters/characters.module#CharactersModule',
+    canActivate: [CanActivateAuthGuard],
+    // canLoad: [CanActivateAuthGuard],
+  },
+  {
+    path: 'vehicles',
+    loadChildren: 'app/vehicles/vehicles.module#VehiclesModule',
+    canActivate: [CanActivateAuthGuard],
+    // canLoad: [CanActivateAuthGuard],
+  },
+  {
+    path: '**',
+    pathMatch: 'full',
+    component: PageNotFoundComponent
+  },
+];
+
+export const routing = RouterModule.forRoot(routes);
+
+routing.providers.push([
+  CanActivateAuthGuard,
+ &nbsp;CanDeactivateGuard,
+ &nbsp;UserProfileService
+]);
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/characters/character-list/character-list.component.ts]" value="import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs/subscription';
 
-import { Character, CharacterService } from '../../../app/models';
-import { FilterTextComponent } from '../../../app/shared/filter-text/filter-text.component';
-import { FilterTextService } from '../../../app/shared/filter-text/filter-text.service';
+import { Character, CharacterService } from '../../models';
+import { FilterTextComponent } from '../../shared/filter-text/filter-text.component';
+import { FilterTextService } from '../../shared/filter-text/filter-text.service';
 
 @Component({
   moduleId: module.id,
@@ -269,10 +324,8 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
-import { CanComponentDeactivate } from '../../routing';
-
-import { Character, CharacterService } from '../../../app/models';
-import { EntityService, ModalService, ToastService } from '../../../app/core';
+import { Character, CharacterService } from '../../models';
+import { CanComponentDeactivate, EntityService, ModalService, ToastService } from '../../core';
 
 @Component({
   moduleId: module.id,
@@ -436,7 +489,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 import { CharacterListComponent } from './character-list/character-list.component';
 import { CharacterComponent } from './character/character.component';
 import { CharactersComponent } from './characters.component';
-import { CanDeactivateGuard, CanActivateAuthGuard } from '../routing';
+import { CanDeactivateGuard } from '../core';
 
 const routes: Routes = [
   {
@@ -454,8 +507,7 @@ const routes: Routes = [
       },
     ]
   },
-]; RouterModule
-
+];
 
 export const routing = RouterModule.forChild(routes);
 
@@ -468,7 +520,7 @@ Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/characters/shared/character-button/character-button.component.ts]" value="import { Component, Input, OnInit } from '@angular/core';
 
-import { Character } from '../../../../app/models';
+import { Character } from '../../../models';
 
 @Component({
   moduleId: module.id,
@@ -493,7 +545,7 @@ Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/characters/shared/sort-characters.pipe.ts]" value="import { Pipe, PipeTransform } from '@angular/core';
 
-import { Character } from '../../../app/models';
+import { Character } from '../../models';
 
 @Pipe({ name: 'sortCharacters' })
 export class SortCharactersPipe implements PipeTransform {
@@ -505,6 +557,80 @@ export class SortCharactersPipe implements PipeTransform {
       if (a.name > b.name) { return 1; }
       return 0;
     });
+  }
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="files[app/core/can-activate-auth.service.ts]" value="import { Injectable } from '@angular/core';
+import {
+  CanActivate,
+  CanLoad,
+  Route,
+  Router,
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot
+} from '@angular/router';
+
+import { UserProfileService } from './user-profile.service';
+
+@Injectable()
+export class CanActivateAuthGuard implements CanActivate, CanLoad {
+  constructor(private userProfileService: UserProfileService, private router: Router) { }
+
+  canLoad(route: Route) {
+    return this.userProfileService.isLoggedIn;
+  }
+
+  canActivate(
+    next: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ) {
+    if (this.userProfileService.isLoggedIn) {
+      return true;
+    }
+    this.router.navigate(['/login'], { queryParams: { redirectTo: state.url }});
+
+    return false;
+  }
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="files[app/core/can-deactivate.service.ts]" value="import { CanDeactivate } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+
+export interface CanComponentDeactivate {
+  canDeactivate: () => any; // boolean|Promise<boolean>|Observable<boolean>;
+}
+
+export class CanDeactivateGuard implements CanDeactivate<CanComponentDeactivate> {
+  canDeactivate(component: CanComponentDeactivate): Observable<boolean> | boolean {
+    // run the function for canDeactivate and if its a promise or a boolean we handle it either way
+
+    // return true;
+
+    // if (component.canDeactivate) {
+    //   let deactivate = component.canDeactivate();
+    //   return this.toObservable(deactivate);
+    // } else {
+    //   return true;
+    // }
+
+    return component.canDeactivate ?
+      this.toObservable(component.canDeactivate()) : true;
+  }
+
+  private toObservable(deactivate: Promise<boolean> | boolean ): Observable<boolean> | boolean {
+    let p = Promise.resolve(deactivate);
+    let o = Observable.fromPromise(p);
+    return o;
   }
 }
 
@@ -617,6 +743,8 @@ Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/core/index.ts]" value="export * from './config';
+export * from './can-activate-auth.service';
+export * from './can-deactivate.service';
 export * from './entity.service';
 export * from './exception.service';
 export * from './message.service';
@@ -1166,7 +1294,7 @@ Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/dashboard/dashboard.module.ts]" value="import { NgModule } from '@angular/core';
 
-import { DashboardButtonComponent } from './shared/story-button/story-button.component';
+import { DashboardButtonComponent } from './shared/dashboard-button/dashboard-button.component';
 import { routing, routedComponents } from './dashboard.routing';
 import { SharedModule } from '../shared/shared.module';
 
@@ -1198,15 +1326,15 @@ export const routedComponents = routes.filter(r => r.component != undefined).map
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="files[app/dashboard/shared/story-button/story-button.component.ts]" value="import { Component, Input, OnInit } from '@angular/core';
+*/"><input type="hidden" name="files[app/dashboard/shared/dashboard-button/dashboard-button.component.ts]" value="import { Component, Input, OnInit } from '@angular/core';
 
-import { Character } from '../../../../app/models';
+import { Character } from '../../../models';
 
 @Component({
   moduleId: module.id,
-  selector: 'story-button',
-  templateUrl: 'story-button.component.html',
-  styleUrls: ['story-button.component.css']
+  selector: 'story-dashboard-button',
+  templateUrl: 'dashboard-button.component.html',
+  styleUrls: ['dashboard-button.component.css']
 })
 export class DashboardButtonComponent implements OnInit {
   @Input() character: Character;
@@ -1469,137 +1597,6 @@ export class PageNotFoundComponent { }
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="files[app/routing/app.routing.ts]" value="import { Routes, RouterModule } from '@angular/router';
-
-import { CanActivateAuthGuard } from './can-activate-auth.service';
-import { CanDeactivateGuard } from './can-deactivate.service';
-import { UserProfileService } from '../core';
-import { PageNotFoundComponent } from '../page-not-found.component';
-
-const routes: Routes = [
-  {
-    path: '',
-    pathMatch: 'full',
-    redirectTo: 'dashboard',
-  },
-  {
-    path: 'dashboard',
-    loadChildren: 'app/dashboard/dashboard.module#DashboardModule'
-  },
-  {
-    path: 'characters',
-    loadChildren: 'app/characters/characters.module#CharactersModule',
-    canActivate: [CanActivateAuthGuard],
-    // canLoad: [CanActivateAuthGuard],
-  },
-  {
-    path: 'vehicles',
-    loadChildren: 'app/vehicles/vehicles.module#VehiclesModule',
-    canActivate: [CanActivateAuthGuard],
-    // canLoad: [CanActivateAuthGuard],
-  },
-  {
-    path: '**',
-    pathMatch: 'full',
-    component: PageNotFoundComponent
-  },
-];
-
-export const routing = RouterModule.forRoot(routes);
-
-routing.providers.push([
-  CanActivateAuthGuard,
- &nbsp;CanDeactivateGuard,
- &nbsp;UserProfileService
-]);
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="files[app/routing/can-activate-auth.service.ts]" value="import { Injectable } from '@angular/core';
-import {
-  CanActivate,
-  CanLoad,
-  Route,
-  Router,
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot
-} from '@angular/router';
-
-import { UserProfileService } from '../core';
-
-@Injectable()
-export class CanActivateAuthGuard implements CanActivate, CanLoad {
-  constructor(private userProfileService: UserProfileService, private router: Router) { }
-
-  canLoad(route: Route) {
-    return this.userProfileService.isLoggedIn;
-  }
-
-  canActivate(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ) {
-    if (this.userProfileService.isLoggedIn) {
-      return true;
-    }
-    this.router.navigate(['/login'], { queryParams: { redirectTo: state.url }});
-
-    return false;
-  }
-}
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="files[app/routing/can-deactivate.service.ts]" value="import { CanDeactivate } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
-
-export interface CanComponentDeactivate {
-  canDeactivate: () => any; // boolean|Promise<boolean>|Observable<boolean>;
-}
-
-export class CanDeactivateGuard implements CanDeactivate<CanComponentDeactivate> {
-  canDeactivate(component: CanComponentDeactivate): Observable<boolean> | boolean {
-    // run the function for canDeactivate and if its a promise or a boolean we handle it either way
-
-    // return true;
-
-    // if (component.canDeactivate) {
-    //   let deactivate = component.canDeactivate();
-    //   return this.toObservable(deactivate);
-    // } else {
-    //   return true;
-    // }
-
-    return component.canDeactivate ?
-      this.toObservable(component.canDeactivate()) : true;
-  }
-
-  private toObservable(deactivate: Promise<boolean> | boolean ): Observable<boolean> | boolean {
-    let p = Promise.resolve(deactivate);
-    let o = Observable.fromPromise(p);
-    return o;
-  }
-}
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="files[app/routing/index.ts]" value="export * from './can-activate-auth.service';
-export * from './can-deactivate.service';
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/shared/filter-text/filter-text.component.ts]" value="import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
@@ -1775,7 +1772,7 @@ import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
 import { Vehicle } from './vehicle.model';
-import { CONFIG, ExceptionService, MessageService, SpinnerService } from '../../../app/core';
+import { CONFIG, ExceptionService, MessageService, SpinnerService } from '../../core';
 
 let vehiclesUrl = CONFIG.baseUrls.vehicles;
 
@@ -1853,8 +1850,8 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/vehicles/vehicle-list/vehicle-list.component.ts]" value="import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
-import { FilterTextComponent } from '../../../app/shared/filter-text/filter-text.component';
-import { FilterTextService } from '../../../app/shared/filter-text/filter-text.service';
+import { FilterTextComponent } from '../../shared/filter-text/filter-text.component';
+import { FilterTextService } from '../../shared/filter-text/filter-text.service';
 import { Vehicle } from '../shared/vehicle.model';
 import { VehicleService } from '../shared/vehicle.service';
 
@@ -1920,8 +1917,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
-import { CanComponentDeactivate } from '../../routing';
-import { EntityService, ModalService, ToastService } from '../../../app/core';
+import { CanComponentDeactivate, EntityService, ModalService, ToastService } from '../../core';
 import { Vehicle } from '../shared/vehicle.model';
 import { VehicleService } from '../shared/vehicle.service';
 
@@ -2101,7 +2097,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 import { VehicleListComponent } from './vehicle-list/vehicle-list.component';
 import { VehicleComponent } from './vehicle/vehicle.component';
 import { VehiclesComponent } from './vehicles.component';
-import { CanDeactivateGuard, CanActivateAuthGuard } from '../routing';
+import { CanDeactivateGuard } from '../core';
 
 const routes: Routes = [
   {
@@ -6265,8 +6261,8 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="files[app/characters/shared/character-button/character-button.component.css]" value="    .mdl-card__title-text {font-size: 16px;}
-    .mdl-card {min-height: 60px;}
+*/"><input type="hidden" name="files[app/characters/shared/character-button/character-button.component.css]" value=".mdl-card__title-text {font-size: 16px;}
+.mdl-card {min-height: 60px;}
 
 
 /*
@@ -6385,6 +6381,12 @@ can be found in the LICENSE file at http://bit.ly/l1cense
   }
 }
 
+@media (max-width: 320px) {
+  a.nav-link {
+    font-size: 12px;
+  }
+}
+
 
 /*
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
@@ -6468,7 +6470,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="files[app/dashboard/shared/story-button/story-button.component.css]" value="button {
+*/"><input type="hidden" name="files[app/dashboard/shared/dashboard-button/dashboard-button.component.css]" value="button {
   width: 200px;height: 70px;
   /*border-bottom: rgb(83,109,254) 4px solid;*/
   /*background: rgb(255,64,129);*/
@@ -6502,8 +6504,8 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="files[app/vehicles/shared/vehicle-button/vehicle-button.component.css]" value="    .mdl-card__title-text {font-size: 16px;}
-    .mdl-card {min-height: 60px;}
+*/"><input type="hidden" name="files[app/vehicles/shared/vehicle-button/vehicle-button.component.css]" value=".mdl-card__title-text {font-size: 16px;}
+.mdl-card {min-height: 60px;}
 
 
 /*
@@ -9895,6 +9897,15 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 
 .not-displayed {
   display: none;
+}
+
+.story-card { max-width: 100% }
+
+@media (max-width: 320px) {
+  .story-button {
+    font-size: 12px;
+    padding: 0em;
+  }
 }
 
 @-webkit-keyframes slideInRight {
@@ -17289,13 +17300,13 @@ can be found in the LICENSE file at http://bit.ly/l1cense
     </div>
 
     <div>
-      <button class=&quot;story-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect
+      <button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect
       mdl-button--accent&quot; (click)=&quot;save()&quot;>Save</button>
       &amp;nbsp;
-      <button class=&quot;story-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect
+      <button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect
       &quot; (click)=&quot;cancel()&quot; [class.not-displayed]=&quot;isAddMode()&quot;>Cancel</button>
       &amp;nbsp;
-      <button class=&quot;story-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot; (click)=&quot;delete()&quot; [class.not-displayed]=&quot;isAddMode()&quot;>Delete</button>
+      <button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot; (click)=&quot;delete()&quot; [class.not-displayed]=&quot;isAddMode()&quot;>Delete</button>
     </div>
 
   </div>
@@ -17306,7 +17317,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
--->"><input type="hidden" name="files[app/characters/shared/character-button/character-button.component.html]" value="<div class=&quot;mdl-card mdl-shadow--2dp&quot;>
+-->"><input type="hidden" name="files[app/characters/shared/character-button/character-button.component.html]" value="<div class=&quot;mdl-card mdl-shadow--2dp story-card&quot;>
   <div class=&quot;mdl-card__title&quot;>
     <h2 class=&quot;mdl-card__title-text&quot;>{{character.id}}. {{character.name}}</h2>
   </div>
@@ -17384,7 +17395,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
       <div class=&quot;mdl-cell mdl-cell--3-col&quot;
         *ngFor=&quot;let character of characters | async;trackBy:trackByCharacters&quot;
         (click)=&quot;gotoDetail(character)&quot;>
-        <story-button [character]=&quot;character&quot;></story-button>
+        <story-dashboard-button [character]=&quot;character&quot;></story-dashboard-button>
       </div>
     </div>
   </div>
@@ -17395,7 +17406,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
--->"><input type="hidden" name="files[app/dashboard/shared/story-button/story-button.component.html]" value="<button class=&quot;story-button mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent mdl-button--raised&quot;>{{character.name}}</button>
+-->"><input type="hidden" name="files[app/dashboard/shared/dashboard-button/dashboard-button.component.html]" value="<button class=&quot;story-button mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent mdl-button--raised&quot;>{{character.name}}</button>
 
 
 <!-- 
@@ -17426,7 +17437,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
--->"><input type="hidden" name="files[app/vehicles/shared/vehicle-button/vehicle-button.component.html]" value="<div class=&quot;mdl-card mdl-shadow--2dp&quot;>
+-->"><input type="hidden" name="files[app/vehicles/shared/vehicle-button/vehicle-button.component.html]" value="<div class=&quot;mdl-card mdl-shadow--2dp story-card&quot;>
   <div class=&quot;mdl-card__title&quot;>
     <h2 class=&quot;mdl-card__title-text&quot;>{{vehicle.id}}. {{vehicle.name | initCaps}}</h2>
   </div>
@@ -18779,7 +18790,6 @@ can be found in the LICENSE file at http://bit.ly/l1cense
     // App specific barrels.
     'app/core',
     'app/models',
-    'app/routing',
   ];
 
   barrels.forEach((barrelName) => {
