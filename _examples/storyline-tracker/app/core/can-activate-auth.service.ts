@@ -8,7 +8,7 @@ import {
   RouterStateSnapshot
 } from '@angular/router';
 
-import { UserProfileService } from '../core';
+import { UserProfileService } from './user-profile.service';
 
 @Injectable()
 export class CanActivateAuthGuard implements CanActivate, CanLoad {

@@ -9,6 +9,15 @@
   display: none;
 }
 
+.story-card { max-width: 100% }
+
+@media (max-width: 320px) {
+  .story-button {
+    font-size: 12px;
+    padding: 0em;
+  }
+}
+
 @-webkit-keyframes slideInRight {
   from {
     -webkit-transform: translate3d(5%, 0, 0);

@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { VehicleListComponent } from './vehicle-list/vehicle-list.component';
 import { VehicleComponent } from './vehicle/vehicle.component';
 import { VehiclesComponent } from './vehicles.component';
-import { CanDeactivateGuard, CanActivateAuthGuard } from '../routing';
+import { CanDeactivateGuard } from '../core';
 
 const routes: Routes = [
   {

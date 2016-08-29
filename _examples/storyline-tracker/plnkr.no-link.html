@@ -1166,7 +1166,7 @@ Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/dashboard/dashboard.module.ts]" value="import { NgModule } from '@angular/core';
 
-import { DashboardButtonComponent } from './shared/dashboard-button/dashboard-button.component';
+import { DashboardButtonComponent } from './shared/story-button/story-button.component';
 import { routing, routedComponents } from './dashboard.routing';
 import { SharedModule } from '../shared/shared.module';
 
@@ -1198,15 +1198,15 @@ export const routedComponents = routes.filter(r => r.component != undefined).map
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="files[app/dashboard/shared/dashboard-button/dashboard-button.component.ts]" value="import { Component, Input, OnInit } from '@angular/core';
+*/"><input type="hidden" name="files[app/dashboard/shared/story-button/story-button.component.ts]" value="import { Component, Input, OnInit } from '@angular/core';
 
 import { Character } from '../../../../app/models';
 
 @Component({
   moduleId: module.id,
-  selector: 'story-dashboard-button',
-  templateUrl: 'dashboard-button.component.html',
-  styleUrls: ['dashboard-button.component.css']
+  selector: 'story-button',
+  templateUrl: 'story-button.component.html',
+  styleUrls: ['story-button.component.css']
 })
 export class DashboardButtonComponent implements OnInit {
   @Input() character: Character;
@@ -1476,7 +1476,7 @@ import { CanDeactivateGuard } from './can-deactivate.service';
 import { UserProfileService } from '../core';
 import { PageNotFoundComponent } from '../page-not-found.component';
 
-export const routes: Routes = [
+const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
@@ -6468,7 +6468,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="files[app/dashboard/shared/dashboard-button/dashboard-button.component.css]" value="button {
+*/"><input type="hidden" name="files[app/dashboard/shared/story-button/story-button.component.css]" value="button {
   width: 200px;height: 70px;
   /*border-bottom: rgb(83,109,254) 4px solid;*/
   /*background: rgb(255,64,129);*/
@@ -17256,7 +17256,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 -->"><input type="hidden" name="files[app/characters/character-list/character-list.component.html]" value="<article class=&quot;template animated slideInRight&quot;>
   <h4>Characters</h4>
 
-  <a href=&quot;&quot; [routerLink]=&quot;['/characters', 'new']&quot;><button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot;>Add</button></a>
+  <a href=&quot;&quot; [routerLink]=&quot;['/characters', 'new']&quot;><button class=&quot;story-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot;>Add</button></a>
 
   <story-filter-text (changed)=&quot;filterChanged($event)&quot;></story-filter-text>
 
@@ -17289,13 +17289,13 @@ can be found in the LICENSE file at http://bit.ly/l1cense
     </div>
 
     <div>
-      <button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect
+      <button class=&quot;story-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect
       mdl-button--accent&quot; (click)=&quot;save()&quot;>Save</button>
       &amp;nbsp;
-      <button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect
+      <button class=&quot;story-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect
       &quot; (click)=&quot;cancel()&quot; [class.not-displayed]=&quot;isAddMode()&quot;>Cancel</button>
       &amp;nbsp;
-      <button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot; (click)=&quot;delete()&quot; [class.not-displayed]=&quot;isAddMode()&quot;>Delete</button>
+      <button class=&quot;story-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot; (click)=&quot;delete()&quot; [class.not-displayed]=&quot;isAddMode()&quot;>Delete</button>
     </div>
 
   </div>
@@ -17384,7 +17384,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
       <div class=&quot;mdl-cell mdl-cell--3-col&quot;
         *ngFor=&quot;let character of characters | async;trackBy:trackByCharacters&quot;
         (click)=&quot;gotoDetail(character)&quot;>
-        <story-dashboard-button [character]=&quot;character&quot;></story-dashboard-button>
+        <story-button [character]=&quot;character&quot;></story-button>
       </div>
     </div>
   </div>
@@ -17395,7 +17395,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
--->"><input type="hidden" name="files[app/dashboard/shared/dashboard-button/dashboard-button.component.html]" value="<button class=&quot;dashboard-button mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent mdl-button--raised&quot;>{{character.name}}</button>
+-->"><input type="hidden" name="files[app/dashboard/shared/story-button/story-button.component.html]" value="<button class=&quot;story-button mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent mdl-button--raised&quot;>{{character.name}}</button>
 
 
 <!-- 
@@ -17447,7 +17447,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 -->"><input type="hidden" name="files[app/vehicles/vehicle-list/vehicle-list.component.html]" value="<article class=&quot;template animated slideInRight&quot;>
   <h4>Vehicles</h4>
 
-  <a href=&quot;&quot; [routerLink]=&quot;['/vehicles', 'new']&quot;><button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot;>Add</button></a>
+  <a href=&quot;&quot; [routerLink]=&quot;['/vehicles', 'new']&quot;><button class=&quot;story-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot;>Add</button></a>
 
   <story-filter-text (changed)=&quot;filterChanged($event)&quot;></story-filter-text>
 
@@ -17478,12 +17478,12 @@ can be found in the LICENSE file at http://bit.ly/l1cense
     </div>
 
     <div>
-      <button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect
+      <button class=&quot;story-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect
       mdl-button--accent&quot; (click)=&quot;save()&quot;>Save</button>
       &amp;nbsp;
-      <button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot; (click)=&quot;cancel()&quot; [class.not-displayed]=&quot;isAddMode()&quot;>Cancel</button>
+      <button class=&quot;story-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot; (click)=&quot;cancel()&quot; [class.not-displayed]=&quot;isAddMode()&quot;>Cancel</button>
       &amp;nbsp;
-      <button class=&quot;dashboard-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot; (click)=&quot;delete()&quot; [class.not-displayed]=&quot;isAddMode()&quot;>Delete</button>
+      <button class=&quot;story-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect&quot; (click)=&quot;delete()&quot; [class.not-displayed]=&quot;isAddMode()&quot;>Delete</button>
     </div>
 
   </div>

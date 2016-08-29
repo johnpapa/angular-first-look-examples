@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { Character } from '../../../app/models';
+import { Character } from '../../models';
 
 @Pipe({ name: 'sortCharacters' })
 export class SortCharactersPipe implements PipeTransform {

@@ -2,10 +2,8 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
-import { CanComponentDeactivate } from '../../routing';
-
-import { Character, CharacterService } from '../../../app/models';
-import { EntityService, ModalService, ToastService } from '../../../app/core';
+import { Character, CharacterService } from '../../models';
+import { CanComponentDeactivate, EntityService, ModalService, ToastService } from '../../core';
 
 @Component({
   moduleId: module.id,

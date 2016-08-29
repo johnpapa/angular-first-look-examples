@@ -50,7 +50,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 
 import { PageNotFoundComponent } from './page-not-found.component';
 
-export const routes: Routes = [
+const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/characters' },
   { path: 'vehicles', loadChildren: 'app/vehicles/vehicles.module#VehiclesModule' },
   { path: '**', pathMatch: 'full', component: PageNotFoundComponent },
@@ -224,7 +224,7 @@ import { CharacterComponent } from './character.component';
 import { CharactersComponent } from './characters.component';
 import { CharacterListComponent } from './character-list.component';
 
-export const routes: Routes = [
+const routes: Routes = [
   // { path: '', pathMatch: 'full', redirectTo: '/characters' },
   {
     path: 'characters',
@@ -454,7 +454,7 @@ import { VehicleComponent } from './vehicle.component';
 import { VehiclesComponent } from './vehicles.component';
 import { VehicleListComponent } from './vehicle-list.component';
 
-export const routes: Routes = [
+const routes: Routes = [
   {
     path: '',
     component: VehiclesComponent,

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { Character } from '../../../../app/models';
+import { Character } from '../../../models';
 
 @Component({
   moduleId: module.id,

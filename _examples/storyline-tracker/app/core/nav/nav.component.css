@@ -56,3 +56,9 @@
     display: none
   }
 }
+
+@media (max-width: 320px) {
+  a.nav-link {
+    font-size: 12px;
+  }
+}

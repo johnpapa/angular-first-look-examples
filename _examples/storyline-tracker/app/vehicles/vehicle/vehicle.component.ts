@@ -2,8 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
-import { CanComponentDeactivate } from '../../routing';
-import { EntityService, ModalService, ToastService } from '../../../app/core';
+import { CanComponentDeactivate, EntityService, ModalService, ToastService } from '../../core';
 import { Vehicle } from '../shared/vehicle.model';
 import { VehicleService } from '../shared/vehicle.service';
 

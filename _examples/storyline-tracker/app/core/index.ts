@@ -1,4 +1,6 @@
 export * from './config';
+export * from './can-activate-auth.service';
+export * from './can-deactivate.service';
 export * from './entity.service';
 export * from './exception.service';
 export * from './message.service';

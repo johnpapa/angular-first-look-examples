@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
-import { FilterTextComponent } from '../../../app/shared/filter-text/filter-text.component';
-import { FilterTextService } from '../../../app/shared/filter-text/filter-text.service';
+import { FilterTextComponent } from '../../shared/filter-text/filter-text.component';
+import { FilterTextService } from '../../shared/filter-text/filter-text.service';
 import { Vehicle } from '../shared/vehicle.model';
 import { VehicleService } from '../shared/vehicle.service';
 

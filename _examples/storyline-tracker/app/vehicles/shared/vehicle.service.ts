@@ -3,7 +3,7 @@ import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
 import { Vehicle } from './vehicle.model';
-import { CONFIG, ExceptionService, MessageService, SpinnerService } from '../../../app/core';
+import { CONFIG, ExceptionService, MessageService, SpinnerService } from '../../core';
 
 let vehiclesUrl = CONFIG.baseUrls.vehicles;
 
