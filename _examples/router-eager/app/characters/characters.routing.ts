@@ -16,7 +16,7 @@ const routes: Routes = [
   }
 ];
 
-export const routing = RouterModule.forChild(routes);
+export const charactersRouterModule = RouterModule.forChild(routes);
 
 export const routedComponents = [
   CharactersComponent,

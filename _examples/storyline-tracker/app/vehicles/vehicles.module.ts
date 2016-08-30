@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 
 import { VehicleButtonComponent } from './shared/vehicle-button/vehicle-button.component';
 
-// routing = routingModuleWithProvidersAndRouteConfiguration
 import { routedComponents, vehiclesRouterModule } from './vehicles.routing';
 
 import { SharedModule } from '../shared/shared.module';

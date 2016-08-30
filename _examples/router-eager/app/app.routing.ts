@@ -7,6 +7,6 @@ const routes: Routes = [
   { path: '**', pathMatch: 'full', component: PageNotFoundComponent },
 ];
 
-export const routing = RouterModule.forRoot(routes);
+export const appRouterModule = RouterModule.forRoot(routes);
 
 export const routableComponents = [PageNotFoundComponent];

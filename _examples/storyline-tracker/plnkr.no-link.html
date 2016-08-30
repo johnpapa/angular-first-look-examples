@@ -177,7 +177,7 @@ import { AppComponent } from './app.component';
 import './core/rxjs-extensions';
 import { InMemoryWebApiModule } from 'angular2-in-memory-web-api';
 import { InMemoryStoreService } from '../api/in-memory-store.service';
-import { routing } from './app.routing';
+import { appRouterModule } from './app.routing';
 import { CharacterService } from './models';
 import { PageNotFoundComponent } from './page-not-found.component';
 
@@ -190,10 +190,10 @@ import { LoginModule } from './login/login.module';
     BrowserModule,
     HttpModule,
 
+    appRouterModule,
     CoreModule,
     InMemoryWebApiModule.forRoot(InMemoryStoreService, { delay: 600 }),
     LoginModule,
-    routing,
   ],
   declarations: [AppComponent, PageNotFoundComponent],
   providers: [CharacterService],
@@ -249,9 +249,9 @@ const routes: Routes = [
   },
 ];
 
-export const routing = RouterModule.forRoot(routes);
+export const appRouterModule = RouterModule.forRoot(routes);
 
-routing.providers.push([
+appRouterModule.providers.push([
   CanActivateAuthGuard,
   CanDeactivateGuard,
   UserProfileService
@@ -470,11 +470,11 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 
 import { CharacterButtonComponent } from './shared/character-button/character-button.component';
 import { SortCharactersPipe } from './shared/sort-characters.pipe';
-import { routing, routedComponents } from './characters.routing';
+import { charactersRouterModule, routedComponents } from './characters.routing';
 import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
-  imports: [routing, SharedModule],
+  imports: [charactersRouterModule, SharedModule],
   declarations: [CharacterButtonComponent, SortCharactersPipe, routedComponents]
 })
 export class CharactersModule { }
@@ -509,7 +509,7 @@ const routes: Routes = [
   },
 ];
 
-export const routing = RouterModule.forChild(routes);
+export const charactersRouterModule = RouterModule.forChild(routes);
 
 export const routedComponents = [CharactersComponent, CharacterListComponent, CharacterComponent]
 
@@ -1295,11 +1295,11 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/dashboard/dashboard.module.ts]" value="import { NgModule } from '@angular/core';
 
 import { DashboardButtonComponent } from './shared/dashboard-button/dashboard-button.component';
-import { routing, routedComponents } from './dashboard.routing';
+import { dashboardRouterModule, routedComponents } from './dashboard.routing';
 import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
-  imports: [routing, SharedModule],
+  imports: [dashboardRouterModule, SharedModule],
   declarations: [DashboardButtonComponent, routedComponents]
 })
 export class DashboardModule { }
@@ -1317,9 +1317,10 @@ const routes: Routes = [
   { path: '', component: DashboardComponent },
 ];
 
-export const routing = RouterModule.forChild(routes);
+export const dashboardRouterModule = RouterModule.forChild(routes);
 
-export const routedComponents = routes.filter(r => r.component != undefined).map(r => r.component)
+// export const routedComponents = routes.filter(r => r.component !== undefined).map(r => r.component);
+export const routedComponents = [DashboardComponent];
 
 
 /*
@@ -1411,11 +1412,11 @@ Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/login/login.module.ts]" value="import { NgModule } from '@angular/core';
 
-import { routing, routedComponents } from './login.routing';
+import { loginRouterModule, routedComponents } from './login.routing';
 import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
-  imports: [SharedModule, routing],
+  imports: [loginRouterModule, SharedModule],
   declarations: [routedComponents],
 })
 export class LoginModule { }
@@ -1433,9 +1434,9 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent }
 ];
 
-export const routing = RouterModule.forChild(routes);
+export const loginRouterModule = RouterModule.forChild(routes);
 
-export const routedComponents = routes.filter(r => r.component != undefined).map(r => r.component)
+export const routedComponents = [LoginComponent];
 
 
 /*
@@ -2069,14 +2070,13 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 
 import { VehicleButtonComponent } from './shared/vehicle-button/vehicle-button.component';
 
-// routing = routingModuleWithProvidersAndRouteConfiguration
-import { routing, routedComponents } from './vehicles.routing';
+import { routedComponents, vehiclesRouterModule } from './vehicles.routing';
 
 import { SharedModule } from '../shared/shared.module';
 import { VehicleService } from './shared/vehicle.service';  // TODO: Remove this when bug is fixed in A2 RC5
 
 @NgModule({
-  imports: [routing, SharedModule],
+  imports: [SharedModule, vehiclesRouterModule],
   declarations: [VehicleButtonComponent, routedComponents],
 
   // TODO: Remove this when bug is fixed in A2 RC5.
@@ -2117,9 +2117,9 @@ const routes: Routes = [
   },
 ];
 
-export const routing = RouterModule.forChild(routes);
+export const vehiclesRouterModule = RouterModule.forChild(routes);
 
-export const routedComponents = [VehiclesComponent, VehicleListComponent, VehicleComponent]
+export const routedComponents = [VehiclesComponent, VehicleListComponent, VehicleComponent];
 
 
 /*
