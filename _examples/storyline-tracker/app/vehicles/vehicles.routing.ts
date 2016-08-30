@@ -23,6 +23,6 @@ const routes: Routes = [
   },
 ];
 
-export const routing = RouterModule.forChild(routes);
+export const vehiclesRouterModule = RouterModule.forChild(routes);
 
-export const routedComponents = [VehiclesComponent, VehicleListComponent, VehicleComponent]
+export const routedComponents = [VehiclesComponent, VehicleListComponent, VehicleComponent];

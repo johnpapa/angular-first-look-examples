@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import './core/rxjs-extensions';
 import { InMemoryWebApiModule } from 'angular2-in-memory-web-api';
 import { InMemoryStoreService } from '../api/in-memory-store.service';
-import { routing } from './app.routing';
+import { appRouterModule } from './app.routing';
 import { CharacterService } from './models';
 import { PageNotFoundComponent } from './page-not-found.component';
 
@@ -19,10 +19,10 @@ import { LoginModule } from './login/login.module';
     BrowserModule,
     HttpModule,
 
+    appRouterModule,
     CoreModule,
     InMemoryWebApiModule.forRoot(InMemoryStoreService, { delay: 600 }),
     LoginModule,
-    routing,
   ],
   declarations: [AppComponent, PageNotFoundComponent],
   providers: [CharacterService],

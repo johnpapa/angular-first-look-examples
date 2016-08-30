@@ -41,9 +41,9 @@ const routes: Routes = [
   },
 ];
 
-export const routing = RouterModule.forRoot(routes);
+export const appRouterModule = RouterModule.forRoot(routes);
 
-routing.providers.push([
+appRouterModule.providers.push([
   CanActivateAuthGuard,
   CanDeactivateGuard,
   UserProfileService

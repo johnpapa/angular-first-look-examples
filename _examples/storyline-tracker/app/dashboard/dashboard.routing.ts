@@ -6,6 +6,7 @@ const routes: Routes = [
   { path: '', component: DashboardComponent },
 ];
 
-export const routing = RouterModule.forChild(routes);
+export const dashboardRouterModule = RouterModule.forChild(routes);
 
-export const routedComponents = routes.filter(r => r.component != undefined).map(r => r.component)
+// export const routedComponents = routes.filter(r => r.component !== undefined).map(r => r.component);
+export const routedComponents = [DashboardComponent];

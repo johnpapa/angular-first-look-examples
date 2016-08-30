@@ -3,13 +3,13 @@ import { NgModule } from '@angular/core';
 import { VehicleButtonComponent } from './shared/vehicle-button/vehicle-button.component';
 
 // routing = routingModuleWithProvidersAndRouteConfiguration
-import { routing, routedComponents } from './vehicles.routing';
+import { routedComponents, vehiclesRouterModule } from './vehicles.routing';
 
 import { SharedModule } from '../shared/shared.module';
 import { VehicleService } from './shared/vehicle.service';  // TODO: Remove this when bug is fixed in A2 RC5
 
 @NgModule({
-  imports: [routing, SharedModule],
+  imports: [SharedModule, vehiclesRouterModule],
   declarations: [VehicleButtonComponent, routedComponents],
 
   // TODO: Remove this when bug is fixed in A2 RC5.
