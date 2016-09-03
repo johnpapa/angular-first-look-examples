@@ -26,7 +26,7 @@ import './rxjs-extensions';
 import { AppComponent } from './app.component';
 import { CharactersModule } from './characters/characters.module';
 import { VehiclesModule } from './vehicles/vehicles.module';
-import { appRouterModule, routableComponents } from './app.routing';
+import { AppRoutingModule, routableComponents } from './app.routing';
 
 @NgModule({
   imports: [
@@ -36,9 +36,9 @@ import { appRouterModule, routableComponents } from './app.routing';
     HttpModule,
     RouterModule,
     VehiclesModule,
-    appRouterModule
+    AppRoutingModule
   ],
-  declarations: [AppComponent, ...routableComponents],
+  declarations: [AppComponent, routableComponents],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
@@ -48,7 +48,8 @@ export class AppModule { }
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="files[app/app.routing.ts]" value="import { Routes, RouterModule } from '@angular/router';
+*/"><input type="hidden" name="files[app/app.routing.ts]" value="import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
 
 import { PageNotFoundComponent } from './page-not-found.component';
 
@@ -57,7 +58,11 @@ const routes: Routes = [
   { path: '**', pathMatch: 'full', component: PageNotFoundComponent },
 ];
 
-export const appRouterModule = RouterModule.forRoot(routes);
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
 
 export const routableComponents = [PageNotFoundComponent];
 
@@ -204,10 +209,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { CharacterService } from './character.service';
-import { charactersRouterModule, routedComponents } from './characters.routing';
+import { CharactersRouterModule, routedComponents } from './characters.routing';
 
 @NgModule({
-  imports: [CommonModule, FormsModule, charactersRouterModule],
+  imports: [CommonModule, FormsModule, CharactersRouterModule],
   exports: [],
   declarations: [routedComponents],
   providers: [CharacterService],
@@ -219,7 +224,8 @@ export class CharactersModule { }
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="files[app/characters/characters.routing.ts]" value="import { Routes, RouterModule } from '@angular/router';
+*/"><input type="hidden" name="files[app/characters/characters.routing.ts]" value="import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
 
 import { CharacterComponent } from './character.component';
 import { CharactersComponent } from './characters.component';
@@ -237,7 +243,11 @@ const routes: Routes = [
   }
 ];
 
-export const charactersRouterModule = RouterModule.forChild(routes);
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
+})
+export class CharactersRouterModule { }
 
 export const routedComponents = [
   CharactersComponent,
@@ -436,10 +446,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { VehicleService } from './vehicle.service';
-import { vehiclesRouterModule, routedComponents } from './vehicles.routing';
+import { VehiclesRoutingModule, routedComponents } from './vehicles.routing';
 
 @NgModule({
-  imports: [CommonModule, FormsModule, vehiclesRouterModule],
+  imports: [CommonModule, FormsModule, VehiclesRoutingModule],
   declarations: [routedComponents],
   providers: [VehicleService],
 })
@@ -450,7 +460,8 @@ export class VehiclesModule { }
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="files[app/vehicles/vehicles.routing.ts]" value="import { Routes, RouterModule } from '@angular/router';
+*/"><input type="hidden" name="files[app/vehicles/vehicles.routing.ts]" value="import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
 
 import { VehicleComponent } from './vehicle.component';
 import { VehiclesComponent } from './vehicles.component';
@@ -467,7 +478,11 @@ const routes: Routes = [
   }
 ];
 
-export const vehiclesRouterModule = RouterModule.forChild(routes);
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
+})
+export class VehiclesRoutingModule { }
 
 export const routedComponents = [
   VehiclesComponent,
