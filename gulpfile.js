@@ -116,7 +116,7 @@ var _exampleProtractorBoilerplateFiles = [
 
 var _exampleConfigFilename = 'example-config.json';
 
-var _styleLessName = 'a2docs.less';
+// var _styleLessName = 'a2docs.less';
 
 // Gulp flags:
 //
@@ -461,11 +461,12 @@ gulp.task('_copy-example-boilerplate', function (done) {
 //and copies the result to the _examples folder to be included as
 //part of the example boilerplate.
 function buildStyles(cb, done){
-  gulp.src(path.join(STYLES_SOURCE_PATH, _styleLessName))
-    .pipe(less())
-    .pipe(gulp.dest(EXAMPLES_PATH)).on('end', function(){
-      cb().then(function() { done(); });
-    });
+  cb().then(function() { done(); });
+  // gulp.src(path.join(STYLES_SOURCE_PATH, _styleLessName))
+  //   .pipe(less())
+  //   .pipe(gulp.dest(EXAMPLES_PATH)).on('end', function(){
+  //     cb().then(function() { done(); });
+  //   });
 }
 
 // copies boilerplate files to locations
