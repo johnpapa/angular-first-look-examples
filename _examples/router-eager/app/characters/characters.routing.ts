@@ -1,3 +1,4 @@
+import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { CharacterComponent } from './character.component';
@@ -16,7 +17,11 @@ const routes: Routes = [
   }
 ];
 
-export const charactersRouterModule = RouterModule.forChild(routes);
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class CharactersRouterModule { }
 
 export const routedComponents = [
   CharactersComponent,
