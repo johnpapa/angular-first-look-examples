@@ -87,7 +87,7 @@ var _excludeMatchers = _excludePatterns.map(function(excludePattern){
 
 var _exampleBoilerplateFiles = [
   '.editorconfig',
-  'a2docs.css',
+  // 'a2docs.css',
   'karma.conf.js',
   'karma-test-shim.js',
   'package.json',

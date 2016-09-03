@@ -96,7 +96,7 @@ var _excludeMatchers = _excludePatterns.map(function(excludePattern){
 
 var _exampleBoilerplateFiles = [
   '.editorconfig',
-  'a2docs.css',
+  // 'a2docs.css',
   'karma.conf.js',
   'karma-test-shim.js',
   'package.json',
@@ -108,7 +108,7 @@ var _exampleBoilerplateFiles = [
   'wallaby.js'
  ];
 
-var _exampleDartWebBoilerPlateFiles = ['a2docs.css', 'styles.css'];
+var _exampleDartWebBoilerPlateFiles = [/* 'a2docs.css',*/ 'styles.css'];
 
 var _exampleProtractorBoilerplateFiles = [
   'tsconfig.json'
