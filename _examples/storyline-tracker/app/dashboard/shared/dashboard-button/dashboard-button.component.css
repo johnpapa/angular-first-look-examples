@@ -1,7 +1,5 @@
 button {
   width: 200px;height: 70px;
-  /*border-bottom: rgb(83,109,254) 4px solid;*/
-  /*background: rgb(255,64,129);*/
   color: #111;
 }
 
@@ -13,7 +11,7 @@ button {
   }
 }
 
-@media (max-width: 839px) and (min-width: 480px){
+@media (max-width: 839px) {
   button {
     width: 120px;
     line-height: 18px;

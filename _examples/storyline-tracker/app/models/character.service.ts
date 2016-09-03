@@ -32,6 +32,7 @@ export class CharacterService {
     this.spinnerService.show();
     return <Observable<Character>>this.http
       .delete(`${charactersUrl}/${character.id}`)
+      .map(res => this.extractData<Character>(res))
       .catch(this.exceptionService.catchBadResponse)
       .finally(() => this.spinnerService.hide());
   }
@@ -60,6 +61,7 @@ export class CharacterService {
 
     return <Observable<Character>>this.http
       .put(`${charactersUrl}/${character.id}`, body)
+      .map(res => this.extractData<Character>(res))
       .catch(this.exceptionService.catchBadResponse)
       .finally(() => this.spinnerService.hide());
   }
@@ -68,7 +70,7 @@ export class CharacterService {
     if (res.status < 200 || res.status >= 300) {
       throw new Error('Bad response status: ' + res.status);
     }
-    let body = res.json();
-    return <T>(body.data || {});
+    let body = res.json ? res.json() : null;
+    return <T>(body && body.data || {});
   }
 }

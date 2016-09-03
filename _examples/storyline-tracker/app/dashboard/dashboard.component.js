@@ -14,7 +14,8 @@ var Observable_1 = require('rxjs/Observable');
 var models_1 = require('../../app/models');
 var core_2 = require('../../app/core');
 var DashboardComponent = (function () {
-    function DashboardComponent(characterService, router, toastService) {
+    function DashboardComponent(route, characterService, router, toastService) {
+        this.route = route;
         this.characterService = characterService;
         this.router = router;
         this.toastService = toastService;
@@ -37,6 +38,9 @@ var DashboardComponent = (function () {
     };
     DashboardComponent.prototype.ngOnInit = function () {
         var _this = this;
+        this.route.data.subscribe(function (data) {
+            _this.title = data.title;
+        });
         this.getCharacters();
         this.dbResetSubscription = this.characterService.onDbReset
             .subscribe(function () { return _this.getCharacters(); });
@@ -51,7 +55,7 @@ var DashboardComponent = (function () {
             templateUrl: 'dashboard.component.html',
             styleUrls: ['dashboard.component.css']
         }), 
-        __metadata('design:paramtypes', [models_1.CharacterService, router_1.Router, core_2.ToastService])
+        __metadata('design:paramtypes', [router_1.ActivatedRoute, models_1.CharacterService, router_1.Router, core_2.ToastService])
     ], DashboardComponent);
     return DashboardComponent;
 }());

@@ -1,3 +1,4 @@
+import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { CanActivateAuthGuard, CanDeactivateGuard, UserProfileService } from './core';
@@ -13,38 +14,26 @@ import { PageNotFoundComponent } from './page-not-found.component';
 * 3. Change the module's default route path from '' to 'pathname'
 *****************************************************************/
 const routes: Routes = [
+  { path: '', pathMatch: 'full', redirectTo: 'dashboard', },
   {
-    path: '',
-    pathMatch: 'full',
-    redirectTo: 'dashboard',
-  },
-  {
-    path: 'dashboard',
-    loadChildren: 'app/dashboard/dashboard.module#DashboardModule'
-  },
-  {
-    path: 'characters',
-    loadChildren: 'app/characters/characters.module#CharactersModule',
+    path: 'admin',
+    loadChildren: 'app/admin/admin.module#AdminModule',
     canActivate: [CanActivateAuthGuard],
-    // canLoad: [CanActivateAuthGuard],
+    canLoad: [CanActivateAuthGuard],
   },
-  {
-    path: 'vehicles',
-    loadChildren: 'app/vehicles/vehicles.module#VehiclesModule',
-    canActivate: [CanActivateAuthGuard],
-    // canLoad: [CanActivateAuthGuard],
-  },
-  {
-    path: '**',
-    pathMatch: 'full',
-    component: PageNotFoundComponent
-  },
+  { path: 'dashboard', loadChildren: 'app/dashboard/dashboard.module#DashboardModule' },
+  { path: 'characters', loadChildren: 'app/characters/characters.module#CharactersModule' },
+  { path: 'vehicles', loadChildren: 'app/vehicles/vehicles.module#VehiclesModule' },
+  { path: '**', pathMatch: 'full', component: PageNotFoundComponent },
 ];
 
-export const appRouterModule = RouterModule.forRoot(routes);
-
-appRouterModule.providers.push([
-  CanActivateAuthGuard,
-  CanDeactivateGuard,
-  UserProfileService
-]);
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule],
+  providers: [
+    CanActivateAuthGuard,
+    CanDeactivateGuard,
+    UserProfileService
+  ]
+})
+export class AppRoutingModule { }

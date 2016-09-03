@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -16,8 +16,10 @@ export class DashboardComponent implements OnDestroy, OnInit {
   private dbResetSubscription: Subscription;
 
   characters: Observable<Character[]>;
+  title: string;
 
   constructor(
+    private route: ActivatedRoute,
     private characterService: CharacterService,
     private router: Router,
     private toastService: ToastService) { }
@@ -41,6 +43,9 @@ export class DashboardComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
+    this.route.data.subscribe((data: { title: string }) => {
+      this.title = data.title;
+    });
     this.getCharacters();
     this.dbResetSubscription = this.characterService.onDbReset
       .subscribe(() => this.getCharacters());

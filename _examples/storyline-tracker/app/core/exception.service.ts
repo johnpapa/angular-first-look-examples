@@ -16,6 +16,6 @@ export class ExceptionService {
       (res.statusText || 'unknown error');
     this.toastService.activate(`Error - Bad Response - ${emsg}`);
     // return Observable.throw(emsg); // TODO: We should NOT swallow error here.
-    return Observable.of();
+    return Observable.of(false);
   };
 }

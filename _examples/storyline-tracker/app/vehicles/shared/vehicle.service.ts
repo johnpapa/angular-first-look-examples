@@ -32,6 +32,7 @@ export class VehicleService {
     this.spinnerService.show();
     return <Observable<Vehicle>>this.http
       .delete(`${vehiclesUrl}/${vehicle.id}`)
+      .map(res => this.extractData<Vehicle>(res))
       .catch(this.exceptionService.catchBadResponse)
       .finally(() => this.spinnerService.hide());
   }
@@ -49,8 +50,8 @@ export class VehicleService {
     if (res.status < 200 || res.status >= 300) {
       throw new Error('Bad response status: ' + res.status);
     }
-    let body = res.json();
-    return <T>(body.data || {});
+    let body = res.json ? res.json() : null;
+    return <T>(body && body.data || {});
   }
 
   getVehicle(id: number) {
@@ -68,6 +69,7 @@ export class VehicleService {
 
     return <Observable<Vehicle>>this.http
       .put(`${vehiclesUrl}/${vehicle.id}`, body)
+      .map(res => this.extractData<Vehicle>(res))
       .catch(this.exceptionService.catchBadResponse)
       .finally(() => this.spinnerService.hide());
   }
