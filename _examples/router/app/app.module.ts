@@ -8,7 +8,7 @@ import './rxjs-extensions';
 import { AppComponent } from './app.component';
 import { CharacterService } from './characters/character.service';
 import { VehicleService } from './vehicles/vehicle.service';
-import { routing, routableComponents } from './app.routing';
+import { appRouterModule, routableComponents } from './app.routing';
 
 @NgModule({
   imports: [
@@ -16,7 +16,7 @@ import { routing, routableComponents } from './app.routing';
     FormsModule,
     HttpModule,
     RouterModule,
-    routing
+    appRouterModule
   ],
   declarations: [AppComponent, ...routableComponents],
   providers: [CharacterService, VehicleService],

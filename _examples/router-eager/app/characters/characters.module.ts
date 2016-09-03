@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { CharacterService } from './character.service';
-import { routing, routedComponents } from './characters.routing';
+import { charactersRouterModule, routedComponents } from './characters.routing';
 
 @NgModule({
-  imports: [CommonModule, FormsModule, routing],
+  imports: [CommonModule, FormsModule, charactersRouterModule],
   exports: [],
   declarations: [routedComponents],
   providers: [CharacterService],

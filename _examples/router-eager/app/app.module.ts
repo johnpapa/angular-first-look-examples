@@ -8,7 +8,7 @@ import './rxjs-extensions';
 import { AppComponent } from './app.component';
 import { CharactersModule } from './characters/characters.module';
 import { VehiclesModule } from './vehicles/vehicles.module';
-import { routing, routableComponents } from './app.routing';
+import { appRouterModule, routableComponents } from './app.routing';
 
 @NgModule({
   imports: [
@@ -18,7 +18,7 @@ import { routing, routableComponents } from './app.routing';
     HttpModule,
     RouterModule,
     VehiclesModule,
-    routing
+    appRouterModule
   ],
   declarations: [AppComponent, ...routableComponents],
   bootstrap: [AppComponent]
