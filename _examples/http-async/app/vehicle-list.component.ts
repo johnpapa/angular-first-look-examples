@@ -16,9 +16,9 @@ export class VehicleListComponent {
 
   constructor(private vehicleService: VehicleService) { }
 
-  ngOnInit() { this.getHeroes(); }
+  ngOnInit() { this.getVehicles(); }
 
-  getHeroes(value?: string) {
+  getVehicles(value?: string) {
     this.vehicles = this.vehicleService.getVehicles(value);
   }
 

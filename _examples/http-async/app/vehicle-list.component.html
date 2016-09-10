@@ -1,4 +1,4 @@
-<input #text (keyup)="getHeroes(text.value)">
+<input #text (keyup)="getVehicles(text.value)">
 <ul>
   <li *ngFor="let vehicle of vehicles | async"
     (click)="select(vehicle)">
