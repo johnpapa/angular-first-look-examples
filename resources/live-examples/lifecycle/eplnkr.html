@@ -336,7 +336,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
   <my-app>Loading Demo ...</my-app>
 
   <script src=&quot;https://npmcdn.com/core-js/client/shim.min.js&quot;></script>
-  <script src=&quot;https://npmcdn.com/zone.js@0.6.12?main=browser&quot;></script>
+  <script src=&quot;https://npmcdn.com/zone.js@0.6.23?main=browser&quot;></script>
   <script src=&quot;https://npmcdn.com/reflect-metadata@0.1.3&quot;></script>
   <script src=&quot;https://npmcdn.com/systemjs@0.19.27/dist/system.src.js&quot;></script>
 
@@ -498,73 +498,13 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 }"><input type="hidden" name="entries[api/vehicles.json][encoding]" value="utf8"><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="first look"><input type="hidden" name="tags[3]" value="angular 2"><input type="hidden" name="title" value="Angular 2 Example - Component Lifecycle Hooks"><input type="hidden" name="source[type]" value="Component Lifecycle Hooks"><input type="hidden" name="source[url]" value="https://angular.io"><input type="hidden" name="entries[README.md][content]" value="### Angular 2 First Look Example 
 
 Component Lifecycle Hooks"><input type="hidden" name="entries[README.md][encoding]" value="utf8"><input type="hidden" name="entries[systemjs.config.js][content]" value="/**
- * PLUNKER VERSION (based on systemjs.config.js in angular.io)
+ * PLUNKER VERSION
+ * (based on systemjs.config.js in angular.io)
  * System configuration for Angular 2 samples
  * Adjust as necessary for your application needs.
  */
-(function(global) {
-
-  var ngVer = '@2.0.0-rc.6'; // lock in the angular package version; do not let it float to current!
-  var routerVer = '@3.0.0-rc.2'; // lock router version
-
-  //map tells the System loader where to look for things
-  var map = {
-    'app':                        'app',
-    'main':                       'main.js',
-
-    '@angular':                   'https://npmcdn.com/@angular', // sufficient if we didn't pin the version
-    '@angular/router':            'https://npmcdn.com/@angular/router' + routerVer,
-    'angular2-in-memory-web-api': 'https://npmcdn.com/angular2-in-memory-web-api', // get latest
-    'rxjs':                       'https://npmcdn.com/rxjs@5.0.0-beta.6',
-    'ts':                         'https://npmcdn.com/plugin-typescript@4.0.10/lib/plugin.js',
-    'typescript':                 'https://npmcdn.com/typescript@1.9.0-dev.20160409/lib/typescript.js',
- };
-
-  //packages tells the System loader how to load when no filename and/or no extension
-  var packages = {
-    'app':                        { main: 'main.ts',  defaultExtension: 'ts' },
-    'api':                        { defaultExtension: 'js' },
-    'rxjs':                       { defaultExtension: 'js' },
-    'angular2-in-memory-web-api': { main: 'index.js', defaultExtension: 'js' },
-  };
-
-  var barrels = [
-    // App specific barrels.
-    'app/core',
-    'app/models',
-  ];
-
-  barrels.forEach((barrelName) => {
-    packages[barrelName] = { main: 'index' };
-  });
-
-  var ngPackageNames = [
-    'common',
-    'compiler',
-    'core',
-    'http',
-    'platform-browser',
-    'platform-browser-dynamic',
-    'upgrade',
-  ];
-
-  // Add map entries for each angular package
-  // only because we're pinning the version with `ngVer`.
-  ngPackageNames.forEach(function(pkgName) {
-    map['@angular/'+pkgName] = 'https://npmcdn.com/@angular/' + pkgName + ngVer;
-  });
-
-  // Add package entries for angular packages
-  ngPackageNames.concat(['forms', 'router']).forEach(function(pkgName) {
-
-    // Bundled (~40 requests):
-    packages['@angular/'+pkgName] = { main: '/bundles/' + pkgName + '.umd.js' };
-
-    // Individual files (~300 requests):
-    //packages['@angular/'+pkgName] = { main: 'index.js', defaultExtension: 'js' };
-  });
-
-  var config = {
+(function (global) {
+  System.config({
     // DEMO ONLY! REAL CODE SHOULD NOT TRANSPILE IN THE BROWSER
     transpiler: 'ts',
     typescriptOptions: {
@@ -575,13 +515,58 @@ Component Lifecycle Hooks"><input type="hidden" name="entries[README.md][encodin
         &quot;exports&quot;: &quot;ts&quot;
       }
     },
-    map: map,
-    packages: packages
-  };
+    paths: {
+      // paths serve as alias
+      'npm:': 'https://unpkg.com/'
+    },
+    // map tells the System loader where to look for things
+    map: {
+      // our app is within the app folder
+      app: 'app',
+      'main':                       'main.js', // PAPA
 
-  System.config(config);
+      // angular bundles
+      '@angular/core': 'npm:@angular/core/bundles/core.umd.js',
+      '@angular/common': 'npm:@angular/common/bundles/common.umd.js',
+      '@angular/compiler': 'npm:@angular/compiler/bundles/compiler.umd.js',
+      '@angular/platform-browser': 'npm:@angular/platform-browser/bundles/platform-browser.umd.js',
+      '@angular/platform-browser-dynamic': 'npm:@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js',
+      '@angular/http': 'npm:@angular/http/bundles/http.umd.js',
+      '@angular/router': 'npm:@angular/router/bundles/router.umd.js',
+      '@angular/forms': 'npm:@angular/forms/bundles/forms.umd.js',
+      '@angular/upgrade': 'npm:@angular/upgrade/bundles/upgrade.umd.js',
 
+      // other libraries
+      'rxjs':                       'npm:rxjs',
+      'angular2-in-memory-web-api': 'npm:angular2-in-memory-web-api',
+      'ts':                         'npm:plugin-typescript@4.0.10/lib/plugin.js',
+      'typescript':                 'npm:typescript@2.0.2/lib/typescript.js',
+
+    },
+    // packages tells the System loader how to load when no filename and/or no extension
+    packages: {
+      'app/core': { main: 'index' }, // PAPA
+      'app/models': { main: 'index' }, // PAPA
+      app: {
+        main: './main.ts',
+        defaultExtension: 'ts'
+      },
+      rxjs: {
+        defaultExtension: 'js'
+      },
+      'angular2-in-memory-web-api': {
+        main: './index.js',
+        defaultExtension: 'js'
+      }
+    }
+  });
 })(this);
+
+/*
+Copyright 2016 Google Inc. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://angular.io/license
+*/
 
 
 /*
