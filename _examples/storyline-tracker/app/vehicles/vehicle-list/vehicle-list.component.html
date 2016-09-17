@@ -1,0 +1,13 @@
+<article class="template animated slideInRight">
+  <h4>Vehicles</h4>
+
+  <a href="" [routerLink]="['/vehicles', 'new']"><button class="story-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Add</button></a>
+
+  <story-filter-text (changed)="filterChanged($event)"></story-filter-text>
+
+  <ul class="vehicles">
+    <li *ngFor="let vehicle of filteredVehicles;trackBy:trackByVehicles">
+      <story-vehicle-button [vehicle]="vehicle"></story-vehicle-button>
+    </li>
+  </ul>
+</article>

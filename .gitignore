@@ -1,7 +1,8 @@
 **/*.map
-examples/**/app/**/*.js
-examples/**/api/**/*.js
-examples/**/in-memory-backend/**/*.js
+_examples/storyline-tracker/app/**/*.js
+_examples/**/app/**/*.js
+_examples/**/api/**/*.js
+_examples/**/in-memory-backend/**/*.js
 
 node_modules
 jspm_packages

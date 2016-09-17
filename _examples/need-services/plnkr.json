@@ -1,0 +1,9 @@
+{
+  "description": "Need Services",
+  "files":[
+    "!**/*.d.ts",
+    "!**/*.js",
+    "**/assets/*.js"
+  ],
+  "tags": ["first look", "angular 2"]
+}

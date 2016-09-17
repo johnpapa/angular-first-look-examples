@@ -1,8 +1,0 @@
-{
-  "description": "Services and DI",
-  "files":[
-    "!**/*.d.ts",
-    "!**/*.js"
-  ],
-  "tags": ["first look", "angular 2"]
-}

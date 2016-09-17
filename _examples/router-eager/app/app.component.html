@@ -1,0 +1,17 @@
+<div>
+  <header>
+    <h1>Storyline Tracker</h1>
+    <h3>Hierarchical Router Demo</h3>
+    <nav>
+      <ul>
+        <li><a [routerLink]="['/characters']" href="">Characters</a></li>
+        <li><a [routerLink]="['/vehicles']" href="">Vehicles</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section>
+      <router-outlet></router-outlet>
+    </section>
+  </main>
+</div>

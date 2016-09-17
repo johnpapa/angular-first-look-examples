@@ -1,8 +1,0 @@
-{
-  "description": "Component Lifecycle Hooks",
-  "files":[
-    "!**/*.d.ts",
-    "!**/*.js"
-  ],
-  "tags": ["first look", "angular 2"]
-}

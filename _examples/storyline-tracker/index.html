@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base href="/">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+  <script src="assets/material.min.js"></script>
+  <link rel="stylesheet" href="assets/material.deep_orange-pink.min.css">
+  <link rel="stylesheet" href="assets/sprite-av-white.css">
+  <link rel="stylesheet" href="assets/animate.css">
+  <link rel="stylesheet" href="assets/app.css">
+
+  <!-- Polyfill(s) for older browsers -->
+  <script src="node_modules/core-js/client/shim.min.js"></script>
+
+  <script src="node_modules/zone.js/dist/zone.js"></script>
+  <script src="node_modules/reflect-metadata/Reflect.js"></script>
+  <script src="node_modules/systemjs/dist/system.src.js"></script>
+</head>
+
+<body>
+  <story-app>Loading Storyline Tracker ...</story-app>
+
+  <script>
+    System.import('systemjs.config.js').then(function () {
+        System.import('main');
+      }).catch(console.error.bind(console));
+  </script>
+</body>
+
+</html>

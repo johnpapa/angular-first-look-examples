@@ -1,0 +1,12 @@
+<article class="template animated slideInRight">
+  <h4>{{title}}</h4>
+  <div>
+    <div class="mdl-grid">
+      <div class="mdl-cell mdl-cell--3-col"
+        *ngFor="let character of characters | async;trackBy:trackByCharacters"
+        (click)="gotoDetail(character)">
+        <story-dashboard-button [character]="character"></story-dashboard-button>
+      </div>
+    </div>
+  </div>
+</article>

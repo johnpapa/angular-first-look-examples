@@ -18,6 +18,14 @@ var _rxRules = {
   link: {
     from: '/<link rel="stylesheet" href=".*%tag%".*>/',
     to: '<link rel="stylesheet" href="%tag%">'
+  },
+  system_extra_main: {
+    from: /main:\s*[\'|\"]index.js[\'|\"]/,
+    to: 'main: "index.ts"'
+  },
+  system_extra_defaultExtension: {
+    from: /defaultExtension:\s*[\'|\"]js[\'|\"]/,
+    to: 'defaultExtension: "ts"'
   }
 };
 
@@ -27,13 +35,13 @@ var _rxData = [
   },
   {
     pattern: 'script',
-    from: 'node_modules/es6-shim/es6-shim.min.js',
-    to:   'https://npmcdn.com/es6-shim@0.35.0/es6-shim.min.js'
+    from: 'node_modules/core-js/client/shim.min.js',
+    to:   'https://npmcdn.com/core-js/client/shim.min.js'
   },
   {
     pattern: 'script',
     from: 'node_modules/zone.js/dist/zone.js',
-    to:   'https://npmcdn.com/zone.js@0.6.12?main=browser'
+    to:   'https://npmcdn.com/zone.js@0.6.23?main=browser'
   },
   {
     pattern: 'script',
@@ -43,7 +51,7 @@ var _rxData = [
   {
     pattern: 'script',
     from: 'node_modules/rxjs/bundles/Rx.umd.js',
-    to:   'https://npmcdn.com/rxjs@5.0.0-beta.6/bundles/Rx.umd.js'
+    to:   'https://npmcdn.com/rxjs@5.0.0-beta.12/bundles/Rx.umd.js'
   },
   {
     pattern: 'script',
@@ -62,8 +70,16 @@ var _rxData = [
   },
   {
     pattern: 'angular_pkg',
+  },
+  {
+    pattern: 'system_extra_main'
+  },
+  {
+    pattern: 'system_extra_defaultExtension'
   }
 ];
+
+
 
 function translate(html) {
   _rxData.forEach(function(rxDatum) {

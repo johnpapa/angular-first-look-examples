@@ -1,8 +1,0 @@
-{
-  "description": "Data Binding",
-  "files":[
-    "!**/*.d.ts",
-    "!**/*.js"
-  ],
-  "tags": ["first look", "angular 2"]
-}

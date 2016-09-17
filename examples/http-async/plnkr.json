@@ -1,8 +1,0 @@
-{
-  "description": "Http with Async Pipe",
-  "files":[
-    "!**/*.d.ts",
-    "!**/*.js"
-  ],
-  "tags": ["first look", "angular 2"]
-}
