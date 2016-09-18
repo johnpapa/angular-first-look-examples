@@ -19,13 +19,14 @@ const routes: Routes = [
   {
     path: 'characters',
     component: CharactersComponent,
+    canActivate: [CanActivateAuthGuard],
     children: [
       { path: '', component: CharacterListComponent },
       { path: ':id', component: CharacterComponent },
     ]
   },
-  { path: 'vehicles', component: VehicleListComponent, canActivate: [CanActivateAuthGuard] },
-  { path: 'vehicles/:id', component: VehicleComponent, canActivate: [CanActivateAuthGuard] },
+  { path: 'vehicles', component: VehicleListComponent },
+  { path: 'vehicles/:id', component: VehicleComponent },
   { path: '**', pathMatch: 'full', component: PageNotFoundComponent },
 ];
 
