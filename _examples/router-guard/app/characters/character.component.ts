@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Character, CharacterService } from '../characters/character.service';
+import { UserProfileService } from '../login/user-profile.service';
 
 @Component({
   moduleId: module.id,
@@ -15,6 +16,7 @@ export class CharacterComponent implements OnInit {
 
   constructor(
     private characterService: CharacterService,
+    private userProfileService: UserProfileService,
     private route: ActivatedRoute,
     private router: Router) { }
 
@@ -26,6 +28,8 @@ export class CharacterComponent implements OnInit {
         .do(id => this.id = +id)
         .subscribe(id => this.getCharacter());
     }
+    // force it to log outs
+    this.userProfileService.isLoggedIn = false;
   }
 
   private getCharacter() {

@@ -20,6 +20,7 @@ const routes: Routes = [
     path: 'characters',
     component: CharactersComponent,
     canActivate: [CanActivateAuthGuard],
+    canActivateChild: [CanActivateAuthGuard],
     children: [
       { path: '', component: CharacterListComponent },
       { path: ':id', component: CharacterComponent },
