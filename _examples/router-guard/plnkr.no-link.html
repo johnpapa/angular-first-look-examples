@@ -70,13 +70,15 @@ const routes: Routes = [
   {
     path: 'characters',
     component: CharactersComponent,
+    canActivate: [CanActivateAuthGuard],
+    canActivateChild: [CanActivateAuthGuard],
     children: [
       { path: '', component: CharacterListComponent },
       { path: ':id', component: CharacterComponent },
     ]
   },
-  { path: 'vehicles', component: VehicleListComponent, canActivate: [CanActivateAuthGuard] },
-  { path: 'vehicles/:id', component: VehicleComponent, canActivate: [CanActivateAuthGuard] },
+  { path: 'vehicles', component: VehicleListComponent },
+  { path: 'vehicles/:id', component: VehicleComponent },
   { path: '**', pathMatch: 'full', component: PageNotFoundComponent },
 ];
 
@@ -104,6 +106,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/can-activate.service.ts]" value="import { Injectable } from '@angular/core';
 import {
   CanActivate,
+  CanActivateChild,
   Route,
   Router,
   ActivatedRouteSnapshot,
@@ -113,10 +116,18 @@ import {
 import { UserProfileService } from './login/user-profile.service';
 
 @Injectable()
-export class CanActivateAuthGuard implements CanActivate {
+export class CanActivateAuthGuard implements CanActivate, CanActivateChild {
   constructor(private userProfileService: UserProfileService, private router: Router) { }
 
+  canActivateChild(next: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    return this.isLoggedIn(next, state);
+  }
+
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    return this.isLoggedIn(next, state);
+  }
+
+  isLoggedIn(next: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     if (this.userProfileService.isLoggedIn) {
       return true;
     }
@@ -163,6 +174,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Character, CharacterService } from '../characters/character.service';
+import { UserProfileService } from '../login/user-profile.service';
 
 @Component({
   moduleId: module.id,
@@ -176,6 +188,7 @@ export class CharacterComponent implements OnInit {
 
   constructor(
     private characterService: CharacterService,
+    private userProfileService: UserProfileService,
     private route: ActivatedRoute,
     private router: Router) { }
 
@@ -187,6 +200,8 @@ export class CharacterComponent implements OnInit {
         .do(id => this.id = +id)
         .subscribe(id => this.getCharacter());
     }
+    // force it to log outs
+    this.userProfileService.isLoggedIn = false;
   }
 
   private getCharacter() {
@@ -740,7 +755,9 @@ can be found in the LICENSE file at http://bit.ly/l1cense
       <input type=&quot;text&quot; id=&quot;typetext&quot; [(ngModel)]=&quot;character.side&quot; />
     </div>
   </div>
+  <button [routerLink]=&quot;['/characters']&quot;>Characters List</button>
 </article>
+
 
 <!-- 
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
