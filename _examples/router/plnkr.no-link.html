@@ -59,9 +59,9 @@ import { VehicleComponent } from './vehicles/vehicle.component';
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'characters', },
   { path: 'characters', component: CharacterListComponent },
-  { path: 'character/:id', component: CharacterComponent },
+  { path: 'characters/:id', component: CharacterComponent },
   { path: 'vehicles', component: VehicleListComponent },
-  { path: 'vehicle/:id', component: VehicleComponent },
+  { path: 'vehicles/:id', component: VehicleComponent },
   { path: '**', pathMatch: 'full', component: PageNotFoundComponent },
 ];
 
@@ -553,7 +553,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 
   <ul class=&quot;characters&quot;>
     <li *ngFor=&quot;let character of characters | async&quot;>
-      <a href=&quot;&quot; [routerLink]=&quot;['/character', character.id]&quot;>
+      <a href=&quot;&quot; [routerLink]=&quot;['/characters', character.id]&quot;>
        {{character.id}}. {{character.name}}
       </a>
     </li>
@@ -590,7 +590,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 
   <ul class=&quot;vehicles&quot;>
     <li *ngFor=&quot;let vehicle of vehicles&quot;>
-      <a href=&quot;&quot; [routerLink]=&quot;['/vehicle', vehicle.id]&quot;>
+      <a href=&quot;&quot; [routerLink]=&quot;['/vehicles', vehicle.id]&quot;>
        {{vehicle.id}}. {{vehicle.name}}
       </a>
     </li>

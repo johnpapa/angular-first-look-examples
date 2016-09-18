@@ -1,4 +1,4 @@
-<html lang="en"><head></head><body><form id="mainForm" method="post" action="https://embed.plnkr.co?show=preview" target="eplnkr"><input type="hidden" name="entries[app/app.component.ts][content]" value="import { Component } from '@angular/core';
+<html lang="en"><head></head><body><form id="mainForm" method="post" action="http://plnkr.co/edit/?p=preview" target="_self"><input type="hidden" name="files[app/app.component.ts]" value="import { Component } from '@angular/core';
 
 @Component({
   moduleId: module.id,
@@ -16,7 +16,7 @@ export class AppComponent { }
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/app.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/app.module.ts][content]" value="import { NgModule } from '@angular/core';
+*/"><input type="hidden" name="files[app/app.module.ts]" value="import { NgModule } from '@angular/core';
 import { BrowserModule  } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
@@ -27,6 +27,8 @@ import { AppComponent } from './app.component';
 import { CharacterService } from './characters/character.service';
 import { VehicleService } from './vehicles/vehicle.service';
 import { AppRoutingModule, routableComponents } from './app.routing';
+import { CanActivateAuthGuard } from './can-activate.service';
+import { UserProfileService } from './login/user-profile.service';
 
 @NgModule({
   imports: [
@@ -37,7 +39,7 @@ import { AppRoutingModule, routableComponents } from './app.routing';
     AppRoutingModule
   ],
   declarations: [AppComponent, routableComponents],
-  providers: [CharacterService, VehicleService],
+  providers: [CanActivateAuthGuard, CharacterService, UserProfileService, VehicleService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
@@ -47,21 +49,34 @@ export class AppModule { }
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/app.module.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/app.routing.ts][content]" value="import { NgModule } from '@angular/core';
+*/"><input type="hidden" name="files[app/app.routing.ts]" value="import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
+import { CharactersComponent } from './characters/characters.component';
 import { CharacterListComponent } from './characters/character-list.component';
 import { CharacterComponent } from './characters/character.component';
+import { LoginComponent } from './login/login.component';
 import { PageNotFoundComponent } from './page-not-found.component';
 import { VehicleListComponent } from './vehicles/vehicle-list.component';
 import { VehicleComponent } from './vehicles/vehicle.component';
 
+import { CanActivateAuthGuard } from './can-activate.service';
+
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'characters', },
-  { path: 'characters', component: CharacterListComponent },
-  { path: 'characters/:id', component: CharacterComponent },
-  { path: 'vehicles', component: VehicleListComponent },
-  { path: 'vehicles/:id', component: VehicleComponent },
+  { path: 'login', component: LoginComponent },
+  // { path: 'characters', component: CharacterListComponent },
+  // { path: 'character/:id', component: CharacterComponent },
+  {
+    path: 'characters',
+    component: CharactersComponent,
+    children: [
+      { path: '', component: CharacterListComponent },
+      { path: ':id', component: CharacterComponent },
+    ]
+  },
+  { path: 'vehicles', component: VehicleListComponent, canActivate: [CanActivateAuthGuard] },
+  { path: 'vehicles/:id', component: VehicleComponent, canActivate: [CanActivateAuthGuard] },
   { path: '**', pathMatch: 'full', component: PageNotFoundComponent },
 ];
 
@@ -74,6 +89,8 @@ export class AppRoutingModule { }
 export const routableComponents = [
   CharacterListComponent,
   CharacterComponent,
+  CharactersComponent,
+  LoginComponent,
   VehicleListComponent,
   VehicleComponent,
   PageNotFoundComponent
@@ -84,7 +101,36 @@ export const routableComponents = [
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/app.routing.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/character-list.component.ts][content]" value="import { Component, OnInit } from '@angular/core';
+*/"><input type="hidden" name="files[app/can-activate.service.ts]" value="import { Injectable } from '@angular/core';
+import {
+  CanActivate,
+  Route,
+  Router,
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot
+} from '@angular/router';
+
+import { UserProfileService } from './login/user-profile.service';
+
+@Injectable()
+export class CanActivateAuthGuard implements CanActivate {
+  constructor(private userProfileService: UserProfileService, private router: Router) { }
+
+  canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    if (this.userProfileService.isLoggedIn) {
+      return true;
+    }
+    this.router.navigate(['/login'], { queryParams: { redirectTo: state.url } });
+    return false;
+  }
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="files[app/characters/character-list.component.ts]" value="import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { Character, CharacterService } from './character.service';
@@ -113,7 +159,7 @@ export class CharacterListComponent implements OnInit {
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/characters/character-list.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/character.component.ts][content]" value="import { Component, Input, OnInit } from '@angular/core';
+*/"><input type="hidden" name="files[app/characters/character.component.ts]" value="import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Character, CharacterService } from '../characters/character.service';
@@ -167,7 +213,7 @@ export class CharacterComponent implements OnInit {
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/characters/character.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/character.service.ts][content]" value="import { Injectable } from '@angular/core';
+*/"><input type="hidden" name="files[app/characters/character.service.ts]" value="import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 
 import { CONFIG } from '../config';
@@ -201,7 +247,22 @@ export class CharacterService {
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/characters/character.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/config.ts][content]" value="export let CONFIG = {
+*/"><input type="hidden" name="files[app/characters/characters.component.ts]" value="import { Component } from '@angular/core';
+
+@Component({
+  moduleId: module.id,
+  template: `
+    <router-outlet></router-outlet>
+  `
+})
+export class CharactersComponent {}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="files[app/config.ts]" value="export let CONFIG = {
   baseUrls: {
     characters: 'api/characters.json',
     vehicles: 'api/vehicles.json'
@@ -213,7 +274,105 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/config.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/page-not-found.component.ts][content]" value="import { Component } from '@angular/core';
+*/"><input type="hidden" name="files[app/login/login.component.ts]" value="import { Component, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
+
+import { LoginService } from './login.service';
+import { UserProfileService } from './user-profile.service';
+
+@Component({
+  moduleId: module.id,
+  templateUrl: 'login.component.html',
+  providers: [LoginService]
+})
+export class LoginComponent implements OnDestroy {
+  private loginSub: Subscription;
+
+  constructor(
+    private loginService: LoginService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private userProfileService: UserProfileService) {
+  }
+
+  public get isLoggedIn() : boolean {
+    return this.userProfileService.isLoggedIn;
+  }
+
+  login() {
+    this.loginSub = this.loginService
+      .login()
+      .mergeMap(loginResult => this.route.queryParams)
+      .map(qp => qp['redirectTo'])
+      .subscribe(redirectTo => {
+        console.log(`Successfully logged in`);
+        if (this.userProfileService.isLoggedIn) {
+          let url = redirectTo ? [redirectTo] : [ '/' ];
+          this.router.navigate(url);
+        }
+      });
+  }
+
+  logout() {
+    this.loginService.logout();
+    console.log(`Successfully logged out`);
+  }
+
+  ngOnDestroy() {
+    if (this.loginSub) {
+      this.loginSub.unsubscribe();
+    }
+  }
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="files[app/login/login.service.ts]" value="import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+
+import { UserProfileService } from './user-profile.service';
+
+@Injectable()
+export class LoginService {
+  constructor(private userProfileService: UserProfileService) { }
+
+  login() {
+    return Observable.of(true)
+        .delay(1000)
+        .do(this.toggleLogState.bind(this));
+  }
+
+  logout() {
+    this.toggleLogState(false);
+  }
+
+  private toggleLogState(val: boolean) {
+    this.userProfileService.isLoggedIn = val;
+  }
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="files[app/login/user-profile.service.ts]" value="import { Injectable } from '@angular/core';
+
+@Injectable()
+export class UserProfileService {
+  isLoggedIn: boolean = false;
+}
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="files[app/page-not-found.component.ts]" value="import { Component } from '@angular/core';
 
 @Component({
   moduleId: module.id,
@@ -231,11 +390,12 @@ export class PageNotFoundComponent { }
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/page-not-found.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/rxjs-extensions.ts][content]" value="import 'rxjs/add/operator/catch';
+*/"><input type="hidden" name="files[app/rxjs-extensions.ts]" value="import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/delay';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/finally';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/fromPromise';
@@ -245,7 +405,7 @@ import 'rxjs/add/observable/fromPromise';
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/rxjs-extensions.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicle-list.component.ts][content]" value="import { Component, OnInit } from '@angular/core';
+*/"><input type="hidden" name="files[app/vehicles/vehicle-list.component.ts]" value="import { Component, OnInit } from '@angular/core';
 
 import { Vehicle, VehicleService } from './vehicle.service';
 
@@ -275,7 +435,7 @@ export class VehicleListComponent implements OnInit {
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/vehicles/vehicle-list.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicle.component.ts][content]" value="import { Component, Input, OnInit } from '@angular/core';
+*/"><input type="hidden" name="files[app/vehicles/vehicle.component.ts]" value="import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Vehicle, VehicleService } from './vehicle.service';
@@ -332,7 +492,7 @@ export class VehicleComponent implements OnInit {
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/vehicles/vehicle.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicle.service.ts][content]" value="import { Injectable } from '@angular/core';
+*/"><input type="hidden" name="files[app/vehicles/vehicle.service.ts]" value="import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 
 import { CONFIG } from '../config';
@@ -366,7 +526,7 @@ export class VehicleService {
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/vehicles/vehicle.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[main.ts][content]" value="import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+*/"><input type="hidden" name="files[main.ts]" value="import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module';
 
 platformBrowserDynamic().bootstrapModule(AppModule)
@@ -378,7 +538,7 @@ platformBrowserDynamic().bootstrapModule(AppModule)
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[main.ts][encoding]" value="utf8"><input type="hidden" name="entries[styles.css][content]" value="/* Master Styles */
+*/"><input type="hidden" name="files[styles.css]" value="/* Master Styles */
 h1 {
   color: #369;
   font-family: Arial, Helvetica, sans-serif;
@@ -525,7 +685,7 @@ nav a.active {
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[styles.css][encoding]" value="utf8"><input type="hidden" name="entries[app/app.component.html][content]" value="<div>
+*/"><input type="hidden" name="files[app/app.component.html]" value="<div>
   <header>
     <h1>Storyline Tracker</h1>
     <h3>Router Demo</h3>
@@ -533,6 +693,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
       <ul>
         <li><a [routerLink]=&quot;['/characters']&quot; href=&quot;&quot;>Characters</a></li>
         <li><a [routerLink]=&quot;['/vehicles']&quot; href=&quot;&quot;>Vehicles</a></li>
+        <li><a [routerLink]=&quot;['/login']&quot; href=&quot;&quot;>Login</a></li>
       </ul>
     </nav>
   </header>
@@ -548,7 +709,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
--->"><input type="hidden" name="entries[app/app.component.html][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/character-list.component.html][content]" value="<article>
+-->"><input type="hidden" name="files[app/characters/character-list.component.html]" value="<article>
   <h4>My Characters</h4>
 
   <ul class=&quot;characters&quot;>
@@ -565,7 +726,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
--->"><input type="hidden" name="entries[app/characters/character-list.component.html][encoding]" value="utf8"><input type="hidden" name="entries[app/characters/character.component.html][content]" value="<article>
+-->"><input type="hidden" name="files[app/characters/character.component.html]" value="<article>
   <div *ngIf=&quot;character&quot;>
     <h4>{{character.name}} details</h4>
 
@@ -585,7 +746,19 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
--->"><input type="hidden" name="entries[app/characters/character.component.html][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicle-list.component.html][content]" value="<article>
+-->"><input type="hidden" name="files[app/login/login.component.html]" value="<h2>LOGIN</h2>
+<p>
+  <button (click)=&quot;login()&quot; *ngIf=&quot;!isLoggedIn&quot;>Login</button>
+
+  <button (click)=&quot;logout()&quot; *ngIf=&quot;isLoggedIn&quot;>Logout</button>
+</p>
+
+
+<!-- 
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+-->"><input type="hidden" name="files[app/vehicles/vehicle-list.component.html]" value="<article>
   <h4>My Vehicles</h4>
 
   <ul class=&quot;vehicles&quot;>
@@ -602,7 +775,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
--->"><input type="hidden" name="entries[app/vehicles/vehicle-list.component.html][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles/vehicle.component.html][content]" value="<article>
+-->"><input type="hidden" name="files[app/vehicles/vehicle.component.html]" value="<article>
   <div *ngIf=&quot;vehicle&quot;>
     <h4>{{vehicle.name}} details</h4>
 
@@ -622,7 +795,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
--->"><input type="hidden" name="entries[app/vehicles/vehicle.component.html][encoding]" value="utf8"><input type="hidden" name="entries[index.html][content]" value="<!DOCTYPE html>
+-->"><input type="hidden" name="files[index.html]" value="<!DOCTYPE html>
 <html>
 
 <head>
@@ -653,7 +826,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
--->"><input type="hidden" name="entries[index.html][encoding]" value="utf8"><input type="hidden" name="entries[api/characters.json][content]" value="{
+-->"><input type="hidden" name="files[api/characters.json]" value="{
   &quot;data&quot;: [
     {
       &quot;id&quot;: 11,
@@ -736,7 +909,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
       &quot;side&quot;: &quot;light&quot;
     }
   ]
-}"><input type="hidden" name="entries[api/characters.json][encoding]" value="utf8"><input type="hidden" name="entries[api/vehicles.json][content]" value="{
+}"><input type="hidden" name="files[api/vehicles.json]" value="{
   &quot;data&quot;: [
     {
       &quot;id&quot;: 30,
@@ -794,9 +967,9 @@ can be found in the LICENSE file at http://bit.ly/l1cense
       &quot;type&quot;: &quot;land&quot;
     }
   ]
-}"><input type="hidden" name="entries[api/vehicles.json][encoding]" value="utf8"><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="first look"><input type="hidden" name="tags[3]" value="angular 2"><input type="hidden" name="title" value="Angular 2 Example - Angular 2 - Router"><input type="hidden" name="source[type]" value="Angular 2 - Router"><input type="hidden" name="source[url]" value="https://angular.io"><input type="hidden" name="entries[README.md][content]" value="### Angular 2 First Look Example 
+}"><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="first look"><input type="hidden" name="tags[3]" value="angular 2"><input type="hidden" name="private" value="true"><input type="hidden" name="description" value="Angular 2 Example - Angular 2 - Router Guards"><input type="hidden" name="files[README.md]" value="### Angular 2 First Look Example 
 
-Angular 2 - Router"><input type="hidden" name="entries[README.md][encoding]" value="utf8"><input type="hidden" name="entries[systemjs.config.js][content]" value="/**
+Angular 2 - Router Guards"><input type="hidden" name="files[systemjs.config.js]" value="/**
  * PLUNKER VERSION
  * (based on systemjs.config.js in angular.io)
  * System configuration for Angular 2 samples
@@ -872,7 +1045,7 @@ can be found in the LICENSE file at http://angular.io/license
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[systemjs.config.js][encoding]" value="utf8"><input type="hidden" name="entries[tsconfig.json][content]" value="{
+*/"><input type="hidden" name="files[tsconfig.json]" value="{
   &quot;compilerOptions&quot;: {
     &quot;target&quot;: &quot;es5&quot;,
     &quot;module&quot;: &quot;commonjs&quot;,
@@ -885,4 +1058,4 @@ can be found in the LICENSE file at http://bit.ly/l1cense
     &quot;suppressImplicitAnyIndexErrors&quot;: true
   }
 }
-"><input type="hidden" name="entries[tsconfig.json][encoding]" value="utf8"></form><script>document.getElementById("mainForm").submit();</script></body></html>
+"></form><script>document.getElementById("mainForm").submit();</script></body></html>
