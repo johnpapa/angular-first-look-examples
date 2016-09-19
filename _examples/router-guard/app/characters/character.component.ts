@@ -28,8 +28,9 @@ export class CharacterComponent implements OnInit {
         .do(id => this.id = +id)
         .subscribe(id => this.getCharacter());
     }
-    // force it to log outs
-    this.userProfileService.isLoggedIn = false;
+    // // force it to log outs
+    // this.userProfileService.isLoggedIn = false;
+    // console.log('Logged out on purpose');
   }
 
   private getCharacter() {

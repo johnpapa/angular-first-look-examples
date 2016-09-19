@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { CanActivateAuthGuard, CanDeactivateGuard, UserProfileService } from './core';
+import { AuthGuard, CanDeactivateGuard, UserProfileService } from './core';
 import { PageNotFoundComponent } from './page-not-found.component';
 
 /***************************************************************
@@ -18,8 +18,9 @@ const routes: Routes = [
   {
     path: 'admin',
     loadChildren: 'app/admin/admin.module#AdminModule',
-    canActivate: [CanActivateAuthGuard],
-    canLoad: [CanActivateAuthGuard],
+    canActivate: [AuthGuard],
+    canActivateChild: [AuthGuard],
+    canLoad: [AuthGuard],
   },
   { path: 'dashboard', loadChildren: 'app/dashboard/dashboard.module#DashboardModule' },
   { path: 'characters', loadChildren: 'app/characters/characters.module#CharactersModule' },
@@ -31,7 +32,7 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
   providers: [
-    CanActivateAuthGuard,
+    AuthGuard,
     CanDeactivateGuard,
     UserProfileService
   ]

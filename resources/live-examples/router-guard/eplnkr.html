@@ -70,15 +70,15 @@ const routes: Routes = [
   {
     path: 'characters',
     component: CharactersComponent,
-    canActivate: [CanActivateAuthGuard],
+    // canActivate: [CanActivateAuthGuard],
     canActivateChild: [CanActivateAuthGuard],
     children: [
       { path: '', component: CharacterListComponent },
       { path: ':id', component: CharacterComponent },
     ]
   },
-  { path: 'vehicles', component: VehicleListComponent },
-  { path: 'vehicles/:id', component: VehicleComponent },
+  { path: 'vehicles', component: VehicleListComponent, canActivateChild: [CanActivateAuthGuard] },
+  { path: 'vehicles/:id', component: VehicleComponent, canActivateChild: [CanActivateAuthGuard] },
   { path: '**', pathMatch: 'full', component: PageNotFoundComponent },
 ];
 
@@ -202,6 +202,7 @@ export class CharacterComponent implements OnInit {
     }
     // force it to log outs
     this.userProfileService.isLoggedIn = false;
+    console.log('Logged out on purpose');
   }
 
   private getCharacter() {

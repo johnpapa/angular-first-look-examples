@@ -12,7 +12,7 @@ import {
 import { UserProfileService } from './user-profile.service';
 
 @Injectable()
-export class CanActivateAuthGuard implements CanActivate, CanActivateChild, CanLoad {
+export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
   constructor(private userProfileService: UserProfileService, private router: Router) { }
 
   canLoad(route: Route) {
