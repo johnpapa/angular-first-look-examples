@@ -39,7 +39,7 @@
 
       // other libraries
       'rxjs':                       'npm:rxjs',
-      'angular2-in-memory-web-api': 'npm:angular2-in-memory-web-api',
+      'angular-in-memory-web-api':  'npm:angular-in-memory-web-api',
       'ts':                         'npm:plugin-typescript@4.0.10/lib/plugin.js',
       'typescript':                 'npm:typescript@2.0.2/lib/typescript.js',
 
@@ -48,6 +48,7 @@
     packages: {
       'app/core': { main: 'index' }, // PAPA
       'app/models': { main: 'index' }, // PAPA
+      'api': { defaultExtension: 'js' }, //PAPA
       app: {
         main: './main.ts',
         defaultExtension: 'ts'
@@ -55,7 +56,7 @@
       rxjs: {
         defaultExtension: 'js'
       },
-      'angular2-in-memory-web-api': {
+      'angular-in-memory-web-api': {
         main: './index.js',
         defaultExtension: 'js'
       }
@@ -63,8 +64,3 @@
   });
 })(this);
 
-/*
-Copyright 2016 Google Inc. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://angular.io/license
-*/

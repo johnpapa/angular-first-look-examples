@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { VehicleService } from './vehicle.service';
-import { routedComponents, VehiclesRoutingModule } from './vehicles.routing';
+import { routedComponents, VehiclesRoutingModule } from './vehicles-routing.module';
 
 @NgModule({
   imports: [CommonModule, FormsModule, VehiclesRoutingModule],
