@@ -41,12 +41,12 @@ var _rxData = [
   {
     pattern: 'script',
     from: 'node_modules/zone.js/dist/zone.js',
-    to:   'https://npmcdn.com/zone.js@0.6.23?main=browser'
+    to:   'https://npmcdn.com/zone.js@0.6.25?main=browser'
   },
   {
     pattern: 'script',
     from: 'node_modules/reflect-metadata/Reflect.js',
-    to:   'https://npmcdn.com/reflect-metadata@0.1.3'
+    to:   'https://npmcdn.com/reflect-metadata@0.1.8'
   },
   {
     pattern: 'script',
@@ -56,7 +56,7 @@ var _rxData = [
   {
     pattern: 'script',
     from: 'node_modules/systemjs/dist/system.src.js',
-    to:   'https://npmcdn.com/systemjs@0.19.27/dist/system.src.js'
+    to:   'https://npmcdn.com/systemjs@0.19.39/dist/system.src.js'
   },
   {
     pattern: 'script',

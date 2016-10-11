@@ -463,9 +463,9 @@ can be found in the LICENSE file at http://bit.ly/l1cense
   <story-app>Loading Storyline Tracker ...</story-app>
 
   <script src=&quot;https://npmcdn.com/core-js/client/shim.min.js&quot;></script>
-  <script src=&quot;https://npmcdn.com/zone.js@0.6.23?main=browser&quot;></script>
-  <script src=&quot;https://npmcdn.com/reflect-metadata@0.1.3&quot;></script>
-  <script src=&quot;https://npmcdn.com/systemjs@0.19.27/dist/system.src.js&quot;></script>
+  <script src=&quot;https://npmcdn.com/zone.js@0.6.25?main=browser&quot;></script>
+  <script src=&quot;https://npmcdn.com/reflect-metadata@0.1.8&quot;></script>
+  <script src=&quot;https://npmcdn.com/systemjs@0.19.39/dist/system.src.js&quot;></script>
 
   <script>
     System.import('systemjs.config.js')
@@ -664,7 +664,7 @@ Angular 2 - Needs a Router"><input type="hidden" name="files[systemjs.config.js]
 
       // other libraries
       'rxjs':                       'npm:rxjs',
-      'angular2-in-memory-web-api': 'npm:angular2-in-memory-web-api',
+      'angular-in-memory-web-api':  'npm:angular-in-memory-web-api',
       'ts':                         'npm:plugin-typescript@4.0.10/lib/plugin.js',
       'typescript':                 'npm:typescript@2.0.2/lib/typescript.js',
 
@@ -673,6 +673,7 @@ Angular 2 - Needs a Router"><input type="hidden" name="files[systemjs.config.js]
     packages: {
       'app/core': { main: 'index' }, // PAPA
       'app/models': { main: 'index' }, // PAPA
+      'api': { defaultExtension: 'js' }, //PAPA
       app: {
         main: './main.ts',
         defaultExtension: 'ts'
@@ -680,7 +681,7 @@ Angular 2 - Needs a Router"><input type="hidden" name="files[systemjs.config.js]
       rxjs: {
         defaultExtension: 'js'
       },
-      'angular2-in-memory-web-api': {
+      'angular-in-memory-web-api': {
         main: './index.js',
         defaultExtension: 'js'
       }
@@ -688,11 +689,6 @@ Angular 2 - Needs a Router"><input type="hidden" name="files[systemjs.config.js]
   });
 })(this);
 
-/*
-Copyright 2016 Google Inc. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://angular.io/license
-*/
 
 
 /*

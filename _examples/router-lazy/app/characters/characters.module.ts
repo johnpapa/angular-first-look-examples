@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { CharacterService } from './character.service';
-import { CharactersRouterModule, routedComponents } from './characters.routing';
+import { CharactersRouterModule, routedComponents } from './characters-routing.module';
 
 @NgModule({
   imports: [CommonModule, FormsModule, CharactersRouterModule],

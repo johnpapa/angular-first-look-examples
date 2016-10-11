@@ -1,4 +1,58 @@
-<html lang="en"><head></head><body><form id="mainForm" method="post" action="http://plnkr.co/edit/?p=preview" target="_self"><input type="hidden" name="files[app/app.component.ts]" value="import { Component } from '@angular/core';
+<html lang="en"><head></head><body><form id="mainForm" method="post" action="http://plnkr.co/edit/?p=preview" target="_self"><input type="hidden" name="files[app/app-routing.module.ts]" value="import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+
+import { CharactersComponent } from './characters/characters.component';
+import { CharacterListComponent } from './characters/character-list.component';
+import { CharacterComponent } from './characters/character.component';
+import { LoginComponent } from './login/login.component';
+import { PageNotFoundComponent } from './page-not-found.component';
+import { VehicleListComponent } from './vehicles/vehicle-list.component';
+import { VehicleComponent } from './vehicles/vehicle.component';
+
+import { CanActivateAuthGuard } from './can-activate.service';
+
+const routes: Routes = [
+  { path: '', pathMatch: 'full', redirectTo: 'characters', },
+  { path: 'login', component: LoginComponent },
+  // { path: 'characters', component: CharacterListComponent },
+  // { path: 'character/:id', component: CharacterComponent },
+  {
+    path: 'characters',
+    component: CharactersComponent,
+    canActivate: [CanActivateAuthGuard],
+    canActivateChild: [CanActivateAuthGuard],
+    children: [
+      { path: '', component: CharacterListComponent },
+      { path: ':id', component: CharacterComponent },
+    ]
+  },
+  { path: 'vehicles', component: VehicleListComponent },
+  { path: 'vehicles/:id', component: VehicleComponent },
+  { path: '**', pathMatch: 'full', component: PageNotFoundComponent },
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+
+export const routableComponents = [
+  CharacterListComponent,
+  CharacterComponent,
+  CharactersComponent,
+  LoginComponent,
+  VehicleListComponent,
+  VehicleComponent,
+  PageNotFoundComponent
+];
+
+
+/*
+Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://bit.ly/l1cense
+*/"><input type="hidden" name="files[app/app.component.ts]" value="import { Component } from '@angular/core';
 
 @Component({
   moduleId: module.id,
@@ -26,7 +80,7 @@ import './rxjs-extensions';
 import { AppComponent } from './app.component';
 import { CharacterService } from './characters/character.service';
 import { VehicleService } from './vehicles/vehicle.service';
-import { AppRoutingModule, routableComponents } from './app.routing';
+import { AppRoutingModule, routableComponents } from './app-routing.module';
 import { CanActivateAuthGuard } from './can-activate.service';
 import { UserProfileService } from './login/user-profile.service';
 
@@ -43,60 +97,6 @@ import { UserProfileService } from './login/user-profile.service';
   bootstrap: [AppComponent]
 })
 export class AppModule { }
-
-
-/*
-Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="files[app/app.routing.ts]" value="import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-
-import { CharactersComponent } from './characters/characters.component';
-import { CharacterListComponent } from './characters/character-list.component';
-import { CharacterComponent } from './characters/character.component';
-import { LoginComponent } from './login/login.component';
-import { PageNotFoundComponent } from './page-not-found.component';
-import { VehicleListComponent } from './vehicles/vehicle-list.component';
-import { VehicleComponent } from './vehicles/vehicle.component';
-
-import { CanActivateAuthGuard } from './can-activate.service';
-
-const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'characters', },
-  { path: 'login', component: LoginComponent },
-  // { path: 'characters', component: CharacterListComponent },
-  // { path: 'character/:id', component: CharacterComponent },
-  {
-    path: 'characters',
-    component: CharactersComponent,
-    // canActivate: [CanActivateAuthGuard],
-    canActivateChild: [CanActivateAuthGuard],
-    children: [
-      { path: '', component: CharacterListComponent },
-      { path: ':id', component: CharacterComponent },
-    ]
-  },
-  { path: 'vehicles', component: VehicleListComponent, canActivateChild: [CanActivateAuthGuard] },
-  { path: 'vehicles/:id', component: VehicleComponent, canActivateChild: [CanActivateAuthGuard] },
-  { path: '**', pathMatch: 'full', component: PageNotFoundComponent },
-];
-
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
-})
-export class AppRoutingModule { }
-
-export const routableComponents = [
-  CharacterListComponent,
-  CharacterComponent,
-  CharactersComponent,
-  LoginComponent,
-  VehicleListComponent,
-  VehicleComponent,
-  PageNotFoundComponent
-];
 
 
 /*
@@ -120,14 +120,10 @@ export class CanActivateAuthGuard implements CanActivate, CanActivateChild {
   constructor(private userProfileService: UserProfileService, private router: Router) { }
 
   canActivateChild(next: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    return this.isLoggedIn(next, state);
+    return this.canActivate(next, state);
   }
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    return this.isLoggedIn(next, state);
-  }
-
-  isLoggedIn(next: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     if (this.userProfileService.isLoggedIn) {
       return true;
     }
@@ -200,9 +196,9 @@ export class CharacterComponent implements OnInit {
         .do(id => this.id = +id)
         .subscribe(id => this.getCharacter());
     }
-    // force it to log outs
-    this.userProfileService.isLoggedIn = false;
-    console.log('Logged out on purpose');
+    // // force it to log outs
+    // this.userProfileService.isLoggedIn = false;
+    // console.log('Logged out on purpose');
   }
 
   private getCharacter() {
@@ -826,9 +822,9 @@ can be found in the LICENSE file at http://bit.ly/l1cense
   <story-app>Loading Storyline Tracker ...</story-app>
 
   <script src=&quot;https://npmcdn.com/core-js/client/shim.min.js&quot;></script>
-  <script src=&quot;https://npmcdn.com/zone.js@0.6.23?main=browser&quot;></script>
-  <script src=&quot;https://npmcdn.com/reflect-metadata@0.1.3&quot;></script>
-  <script src=&quot;https://npmcdn.com/systemjs@0.19.27/dist/system.src.js&quot;></script>
+  <script src=&quot;https://npmcdn.com/zone.js@0.6.25?main=browser&quot;></script>
+  <script src=&quot;https://npmcdn.com/reflect-metadata@0.1.8&quot;></script>
+  <script src=&quot;https://npmcdn.com/systemjs@0.19.39/dist/system.src.js&quot;></script>
 
   <script>
     System.import('systemjs.config.js')
@@ -1028,7 +1024,7 @@ Angular 2 - Router Guards"><input type="hidden" name="files[systemjs.config.js]"
 
       // other libraries
       'rxjs':                       'npm:rxjs',
-      'angular2-in-memory-web-api': 'npm:angular2-in-memory-web-api',
+      'angular-in-memory-web-api':  'npm:angular-in-memory-web-api',
       'ts':                         'npm:plugin-typescript@4.0.10/lib/plugin.js',
       'typescript':                 'npm:typescript@2.0.2/lib/typescript.js',
 
@@ -1037,6 +1033,7 @@ Angular 2 - Router Guards"><input type="hidden" name="files[systemjs.config.js]"
     packages: {
       'app/core': { main: 'index' }, // PAPA
       'app/models': { main: 'index' }, // PAPA
+      'api': { defaultExtension: 'js' }, //PAPA
       app: {
         main: './main.ts',
         defaultExtension: 'ts'
@@ -1044,7 +1041,7 @@ Angular 2 - Router Guards"><input type="hidden" name="files[systemjs.config.js]"
       rxjs: {
         defaultExtension: 'js'
       },
-      'angular2-in-memory-web-api': {
+      'angular-in-memory-web-api': {
         main: './index.js',
         defaultExtension: 'js'
       }
@@ -1052,11 +1049,6 @@ Angular 2 - Router Guards"><input type="hidden" name="files[systemjs.config.js]"
   });
 })(this);
 
-/*
-Copyright 2016 Google Inc. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://angular.io/license
-*/
 
 
 /*
