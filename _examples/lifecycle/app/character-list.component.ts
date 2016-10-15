@@ -10,18 +10,12 @@ import { Character, CharacterService } from './character.service';
 })
 export class CharacterListComponent implements OnInit {
   characters: Character[] = [];
-  messages: string[] = [];
   selectedCharacter: Character;
 
   constructor(private characterService: CharacterService) { }
 
-  clear() {
+  clearSelection() {
     this.selectedCharacter = null;
-  }
-
-  log(msg: string) {
-    this.messages.splice(0, 0, msg);
-    console.log(msg);
   }
 
   ngOnInit() {

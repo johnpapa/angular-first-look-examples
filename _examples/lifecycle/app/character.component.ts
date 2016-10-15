@@ -9,14 +9,13 @@ import { Character } from './character.service';
 })
 export class CharacterComponent implements OnChanges, OnInit, AfterViewInit, OnDestroy {
   @Input() character: Character;
-  @Output() onLifecycleHookFire = new EventEmitter<string>();
 
   ngAfterViewInit() {
-    this.onLifecycleHookFire.emit(`ngAfterViewInit for ${this.character.name}`);
+    console.log(`ngAfterViewInit for ${this.character.name}`);
   }
 
   ngOnChanges() {
-    this.onLifecycleHookFire.emit(`ngOnChanges for ${this.character.name}`);
+    console.log(`ngOnChanges for ${this.character.name}`);
   }
 
   ngOnDestroy() {
@@ -24,6 +23,6 @@ export class CharacterComponent implements OnChanges, OnInit, AfterViewInit, OnD
   }
 
   ngOnInit() {
-    this.onLifecycleHookFire.emit(`ngOnInit for ${this.character.name}`);
+    console.log(`ngOnInit for ${this.character.name}`);
   }
 }

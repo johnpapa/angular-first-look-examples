@@ -4,12 +4,8 @@
   </li>
 </ul>
 
-<button (click)="clear()">clear</button>
-<ul class="messages">
-  <li *ngFor="let msg of messages">{{msg}}</li>
-</ul>
+<button (click)="clearSelection()">clear selection</button>
 
 <my-character *ngIf="selectedCharacter"
-  (onLifecycleHookFire)="log($event)"
   [character]="selectedCharacter"
   ></my-character>
