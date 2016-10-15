@@ -26,6 +26,7 @@ export class VehicleService {
 
   private handleError(error: Response) {
     console.error(error);
-    return Observable.throw(error.json().error || 'Server error');
+    let msg = `Error status code ${error.status} at ${error.url}`;
+    return Observable.throw(msg);
   }
 }
