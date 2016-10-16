@@ -49,6 +49,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/fromPromise';
+import 'rxjs/add/observable/throw';
 
 
 /*
@@ -127,7 +128,8 @@ export class VehicleService {
 
   private handleError(error: Response) {
     console.error(error);
-    return Observable.throw(error.json().error || 'Server error');
+    let msg = `Error status code ${error.status} at ${error.url}`;
+    return Observable.throw(msg);
   }
 }
 

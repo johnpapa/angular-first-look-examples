@@ -15,9 +15,9 @@ import { Character, CharacterService } from './character.service';
 export class CharacterListComponent implements OnInit {
   characters: Observable<Character[]>;
 
-  constructor(private _characterService: CharacterService) { }
+  constructor(private characterService: CharacterService) { }
 
   ngOnInit() {
-    this.characters = this._characterService.getCharacters();
+    this.characters = this.characterService.getCharacters();
   }
 }
