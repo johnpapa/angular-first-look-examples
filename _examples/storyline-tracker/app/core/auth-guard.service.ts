@@ -40,7 +40,6 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ) {
-    // TODO: implement this somewhere
     return this.canActivate(route, state);
   }
 }
