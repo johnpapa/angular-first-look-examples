@@ -30,6 +30,7 @@ class PlunkerBuilder {
     var plunkerPaths = path.join(this.basePath, '**/*plnkr.json');
     var fileNames = globby.sync(plunkerPaths, { ignore: "**/node_modules/**"});
     fileNames.forEach((configFileName) => {
+      // console.log(configFileName);
       try {
         this._buildPlunkerFrom(configFileName);
       } catch (e) {

@@ -104,7 +104,6 @@ var _exampleBoilerplateFiles = [
   'systemjs.config.js',
   'tsconfig.json',
   'tslint.json',
-  'typings.json',
   'wallaby.js'
  ];
 
