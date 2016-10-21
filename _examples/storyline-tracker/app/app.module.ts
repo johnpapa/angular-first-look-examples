@@ -5,7 +5,7 @@ import { HttpModule } from '@angular/http';
 import './core/rxjs-extensions';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { InMemoryWebApiModule } from 'angular-in-memory-web-api/in-memory-web-api.module';
+import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { InMemoryStoreService } from '../api/in-memory-store.service';
 import { CharacterService } from './models';
 import { PageNotFoundComponent } from './page-not-found.component';
