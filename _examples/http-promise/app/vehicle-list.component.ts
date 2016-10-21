@@ -15,11 +15,11 @@ export class VehicleListComponent {
 
   constructor(private vehicleService: VehicleService) { }
 
-  getHeroes(value?: string) {
+  getVehicles(value?: string) {
     this.vehicles = this.vehicleService.getVehicles(value);
   }
 
-  ngOnInit() { this.getHeroes(); }
+  ngOnInit() { this.getVehicles(); }
 
   select(vehicle: Vehicle) {
     this.selectedVehicle = vehicle;

@@ -32,11 +32,14 @@
   "devDependencies": {
     "concurrently": "^3.0.0",
     "lite-server": "^2.2.2",
-    "typescript": "^2.0.3",
-    "typings": "^1.4.0",
     "fs-extra": "^0.24.0",
     "globby": "^4.0.0",
     "lodash": "^4.11.1",
-    "minimatch": "^3.0.2"
+    "minimatch": "^3.0.2",
+    "typescript": "^2.0.3",
+    "@types/core-js": "^0.9.34",
+    "@types/node": "^6.0.45",
+    "@types/jasmine": "^2.5.35",
+    "@types/selenium-webdriver": "^2.53.32"
   }
 }

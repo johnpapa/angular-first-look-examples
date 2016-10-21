@@ -15,7 +15,7 @@ export class VehicleListComponent {
 
   constructor(private vehicleService: VehicleService) { }
 
-  getHeroes() {
+  getVehicles() {
     this.vehicleService.getVehicles()
       .subscribe(
         vehicles => this.vehicles = vehicles,
@@ -23,7 +23,7 @@ export class VehicleListComponent {
     );
   }
 
-  ngOnInit() { this.getHeroes(); }
+  ngOnInit() { this.getVehicles(); }
 
   select(vehicle: Vehicle) {
     this.selectedVehicle = vehicle;
