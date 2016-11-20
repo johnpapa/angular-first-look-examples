@@ -17,3 +17,5 @@ npm-debug.log
 #the pluralsight download folder
 materials
 materials.zip
+
+.DS_Store
