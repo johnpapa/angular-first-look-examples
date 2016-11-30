@@ -2,6 +2,10 @@
 
 ### for Pluralsight
 
+The code in this repo is the source for what becomes the plunkers located [https://github.com/johnpapa/angular2-first-look](https://github.com/johnpapa/angular2-first-look)
+
+The plunkers are the recommended way to run the code. However, if you wish to explore, instructions can be found below.
+
 # Getting Started
 
 1. Fork and clone this repo
@@ -10,6 +14,8 @@
 
   `npm i`
 
-1. Run the TypeScript compiler, watch for changes, start the server, and launch the browser
+# Exploring 
 
-  `npm start`
+Each example is located in its own folder under `_examples/`. Feel free to explore them. You may run `npm i` in those respective folders, if you wish to run them. Then run `npm start` to try each demo locally.
+
+
