@@ -18,4 +18,14 @@ The plunkers are the recommended way to run the code. However, if you wish to ex
 
 Each example is located in its own folder under `_examples/`. Feel free to explore them. You may run `npm i` in those respective folders, if you wish to run them. Then run `npm start` to try each demo locally.
 
+For example ...
+
+```
+cd _examples/component-simple
+npm i
+npm start
+```
+
+Reminder ... The other files in this repo are here for helping create the plunkers. Focus only on the files in the`_examples/xxx` folders.
+
 
