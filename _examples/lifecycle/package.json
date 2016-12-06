@@ -5,10 +5,8 @@
     "start": "npm run tsc && concurrently \"npm run tsc:w\" \"npm run lite\" ",
     "lint": "tslint ./app/**/*.ts -t verbose",
     "lite": "lite-server",
-    "postinstall": "typings install",
     "tsc": "tsc",
-    "tsc:w": "tsc -w",
-    "typings": "typings"
+    "tsc:w": "tsc -w"
   },
   "dependencies": {
     "@angular/common": "~2.2.0",
