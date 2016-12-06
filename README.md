@@ -13,18 +13,11 @@ Fork and clone this repo ...
 ```
 git clone git@github.com:johnpapa/a2-first-look.git a2firstlook
 cd a2firstlook
-rm .git
+rm -rf .git/
 ```
 
-Now Explore ...
 
-```
-cd _examples/component-simple/
-npm i
-npm start
-```
-
-# Prep the Examples
+Prep the Examples
 
 ```
 cd _examples
@@ -33,16 +26,12 @@ cd ..
 npm run all
 ```
 
-# Exploring
-
-Each example is located in its own folder under `_examples/`. Feel free to explore them. You may run `npm start` in those respective folders, if you wish to run them locally.
-
-For example ...
-
 ```
-cd _examples/component-simple
+cd _examples/component-simple/
 npm start
 ```
+
+Each example is located in its own folder under `_examples/`. Feel free to explore them. You may run `npm start` in those respective folders, if you wish to run them locally.
 
 Reminder ... The other files in this repo are here for helping create the plunkers. Focus only on the files in the`_examples/xxx` folders.
 
