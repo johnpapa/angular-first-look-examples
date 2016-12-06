@@ -8,11 +8,21 @@ The plunkers are the recommended way to run the code. However, if you wish to ex
 
 # Getting Started
 
-1. Fork and clone this repo
+Fork and clone this repo ...
 
-1. Install packages
+```
+git clone git@github.com:johnpapa/a2-first-look.git a2firstlook
+cd a2firstlook
+rm .git
+```
 
-  `npm i`
+Now Explore ...
+
+```
+cd _examples/component-simple/
+npm i
+npm start
+```
 
 # Exploring 
 
