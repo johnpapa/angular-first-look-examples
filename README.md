@@ -14,6 +14,7 @@ Fork and clone this repo ...
 git clone git@github.com:johnpapa/a2-first-look.git a2firstlook
 cd a2firstlook
 rm -rf .git/
+npm i
 ```
 
 
@@ -25,6 +26,8 @@ npm i
 cd ..
 npm run all
 ```
+
+Run an example
 
 ```
 cd _examples/component-simple/
