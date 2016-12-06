@@ -24,15 +24,23 @@ npm i
 npm start
 ```
 
-# Exploring 
+# Prep the Examples
 
-Each example is located in its own folder under `_examples/`. Feel free to explore them. You may run `npm i` in those respective folders, if you wish to run them. Then run `npm start` to try each demo locally.
+```
+cd _examples
+npm i
+cd ..
+npm run all
+```
+
+# Exploring
+
+Each example is located in its own folder under `_examples/`. Feel free to explore them. You may run `npm start` in those respective folders, if you wish to run them locally.
 
 For example ...
 
 ```
 cd _examples/component-simple
-npm i
 npm start
 ```
 
