@@ -3,6 +3,7 @@
   "files":[
     "!**/*.d.ts",
     "!**/*.js",
+    "typings.d.ts",
     "**/assets/*.js",
     "**/assets/*.js"
   ],
