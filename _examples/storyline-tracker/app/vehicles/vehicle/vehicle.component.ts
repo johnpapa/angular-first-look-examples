@@ -10,7 +10,7 @@ import { VehicleService } from '../shared/vehicle.service';
   moduleId: module.id,
   selector: 'story-vehicle',
    templateUrl: './vehicle.component.html',
-  styleUrls: ['vehicle.component.css']
+  styleUrls: ['./vehicle.component.css']
 })
 export class VehicleComponent implements OnDestroy, OnInit, CanComponentDeactivate {
   @Input() vehicle: Vehicle;

@@ -9,7 +9,7 @@ import { CanComponentDeactivate, EntityService, ModalService, ToastService } fro
   moduleId: module.id,
   selector: 'story-character',
    templateUrl: './character.component.html',
-  styleUrls: ['character.component.css']
+  styleUrls: ['./character.component.css']
 })
 export class CharacterComponent implements OnDestroy, OnInit, CanComponentDeactivate {
   @Input() character: Character;

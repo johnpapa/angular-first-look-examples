@@ -7,7 +7,7 @@ import { SpinnerState, SpinnerService } from './spinner.service';
   moduleId: module.id,
   selector: 'story-spinner',
    templateUrl: './spinner.component.html',
-  styleUrls: ['spinner.component.css']
+  styleUrls: ['./spinner.component.css']
 })
 export class SpinnerComponent implements OnDestroy, OnInit {
   visible = false;

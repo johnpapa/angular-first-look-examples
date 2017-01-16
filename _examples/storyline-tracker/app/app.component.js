@@ -16,7 +16,7 @@ AppComponent = __decorate([
         moduleId: module.id,
         selector: 'story-app',
         templateUrl: './app.component.html',
-        styleUrls: ['app.component.css']
+        styleUrls: ['./app.component.css']
     })
 ], AppComponent);
 exports.AppComponent = AppComponent;

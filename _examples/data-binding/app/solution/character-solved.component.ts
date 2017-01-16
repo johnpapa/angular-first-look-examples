@@ -12,7 +12,7 @@ class Vehicle {
   moduleId: module.id,
   selector: 'story-character-solved',
    templateUrl: './character-solved.component.html',
-  styleUrls: ['character-solved.component.css']
+  styleUrls: ['./character-solved.component.css']
 })
 export class CharacterSolvedComponent {
   character: Character;

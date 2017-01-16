@@ -9,7 +9,7 @@ import { FilterTextService } from '../../shared/filter-text/filter-text.service'
   moduleId: module.id,
   selector: 'story-character-list',
    templateUrl: './character-list.component.html',
-  styleUrls: ['character-list.component.css'],
+  styleUrls: ['./character-list.component.css'],
 })
 export class CharacterListComponent implements OnDestroy, OnInit {
   private dbResetSubscription: Subscription;

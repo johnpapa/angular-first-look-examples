@@ -55,7 +55,7 @@ DashboardComponent = __decorate([
         moduleId: module.id,
         selector: 'story-dashboard',
         templateUrl: './dashboard.component.html',
-        styleUrls: ['dashboard.component.css']
+        styleUrls: ['./dashboard.component.css']
     }),
     __metadata("design:paramtypes", [router_1.ActivatedRoute,
         models_1.CharacterService,

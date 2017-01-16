@@ -8,7 +8,7 @@ const KEY_ESC = 27;
   moduleId: module.id,
   selector: 'story-modal',
    templateUrl: './modal.component.html',
-  styleUrls: ['modal.component.css']
+  styleUrls: ['./modal.component.css']
 })
 export class ModalComponent implements OnInit {
   title: string;

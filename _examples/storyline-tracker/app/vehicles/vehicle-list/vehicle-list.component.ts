@@ -10,7 +10,7 @@ import { VehicleService } from '../shared/vehicle.service';
   moduleId: module.id,
   selector: 'story-vehicle-list',
    templateUrl: './vehicle-list.component.html',
-  styleUrls: ['vehicle-list.component.css']
+  styleUrls: ['./vehicle-list.component.css']
 })
 export class VehicleListComponent implements OnDestroy, OnInit {
   private dbResetSubscription: Subscription;
