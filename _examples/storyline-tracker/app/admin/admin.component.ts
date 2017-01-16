@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   moduleId: module.id,
   selector: 'story-admin',
-  templateUrl: 'admin.component.html'
+   templateUrl: './admin.component.html'
 })
 export class AdminComponent implements OnInit {
   constructor() { }

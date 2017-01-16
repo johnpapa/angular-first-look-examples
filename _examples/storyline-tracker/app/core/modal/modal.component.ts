@@ -7,7 +7,7 @@ const KEY_ESC = 27;
 @Component({
   moduleId: module.id,
   selector: 'story-modal',
-  templateUrl: 'modal.component.html',
+   templateUrl: './modal.component.html',
   styleUrls: ['modal.component.css']
 })
 export class ModalComponent implements OnInit {

@@ -5,7 +5,7 @@ import { Character } from './character.service';
 @Component({
   moduleId: module.id,
   selector: 'my-character',
-  templateUrl: 'character.component.html'
+   templateUrl: './character.component.html'
 })
 export class CharacterComponent {
   @Input() character: Character;

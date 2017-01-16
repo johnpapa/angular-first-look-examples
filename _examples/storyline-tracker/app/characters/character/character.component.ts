@@ -8,7 +8,7 @@ import { CanComponentDeactivate, EntityService, ModalService, ToastService } fro
 @Component({
   moduleId: module.id,
   selector: 'story-character',
-  templateUrl: 'character.component.html',
+   templateUrl: './character.component.html',
   styleUrls: ['character.component.css']
 })
 export class CharacterComponent implements OnDestroy, OnInit, CanComponentDeactivate {

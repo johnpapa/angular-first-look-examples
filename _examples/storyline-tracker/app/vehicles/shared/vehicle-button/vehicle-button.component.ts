@@ -5,7 +5,7 @@ import { Vehicle } from '../vehicle.model';
 @Component({
   moduleId: module.id,
   selector: 'story-vehicle-button',
-  templateUrl: 'vehicle-button.component.html',
+   templateUrl: './vehicle-button.component.html',
   styleUrls: ['vehicle-button.component.css'],
 })
 export class VehicleButtonComponent implements OnInit {

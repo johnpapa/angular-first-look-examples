@@ -11,7 +11,7 @@ class Vehicle {
 @Component({
   moduleId: module.id,
   selector: 'story-character-solved',
-  templateUrl: 'character-solved.component.html',
+   templateUrl: './character-solved.component.html',
   styleUrls: ['character-solved.component.css']
 })
 export class CharacterSolvedComponent {

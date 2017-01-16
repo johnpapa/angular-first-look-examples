@@ -16,7 +16,7 @@ CharacterComponent = __decorate([
     core_1.Component({
         moduleId: module.id,
         selector: 'my-character',
-        templateUrl: 'character.component.html'
+        templateUrl: './character.component.html'
     })
 ], CharacterComponent);
 exports.CharacterComponent = CharacterComponent;

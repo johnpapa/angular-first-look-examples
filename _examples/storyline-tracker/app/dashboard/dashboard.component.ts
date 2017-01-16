@@ -9,7 +9,7 @@ import { ToastService } from '../../app/core';
 @Component({
   moduleId: module.id,
   selector: 'story-dashboard',
-  templateUrl: 'dashboard.component.html',
+   templateUrl: './dashboard.component.html',
   styleUrls: ['dashboard.component.css']
 })
 export class DashboardComponent implements OnDestroy, OnInit {

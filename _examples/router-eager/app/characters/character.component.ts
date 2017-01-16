@@ -6,7 +6,7 @@ import { Character, CharacterService } from '../characters/character.service';
 @Component({
   moduleId: module.id,
   selector: 'story-character',
-  templateUrl: 'character.component.html'
+   templateUrl: './character.component.html'
 })
 export class CharacterComponent implements OnInit {
   @Input() character: Character;

@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs/Subscription'
 @Component({
   moduleId: module.id,
   selector: 'story-toast',
-  templateUrl: 'toast.component.html',
+   templateUrl: './toast.component.html',
   styleUrls: ['toast.component.css']
 })
 export class ToastComponent implements OnDestroy, OnInit {

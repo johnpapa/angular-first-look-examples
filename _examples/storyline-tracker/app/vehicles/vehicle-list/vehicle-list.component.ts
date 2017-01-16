@@ -9,7 +9,7 @@ import { VehicleService } from '../shared/vehicle.service';
 @Component({
   moduleId: module.id,
   selector: 'story-vehicle-list',
-  templateUrl: 'vehicle-list.component.html',
+   templateUrl: './vehicle-list.component.html',
   styleUrls: ['vehicle-list.component.css']
 })
 export class VehicleListComponent implements OnDestroy, OnInit {

@@ -4,7 +4,7 @@ import { Character, CharacterService } from './character.service';
 @Component({
   moduleId: module.id,
   selector: 'story-characters',
-  templateUrl: 'characters.component.html',
+   templateUrl: './characters.component.html',
   styleUrls: ['characters.component.css'],
   providers: [CharacterService]
 })
