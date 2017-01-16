@@ -8,7 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var core_1 = require('@angular/core');
+var core_1 = require("@angular/core");
 var Character = (function () {
     function Character(id, name, side, imageUrl, link) {
         this.id = id;
@@ -43,16 +43,16 @@ var CharacterComponent = (function () {
         console.log(msg);
         this.isSelected = !this.isSelected;
     };
-    CharacterComponent = __decorate([
-        core_1.Component({
-            moduleId: module.id,
-            selector: 'story-character',
-            templateUrl: 'character.component.html',
-            styleUrls: ['character.component.css']
-        }), 
-        __metadata('design:paramtypes', [])
-    ], CharacterComponent);
     return CharacterComponent;
 }());
+CharacterComponent = __decorate([
+    core_1.Component({
+        moduleId: module.id,
+        selector: 'story-character',
+        templateUrl: './character.component.html',
+        styleUrls: ['./character.component.css']
+    }),
+    __metadata("design:paramtypes", [])
+], CharacterComponent);
 exports.CharacterComponent = CharacterComponent;
 //# sourceMappingURL=character.component.js.map
