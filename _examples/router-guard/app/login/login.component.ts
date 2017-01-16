@@ -7,7 +7,7 @@ import { UserProfileService } from './user-profile.service';
 
 @Component({
   moduleId: module.id,
-  templateUrl: 'login.component.html',
+   templateUrl: './login.component.html',
   providers: [LoginService]
 })
 export class LoginComponent implements OnDestroy {

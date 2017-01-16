@@ -45,11 +45,6 @@ var _rxData = [
   },
   {
     pattern: 'script',
-    from: 'node_modules/reflect-metadata/Reflect.js',
-    to:   'https://npmcdn.com/reflect-metadata@0.1.8'
-  },
-  {
-    pattern: 'script',
     from: 'node_modules/rxjs/bundles/Rx.umd.js',
     to:   'https://npmcdn.com/rxjs@5.0.0-beta.12/bundles/Rx.umd.js'
   },

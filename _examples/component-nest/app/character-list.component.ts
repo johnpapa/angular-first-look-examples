@@ -4,7 +4,7 @@ import { Character } from './character';
 @Component({
   moduleId: module.id,
   selector: 'my-character-list',
-  templateUrl: 'character-list.component.html'
+   templateUrl: './character-list.component.html'
 })
 export class CharacterListComponent {
   characters = [

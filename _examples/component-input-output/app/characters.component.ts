@@ -4,8 +4,8 @@ import { Character, CharacterService } from './character.service';
 @Component({
   moduleId: module.id,
   selector: 'story-characters',
-  templateUrl: 'characters.component.html',
-  styleUrls: ['characters.component.css'],
+   templateUrl: './characters.component.html',
+  styleUrls: ['./characters.component.css'],
   providers: [CharacterService]
 })
 export class CharactersComponent implements OnInit {
