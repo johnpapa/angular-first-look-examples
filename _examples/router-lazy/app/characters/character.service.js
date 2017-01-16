@@ -8,9 +8,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var core_1 = require('@angular/core');
-var http_1 = require('@angular/http');
-var config_1 = require('../config');
+var core_1 = require("@angular/core");
+var http_1 = require("@angular/http");
+var config_1 = require("../config");
 var charactersUrl = config_1.CONFIG.baseUrls.characters;
 var Character = (function () {
     function Character() {
@@ -31,11 +31,11 @@ var CharacterService = (function () {
             .get(charactersUrl)
             .map(function (response) { return response.json().data; });
     };
-    CharacterService = __decorate([
-        core_1.Injectable(), 
-        __metadata('design:paramtypes', [http_1.Http])
-    ], CharacterService);
     return CharacterService;
 }());
+CharacterService = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [http_1.Http])
+], CharacterService);
 exports.CharacterService = CharacterService;
 //# sourceMappingURL=character.service.js.map

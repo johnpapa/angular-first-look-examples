@@ -8,8 +8,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var core_1 = require('@angular/core');
-var character_service_1 = require('./character.service');
+var core_1 = require("@angular/core");
+var character_service_1 = require("./character.service");
 var CharacterListComponent = (function () {
     function CharacterListComponent(characterService) {
         this.characterService = characterService;
@@ -17,16 +17,16 @@ var CharacterListComponent = (function () {
     CharacterListComponent.prototype.ngOnInit = function () {
         this.characters = this.characterService.getCharacters();
     };
-    CharacterListComponent = __decorate([
-        core_1.Component({
-            moduleId: module.id,
-            selector: 'story-characters',
-            templateUrl: 'character-list.component.html',
-            styles: ["\n    .characters {list-style-type: none;}\n    *.characters li {padding: 4px;cursor: pointer;}\n  "]
-        }), 
-        __metadata('design:paramtypes', [character_service_1.CharacterService])
-    ], CharacterListComponent);
     return CharacterListComponent;
 }());
+CharacterListComponent = __decorate([
+    core_1.Component({
+        moduleId: module.id,
+        selector: 'story-characters',
+        templateUrl: 'character-list.component.html',
+        styles: ["\n    .characters {list-style-type: none;}\n    *.characters li {padding: 4px;cursor: pointer;}\n  "]
+    }),
+    __metadata("design:paramtypes", [character_service_1.CharacterService])
+], CharacterListComponent);
 exports.CharacterListComponent = CharacterListComponent;
 //# sourceMappingURL=character-list.component.js.map
