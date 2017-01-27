@@ -4,7 +4,7 @@
 
 The code in this repo is the source for what becomes the plunkers located [https://github.com/johnpapa/angular2-first-look](https://github.com/johnpapa/angular2-first-look)
 
-The plunkers are the recommended way to run the code. However, if you wish to explore, instructions can be found below.
+> Note: The plunkers are the recommended way to run the code. However, if you wish to explore, instructions can be found below. This repo is not part of the course ... this is intended to be extra credit ... fun ... for those who are curious :)
 
 # Getting Started
 
