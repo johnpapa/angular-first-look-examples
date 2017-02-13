@@ -120,8 +120,9 @@ class PlunkerBuilder {
       targetName = altFileName.split('/').pop().slice(0, -5);
     }
     var target = embedded ? targetName : '_self';
+    var targetAttribute = embedded ? '' : `target="${target}"`
     var html = '<!DOCTYPE html><html lang="en"><body>'
-    html += `<form id="mainForm" method="post" action="${this.options.url}" target="${target}">`
+    html += `<form id="mainForm" method="post" action="${this.options.url}" ${targetAttribute}>`
 
     // html += '<div class="button"><button id="formButton" type="submit">Create Plunker</button></div>'
     // html += '</form><script>document.getElementById("formButton").click();</script>'
