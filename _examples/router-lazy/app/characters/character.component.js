@@ -8,9 +8,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var core_1 = require('@angular/core');
-var router_1 = require('@angular/router');
-var character_service_1 = require('../characters/character.service');
+var core_1 = require("@angular/core");
+var router_1 = require("@angular/router");
+var character_service_1 = require("../characters/character.service");
 var CharacterComponent = (function () {
     function CharacterComponent(characterService, route, router) {
         this.characterService = characterService;
@@ -44,19 +44,21 @@ var CharacterComponent = (function () {
             this.gotoCharacters();
         }
     };
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', character_service_1.Character)
-    ], CharacterComponent.prototype, "character", void 0);
-    CharacterComponent = __decorate([
-        core_1.Component({
-            moduleId: module.id,
-            selector: 'story-character',
-            templateUrl: 'character.component.html'
-        }), 
-        __metadata('design:paramtypes', [character_service_1.CharacterService, router_1.ActivatedRoute, router_1.Router])
-    ], CharacterComponent);
     return CharacterComponent;
 }());
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", character_service_1.Character)
+], CharacterComponent.prototype, "character", void 0);
+CharacterComponent = __decorate([
+    core_1.Component({
+        moduleId: module.id,
+        selector: 'story-character',
+        templateUrl: 'character.component.html'
+    }),
+    __metadata("design:paramtypes", [character_service_1.CharacterService,
+        router_1.ActivatedRoute,
+        router_1.Router])
+], CharacterComponent);
 exports.CharacterComponent = CharacterComponent;
 //# sourceMappingURL=character.component.js.map

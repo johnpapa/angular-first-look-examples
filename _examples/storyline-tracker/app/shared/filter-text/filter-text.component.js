@@ -8,7 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var core_1 = require('@angular/core');
+var core_1 = require("@angular/core");
 var FilterTextComponent = (function () {
     function FilterTextComponent() {
         this.changed = new core_1.EventEmitter();
@@ -22,19 +22,19 @@ var FilterTextComponent = (function () {
         console.log("Filter Changed: " + this.filter);
         this.changed.emit(this.filter);
     };
-    __decorate([
-        core_1.Output(), 
-        __metadata('design:type', core_1.EventEmitter)
-    ], FilterTextComponent.prototype, "changed", void 0);
-    FilterTextComponent = __decorate([
-        core_1.Component({
-            moduleId: module.id,
-            selector: 'story-filter-text',
-            templateUrl: 'filter-text.component.html'
-        }), 
-        __metadata('design:paramtypes', [])
-    ], FilterTextComponent);
     return FilterTextComponent;
 }());
+__decorate([
+    core_1.Output(),
+    __metadata("design:type", core_1.EventEmitter)
+], FilterTextComponent.prototype, "changed", void 0);
+FilterTextComponent = __decorate([
+    core_1.Component({
+        moduleId: module.id,
+        selector: 'story-filter-text',
+        templateUrl: './filter-text.component.html'
+    }),
+    __metadata("design:paramtypes", [])
+], FilterTextComponent);
 exports.FilterTextComponent = FilterTextComponent;
 //# sourceMappingURL=filter-text.component.js.map

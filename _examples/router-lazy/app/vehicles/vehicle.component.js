@@ -8,9 +8,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var core_1 = require('@angular/core');
-var router_1 = require('@angular/router');
-var vehicle_service_1 = require('./vehicle.service');
+var core_1 = require("@angular/core");
+var router_1 = require("@angular/router");
+var vehicle_service_1 = require("./vehicle.service");
 var VehicleComponent = (function () {
     function VehicleComponent(route, router, vehicleService) {
         this.route = route;
@@ -20,9 +20,6 @@ var VehicleComponent = (function () {
     VehicleComponent.prototype.ngOnInit = function () {
         var _this = this;
         if (!this.vehicle) {
-            // Could use a snapshot here, as long as the parameters do not change.
-            // This may happen when a component is re-used.
-            // this.id = +this.route.snapshot.params['id'];
             this.route
                 .params
                 .map(function (params) { return params['id']; })
@@ -47,19 +44,21 @@ var VehicleComponent = (function () {
             this.gotoVehicles();
         }
     };
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', vehicle_service_1.Vehicle)
-    ], VehicleComponent.prototype, "vehicle", void 0);
-    VehicleComponent = __decorate([
-        core_1.Component({
-            moduleId: module.id,
-            selector: 'story-vehicle',
-            templateUrl: 'vehicle.component.html'
-        }), 
-        __metadata('design:paramtypes', [router_1.ActivatedRoute, router_1.Router, vehicle_service_1.VehicleService])
-    ], VehicleComponent);
     return VehicleComponent;
 }());
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", vehicle_service_1.Vehicle)
+], VehicleComponent.prototype, "vehicle", void 0);
+VehicleComponent = __decorate([
+    core_1.Component({
+        moduleId: module.id,
+        selector: 'story-vehicle',
+        templateUrl: 'vehicle.component.html'
+    }),
+    __metadata("design:paramtypes", [router_1.ActivatedRoute,
+        router_1.Router,
+        vehicle_service_1.VehicleService])
+], VehicleComponent);
 exports.VehicleComponent = VehicleComponent;
 //# sourceMappingURL=vehicle.component.js.map

@@ -2,7 +2,8 @@
   "description": "Angular 2 - Two-Way Binding",
   "files":[
     "!**/*.d.ts",
-    "!**/*.js",     "**/assets/*.js",
+    "!**/*.js",
+    "typings.d.ts",
     "**/assets/*.js"
   ],
   "tags": ["first look", "angular 2"]

@@ -8,11 +8,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var core_1 = require('@angular/core');
-var router_1 = require('@angular/router');
-var Observable_1 = require('rxjs/Observable');
-var models_1 = require('../../app/models');
-var core_2 = require('../../app/core');
+var core_1 = require("@angular/core");
+var router_1 = require("@angular/router");
+var Observable_1 = require("rxjs/Observable");
+var models_1 = require("../../app/models");
+var core_2 = require("../../app/core");
 var DashboardComponent = (function () {
     function DashboardComponent(route, characterService, router, toastService) {
         this.route = route;
@@ -48,16 +48,19 @@ var DashboardComponent = (function () {
     DashboardComponent.prototype.trackByCharacters = function (index, character) {
         return character.id;
     };
-    DashboardComponent = __decorate([
-        core_1.Component({
-            moduleId: module.id,
-            selector: 'story-dashboard',
-            templateUrl: 'dashboard.component.html',
-            styleUrls: ['dashboard.component.css']
-        }), 
-        __metadata('design:paramtypes', [router_1.ActivatedRoute, models_1.CharacterService, router_1.Router, core_2.ToastService])
-    ], DashboardComponent);
     return DashboardComponent;
 }());
+DashboardComponent = __decorate([
+    core_1.Component({
+        moduleId: module.id,
+        selector: 'story-dashboard',
+        templateUrl: './dashboard.component.html',
+        styleUrls: ['./dashboard.component.css']
+    }),
+    __metadata("design:paramtypes", [router_1.ActivatedRoute,
+        models_1.CharacterService,
+        router_1.Router,
+        core_2.ToastService])
+], DashboardComponent);
 exports.DashboardComponent = DashboardComponent;
 //# sourceMappingURL=dashboard.component.js.map

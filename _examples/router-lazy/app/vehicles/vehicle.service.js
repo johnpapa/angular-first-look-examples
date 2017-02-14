@@ -8,9 +8,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var core_1 = require('@angular/core');
-var http_1 = require('@angular/http');
-var config_1 = require('../config');
+var core_1 = require("@angular/core");
+var http_1 = require("@angular/http");
+var config_1 = require("../config");
 var vehiclesUrl = config_1.CONFIG.baseUrls.vehicles;
 var Vehicle = (function () {
     function Vehicle() {
@@ -21,6 +21,7 @@ exports.Vehicle = Vehicle;
 var VehicleService = (function () {
     function VehicleService(http) {
         this.http = http;
+        console.log('created vehicle service');
     }
     VehicleService.prototype.getVehicle = function (id) {
         return this.getVehicles()
@@ -31,11 +32,11 @@ var VehicleService = (function () {
             .get(vehiclesUrl)
             .map(function (response) { return response.json().data; });
     };
-    VehicleService = __decorate([
-        core_1.Injectable(), 
-        __metadata('design:paramtypes', [http_1.Http])
-    ], VehicleService);
     return VehicleService;
 }());
+VehicleService = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [http_1.Http])
+], VehicleService);
 exports.VehicleService = VehicleService;
 //# sourceMappingURL=vehicle.service.js.map
