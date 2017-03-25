@@ -1,5 +1,5 @@
 {
-  "name": "a2-first-look",
+  "name": "angular-first-look-examples",
   "version": "0.0.1",
   "scripts": {
     "plunk": "gulp build-plunkers",

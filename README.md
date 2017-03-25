@@ -1,8 +1,8 @@
-# Angular 2 First Look
+# Angular First Look
 
 ### for Pluralsight
 
-The code in this repo is the source for what becomes the plunkers located [https://github.com/johnpapa/angular2-first-look](https://github.com/johnpapa/angular2-first-look)
+The code in this repo is the source for what becomes the plunkers located [https://github.com/johnpapa/angular-first-look-hosted](https://github.com/johnpapa/angular-first-look-hosted)
 
 > Note: The plunkers are the recommended way to run the code. However, if you wish to explore, instructions can be found below. This repo is not part of the course ... this is intended to be extra credit ... fun ... for those who are curious :)
 
@@ -11,8 +11,8 @@ The code in this repo is the source for what becomes the plunkers located [https
 Fork and clone this repo ...
 
 ```
-git clone git@github.com:johnpapa/a2-first-look.git a2firstlook
-cd a2firstlook
+git clone git@github.com:johnpapa/angular-first-look-examples.git ng-ex
+cd ng-ex
 rm -rf .git/
 npm i
 ```
