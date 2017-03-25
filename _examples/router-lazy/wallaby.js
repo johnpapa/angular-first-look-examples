@@ -14,7 +14,7 @@ module.exports = function () {
       {pattern: 'node_modules/core-js/client/shim.min.js', instrument: false},
 
       // Reflect, Zone.js, and test shims
-      // Rx.js, Angular 2 itself, and the testing library not here because loaded by systemjs
+      // Rx.js, Angular itself, and the testing library not here because loaded by systemjs
       {pattern: 'node_modules/reflect-metadata/Reflect.js', instrument: false},
       {pattern: 'node_modules/zone.js/dist/zone.js', instrument: false},
       {pattern: 'node_modules/zone.js/dist/jasmine-patch.js', instrument: false},

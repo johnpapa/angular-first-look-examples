@@ -10,5 +10,5 @@ export class AppComponent {
   imagePath = 'angular.png';
   link = 'http://angular.io';
   story = 'The Empire Strikes Back';
-  title = 'Angular 2 Property Binding';
+  title = 'Angular Property Binding';
 }

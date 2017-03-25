@@ -508,12 +508,12 @@ declare var componentHandler: any;
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="first look"><input type="hidden" name="tags[3]" value="angular 2"><input type="hidden" name="private" value="true"><input type="hidden" name="description" value="Angular 2 Example - Http"><input type="hidden" name="files[README.md]" value="### Angular 2 First Look Example 
+*/"><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="first look"><input type="hidden" name="tags[3]" value="Angular"><input type="hidden" name="private" value="true"><input type="hidden" name="description" value="Angular Example - Http"><input type="hidden" name="files[README.md]" value="### Angular First Look Example 
 
 Http"><input type="hidden" name="files[systemjs.config.js]" value="/**
  * PLUNKER VERSION
  * (based on systemjs.config.js in angular.io)
- * System configuration for Angular 2 samples
+ * System configuration for Angular samples
  * Adjust as necessary for your application needs.
  */
 (function (global) {
@@ -550,11 +550,10 @@ Http"><input type="hidden" name="files[systemjs.config.js]" value="/**
       '@angular/upgrade': 'npm:@angular/upgrade/bundles/upgrade.umd.js',
 
       // other libraries
-      'rxjs':                       'npm:rxjs',
-      'angular-in-memory-web-api':  'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js',
-      'ts':                         'npm:plugin-typescript@4.0.10/lib/plugin.js',
-      'typescript':                 'npm:typescript@2.0.3/lib/typescript.js',
-
+      'rxjs':                      'npm:rxjs@5.0.1',
+      'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js',
+      'ts':                        'npm:plugin-typescript@5.2.7/lib/plugin.js',
+      'typescript':                'npm:typescript@2.2.1/lib/typescript.js'
     },
     // packages tells the System loader how to load when no filename and/or no extension
     packages: {
@@ -582,6 +581,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
   &quot;compilerOptions&quot;: {
     &quot;emitDecoratorMetadata&quot;: true,
     &quot;experimentalDecorators&quot;: true,
+    &quot;lib&quot;: [ &quot;es2015&quot;, &quot;dom&quot; ],
     &quot;module&quot;: &quot;commonjs&quot;,
     &quot;moduleResolution&quot;: &quot;node&quot;,
     &quot;noImplicitAny&quot;: false,

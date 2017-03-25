@@ -45,23 +45,8 @@ var _rxData = [
   },
   {
     pattern: 'script',
-    from: 'node_modules/rxjs/bundles/Rx.umd.js',
-    to:   'https://npmcdn.com/rxjs@5.0.0-beta.12/bundles/Rx.umd.js'
-  },
-  {
-    pattern: 'script',
     from: 'node_modules/systemjs/dist/system.src.js',
     to:   'https://npmcdn.com/systemjs@0.19.40/dist/system.src.js'
-  },
-  {
-    pattern: 'script',
-    from: 'node_modules/angular/in-memory-web-api/web-api.js',
-    to:   'https://npmcdn.com/angular/in-memory-web-api/web-api.js'
-  },
-  {
-    pattern: 'link',
-    from: 'node_modules/bootstrap/dist/css/bootstrap.min.css',
-    to:   'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css'
   },
   {
     pattern: 'angular_pkg',

@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
    templateUrl: './app.component.html',
 })
 export class AppComponent {
-  title = 'Angular 2 Two-Way Binding';
+  title = 'Angular Two-Way Binding';
   story = {
     name: 'The Empire Strikes Back'
   };

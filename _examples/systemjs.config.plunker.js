@@ -1,7 +1,7 @@
 /**
  * PLUNKER VERSION
  * (based on systemjs.config.js in angular.io)
- * System configuration for Angular 2 samples
+ * System configuration for Angular samples
  * Adjust as necessary for your application needs.
  */
 (function (global) {
@@ -38,11 +38,10 @@
       '@angular/upgrade': 'npm:@angular/upgrade/bundles/upgrade.umd.js',
 
       // other libraries
-      'rxjs':                       'npm:rxjs',
-      'angular-in-memory-web-api':  'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js',
-      'ts':                         'npm:plugin-typescript@4.0.10/lib/plugin.js',
-      'typescript':                 'npm:typescript@2.0.3/lib/typescript.js',
-
+      'rxjs':                      'npm:rxjs@5.0.1',
+      'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js',
+      'ts':                        'npm:plugin-typescript@5.2.7/lib/plugin.js',
+      'typescript':                'npm:typescript@2.2.1/lib/typescript.js'
     },
     // packages tells the System loader how to load when no filename and/or no extension
     packages: {

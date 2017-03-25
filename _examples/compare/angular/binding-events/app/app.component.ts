@@ -13,7 +13,7 @@ export class AppComponent {
   title: string;
 
   constructor() {
-    this.title = 'Angular 2 Binding Events';
+    this.title = 'Angular Binding Events';
   }
 
   log(msg: string, data: string) {

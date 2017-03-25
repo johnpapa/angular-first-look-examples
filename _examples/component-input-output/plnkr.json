@@ -6,5 +6,5 @@
     "typings.d.ts",
     "**/assets/*.js"
   ],
-  "tags": ["first look", "angular 2"]
+  "tags": ["first look", "Angular"]
 }
