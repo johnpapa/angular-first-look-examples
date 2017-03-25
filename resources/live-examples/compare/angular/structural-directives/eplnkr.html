@@ -1,12 +1,12 @@
 <html lang="en"><head></head><body><form id="mainForm" method="post" action="https://embed.plnkr.co?show=preview"><input type="hidden" name="entries[app/app.module.ts][content]" value="import { NgModule } from '@angular/core';
 import { BrowserModule  } from '@angular/platform-browser';
 
-import { CharacterComponent } from './character.component';
+import { VehiclesComponent } from './vehicles.component';
 
 @NgModule({
   imports: [BrowserModule],
-  declarations: [CharacterComponent],
-  bootstrap: [CharacterComponent],
+  declarations: [VehiclesComponent],
+  bootstrap: [VehiclesComponent],
 })
 export class AppModule { }
 
@@ -15,15 +15,19 @@ export class AppModule { }
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/app.module.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/character.component.ts][content]" value="import { Component } from '@angular/core';
+*/"><input type="hidden" name="entries[app/app.module.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles.component.ts][content]" value="import { Component } from '@angular/core';
 
 @Component({
   moduleId: module.id,
-  selector: 'my-character',
-   templateUrl: './character.component.html'
+  selector: 'my-vehicles',
+   templateUrl: './vehicles.component.html'
 })
-export class CharacterComponent {
-  name = 'Han Solo';
+export class VehiclesComponent {
+  vehicles = [
+    { id: 1, name: 'X-Wing Fighter' },
+    { id: 2, name: 'Tie Fighter' },
+    { id: 3, name: 'Y-Wing Fighter' }
+  ];
 }
 
 
@@ -31,7 +35,7 @@ export class CharacterComponent {
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/character.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[main.ts][content]" value="import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+*/"><input type="hidden" name="entries[app/vehicles.component.ts][encoding]" value="utf8"><input type="hidden" name="entries[main.ts][content]" value="import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module';
 
 platformBrowserDynamic().bootstrapModule(AppModule)
@@ -190,14 +194,21 @@ nav a.active {
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[styles.css][encoding]" value="utf8"><input type="hidden" name="entries[app/character.component.html][content]" value="<h3>My name is {{name}}</h3>
+*/"><input type="hidden" name="entries[styles.css][encoding]" value="utf8"><input type="hidden" name="entries[app/vehicles.component.html][content]" value="<ul>
+  <li *ngFor=&quot;let vehicle of vehicles&quot;>
+    {{vehicle.name}}
+  </li>
+</ul>
+<div *ngIf=&quot;vehicles.length&quot;>
+  <h3>You have {{vehicles.length}} vehicles</h3>
+</div>
 
 
 <!-- 
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
--->"><input type="hidden" name="entries[app/character.component.html][encoding]" value="utf8"><input type="hidden" name="entries[index.html][content]" value="<!DOCTYPE html>
+-->"><input type="hidden" name="entries[app/vehicles.component.html][encoding]" value="utf8"><input type="hidden" name="entries[index.html][content]" value="<!DOCTYPE html>
 <html>
 
 <head>
@@ -207,10 +218,9 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 </head>
 
 <body>
-  <my-character>Loading Demo ...</my-character>
+  <my-vehicles>Loading ngFor Demo ...</my-vehicles>
 
   <script src=&quot;https://npmcdn.com/core-js/client/shim.min.js&quot;></script>
-
   <script src=&quot;https://npmcdn.com/zone.js@0.6.26?main=browser&quot;></script>
 
   <script src=&quot;https://npmcdn.com/systemjs@0.19.40/dist/system.src.js&quot;></script>
@@ -229,7 +239,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
--->"><input type="hidden" name="entries[index.html][encoding]" value="utf8"><input type="hidden" name="entries[typings.d.ts][content]" value=" 
+-->"><input type="hidden" name="entries[index.html][encoding]" value="utf8"><input type="hidden" name="entries[typings.d.ts][content]" value="
 
 declare var componentHandler: any;
 
@@ -238,9 +248,9 @@ declare var componentHandler: any;
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[typings.d.ts][encoding]" value="utf8"><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="first look"><input type="hidden" name="tags[3]" value="Angular"><input type="hidden" name="title" value="Angular Example - Simplest Component"><input type="hidden" name="source[type]" value="Simplest Component"><input type="hidden" name="source[url]" value="https://angular.io"><input type="hidden" name="entries[README.md][content]" value="### Angular First Look Example 
+*/"><input type="hidden" name="entries[typings.d.ts][encoding]" value="utf8"><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="first look"><input type="hidden" name="tags[3]" value="Angular"><input type="hidden" name="title" value="Angular Example - Angular - ngFor"><input type="hidden" name="source[type]" value="Angular - ngFor"><input type="hidden" name="source[url]" value="https://angular.io"><input type="hidden" name="entries[README.md][content]" value="### Angular First Look Example 
 
-Simplest Component"><input type="hidden" name="entries[README.md][encoding]" value="utf8"><input type="hidden" name="entries[systemjs.config.js][content]" value="/**
+Angular - ngFor"><input type="hidden" name="entries[README.md][encoding]" value="utf8"><input type="hidden" name="entries[systemjs.config.js][content]" value="/**
  * PLUNKER VERSION
  * (based on systemjs.config.js in angular.io)
  * System configuration for Angular samples
