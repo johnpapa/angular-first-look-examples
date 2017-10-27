@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { Character, CharacterService } from '../../app/models';
 import { ToastService } from '../../app/core';
 
+
 @Component({
   moduleId: module.id,
   selector: 'story-dashboard',
@@ -47,8 +48,9 @@ export class DashboardComponent implements OnDestroy, OnInit {
       this.title = data.title;
     });
     this.getCharacters();
-    this.dbResetSubscription = this.characterService.onDbReset
-      .subscribe(() => this.getCharacters());
+    this.dbResetSubscription = this.characterService.onDbReset.subscribe(() =>
+      this.getCharacters()
+    );
   }
 
   trackByCharacters(index: number, character: Character) {

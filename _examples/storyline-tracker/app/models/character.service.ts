@@ -41,7 +41,10 @@ export class CharacterService {
     this.spinnerService.show();
     return <Observable<Character[]>>this.http
       .get(charactersUrl)
-      .map(res => this.extractData<Character[]>(res))
+      .map(res => {
+        const x = this.extractData<Character[]>(res);
+        return this.extractData<Character[]>(res);
+      })
       .catch(this.exceptionService.catchBadResponse)
       .finally(() => this.spinnerService.hide());
   }
