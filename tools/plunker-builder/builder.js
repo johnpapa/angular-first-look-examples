@@ -43,6 +43,8 @@ class PlunkerBuilder {
     this._addReadme(config, postData);
     // if (config.basePath.indexOf('/ts') > -1) {
       // uses systemjs.config.js so add plunker version
+
+      this.options.addField(postData, 'systemjs-angular-loader.js', this.systemjsLoader);
       this.options.addField(postData, 'systemjs.config.js', this.systemjsConfig);
       this.options.addField(postData, 'tsconfig.json', this.tsconfig);
     // }
@@ -231,6 +233,9 @@ class PlunkerBuilder {
     this.systemjsConfig = fs.readFileSync(this.basePath + systemJsConfigPath, 'utf-8');
     this.systemjsConfig +=  this.copyrights.jsCss;
     this.tsconfig = fs.readFileSync(`${this.basePath}/tsconfig.json`, 'utf-8');
+
+    this.systemjsLoader = fs.readFileSync(this.basePath + '/systemjs-angular-loader.js', 'utf-8');
+    this.systemjsLoader +=  this.copyrights.jsCss;
   }
 
   _htmlToElement(document, html) {

@@ -7,12 +7,10 @@
     "rm-bp": "gulp remove-example-boilerplate",
     "all": "npm run rm-bp && npm run add-bp && npm run plunk"
   },
-  "dependencies": {},
+  "dependencies": {
+    "zone.js": "^0.7.4"
+  },
   "devDependencies": {
-    "codelyzer": "~2.0.0",
-    "ts-node": "~2.0.0",
-    "tslint": "~4.5.0",
-    "typescript": "~2.2.0",
     "archiver": "^1.0.0",
     "assert-plus": "^1.0.0",
     "bootstrap": "3.3.6",
@@ -20,6 +18,7 @@
     "browser-sync": "^2.9.3",
     "canonical-path": "0.0.2",
     "cheerio": "^0.20.0",
+    "codelyzer": "~2.0.0",
     "cross-spawn": "^4.0.0",
     "del": "^2.2.0",
     "dgeni": "^0.4.0",
@@ -30,8 +29,8 @@
     "grunt-sass": "^1.2.0",
     "gulp": "^3.5.6",
     "gulp-env": "0.4.0",
-    "gulp-sass": "^2.3.2",
     "gulp-less": "^3.1.0",
+    "gulp-sass": "^2.3.2",
     "gulp-task-listing": "^1.0.1",
     "gulp-tslint": "^5.0.0",
     "gulp-util": "^3.0.6",
@@ -53,6 +52,10 @@
     "prompt": "^1.0.0",
     "q": "^1.4.1",
     "tree-kill": "^1.0.0",
+    "ts-node": "~3.3.0",
+    "tslib": "^1.8.0",
+    "tslint": "~4.5.0",
+    "typescript": "~2.5.3",
     "yargs": "^4.7.1"
   }
 }
