@@ -1167,31 +1167,31 @@ export class SpinnerService {
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/core/spinner/spinner.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/core/toast/toast.component.ts][content]" value="import { Component, OnDestroy, OnInit } from '@angular/core';
+*/"><input type="hidden" name="entries[app/core/spinner/spinner.service.ts][encoding]" value="utf8"><input type="hidden" name="entries[app/core/toast/toast.component.ts][content]" value="import { Component, OnDestroy, ElementRef, Renderer } from '@angular/core';
 import { ToastService } from './toast.service';
-
-import { Subscription } from 'rxjs/Subscription'
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   moduleId: module.id,
   selector: 'story-toast',
-   templateUrl: './toast.component.html',
+  templateUrl: './toast.component.html',
   styleUrls: ['./toast.component.css']
 })
-export class ToastComponent implements OnDestroy, OnInit {
+export class ToastComponent implements OnDestroy {
   private defaults = {
     title: '',
     message: 'May the Force be with You'
   };
-  private toastElement: any;
   private toastSubscription: Subscription;
 
   title: string;
   message: string;
 
-  constructor(private toastService: ToastService) {
+  constructor(private toastService: ToastService,
+              private renderer: Renderer,
+              private elementRef: ElementRef) {
     this.toastSubscription = this.toastService.toastState.subscribe((toastMessage) => {
-      console.log(`activiting toast: ${toastMessage.message}`)
+      console.log(`activiting toast: ${toastMessage.message}`);
       this.activate(toastMessage.message);
     });
   }
@@ -1202,25 +1202,21 @@ export class ToastComponent implements OnDestroy, OnInit {
     this.show();
   }
 
-  ngOnInit() {
-    this.toastElement = document.getElementById('toast');
-  }
-
   ngOnDestroy() {
     this.toastSubscription.unsubscribe();
   }
 
   private show() {
     console.log(this.message);
-    this.toastElement.style.opacity = 1;
-    this.toastElement.style.zIndex = 9999;
+    this.renderer.setElementStyle(this.elementRef.nativeElement, 'opacity', '1');
+    this.renderer.setElementStyle(this.elementRef.nativeElement, 'zIndex', '9999');
 
     window.setTimeout(() => this.hide(), 2500);
   }
 
   private hide() {
-    this.toastElement.style.opacity = 0;
-    window.setTimeout(() => this.toastElement.style.zIndex = 0, 400);
+    this.renderer.setElementStyle(this.elementRef.nativeElement, 'opacity', '0');
+    window.setTimeout(() => this.renderer.setElementStyle(this.elementRef.nativeElement, 'zIndex', '0'), 400);
   }
 }
 
@@ -2541,7 +2537,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="entries[app/core/spinner/spinner.component.css][encoding]" value="utf8"><input type="hidden" name="entries[app/core/toast/toast.component.css][content]" value=".toast-container {
+*/"><input type="hidden" name="entries[app/core/spinner/spinner.component.css][encoding]" value="utf8"><input type="hidden" name="entries[app/core/toast/toast.component.css][content]" value=":host {
   /*-webkit-transition-property: opacity, bottom, left, right, width, margin, border-radius;
   transition-property: opacity, bottom, left, right, width, margin, border-radius;
   -webkit-transition-duration: 1.0s;
@@ -2552,7 +2548,6 @@ can be found in the LICENSE file at http://bit.ly/l1cense
   right: 0;
   bottom: 0;
   left: 0;
-  overflow: scroll;
   background: rgba(0, 0, 0, 0.4);
   z-index: 9999;
   opacity: 0;
@@ -2562,12 +2557,11 @@ can be found in the LICENSE file at http://bit.ly/l1cense
   transition: opacity 400ms ease-in;
 }
 
-.toast-container > * {
+:host > * {
   text-align: center;
 }
 
 .toast-card {
-  width: 100%;
   z-index: 1;
   padding: 2px;
   position: relative;
@@ -13531,11 +13525,9 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
--->"><input type="hidden" name="entries[app/core/spinner/spinner.component.html][encoding]" value="utf8"><input type="hidden" name="entries[app/core/toast/toast.component.html][content]" value="<div id=&quot;toast&quot; class=&quot;toast-container&quot;>
-  <div class=&quot;toast-card mdl-shadow--16dp&quot;>
-    <h5 class=&quot;toast-title&quot;>{{title}}</h5>
-    <p class=&quot;toast-message&quot;>{{message}}</p>
-  </div>
+-->"><input type="hidden" name="entries[app/core/spinner/spinner.component.html][encoding]" value="utf8"><input type="hidden" name="entries[app/core/toast/toast.component.html][content]" value="<div class=&quot;toast-card mdl-shadow--16dp&quot;>
+  <h5 class=&quot;toast-title&quot;>{{title}}</h5>
+  <p class=&quot;toast-message&quot;>{{message}}</p>
 </div>
 
 
