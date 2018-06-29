@@ -179,7 +179,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/admin/admin.component.ts]" value="import { Component, OnInit } from '@angular/core';
 
 @Component({
-  moduleId: module.id,
+
   selector: 'story-admin',
    templateUrl: './admin.component.html'
 })
@@ -259,7 +259,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/app.component.ts]" value="import { Component } from '@angular/core';
 
 @Component({
-  moduleId: module.id,
+
   selector: 'story-app',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
@@ -273,7 +273,7 @@ Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/app.module.ts]" value="import { NgModule } from '@angular/core';
 import { BrowserModule  } from '@angular/platform-browser';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import './core/rxjs-extensions';
 import { AppComponent } from './app.component';
@@ -290,7 +290,7 @@ import { LoginModule } from './login/login.module';
 @NgModule({
   imports: [
     BrowserModule,
-    HttpModule,
+    HttpClientModule,
 
     LoginModule,
     // Routes get loaded in order. It is important that login
@@ -319,7 +319,7 @@ import { FilterTextComponent } from '../../shared/filter-text/filter-text.compon
 import { FilterTextService } from '../../shared/filter-text/filter-text.service';
 
 @Component({
-  moduleId: module.id,
+
   selector: 'story-character-list',
    templateUrl: './character-list.component.html',
   styleUrls: ['./character-list.component.css'],
@@ -377,7 +377,7 @@ import { Character, CharacterService } from '../../models';
 import { CanComponentDeactivate, EntityService, ModalService, ToastService } from '../../core';
 
 @Component({
-  moduleId: module.id,
+
   selector: 'story-character',
    templateUrl: './character.component.html',
   styleUrls: ['./character.component.css']
@@ -577,7 +577,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 import { Character } from '../../../models';
 
 @Component({
-  moduleId: module.id,
+
   selector: 'story-character-button',
    templateUrl: './character-button.component.html',
   styleUrls: ['./character-button.component.css'],
@@ -785,7 +785,7 @@ Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/core/exception.service.ts]" value="import { Injectable } from '@angular/core';
-import { Response } from '@angular/http';
+import { Response } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 
 import { ToastService } from './toast/toast.service';
@@ -828,7 +828,7 @@ Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/core/message.service.ts]" value="import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http } from '@angular/common/http';
 import { Subject } from 'rxjs/Subject';
 
 import { CONFIG } from './config';
@@ -868,7 +868,7 @@ import { ModalService } from './modal.service';
 const KEY_ESC = 27;
 
 @Component({
-  moduleId: module.id,
+
   selector: 'story-modal',
    templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.css']
@@ -1023,7 +1023,7 @@ class MenuItem {
 }
 
 @Component({
-  moduleId: module.id,
+
   selector: 'story-nav',
    templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.css'],
@@ -1083,7 +1083,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { SpinnerState, SpinnerService } from './spinner.service';
 
 @Component({
-  moduleId: module.id,
+
   selector: 'story-spinner',
    templateUrl: './spinner.component.html',
   styleUrls: ['./spinner.component.css']
@@ -1173,7 +1173,7 @@ import { ToastService } from './toast.service';
 import { Subscription } from 'rxjs/Subscription'
 
 @Component({
-  moduleId: module.id,
+
   selector: 'story-toast',
    templateUrl: './toast.component.html',
   styleUrls: ['./toast.component.css']
@@ -1329,7 +1329,7 @@ import { ToastService } from '../../app/core';
 
 
 @Component({
-  moduleId: module.id,
+
   selector: 'story-dashboard',
    templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
@@ -1406,7 +1406,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 import { Character } from '../../../models';
 
 @Component({
-  moduleId: module.id,
+
   selector: 'story-dashboard-button',
    templateUrl: './dashboard-button.component.html',
   styleUrls: ['./dashboard-button.component.css']
@@ -1455,7 +1455,7 @@ import { LoginService } from './login.service';
 import { ToastService, UserProfileService } from '../core';
 
 @Component({
-  moduleId: module.id,
+
    templateUrl: './login.component.html',
   providers: [LoginService]
 })
@@ -1570,7 +1570,7 @@ Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/models/character.service.ts]" value="import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http, Response } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 
 import { Character } from './character.model';
@@ -1665,7 +1665,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/page-not-found.component.ts]" value="import { Component } from '@angular/core';
 
 @Component({
-  moduleId: module.id,
+
   selector: 'story-404',
   template: `
     <article class=&quot;template animated slideInRight&quot;>
@@ -1684,7 +1684,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/shared/filter-text/filter-text.component.ts]" value="import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
-  moduleId: module.id,
+
   selector: 'story-filter-text',
    templateUrl: './filter-text.component.html'
 })
@@ -1820,7 +1820,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 import { Vehicle } from '../vehicle.model';
 
 @Component({
-  moduleId: module.id,
+
   selector: 'story-vehicle-button',
    templateUrl: './vehicle-button.component.html',
   styleUrls: ['./vehicle-button.component.css'],
@@ -1894,7 +1894,7 @@ Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/vehicles/shared/vehicle.service.ts]" value="import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http, Response } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 
 import { Vehicle } from './vehicle.model';
@@ -1984,7 +1984,7 @@ import { Vehicle } from '../shared/vehicle.model';
 import { VehicleService } from '../shared/vehicle.service';
 
 @Component({
-  moduleId: module.id,
+
   selector: 'story-vehicle-list',
    templateUrl: './vehicle-list.component.html',
   styleUrls: ['./vehicle-list.component.css']
@@ -2050,7 +2050,7 @@ import { Vehicle } from '../shared/vehicle.model';
 import { VehicleService } from '../shared/vehicle.service';
 
 @Component({
-  moduleId: module.id,
+
   selector: 'story-vehicle',
    templateUrl: './vehicle.component.html',
   styleUrls: ['./vehicle.component.css']
@@ -2253,7 +2253,7 @@ import { VehicleButtonComponent } from './shared/vehicle-button/vehicle-button.c
 import { routedComponents, VehiclesRoutingModule } from './vehicles-routing.module';
 
 import { SharedModule } from '../shared/shared.module';
-import { VehicleService } from './shared/vehicle.service'; 
+import { VehicleService } from './shared/vehicle.service';
 
 @NgModule({
   imports: [SharedModule, VehiclesRoutingModule],
@@ -13396,7 +13396,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 </p>
 
 
-<!-- 
+<!--
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
@@ -13415,7 +13415,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 </div>
 
 
-<!-- 
+<!--
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
@@ -13436,7 +13436,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 </article>
 
 
-<!-- 
+<!--
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
@@ -13468,7 +13468,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 </article>
 
 
-<!-- 
+<!--
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
@@ -13486,7 +13486,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 </div>
 
 
-<!-- 
+<!--
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
@@ -13504,7 +13504,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 </div>
 
 
-<!-- 
+<!--
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
@@ -13520,14 +13520,14 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 </header>
 
 
-<!-- 
+<!--
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
 -->"><input type="hidden" name="files[app/core/spinner/spinner.component.html]" value="<div class=&quot;spinner mdl-spinner mdl-js-spinner mdl-spinner--single-color&quot; [class.is-active]=&quot;visible&quot;></div>
 
 
-<!-- 
+<!--
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
@@ -13539,7 +13539,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 </div>
 
 
-<!-- 
+<!--
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
@@ -13557,14 +13557,14 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 </article>
 
 
-<!-- 
+<!--
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
 -->"><input type="hidden" name="files[app/dashboard/shared/dashboard-button/dashboard-button.component.html]" value="<button class=&quot;story-button mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent mdl-button--raised&quot;>{{character.name}}</button>
 
 
-<!-- 
+<!--
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
@@ -13576,7 +13576,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 </p>
 
 
-<!-- 
+<!--
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
@@ -13588,7 +13588,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 </div>
 
 
-<!-- 
+<!--
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
@@ -13606,7 +13606,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 </div>
 
 
-<!-- 
+<!--
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
@@ -13625,7 +13625,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 </article>
 
 
-<!-- 
+<!--
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
@@ -13656,7 +13656,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 </article>
 
 
-<!-- 
+<!--
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
@@ -13696,7 +13696,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 </html>
 
 
-<!-- 
+<!--
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
@@ -15020,7 +15020,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
         'npm:@angular/platform-browser/bundles/platform-browser-animations.umd.js',
       '@angular/platform-browser-dynamic':
         'npm:@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js',
-      '@angular/http': 'npm:@angular/http/bundles/http.umd.js',
+      '@angular/common/http': 'npm:@angular/http/bundles/http.umd.js',
       '@angular/router': 'npm:@angular/router/bundles/router.umd.js',
       '@angular/router/upgrade': 'npm:@angular/router/bundles/router-upgrade.umd.js',
       '@angular/forms': 'npm:@angular/forms/bundles/forms.umd.js',

@@ -1,12 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
-
-import { SpinnerState, SpinnerService } from './spinner.service';
+import { SpinnerService, SpinnerState } from './spinner.service';
 
 @Component({
-  moduleId: module.id,
   selector: 'story-spinner',
-   templateUrl: './spinner.component.html',
+  templateUrl: './spinner.component.html',
   styleUrls: ['./spinner.component.css']
 })
 export class SpinnerComponent implements OnDestroy, OnInit {
@@ -14,12 +12,13 @@ export class SpinnerComponent implements OnDestroy, OnInit {
 
   private spinnerStateChanged: Subscription;
 
-  constructor(private spinnerService: SpinnerService) { }
+  constructor(private spinnerService: SpinnerService) {}
 
   ngOnInit() {
     componentHandler.upgradeDom();
-    this.spinnerStateChanged = this.spinnerService.spinnerState
-      .subscribe((state: SpinnerState) => this.visible = state.show);
+    this.spinnerStateChanged = this.spinnerService.spinnerState.subscribe(
+      (state: SpinnerState) => (this.visible = state.show)
+    );
   }
 
   ngOnDestroy() {

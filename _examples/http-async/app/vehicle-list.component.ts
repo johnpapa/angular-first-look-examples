@@ -1,12 +1,10 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-
 import { Vehicle, VehicleService } from './vehicle.service';
 
 @Component({
-  moduleId: module.id,
   selector: 'my-vehicle-list',
-   templateUrl: './vehicle-list.component.html',
+  templateUrl: './vehicle-list.component.html',
   styles: ['li {cursor: pointer;} .error {color:red;}']
 })
 export class VehicleListComponent {
@@ -14,9 +12,11 @@ export class VehicleListComponent {
   selectedVehicle: Vehicle;
   vehicles: Observable<Vehicle[]>;
 
-  constructor(private vehicleService: VehicleService) { }
+  constructor(private vehicleService: VehicleService) {}
 
-  ngOnInit() { this.getVehicles(); }
+  ngOnInit() {
+    this.getVehicles();
+  }
 
   getVehicles(value?: string) {
     this.vehicles = this.vehicleService.getVehicles(value);

@@ -1,7 +1,7 @@
 <html lang="en"><head></head><body><form id="mainForm" method="post" action="http://plnkr.co/edit/?p=preview" target="_self"><input type="hidden" name="files[app/app.component.ts]" value="import { Component } from '@angular/core';
 
 @Component({
-  moduleId: module.id,
+
   selector: 'my-app',
   template: '<my-vehicle-list></my-vehicle-list>',
 })
@@ -16,7 +16,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/app.module.ts]" value="import { NgModule } from '@angular/core';
 import { BrowserModule  } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import './rxjs-extensions';
 
 import { AppComponent } from './app.component';
@@ -25,7 +25,7 @@ import { VehicleListComponent } from './vehicle-list.component';
 import { VehicleService } from './vehicle.service';
 
 @NgModule({
-  imports: [BrowserModule, FormsModule, HttpModule],
+  imports: [BrowserModule, FormsModule, HttpClientModule],
   declarations: [
     AppComponent,
     VehicleComponent,
@@ -61,7 +61,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 import { Vehicle, VehicleService } from './vehicle.service';
 
 @Component({
-  moduleId: module.id,
+
   selector: 'my-vehicle-list',
    templateUrl: './vehicle-list.component.html',
   styles: ['li {cursor: pointer;} .error {color:red;}']
@@ -94,7 +94,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 import { Vehicle } from './vehicle.service';
 
 @Component({
-  moduleId: module.id,
+
   selector: 'my-vehicle',
    templateUrl: './vehicle.component.html'
 })
@@ -108,7 +108,7 @@ Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/vehicle.service.ts]" value="import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http, Response } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 
 export class Vehicle {
@@ -313,14 +313,14 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 <my-vehicle *ngIf=&quot;selectedVehicle&quot; [vehicle]=&quot;selectedVehicle&quot;></my-vehicle>
 
 
-<!-- 
+<!--
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
 -->"><input type="hidden" name="files[app/vehicle.component.html]" value="<h3>We selected {{vehicle.name}}</h3>
 
 
-<!-- 
+<!--
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
@@ -351,7 +351,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 </html>
 
 
-<!-- 
+<!--
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
@@ -505,7 +505,7 @@ declare var componentHandler: any;
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="first look"><input type="hidden" name="tags[3]" value="Angular"><input type="hidden" name="private" value="true"><input type="hidden" name="description" value="Angular Example - Http with promise"><input type="hidden" name="files[README.md]" value="### Angular First Look Example 
+*/"><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="first look"><input type="hidden" name="tags[3]" value="Angular"><input type="hidden" name="private" value="true"><input type="hidden" name="description" value="Angular Example - Http with promise"><input type="hidden" name="files[README.md]" value="### Angular First Look Example
 
 Http with promise"><input type="hidden" name="files[systemjs-angular-loader.js]" value="var templateUrlRegex = /templateUrl\s*:(\s*['&quot;`](.*?)['&quot;`]\s*)/gm;
 var stylesRegex = /styleUrls *:(\s*\[[^\]]*?\])/g;
@@ -611,7 +611,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
         'npm:@angular/platform-browser/bundles/platform-browser-animations.umd.js',
       '@angular/platform-browser-dynamic':
         'npm:@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js',
-      '@angular/http': 'npm:@angular/http/bundles/http.umd.js',
+      '@angular/common/http': 'npm:@angular/http/bundles/http.umd.js',
       '@angular/router': 'npm:@angular/router/bundles/router.umd.js',
       '@angular/router/upgrade': 'npm:@angular/router/bundles/router-upgrade.umd.js',
       '@angular/forms': 'npm:@angular/forms/bundles/forms.umd.js',

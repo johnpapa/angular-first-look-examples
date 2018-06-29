@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Response } from '@angular/http';
+import { Response } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 
 import { ToastService } from './toast/toast.service';

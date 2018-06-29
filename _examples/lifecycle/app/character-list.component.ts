@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-
 import { Character, CharacterService } from './character.service';
 
+
 @Component({
-  moduleId: module.id,
+
   selector: 'my-character-list',
    templateUrl: './character-list.component.html',
   styles: ['li {cursor: pointer;}']

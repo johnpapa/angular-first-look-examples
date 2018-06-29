@@ -1,12 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-
 import { Character, CharacterService } from '../characters/character.service';
 
 @Component({
-  moduleId: module.id,
   selector: 'story-character',
-   templateUrl: './character.component.html'
+  templateUrl: './character.component.html'
 })
 export class CharacterComponent implements OnInit {
   @Input() character: Character;
@@ -16,20 +14,21 @@ export class CharacterComponent implements OnInit {
   constructor(
     private characterService: CharacterService,
     private route: ActivatedRoute,
-    private router: Router) { }
+    private router: Router
+  ) {}
 
   ngOnInit() {
     if (!this.character) {
-      this.route
-        .params
+      this.route.params
         .map(params => params['id'])
-        .do(id => this.id = +id)
+        .do(id => (this.id = +id))
         .subscribe(id => this.getCharacter());
     }
   }
 
   private getCharacter() {
-    this.characterService.getCharacter(this.id)
+    this.characterService
+      .getCharacter(this.id)
       .subscribe(character => this.setEditCharacter(character));
   }
 

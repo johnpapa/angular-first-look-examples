@@ -25,7 +25,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/app.component.ts]" value="import { Component } from '@angular/core';
 
 @Component({
-  moduleId: module.id,
+
   selector: 'story-app',
    templateUrl: './app.component.html',
   styles: [`
@@ -43,7 +43,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/app.module.ts]" value="import { NgModule } from '@angular/core';
 import { BrowserModule  } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import './rxjs-extensions';
 
 import { AppComponent } from './app.component';
@@ -54,7 +54,7 @@ import { AppRoutingModule, routableComponents } from './app-routing.module';
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule,
+    HttpClientModule,
 
     CharactersModule,
     AppRoutingModule,
@@ -75,7 +75,7 @@ import { Observable } from 'rxjs/Observable';
 import { Character, CharacterService } from './character.service';
 
 @Component({
-  moduleId: module.id,
+
   selector: 'story-characters',
    templateUrl: './character-list.component.html',
   styles: [`
@@ -104,7 +104,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Character, CharacterService } from '../characters/character.service';
 
 @Component({
-  moduleId: module.id,
+
   selector: 'story-character',
    templateUrl: './character.component.html'
 })
@@ -153,7 +153,7 @@ Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/characters/character.service.ts]" value="import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http, Response } from '@angular/common/http';
 
 import { CONFIG } from '../config';
 
@@ -225,7 +225,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/characters/characters.component.ts]" value="import { Component } from '@angular/core';
 
 @Component({
-  moduleId: module.id,
+
   selector: 'story-characters-root',
   template: `
     <router-outlet></router-outlet>
@@ -272,7 +272,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/page-not-found.component.ts]" value="import { Component } from '@angular/core';
 
 @Component({
-  moduleId: module.id,
+
   template: `
     <article class=&quot;template animated slideInRight&quot;>
       <h4>Inconceivable!</h4>
@@ -307,7 +307,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 import { Vehicle, VehicleService } from './vehicle.service';
 
 @Component({
-  moduleId: module.id,
+
   selector: 'story-vehicles',
    templateUrl: './vehicle-list.component.html',
   styles: [`
@@ -338,7 +338,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Vehicle, VehicleService } from './vehicle.service';
 
 @Component({
-  moduleId: module.id,
+
   selector: 'story-vehicle',
    templateUrl: './vehicle.component.html'
 })
@@ -387,7 +387,7 @@ Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/vehicles/vehicle.service.ts]" value="import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http, Response } from '@angular/common/http';
 
 import { CONFIG } from '../config';
 
@@ -460,7 +460,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 */"><input type="hidden" name="files[app/vehicles/vehicles.component.ts]" value="import { Component } from '@angular/core';
 
 @Component({
-  moduleId: module.id,
+
   selector: 'story-vehicles-root',
   template: `
     <router-outlet></router-outlet>
@@ -670,7 +670,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 </div>
 
 
-<!-- 
+<!--
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
@@ -687,7 +687,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 </article>
 
 
-<!-- 
+<!--
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
@@ -707,7 +707,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
   </div>
 </article>
 
-<!-- 
+<!--
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
@@ -724,7 +724,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 </article>
 
 
-<!-- 
+<!--
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
@@ -744,7 +744,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
   </div>
 </article>
 
-<!-- 
+<!--
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
@@ -775,7 +775,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 </html>
 
 
-<!-- 
+<!--
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
@@ -929,7 +929,7 @@ declare var componentHandler: any;
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="first look"><input type="hidden" name="tags[3]" value="Angular"><input type="hidden" name="private" value="true"><input type="hidden" name="description" value="Angular Example - Angular - Lazily Loaded Modules via Routes"><input type="hidden" name="files[README.md]" value="### Angular First Look Example 
+*/"><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="first look"><input type="hidden" name="tags[3]" value="Angular"><input type="hidden" name="private" value="true"><input type="hidden" name="description" value="Angular Example - Angular - Lazily Loaded Modules via Routes"><input type="hidden" name="files[README.md]" value="### Angular First Look Example
 
 Angular - Lazily Loaded Modules via Routes"><input type="hidden" name="files[systemjs-angular-loader.js]" value="var templateUrlRegex = /templateUrl\s*:(\s*['&quot;`](.*?)['&quot;`]\s*)/gm;
 var stylesRegex = /styleUrls *:(\s*\[[^\]]*?\])/g;
@@ -1035,7 +1035,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
         'npm:@angular/platform-browser/bundles/platform-browser-animations.umd.js',
       '@angular/platform-browser-dynamic':
         'npm:@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js',
-      '@angular/http': 'npm:@angular/http/bundles/http.umd.js',
+      '@angular/common/http': 'npm:@angular/http/bundles/http.umd.js',
       '@angular/router': 'npm:@angular/router/bundles/router.umd.js',
       '@angular/router/upgrade': 'npm:@angular/router/bundles/router-upgrade.umd.js',
       '@angular/forms': 'npm:@angular/forms/bundles/forms.umd.js',

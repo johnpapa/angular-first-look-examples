@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 
 @Component({
-  moduleId: module.id,
   selector: 'story-404',
   template: `
     <article class="template animated slideInRight">
@@ -10,4 +9,4 @@ import { Component } from '@angular/core';
     </article>
   `
 })
-export class PageNotFoundComponent { }
+export class PageNotFoundComponent {}

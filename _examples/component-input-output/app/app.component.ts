@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { HTTP_PROVIDERS } from '@angular/http';
+import { HTTP_PROVIDERS } from '@angular/common/http';
 
 import { CharactersComponent } from './characters.component';
 
 @Component({
-  moduleId: module.id,
+
   selector: 'story-app',
   template: `
   <div>

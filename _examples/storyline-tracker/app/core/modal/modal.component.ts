@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-
 import { ModalService } from './modal.service';
 
 const KEY_ESC = 27;
 
 @Component({
-  moduleId: module.id,
   selector: 'story-modal',
-   templateUrl: './modal.component.html',
+  templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.css']
 })
 export class ModalComponent implements OnInit {
@@ -63,19 +61,19 @@ export class ModalComponent implements OnInit {
     this.modalElement.style.opacity = 0;
     this.modalElement.style.zIndex = 9999;
 
-    this.cancelButton.onclick = ((e: any) => {
+    this.cancelButton.onclick = (e: any) => {
       e.preventDefault();
       if (!this.negativeOnClick(e)) {
         this.hideDialog();
       }
-    });
+    };
 
-    this.okButton.onclick = ((e: any) => {
+    this.okButton.onclick = (e: any) => {
       e.preventDefault();
       if (!this.positiveOnClick(e)) {
         this.hideDialog();
       }
-    });
+    };
 
     this.modalElement.onclick = () => {
       this.hideDialog();
@@ -95,6 +93,6 @@ export class ModalComponent implements OnInit {
   private hideDialog() {
     document.onkeyup = null;
     this.modalElement.style.opacity = 0;
-    window.setTimeout(() => this.modalElement.style.zIndex = 0, 400);
+    window.setTimeout(() => (this.modalElement.style.zIndex = 0), 400);
   }
 }

@@ -1,30 +1,36 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
-
-import { CanComponentDeactivate, EntityService, ModalService, ToastService } from '../../core';
+import {
+  CanComponentDeactivate,
+  EntityService,
+  ModalService,
+  ToastService
+} from '../../core';
 import { Vehicle } from '../shared/vehicle.model';
 import { VehicleService } from '../shared/vehicle.service';
 
 @Component({
-  moduleId: module.id,
   selector: 'story-vehicle',
-   templateUrl: './vehicle.component.html',
+  templateUrl: './vehicle.component.html',
   styleUrls: ['./vehicle.component.css']
 })
-export class VehicleComponent implements OnDestroy, OnInit, CanComponentDeactivate {
+export class VehicleComponent
+  implements OnDestroy, OnInit, CanComponentDeactivate {
   @Input() vehicle: Vehicle;
   editVehicle: Vehicle = <Vehicle>{};
 
   private dbResetSubscription: Subscription;
   private id: any;
 
-  constructor(private entityService: EntityService,
+  constructor(
+    private entityService: EntityService,
     private modalService: ModalService,
     private route: ActivatedRoute,
     private router: Router,
     private vehicleService: VehicleService,
-    private toastService: ToastService) { }
+    private toastService: ToastService
+  ) {}
 
   cancel(showToast = true) {
     this.editVehicle = this.entityService.clone(this.vehicle);
@@ -34,30 +40,30 @@ export class VehicleComponent implements OnDestroy, OnInit, CanComponentDeactiva
   }
 
   canDeactivate() {
-    return !this.vehicle ||
-      !this.isDirty() ||
-      this.modalService.activate();
+    return !this.vehicle || !this.isDirty() || this.modalService.activate();
   }
 
   delete() {
     let msg = `Do you want to delete the ${this.vehicle.name}?`;
-    this.modalService.activate(msg).then((responseOK) => {
+    this.modalService.activate(msg).then(responseOK => {
       if (responseOK) {
         this.cancel(false);
-        this.vehicleService.deleteVehicle(this.vehicle)
-          .subscribe(
-          () => { // Success path
+        this.vehicleService.deleteVehicle(this.vehicle).subscribe(
+          () => {
+            // Success path
             this.toastService.activate(`Deleted ${this.vehicle.name}`);
             this.gotoVehicles();
           },
-          (err) => this.handleServiceError('Delete', err), // Failure path
+          err => this.handleServiceError('Delete', err), // Failure path
           () => console.log('Delete Completed') // Completed actions
-          );
+        );
       }
     });
   }
 
-  isAddMode() { return isNaN(this.id); }
+  isAddMode() {
+    return isNaN(this.id);
+  }
 
   ngOnDestroy() {
     this.dbResetSubscription.unsubscribe();
@@ -65,8 +71,9 @@ export class VehicleComponent implements OnDestroy, OnInit, CanComponentDeactiva
 
   ngOnInit() {
     componentHandler.upgradeDom();
-    this.dbResetSubscription =
-      this.vehicleService.onDbReset.subscribe(() => this.getVehicle());
+    this.dbResetSubscription = this.vehicleService.onDbReset.subscribe(() =>
+      this.getVehicle()
+    );
 
     // ** Could use a snapshot here, as long as the parameters do not change.
     // ** This may happen when a component is re-used, such as fwd/back.
@@ -88,8 +95,10 @@ export class VehicleComponent implements OnDestroy, OnInit, CanComponentDeactiva
   }
 
   save() {
-    let vehicle = this.vehicle =
-      this.entityService.merge(this.vehicle, this.editVehicle);
+    let vehicle = (this.vehicle = this.entityService.merge(
+      this.vehicle,
+      this.editVehicle
+    ));
     if (vehicle.id == null) {
       this.vehicleService.addVehicle(vehicle).subscribe(s => {
         this.setEditVehicle(s);
@@ -98,22 +107,25 @@ export class VehicleComponent implements OnDestroy, OnInit, CanComponentDeactiva
       });
       return;
     }
-    this.vehicleService.updateVehicle(this.vehicle)
-      .subscribe(() => this.toastService.activate(
-        `Successfully saved ${this.vehicle.name}`));
+    this.vehicleService
+      .updateVehicle(this.vehicle)
+      .subscribe(() =>
+        this.toastService.activate(`Successfully saved ${this.vehicle.name}`)
+      );
   }
 
   private getVehicle() {
     if (this.id === 0) {
       return;
-    };
+    }
     if (this.isAddMode()) {
       this.vehicle = <Vehicle>{ name: '', type: '' };
       this.editVehicle = this.entityService.clone(this.vehicle);
       return;
     }
-    this.vehicleService.getVehicle(this.id).subscribe(
-      (vehicle: Vehicle) => this.setEditVehicle(vehicle));
+    this.vehicleService
+      .getVehicle(this.id)
+      .subscribe((vehicle: Vehicle) => this.setEditVehicle(vehicle));
   }
 
   private gotoVehicles() {

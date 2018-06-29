@@ -1,12 +1,12 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs/subscription';
-
 import { Character, CharacterService } from '../../models';
 import { FilterTextComponent } from '../../shared/filter-text/filter-text.component';
 import { FilterTextService } from '../../shared/filter-text/filter-text.service';
 
+
 @Component({
-  moduleId: module.id,
+
   selector: 'story-character-list',
    templateUrl: './character-list.component.html',
   styleUrls: ['./character-list.component.css'],

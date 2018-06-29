@@ -25,7 +25,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 import { Character } from './character';
 
 @Component({
-  moduleId: module.id,
+
   selector: 'my-character-list',
    templateUrl: './character-list.component.html'
 })
@@ -54,7 +54,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 import { Character } from './character';
 
 @Component({
-  moduleId: module.id,
+
   selector: 'my-character',
    templateUrl: './character.component.html'
 })
@@ -244,14 +244,14 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 <my-character *ngIf=&quot;selectedCharacter&quot; [character]=&quot;selectedCharacter&quot;></my-character>
 
 
-<!-- 
+<!--
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
 -->"><input type="hidden" name="files[app/character.component.html]" value="<h3>We selected {{character.name}}</h3>
 
 
-<!-- 
+<!--
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
@@ -282,7 +282,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
 </html>
 
 
-<!-- 
+<!--
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
@@ -295,7 +295,7 @@ declare var componentHandler: any;
 Copyright 2016 JohnPapa.net, LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://bit.ly/l1cense
-*/"><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="first look"><input type="hidden" name="tags[3]" value="Angular"><input type="hidden" name="private" value="true"><input type="hidden" name="description" value="Angular Example - Nested Component"><input type="hidden" name="files[README.md]" value="### Angular First Look Example 
+*/"><input type="hidden" name="tags[0]" value="angular2"><input type="hidden" name="tags[1]" value="example"><input type="hidden" name="tags[2]" value="first look"><input type="hidden" name="tags[3]" value="Angular"><input type="hidden" name="private" value="true"><input type="hidden" name="description" value="Angular Example - Nested Component"><input type="hidden" name="files[README.md]" value="### Angular First Look Example
 
 Nested Component"><input type="hidden" name="files[systemjs-angular-loader.js]" value="var templateUrlRegex = /templateUrl\s*:(\s*['&quot;`](.*?)['&quot;`]\s*)/gm;
 var stylesRegex = /styleUrls *:(\s*\[[^\]]*?\])/g;
@@ -401,7 +401,7 @@ can be found in the LICENSE file at http://bit.ly/l1cense
         'npm:@angular/platform-browser/bundles/platform-browser-animations.umd.js',
       '@angular/platform-browser-dynamic':
         'npm:@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js',
-      '@angular/http': 'npm:@angular/http/bundles/http.umd.js',
+      '@angular/common/http': 'npm:@angular/http/bundles/http.umd.js',
       '@angular/router': 'npm:@angular/router/bundles/router.umd.js',
       '@angular/router/upgrade': 'npm:@angular/router/bundles/router-upgrade.umd.js',
       '@angular/forms': 'npm:@angular/forms/bundles/forms.umd.js',

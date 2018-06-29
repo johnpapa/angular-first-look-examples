@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 
 @Component({
-  moduleId: module.id,
   selector: 'my-story',
   template: `
     <h3>{{story.name}}</h3>

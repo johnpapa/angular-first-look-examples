@@ -1,15 +1,20 @@
 import { Component } from '@angular/core';
 
 class Character {
-  constructor(public id: number, public name: string, public side: string, public imageUrl: string, public link: string) { }
+  constructor(
+    public id: number,
+    public name: string,
+    public side: string,
+    public imageUrl: string,
+    public link: string
+  ) {}
 }
 
 class Vehicle {
-  constructor(public id: number, public name: string) { }
+  constructor(public id: number, public name: string) {}
 }
 
 @Component({
-  moduleId: module.id,
   selector: 'story-character',
   templateUrl: './character.component.html',
   styleUrls: ['./character.component.css']
@@ -26,7 +31,13 @@ export class CharacterComponent {
   ];
 
   constructor() {
-    this.character = new Character(100, 'Boba Fett', 'dark', 'assets/man.png', 'http://angular.io');
+    this.character = new Character(
+      100,
+      'Boba Fett',
+      'dark',
+      'assets/man.png',
+      'http://angular.io'
+    );
   }
 
   select(name: string) {

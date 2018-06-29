@@ -1,28 +1,31 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule  } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
+import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
-import './rxjs-extensions';
-
-import { AppComponent } from './app.component';
 import { AppRoutingModule, routableComponents } from './app-routing.module';
-
-import { CharacterService } from './characters/character.service';
-import { VehicleService } from './vehicles/vehicle.service';
+import { AppComponent } from './app.component';
 import { CanActivateAuthGuard } from './can-activate.service';
+import { CharacterService } from './characters/character.service';
 import { UserProfileService } from './login/user-profile.service';
+import './rxjs-extensions';
+import { VehicleService } from './vehicles/vehicle.service';
 
 @NgModule({
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule,
+    HttpClientModule,
     RouterModule,
     AppRoutingModule
   ],
   declarations: [AppComponent, routableComponents],
-  providers: [CanActivateAuthGuard, CharacterService, UserProfileService, VehicleService],
+  providers: [
+    CanActivateAuthGuard,
+    CharacterService,
+    UserProfileService,
+    VehicleService
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

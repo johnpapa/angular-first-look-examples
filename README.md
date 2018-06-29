@@ -1,38 +1,27 @@
-# Angular First Look
+# AngularFirstLookExamples
 
-## For Pluralsight
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.7.
 
-The code in this repo is the source for what becomes the plunkers located [https://github.com/johnpapa/angular-first-look-hosted](https://github.com/johnpapa/angular-first-look-hosted)
+## Development server
 
-> Note: The plunkers are the recommended way to run the code. However, if you wish to explore, instructions can be found below. This repo is not part of the course ... this is intended to be extra credit ... fun ... for those who are curious :)
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-## Getting Started
+## Code scaffolding
 
-Fork and clone this repo ...
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-```bash
-git clone git@github.com:johnpapa/angular-first-look-examples.git ng-ex
-cd ng-ex
-rm -rf .git/
-npm i
-```
+## Build
 
-Prep the Examples
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
-```bash
-cd _examples
-npm i
-cd ..
-npm run all
-```
+## Running unit tests
 
-Run an example
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-```bash
-cd _examples/component-simple/
-npm start
-```
+## Running end-to-end tests
 
-Each example is located in its own folder under `_examples/`. Feel free to explore them. You may run `npm start` in those respective folders, if you wish to run them locally.
+Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 
-Reminder ... The other files in this repo are here for helping create the plunkers. Focus only on the files in the`_examples/xxx` folders.
+## Further help
+
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).

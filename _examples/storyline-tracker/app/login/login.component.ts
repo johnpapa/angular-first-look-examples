@@ -1,13 +1,11 @@
 import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
-
-import { LoginService } from './login.service';
 import { ToastService, UserProfileService } from '../core';
+import { LoginService } from './login.service';
 
 @Component({
-  moduleId: module.id,
-   templateUrl: './login.component.html',
+  templateUrl: './login.component.html',
   providers: [LoginService]
 })
 export class LoginComponent implements OnDestroy {
@@ -18,10 +16,10 @@ export class LoginComponent implements OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private toastService: ToastService,
-    private userProfileService: UserProfileService) {
-  }
+    private userProfileService: UserProfileService
+  ) {}
 
-  public get isLoggedIn() : boolean {
+  public get isLoggedIn(): boolean {
     return this.userProfileService.isLoggedIn;
   }
 
@@ -33,7 +31,7 @@ export class LoginComponent implements OnDestroy {
       .subscribe(redirectTo => {
         this.toastService.activate(`Successfully logged in`);
         if (this.userProfileService.isLoggedIn) {
-          let url = redirectTo ? [redirectTo] : [ '/dashboard' ];
+          let url = redirectTo ? [redirectTo] : ['/dashboard'];
           this.router.navigate(url);
         }
       });

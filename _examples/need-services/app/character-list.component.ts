@@ -1,12 +1,10 @@
 import { Component } from '@angular/core';
-
 import { Character } from './character';
 
 @Component({
-  moduleId: module.id,
   selector: 'my-character-list',
-   templateUrl: './character-list.component.html',
-  styles: ['li {cursor: pointer;}'],
+  templateUrl: './character-list.component.html',
+  styles: ['li {cursor: pointer;}']
 })
 export class CharacterListComponent {
   characters = [
@@ -22,4 +20,3 @@ export class CharacterListComponent {
     this.selectedCharacter = character;
   }
 }
-

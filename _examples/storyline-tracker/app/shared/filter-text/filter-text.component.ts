@@ -1,9 +1,8 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
-  moduleId: module.id,
   selector: 'story-filter-text',
-   templateUrl: './filter-text.component.html'
+  templateUrl: './filter-text.component.html'
 })
 export class FilterTextComponent {
   @Output() changed: EventEmitter<string>;

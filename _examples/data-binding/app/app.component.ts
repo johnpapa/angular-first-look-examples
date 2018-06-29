@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 
 @Component({
-  moduleId: module.id,
   selector: 'story-app',
   template: `
   <div>
@@ -30,6 +29,8 @@ export class AppComponent {
 
   solve() {
     this.showSolution = !this.showSolution;
-    this.buttonText = this.showSolution ? 'Switch to  Starter' : 'Switch to Solution';
+    this.buttonText = this.showSolution
+      ? 'Switch to  Starter'
+      : 'Switch to Solution';
   }
 }

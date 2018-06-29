@@ -1,21 +1,20 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule  } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
+import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
-import './rxjs-extensions';
-
+import { AppRoutingModule, routableComponents } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CharactersModule } from './characters/characters.module';
+import './rxjs-extensions';
 import { VehiclesModule } from './vehicles/vehicles.module';
-import { AppRoutingModule, routableComponents } from './app-routing.module';
 
 @NgModule({
   imports: [
     BrowserModule,
     CharactersModule,
     FormsModule,
-    HttpModule,
+    HttpClientModule,
     RouterModule,
     VehiclesModule,
     AppRoutingModule
@@ -23,4 +22,4 @@ import { AppRoutingModule, routableComponents } from './app-routing.module';
   declarations: [AppComponent, routableComponents],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

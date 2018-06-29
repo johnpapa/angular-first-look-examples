@@ -1,12 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 import { ToastService } from './toast.service';
 
-import { Subscription } from 'rxjs/Subscription'
-
 @Component({
-  moduleId: module.id,
   selector: 'story-toast',
-   templateUrl: './toast.component.html',
+  templateUrl: './toast.component.html',
   styleUrls: ['./toast.component.css']
 })
 export class ToastComponent implements OnDestroy, OnInit {
@@ -21,10 +19,12 @@ export class ToastComponent implements OnDestroy, OnInit {
   message: string;
 
   constructor(private toastService: ToastService) {
-    this.toastSubscription = this.toastService.toastState.subscribe((toastMessage) => {
-      console.log(`activiting toast: ${toastMessage.message}`)
-      this.activate(toastMessage.message);
-    });
+    this.toastSubscription = this.toastService.toastState.subscribe(
+      toastMessage => {
+        console.log(`activiting toast: ${toastMessage.message}`);
+        this.activate(toastMessage.message);
+      }
+    );
   }
 
   activate(message = this.defaults.message, title = this.defaults.title) {
@@ -51,6 +51,6 @@ export class ToastComponent implements OnDestroy, OnInit {
 
   private hide() {
     this.toastElement.style.opacity = 0;
-    window.setTimeout(() => this.toastElement.style.zIndex = 0, 400);
+    window.setTimeout(() => (this.toastElement.style.zIndex = 0), 400);
   }
 }

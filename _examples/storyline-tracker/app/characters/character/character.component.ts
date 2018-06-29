@@ -1,12 +1,12 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
-
-import { Character, CharacterService } from '../../models';
 import { CanComponentDeactivate, EntityService, ModalService, ToastService } from '../../core';
+import { Character, CharacterService } from '../../models';
+
 
 @Component({
-  moduleId: module.id,
+
   selector: 'story-character',
    templateUrl: './character.component.html',
   styleUrls: ['./character.component.css']

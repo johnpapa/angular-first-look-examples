@@ -1,9 +1,9 @@
-import { Component, EventEmitter, Input, Output, OnChanges, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
-
+import { AfterViewInit, Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { Character } from './character.service';
 
+
 @Component({
-  moduleId: module.id,
+
   selector: 'my-character',
    templateUrl: './character.component.html'
 })
