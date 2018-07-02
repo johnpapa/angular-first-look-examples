@@ -1,0 +1,15 @@
+<article>
+  <div *ngIf="character">
+    <h4>{{character.name}} details</h4>
+
+    <div>
+      <label for="nametext">Name</label>
+      <input type="text" id="nametext" [(ngModel)]="character.name" />
+    </div>
+
+    <div>
+      <label for="typetext">Side</label>
+      <input type="text" id="typetext" [(ngModel)]="character.side" />
+    </div>
+  </div>
+</article>
