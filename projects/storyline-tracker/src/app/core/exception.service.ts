@@ -10,7 +10,7 @@ export class ExceptionService {
     errorResponse: any
   ) => {
     let res = <Response>errorResponse;
-    let err = res.json();
+    let err = res;
     let emsg = err
       ? err.error
         ? err.error

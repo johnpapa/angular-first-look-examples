@@ -1,4 +1,4 @@
-import { Http, Response } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError, finalize, map } from 'rxjs/operators';
@@ -17,7 +17,7 @@ export class CharacterService {
   onDbReset = this.messageService.state;
 
   constructor(
-    private http: Http,
+    private http: HttpClient,
     private exceptionService: ExceptionService,
     private messageService: MessageService,
     private spinnerService: SpinnerService
@@ -29,7 +29,7 @@ export class CharacterService {
     let body = JSON.stringify(character);
     this.spinnerService.show();
     return <Observable<Character>>this.http.post(`${charactersUrl}`, body).pipe(
-      map(res => res.json().data),
+      map(res => res.data),
       catchError(this.exceptionService.catchBadResponse),
       finalize(() => this.spinnerService.hide())
     );
@@ -84,7 +84,7 @@ export class CharacterService {
     if (res.status < 200 || res.status >= 300) {
       throw new Error('Bad response status: ' + res.status);
     }
-    let body = res.json ? res.json() : null;
+    let body = res.json ? res : null;
     return <T>((body && body.data) || {});
   }
 }
