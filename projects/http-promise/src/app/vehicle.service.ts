@@ -14,8 +14,8 @@ export class VehicleService {
   getVehicles(value?: string) {
     return this.http.get('api/vehicles.json').pipe(
       map((data: any) => <Vehicle[]>data.data),
-      toPromise(),
-      catchError(this.handleError)
+      catchError(this.handleError),
+      toPromise()
     );
   }
 
