@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { map, tap } from 'rxjs/operators';
 import { Vehicle, VehicleService } from './vehicle.service';
 
 @Component({
@@ -23,8 +24,10 @@ export class VehicleComponent implements OnInit {
       // This may happen when a component is re-used.
       // this.id = +this.route.snapshot.params['id'];
       this.route.params
-        .map(params => params['id'])
-        .do(id => (this.id = +id))
+        .pipe(
+          map(params => params['id']),
+          tap(id => (this.id = +id))
+        )
         .subscribe(id => this.getVehicle());
     }
   }

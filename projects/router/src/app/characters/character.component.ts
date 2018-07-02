@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { map, tap } from 'rxjs/operators';
 import { Character, CharacterService } from '../characters/character.service';
 
 @Component({
@@ -20,8 +21,10 @@ export class CharacterComponent implements OnInit {
   ngOnInit() {
     if (!this.character) {
       this.route.params
-        .map(params => params['id'])
-        .do(id => (this.id = +id))
+        .pipe(
+          map(params => params['id']),
+          tap(id => (this.id = +id))
+        )
         .subscribe(id => this.getCharacter());
     }
   }
