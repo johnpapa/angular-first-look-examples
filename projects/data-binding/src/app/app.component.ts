@@ -13,12 +13,12 @@ import { Component } from '@angular/core';
     </div>
 
     <span [ngSwitch]="showSolution">
-      <template [ngSwitchCase]="true">
+      <ng-template [ngSwitchCase]="true">
         <story-character-solved></story-character-solved>
-      </template>
-      <template ngSwitchDefault>
+      </ng-template>
+      <ng-template ngSwitchDefault>
         <story-character></story-character>
-      </template>
+      </ng-template>
     </span>
   </div>
   `
