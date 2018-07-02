@@ -1,0 +1,9 @@
+<ul>
+  <li *ngFor="let character of characters" (click)="select(character)">
+    {{ character.name }}
+  </li>
+</ul>
+
+<button (click)="clearSelection()">clear selection</button>
+
+<my-character *ngIf="selectedCharacter" [character]="selectedCharacter"></my-character>
