@@ -1,10 +1,19 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-root',
+  selector: 'story-app',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styles: [
+    `
+      nav ul {
+        list-style-type: none;
+      }
+      nav ul li {
+        padding: 4px;
+        cursor: pointer;
+        display: inline-block;
+      }
+    `
+  ]
 })
-export class AppComponent {
-  title = 'app';
-}
+export class AppComponent {}
