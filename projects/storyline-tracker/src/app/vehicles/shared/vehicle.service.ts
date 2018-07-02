@@ -1,6 +1,7 @@
 import { Http, Response } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { catchError, finalize, map } from 'rxjs/operators';
 import {
   CONFIG,
   ExceptionService,
@@ -27,29 +28,31 @@ export class VehicleService {
   addVehicle(vehicle: Vehicle) {
     let body = JSON.stringify(vehicle);
     this.spinnerService.show();
-    return <Observable<Vehicle>>this.http
-      .post(`${vehiclesUrl}`, body)
-      .map(res => <Vehicle>res.json().data)
-      .catch(this.exceptionService.catchBadResponse)
-      .finally(() => this.spinnerService.hide());
+    return <Observable<Vehicle>>this.http.post(`${vehiclesUrl}`, body).pipe(
+      map(res => <Vehicle>res.json().data),
+      catchError(this.exceptionService.catchBadResponse),
+      finalize(() => this.spinnerService.hide())
+    );
   }
 
   deleteVehicle(vehicle: Vehicle) {
     this.spinnerService.show();
-    return <Observable<Vehicle>>this.http
-      .delete(`${vehiclesUrl}/${vehicle.id}`)
-      .map(res => this.extractData<Vehicle>(res))
-      .catch(this.exceptionService.catchBadResponse)
-      .finally(() => this.spinnerService.hide());
+    return <Observable<Vehicle>>(
+      this.http.delete(`${vehiclesUrl}/${vehicle.id}`).pipe(
+        map(res => this.extractData<Vehicle>(res)),
+        catchError(this.exceptionService.catchBadResponse),
+        finalize(() => this.spinnerService.hide())
+      )
+    );
   }
 
   getVehicles() {
     this.spinnerService.show();
-    return <Observable<Vehicle[]>>this.http
-      .get(vehiclesUrl)
-      .map(res => this.extractData<Vehicle[]>(res))
-      .catch(this.exceptionService.catchBadResponse)
-      .finally(() => this.spinnerService.hide());
+    return <Observable<Vehicle[]>>this.http.get(vehiclesUrl).pipe(
+      map(res => this.extractData<Vehicle[]>(res)),
+      catchError(this.exceptionService.catchBadResponse),
+      finalize(() => this.spinnerService.hide())
+    );
   }
 
   private extractData<T>(res: Response) {
@@ -62,21 +65,23 @@ export class VehicleService {
 
   getVehicle(id: number) {
     this.spinnerService.show();
-    return <Observable<Vehicle>>this.http
-      .get(`${vehiclesUrl}/${id}`)
-      .map(res => this.extractData<Vehicle>(res))
-      .catch(this.exceptionService.catchBadResponse)
-      .finally(() => this.spinnerService.hide());
+    return <Observable<Vehicle>>this.http.get(`${vehiclesUrl}/${id}`).pipe(
+      map(res => this.extractData<Vehicle>(res)),
+      catchError(this.exceptionService.catchBadResponse),
+      finalize(() => this.spinnerService.hide())
+    );
   }
 
   updateVehicle(vehicle: Vehicle) {
     let body = JSON.stringify(vehicle);
     this.spinnerService.show();
 
-    return <Observable<Vehicle>>this.http
-      .put(`${vehiclesUrl}/${vehicle.id}`, body)
-      .map(res => this.extractData<Vehicle>(res))
-      .catch(this.exceptionService.catchBadResponse)
-      .finally(() => this.spinnerService.hide());
+    return <Observable<Vehicle>>(
+      this.http.put(`${vehiclesUrl}/${vehicle.id}`, body).pipe(
+        map(res => this.extractData<Vehicle>(res)),
+        catchError(this.exceptionService.catchBadResponse),
+        finalize(() => this.spinnerService.hide())
+      )
+    );
   }
 }
