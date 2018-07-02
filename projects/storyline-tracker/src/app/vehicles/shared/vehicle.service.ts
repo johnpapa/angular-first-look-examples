@@ -55,7 +55,7 @@ export class VehicleService {
     );
   }
 
-  private extractData<T>(res: Response) {
+  private extractData<T>(res: any) {
     if (res.status < 200 || res.status >= 300) {
       throw new Error('Bad response status: ' + res.status);
     }
