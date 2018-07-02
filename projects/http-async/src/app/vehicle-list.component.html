@@ -1,0 +1,15 @@
+<input #text (keyup)="getVehicles(text.value)">
+<ul>
+  <li *ngFor="let vehicle of vehicles | async"
+    (click)="select(vehicle)">
+    {{ vehicle.name }}
+  </li>
+</ul>
+
+<ul class="messages">
+  <li *ngFor="let msg of messages">{{msg}}</li>
+</ul>
+
+<div class="error" *ngIf="errorMessage">{{errorMessage}}</div>
+
+<my-vehicle *ngIf="selectedVehicle" [vehicle]="selectedVehicle"></my-vehicle>
