@@ -1,0 +1,59 @@
+{
+  "data": [
+    {
+      "id": 30,
+      "name": "Millennium Falcon",
+      "type": "space"
+    },
+    {
+      "id": 31,
+      "name": "Y-Wing Fighter",
+      "type": "space"
+    },
+    {
+      "id": 32,
+      "name": "X-Wing Fighter",
+      "type": "space"
+    },
+    {
+      "id": 33,
+      "name": "Imperial Star Destroyer",
+      "type": "space"
+    },
+    {
+      "id": 34,
+      "name": "AT-AT Walker",
+      "type": "land"
+    },
+    {
+      "id": 35,
+      "name": "TIE Fighter",
+      "type": "space"
+    },
+    {
+      "id": 36,
+      "name": "B-Wing Fighter",
+      "type": "space"
+    },
+    {
+      "id": 37,
+      "name": "ETA-2 Jedi Starfighter",
+      "type": "space"
+    },
+    {
+      "id": 38,
+      "name": "TIE Interceptor",
+      "type": "space"
+    },
+    {
+      "id": 39,
+      "name": "X-34 Landspeeder",
+      "type": "land"
+    },
+    {
+      "id": 40,
+      "name": "Snow Speeder",
+      "type": "land"
+    }
+  ]
+}
