@@ -1,6 +1,6 @@
 export let CONFIG = {
   baseUrls: {
-    characters: 'api/characters.json',
-    vehicles: 'api/vehicles.json'
+    characters: 'assets/characters.json',
+    vehicles: 'assets/vehicles.json'
   }
 };
