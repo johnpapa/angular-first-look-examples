@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { of } from 'rxjs';
 import { delay, tap } from 'rxjs/operators';
 import { UserProfileService } from './user-profile.service';
 
@@ -8,7 +8,7 @@ export class LoginService {
   constructor(private userProfileService: UserProfileService) {}
 
   login() {
-    return Observable.of(true).pipe(
+    return of(true).pipe(
       delay(1000),
       tap(this.toggleLogState.bind(this))
     );
