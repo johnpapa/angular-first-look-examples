@@ -1,6 +1,7 @@
-import { Http, Response } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, map, tap, throwError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
 
 export class Vehicle {
   constructor(public id: number, public name: string) {}
@@ -8,17 +9,17 @@ export class Vehicle {
 
 @Injectable()
 export class VehicleService {
-  constructor(private http: Http) {}
+  constructor(private http: HttpClient) {}
 
   getVehicles() {
-    return this.http.get('api/vehicles.json').pipe(
-      map((response: Response) => <Vehicle[]>response.json().data),
+    return this.http.get('assets/vehicles.json').pipe(
+      map((data: any) => <Vehicle[]>data.data),
       tap(data => console.log(data)),
       catchError(this.handleError)
     );
   }
 
-  private handleError(error: Response) {
+  private handleError(error: HttpErrorResponse) {
     console.error(error);
     let msg = `Error status code ${error.status} at ${error.url}`;
     return throwError(msg);
