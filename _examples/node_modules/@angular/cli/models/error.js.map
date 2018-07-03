@@ -1,1 +1,0 @@
-{"version":3,"file":"error.js","sourceRoot":"/Users/hansl/Sources/hansl/angular-cli/","sources":["models/error.ts"],"names":[],"mappings":";;AAAA,oBAA4B,SAAQ,KAAK;IACvC,YAAY,OAAgB;QAC1B,KAAK,EAAE,CAAC;QAER,IAAI,OAAO,EAAE;YACX,IAAI,CAAC,OAAO,GAAG,OAAO,CAAC;SACxB;aAAM;YACL,IAAI,CAAC,OAAO,GAAS,IAAI,CAAC,WAAY,CAAC,IAAI,CAAC;SAC7C;IACH,CAAC;CACF;AAVD,wCAUC"}

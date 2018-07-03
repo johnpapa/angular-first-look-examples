@@ -1,3 +1,0 @@
-
-
-declare var componentHandler: any;
