@@ -1,10 +1,13 @@
+// our root app component
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  selector: 'my-app',
+  templateUrl: './app.component.html'
 })
 export class AppComponent {
-  title = 'app';
+  imagePath = 'assets/angular.png';
+  link = 'http://angular.io';
+  story = 'The Empire Strikes Back';
+  title = 'Angular Property Binding';
 }
