@@ -52,7 +52,7 @@ export class VehicleListComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    componentHandler.upgradeDom();
+    // componentHandler.upgradeDom();
     this.getVehicles();
     this.dbResetSubscription = this.vehicleService.onDbReset.subscribe(() =>
       this.getVehicles()

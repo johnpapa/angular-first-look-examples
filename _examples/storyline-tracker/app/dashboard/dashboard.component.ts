@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
+import { Observable, Subscription } from 'rxjs';
 import { ToastService } from '../../app/core';
 import { Character, CharacterService } from '../../app/models';
 
@@ -24,17 +23,17 @@ export class DashboardComponent implements OnDestroy, OnInit {
   ) {}
 
   getCharacters() {
-    this.characters = this.characterService
-      .getCharacters()
-      .do(() => this.toastService.activate('Got characters for the dashboard'))
-      .catch(e => {
+    this.characters = this.characterService.getCharacters().pipe(
+      tap(() => this.toastService.activate('Got characters for the dashboard')),
+      catchError(e => {
         this.toastService.activate(`${e}`);
         return Observable.of([]);
-      });
+      })
+    );
   }
 
   gotoDetail(character: Character) {
-    let link = ['/characters', character.id];
+    const link = ['/characters', character.id];
     this.router.navigate(link);
   }
 

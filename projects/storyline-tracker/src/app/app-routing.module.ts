@@ -16,22 +16,22 @@ const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
   {
     path: 'admin',
-    loadChildren: 'app/admin/admin.module#AdminModule',
+    loadChildren: './admin/admin.module#AdminModule',
     canActivate: [AuthGuard],
     canActivateChild: [AuthGuard],
     canLoad: [AuthGuard]
   },
   {
     path: 'dashboard',
-    loadChildren: 'app/dashboard/dashboard.module#DashboardModule'
+    loadChildren: './dashboard/dashboard.module#DashboardModule'
   },
   {
     path: 'characters',
-    loadChildren: 'app/characters/characters.module#CharactersModule'
+    loadChildren: './characters/characters.module#CharactersModule'
   },
   {
     path: 'vehicles',
-    loadChildren: 'app/vehicles/vehicles.module#VehiclesModule'
+    loadChildren: './vehicles/vehicles.module#VehiclesModule'
   },
   { path: '**', pathMatch: 'full', component: PageNotFoundComponent }
 ];

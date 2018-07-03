@@ -43,7 +43,7 @@ export class CharacterListComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    componentHandler.upgradeDom();
+    // componentHandler.upgradeDom();
     this.getCharacters();
     this.dbResetSubscription = this.characterService.onDbReset.subscribe(() =>
       this.getCharacters()

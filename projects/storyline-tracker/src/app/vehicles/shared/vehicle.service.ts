@@ -29,7 +29,7 @@ export class VehicleService {
     let body = JSON.stringify(vehicle);
     this.spinnerService.show();
     return <Observable<Vehicle>>this.http.post(`${vehiclesUrl}`, body).pipe(
-      map(res => <Vehicle>res.json().data),
+      map((res: any) => <Vehicle>res.data),
       catchError(this.exceptionService.catchBadResponse),
       finalize(() => this.spinnerService.hide())
     );
@@ -59,8 +59,7 @@ export class VehicleService {
     if (res.status < 200 || res.status >= 300) {
       throw new Error('Bad response status: ' + res.status);
     }
-    let body = res.json ? res : null;
-    return <T>((body && body.data) || {});
+    return <T>((res) || {});
   }
 
   getVehicle(id: number) {

@@ -1,6 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import {
   CanComponentDeactivate,
   EntityService,
@@ -68,7 +69,7 @@ export class CharacterComponent
   }
 
   ngOnInit() {
-    componentHandler.upgradeDom();
+    // componentHandler.upgradeDom();
     this.dbResetSubscription = this.characterService.onDbReset.subscribe(() =>
       this.getCharacter()
     );
@@ -77,8 +78,10 @@ export class CharacterComponent
     // This may happen when a component is re-used.
     // this.id = +this.route.snapshot.params['id'];
     this.route.params
-      .map(params => params['id'])
-      .do(id => (this.id = +id))
+      .pipe(
+        map(params => params['id']),
+        tap(id => (this.id = +id))
+      )
       .subscribe(id => this.getCharacter());
   }
 

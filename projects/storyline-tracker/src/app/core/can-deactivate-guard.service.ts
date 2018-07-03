@@ -1,5 +1,5 @@
 import { CanDeactivate } from '@angular/router';
-import { Observable } from 'rxjs';
+import { from, Observable } from 'rxjs';
 
 export interface CanComponentDeactivate {
   canDeactivate: () => any; // boolean|Promise<boolean>|Observable<boolean>;
@@ -30,7 +30,7 @@ export class CanDeactivateGuard
     deactivate: Promise<boolean> | boolean
   ): Observable<boolean> | boolean {
     let p = Promise.resolve(deactivate);
-    let o = Observable.fromPromise(p);
+    let o = from(p);
     return o;
   }
 }

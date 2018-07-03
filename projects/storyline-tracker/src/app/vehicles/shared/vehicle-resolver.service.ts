@@ -5,7 +5,8 @@ import {
   Router,
   RouterStateSnapshot
 } from '@angular/router';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { Vehicle } from './vehicle.model';
 import { VehicleService } from './vehicle.service';
 
@@ -13,11 +14,13 @@ import { VehicleService } from './vehicle.service';
 export class VehicleResolver implements Resolve<Vehicle> {
   constructor(private vehicleService: VehicleService, private router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+  resolve(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Observable<Vehicle> {
     let id = +route.params['id'];
-    return this.vehicleService
-      .getVehicle(id)
-      .map(vehicle => {
+    return this.vehicleService.getVehicle(id).pipe(
+      map(vehicle => {
         if (vehicle) {
           return vehicle;
         }
@@ -28,11 +31,12 @@ export class VehicleResolver implements Resolve<Vehicle> {
         // let msg = `vehicle id ${id} not found`;
         // console.log(msg);
         // throw new Error(msg)
-      })
-      .catch((error: any) => {
+      }),
+      catchError((error: any) => {
         console.log(`${error}. Heading back to vehicle list`);
         this.router.navigate(['/vehicles']);
-        return of(null);
-      });
+        return of(null as Vehicle); // null
+      })
+    );
   }
 }

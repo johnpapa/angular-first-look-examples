@@ -70,7 +70,7 @@ export class VehicleComponent
   }
 
   ngOnInit() {
-    componentHandler.upgradeDom();
+    // componentHandler.upgradeDom();
     this.dbResetSubscription = this.vehicleService.onDbReset.subscribe(() =>
       this.getVehicle()
     );

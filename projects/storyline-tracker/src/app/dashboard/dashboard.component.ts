@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { ToastService } from '../../app/core';
 import { Character, CharacterService } from '../../app/models';
@@ -28,7 +28,7 @@ export class DashboardComponent implements OnDestroy, OnInit {
       tap(() => this.toastService.activate('Got characters for the dashboard')),
       catchError(e => {
         this.toastService.activate(`${e}`);
-        return Observable.of([]);
+        return of([]);
       })
     );
   }

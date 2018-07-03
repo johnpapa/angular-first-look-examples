@@ -12,7 +12,7 @@ export class FilterTextComponent {
   constructor() {
     this.changed = new EventEmitter<string>();
 
-    componentHandler.upgradeDom();
+    // componentHandler.upgradeDom();
   }
 
   clear() {

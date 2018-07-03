@@ -29,7 +29,7 @@ export class CharacterService {
     let body = JSON.stringify(character);
     this.spinnerService.show();
     return <Observable<Character>>this.http.post(`${charactersUrl}`, body).pipe(
-      map(res => res.data),
+      map((res: any) => res.data),
       catchError(this.exceptionService.catchBadResponse),
       finalize(() => this.spinnerService.hide())
     );
@@ -84,7 +84,6 @@ export class CharacterService {
     if (res.status < 200 || res.status >= 300) {
       throw new Error('Bad response status: ' + res.status);
     }
-    let body = res.json ? res : null;
-    return <T>((body && body.data) || {});
+    return <T>(res || {});
   }
 }
