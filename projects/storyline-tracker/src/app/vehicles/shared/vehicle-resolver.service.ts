@@ -18,7 +18,10 @@ export class VehicleResolver implements Resolve<Vehicle> {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<Vehicle> {
-    let id = +route.params['id'];
+    const id = +route.params['id'];
+    if (isNaN(id)) {
+      return of(new Vehicle());
+    }
     return this.vehicleService.getVehicle(id).pipe(
       map(vehicle => {
         if (vehicle) {

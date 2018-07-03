@@ -26,10 +26,11 @@ export class VehicleService {
   }
 
   addVehicle(vehicle: Vehicle) {
-    let body = JSON.stringify(vehicle);
     this.spinnerService.show();
-    return <Observable<Vehicle>>this.http.post(`${vehiclesUrl}`, body).pipe(
-      map((res: any) => <Vehicle>res.data),
+    return <Observable<Vehicle>>this.http.post(`${vehiclesUrl}`, vehicle).pipe(
+      map((res: any) => {
+        return <Vehicle>res;
+      }),
       catchError(this.exceptionService.catchBadResponse),
       finalize(() => this.spinnerService.hide())
     );
@@ -56,10 +57,10 @@ export class VehicleService {
   }
 
   private extractData<T>(res: any) {
-    if (res.status < 200 || res.status >= 300) {
+    if (res && (res.status < 200 || res.status >= 300)) {
       throw new Error('Bad response status: ' + res.status);
     }
-    return <T>((res) || {});
+    return <T>(res || {});
   }
 
   getVehicle(id: number) {
@@ -72,11 +73,9 @@ export class VehicleService {
   }
 
   updateVehicle(vehicle: Vehicle) {
-    let body = JSON.stringify(vehicle);
     this.spinnerService.show();
-
     return <Observable<Vehicle>>(
-      this.http.put(`${vehiclesUrl}/${vehicle.id}`, body).pipe(
+      this.http.put(`${vehiclesUrl}/${vehicle.id}`, vehicle).pipe(
         map(res => this.extractData<Vehicle>(res)),
         catchError(this.exceptionService.catchBadResponse),
         finalize(() => this.spinnerService.hide())

@@ -26,12 +26,13 @@ export class CharacterService {
   }
 
   addCharacter(character: Character) {
-    let body = JSON.stringify(character);
     this.spinnerService.show();
-    return <Observable<Character>>this.http.post(`${charactersUrl}`, body).pipe(
-      map((res: any) => res.data),
-      catchError(this.exceptionService.catchBadResponse),
-      finalize(() => this.spinnerService.hide())
+    return <Observable<Character>>(
+      this.http.post(`${charactersUrl}`, character).pipe(
+        map((res: any) => <Character>res),
+        catchError(this.exceptionService.catchBadResponse),
+        finalize(() => this.spinnerService.hide())
+      )
     );
   }
 
@@ -49,10 +50,7 @@ export class CharacterService {
   getCharacters() {
     this.spinnerService.show();
     return <Observable<Character[]>>this.http.get(charactersUrl).pipe(
-      map(res => {
-        const x = this.extractData<Character[]>(res);
-        return this.extractData<Character[]>(res);
-      }),
+      map(res => this.extractData<Character[]>(res)),
       catchError(this.exceptionService.catchBadResponse),
       finalize(() => this.spinnerService.hide())
     );
@@ -68,11 +66,9 @@ export class CharacterService {
   }
 
   updateCharacter(character: Character) {
-    let body = JSON.stringify(character);
     this.spinnerService.show();
-
     return <Observable<Character>>(
-      this.http.put(`${charactersUrl}/${character.id}`, body).pipe(
+      this.http.put(`${charactersUrl}/${character.id}`, character).pipe(
         map(res => this.extractData<Character>(res)),
         catchError(this.exceptionService.catchBadResponse),
         finalize(() => this.spinnerService.hide())
@@ -81,7 +77,7 @@ export class CharacterService {
   }
 
   private extractData<T>(res: any) {
-    if (res.status < 200 || res.status >= 300) {
+    if (res && (res.status < 200 || res.status >= 300)) {
       throw new Error('Bad response status: ' + res.status);
     }
     return <T>(res || {});
