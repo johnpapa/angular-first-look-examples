@@ -1,4 +1,4 @@
-import { Http, Response } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -9,7 +9,7 @@ export class Vehicle {
 
 @Injectable()
 export class VehicleService {
-  constructor(private http: Http) {}
+  constructor(private http: HttpClient) {}
 
   getVehicles() {
     return this.http.get('assets/vehicles.json').pipe(
@@ -18,8 +18,8 @@ export class VehicleService {
     );
   }
 
-  private handleError(error: Response) {
-    console.error(error);
-    return throwError(error.json().error || 'Server error');
+  private handleError(res: HttpErrorResponse) {
+    console.error(res.error);
+    return throwError(res.error || 'Server error');
   }
 }
