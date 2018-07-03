@@ -1,0 +1,12 @@
+{
+  "name": "two-way",
+  "version": "0.0.0",
+  "scripts": {
+    "start": "ng serve"
+  },
+  "private": true,
+  "dependencies": {
+  },
+  "devDependencies": {
+  }
+}
