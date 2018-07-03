@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  imagePath = 'images/angular.png';
+  imagePath = 'assets/angular.png';
   messages: string[] = [];
   title: string;
 
