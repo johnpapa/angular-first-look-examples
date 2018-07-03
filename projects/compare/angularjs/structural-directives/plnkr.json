@@ -1,0 +1,7 @@
+{
+  "description": "Angular 1 - ng-repeat",
+  "files":[
+    "!**/*.d.ts"
+  ],
+  "tags": ["first look", "angular 1"]
+}
