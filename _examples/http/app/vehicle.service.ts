@@ -12,7 +12,7 @@ export class VehicleService {
 
   getVehicles() {
     return this.http
-      .get('api/vehicles.json')
+      .get('assets/vehicles.json')
       .map((response: Response) => <Vehicle[]>response.json().data)
       .do(data => console.log(data))
       .catch(this.handleError);

@@ -12,15 +12,17 @@ export class VehicleService {
 
   getVehicles(value?: string) {
     return this.http
-      .get('api/vehicles.json')
+      .get("assets/vehicles.json")
       .map((response: Response) => {
         let vehicles = <Vehicle[]>response.json().data;
         if (!value) {
           return vehicles;
         }
-        return vehicles.filter(v => v.name.toLowerCase().includes(value.toLowerCase()));
+        return vehicles.filter((v) =>
+          v.name.toLowerCase().includes(value.toLowerCase())
+        );
       })
-      .do(data => console.log(data))
+      .do((data) => console.log(data))
       .catch(this.handleError);
   }
 
