@@ -13,7 +13,7 @@ export class CharacterService {
 
   getCharacters(storyId: number) {
     return this.http
-      .get('api/characters.json')
+      .get("assets/characters.json")
       .map((response: Response) => response.json().data);
   }
 }

@@ -11,7 +11,8 @@ export class VehicleService {
   constructor(private http: Http) { }
 
   getVehicles(value?: string) {
-    return this.http.get('api/vehicles.json')
+    return this.http
+      .get("assets/vehicles.json")
       .map((response: Response) => <Vehicle[]>response.json().data)
       .toPromise()
       .catch(this.handleError);
