@@ -1,8 +1,8 @@
-import { Http, Response } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/map';
-import { Observable } from 'rxjs/Observable';
+import { Http, Response } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import "rxjs/add/operator/catch";
+import "rxjs/add/operator/map";
+import { Observable } from "rxjs/Observable";
 export class Vehicle {
   constructor(public id: number, public name: string, public side: string) {}
 }
@@ -12,7 +12,7 @@ export class VehicleService {
   constructor(private http: Http) {}
 
   getVehicles() {
-    return this.http.get('api/vehicles.json').pipe(
+    return this.http.get("assets/vehicles.json").pipe(
       map((data: any) => <Vehicle[]>data.data),
       catchError(this.handleError)
     );
@@ -20,6 +20,6 @@ export class VehicleService {
 
   private handleError(error: Response) {
     console.error(error);
-    return Observable.throw(error.json().error || 'Server error');
+    return Observable.throw(error.json().error || "Server error");
   }
 }
