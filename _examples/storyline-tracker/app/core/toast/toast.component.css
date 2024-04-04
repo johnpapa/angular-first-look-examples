@@ -1,4 +1,4 @@
-.toast-container {
+:host {
   /*-webkit-transition-property: opacity, bottom, left, right, width, margin, border-radius;
   transition-property: opacity, bottom, left, right, width, margin, border-radius;
   -webkit-transition-duration: 1.0s;
@@ -9,7 +9,6 @@
   right: 0;
   bottom: 0;
   left: 0;
-  overflow: scroll;
   background: rgba(0, 0, 0, 0.4);
   z-index: 9999;
   opacity: 0;
@@ -19,12 +18,11 @@
   transition: opacity 400ms ease-in;
 }
 
-.toast-container > * {
+:host > * {
   text-align: center;
 }
 
 .toast-card {
-  width: 100%;
   z-index: 1;
   padding: 2px;
   position: relative;

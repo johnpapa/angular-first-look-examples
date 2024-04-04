@@ -1,28 +1,28 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, ElementRef, Renderer } from '@angular/core';
 import { ToastService } from './toast.service';
-
-import { Subscription } from 'rxjs/Subscription'
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   moduleId: module.id,
   selector: 'story-toast',
-   templateUrl: './toast.component.html',
+  templateUrl: './toast.component.html',
   styleUrls: ['./toast.component.css']
 })
-export class ToastComponent implements OnDestroy, OnInit {
+export class ToastComponent implements OnDestroy {
   private defaults = {
     title: '',
     message: 'May the Force be with You'
   };
-  private toastElement: any;
   private toastSubscription: Subscription;
 
   title: string;
   message: string;
 
-  constructor(private toastService: ToastService) {
+  constructor(private toastService: ToastService,
+              private renderer: Renderer,
+              private elementRef: ElementRef) {
     this.toastSubscription = this.toastService.toastState.subscribe((toastMessage) => {
-      console.log(`activiting toast: ${toastMessage.message}`)
+      console.log(`activiting toast: ${toastMessage.message}`);
       this.activate(toastMessage.message);
     });
   }
@@ -33,24 +33,20 @@ export class ToastComponent implements OnDestroy, OnInit {
     this.show();
   }
 
-  ngOnInit() {
-    this.toastElement = document.getElementById('toast');
-  }
-
   ngOnDestroy() {
     this.toastSubscription.unsubscribe();
   }
 
   private show() {
     console.log(this.message);
-    this.toastElement.style.opacity = 1;
-    this.toastElement.style.zIndex = 9999;
+    this.renderer.setElementStyle(this.elementRef.nativeElement, 'opacity', '1');
+    this.renderer.setElementStyle(this.elementRef.nativeElement, 'zIndex', '9999');
 
     window.setTimeout(() => this.hide(), 2500);
   }
 
   private hide() {
-    this.toastElement.style.opacity = 0;
-    window.setTimeout(() => this.toastElement.style.zIndex = 0, 400);
+    this.renderer.setElementStyle(this.elementRef.nativeElement, 'opacity', '0');
+    window.setTimeout(() => this.renderer.setElementStyle(this.elementRef.nativeElement, 'zIndex', '0'), 400);
   }
 }
